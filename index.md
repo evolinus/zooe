@@ -1,9 +1,9 @@
 ---
 ---
 
-# evolinus's Website
+# Zoology and Evolution
 
-An engaging 1-3 sentence description of your lab.
+We study the genetic basis of biodiversity with a combination of computational and experimental approaches in insects and other organisms.
 
 {% include section.html %}
 
