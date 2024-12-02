@@ -11,12 +11,6 @@ If you wish the .pdf copy of an article, please do contact us.
 
 {% include section.html %}
 
-## Highlighted
-
-{% include citation.html lookup="Open collaborative writing with Manubot" style="rich" %}
-
-{% include section.html %}
-
 ## All
 
 {% include search-box.html %}
