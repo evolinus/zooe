@@ -14,20 +14,20 @@ nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 {%
   include button.html
   type="email"
-  text="jane@smith.com"
-  link="jane@smith.com"
+  text="lino.ometto@smunipv.it"
+  link="lino.ometto@smunipv.it"
 %}
 {%
   include button.html
   type="phone"
-  text="(555) 867-5309"
-  link="+1-555-867-5309"
+  text="+39 0382 986079"
+  link="+39 0382 986079"
 %}
 {%
   include button.html
   type="address"
-  tooltip="Our location on Google Maps for easy navigation"
-  link="https://www.google.com/maps"
+  tooltip="Department of Biology and Biotechnology - University of Pavia - Via Ferrata 9 - 27100 Pavia - Italy"
+  link="https://maps.app.goo.gl/9ZSSNfQ7WQkuJpNN7"
 %}
 
 {% include section.html %}
