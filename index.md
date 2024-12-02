@@ -11,7 +11,7 @@ We study the genetic basis of biodiversity with a combination of computational a
 
 {% capture text %}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+We use molecular evolution and population genetics approaches to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations.
 
 {%
   include button.html
@@ -34,7 +34,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 {% capture text %}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Can Transposable Elements provide adaptive variation in invading mosquitoes? 
+What happened to introduced ant populations?
+And other stories.
 
 {%
   include button.html
@@ -59,7 +61,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 {% capture text %}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Meet the people behind the quest 
 
 {%
   include button.html
