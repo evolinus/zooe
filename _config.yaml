@@ -9,10 +9,10 @@ proofer: false
 # site social media and other links
 links:
   email: lino.ometto@unipv.it
-  orcid: 0000-0001-8713-9213
+  orcid: 0000-0002-2679-625X
   google-scholar: RVjMHWgAAAAJ
   github: evolinus
-  twitter: evolinus
+  # twitter: evolinus
   # youtube: evolinus
 
 ### jekyll settings
