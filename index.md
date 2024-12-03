@@ -11,7 +11,7 @@ In the zoo_e lab we study the genetic basis of biodiversity with a combination o
 
 {% capture text %}
 
-We use molecular evolution and population genetics approaches to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of insects&co.
+We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of insects&co.
 
 {%
   include button.html
