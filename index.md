@@ -3,7 +3,7 @@
 
 # Zoology and Evolution
 
-We study the genetic basis of biodiversity with a combination of computational and experimental approaches in insects and other organisms.
+In the zoo_e lab we study the genetic basis of biodiversity with a combination of computational and experimental approaches in insects and other organisms.
 
 {% include section.html %}
 
@@ -11,7 +11,7 @@ We study the genetic basis of biodiversity with a combination of computational a
 
 {% capture text %}
 
-We use molecular evolution and population genetics approaches to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations.
+We use molecular evolution and population genetics approaches to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of insects&co.
 
 {%
   include button.html
@@ -26,7 +26,7 @@ We use molecular evolution and population genetics approaches to characterize th
 
 {%
   include feature.html
-  image="images/photo.jpg"
+  image="images/riso.png"
   link="research"
   title="Our Research"
   text=text
@@ -51,7 +51,7 @@ And other stories.
 
 {%
   include feature.html
-  image="images/photo.jpg"
+  image="images/bai.png"
   link="projects"
   title="Our Projects"
   flip=true
@@ -76,7 +76,7 @@ Meet the people behind the quest
 
 {%
   include feature.html
-  image="images/photo.jpg"
+  image="images/farfalla.png"
   link="team"
   title="Our Team"
   text=text
