@@ -1,5 +1,8 @@
 - id: doi:10.1101/2024.11.10.622744   
 - id: doi:10.1101/2024.11.10.622744 
+  title: Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through
+    the expanded DEST 2.0 genomic resource
+  publisher: bioRxiv  
 - id: doi:10.22541/au.172510123.38206942/v1 
 - id: doi:10.1007/s12600-024-01205-y 
 - id: doi:10.1007/s12600-024-01208-9 
@@ -9,11 +12,26 @@
 - id: doi:10.1038/s41437-022-00564-8
 - id: doi:10.3390/insects13070603 
 - id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+  title: 'The complete mitogenome of the European mantis, <i>Mantis religiosa</i>, from Italy: implications for the origin of
+    North American mantis population'
+  authors:
+  - Andrea Luchetti
+  - Lino Ometto
+  - Omar Rota-Stabelli
+  publisher: 'Bulletin of Insectology'
+  date: '2021-11-01'
+  link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
 - id: doi:10.1093/gbe/evab170
 - id: doi:10.1093/molbev/msab259
 - id: doi:10.1093/ve/veab031
+  title: The discovery, distribution, and diversity of DNA viruses associated with <i>Drosophila
+    melanogaster</i> in Europe
 - id: doi:10.1016/j.ibmb.2020.103474
+  title: Linking omics and ecology to dissect interactions between the apple proliferation
+    phytoplasma and its psyllid vector <i>Cacopsylla melanoneura</i>
 - id: doi:10.1007/s10340-019-01172-y
+  title: 'Distinct genotypes and phenotypes in European and American strains of <i>Drosophila
+    suzukii</i>: implications for biology and management of an invasive organism'
 - id: doi:10.1371/journal.pntd.0007919
 - id: doi:10.1038/s41467-019-12175-9
 - id: doi:10.1186/s13059-019-1768-2
