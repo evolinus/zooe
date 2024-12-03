@@ -26,7 +26,7 @@ We use molecular evolution and population genetics approaches to characterize th
 
 {%
   include feature.html
-  image="images/riso.png"
+  image="images/bai.png"
   link="research"
   title="Our Research"
   text=text
@@ -51,7 +51,7 @@ And other stories.
 
 {%
   include feature.html
-  image="images/bai.png"
+  image="images/farfalla.png"
   link="projects"
   title="Our Projects"
   flip=true
@@ -76,7 +76,7 @@ Meet the people behind the quest
 
 {%
   include feature.html
-  image="images/farfalla.png"
+  image="images/riso.png"
   link="team"
   title="Our Team"
   text=text
