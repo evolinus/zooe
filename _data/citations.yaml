@@ -1,8 +1,8 @@
 # DO NOT EDIT, GENERATED AUTOMATICALLY
 
 - id: doi:10.1101/2024.11.10.622744
-  title: Footprints of worldwide adaptation in structured populations of<i>D. melanogaster</i>through
-    the expanded DEST 2.0 genomic resource
+  title: Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i>
+    through the expanded DEST 2.0 genomic resource
   authors:
   - Joaquin C. B. Nunez
   - Marta Coronado-Zamora
@@ -105,7 +105,7 @@
   - Thomas Flatt
   - Alan O. Bergland
   - Josefa Gonzalez
-  publisher: Cold Spring Harbor Laboratory
+  publisher: bioRxiv
   date: '2024-11-11'
   link: https://doi.org/g8s4pw
   plugin: sources.py
@@ -461,11 +461,15 @@
   plugin: sources.py
   file: sources.yaml
 - id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
-  title: ''
-  authors: []
-  publisher: ''
-  date: ''
-  link: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+  title: 'The complete mitogenome of the European mantis, <i>Mantis religiosa</i>,
+    from Italy: implications for the origin of North American mantis population'
+  authors:
+  - Andrea Luchetti
+  - Lino Ometto
+  - Omar Rota-Stabelli
+  publisher: Bulletin of Insectology
+  date: '2021-11-01'
+  link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/gbe/evab170
@@ -567,8 +571,8 @@
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/ve/veab031
-  title: The discovery, distribution, and diversity of DNA viruses associated with<i>Drosophila
-    melanogaster</i>in Europe
+  title: The discovery, distribution, and diversity of DNA viruses associated with
+    <i>Drosophila melanogaster</i> in Europe
   authors:
   - Megan A Wallace
   - Kelsey A Coffman
@@ -616,7 +620,7 @@
   file: sources.yaml
 - id: doi:10.1016/j.ibmb.2020.103474
   title: Linking omics and ecology to dissect interactions between the apple proliferation
-    phytoplasma and its psyllid vector Cacopsylla melanoneura
+    phytoplasma and its psyllid vector <i>Cacopsylla melanoneura</i>
   authors:
   - Tobias Weil
   - Lino Ometto
@@ -635,8 +639,8 @@
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s10340-019-01172-y
-  title: 'Distinct genotypes and phenotypes in European and American strains of Drosophila
-    suzukii: implications for biology and management of an invasive organism'
+  title: 'Distinct genotypes and phenotypes in European and American strains of <i>Drosophila
+    suzukii</i>: implications for biology and management of an invasive organism'
   authors:
   - Omar Rota-Stabelli
   - Lino Ometto
