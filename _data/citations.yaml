@@ -131,3 +131,367 @@
   link: https://doi.org/g8s4pw
   plugin: sources.py
   file: sources.yaml
+- id: doi:10.22541/au.172510123.38206942/v1
+  title: Harmonising genomics research excellence and stakeholder needs in conservation
+    management
+  authors:
+  - Elena Buzan
+  - Christian de Guttry
+  - Chiara Bortoluzzi
+  - Nathaniel Street
+  - Kay Lucek
+  - Anna Rosling
+  - Lino Ometto
+  - Alice Mouton
+  - "Lu\xEDsa Marins"
+  - "Mar\xEDa Jos\xE9 Ruiz-L\xF3pez"
+  - "Jos\xE9 Melo-Ferreira"
+  - Elisabet Ottosson
+  - Camila Mazzoni
+  - Robert Waterhouse
+  publisher: Authorea
+  date: '2024-08-31'
+  link: https://doi.org/g8s4p2
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1007/s12600-024-01205-y
+  title: An initial investigation into the genetic diversity, phylogenetic relationships,
+    and population structure of the Olive Psyllid <i>Euphyllura olivina</i> in Tunisia
+  authors:
+  - Nihel Oueslati
+  - Asma Ghedir
+  - Sarra Choulak
+  - Laila Gasmi
+  - Khaled Said
+  - Lino Ometto
+  publisher: Phytoparasitica
+  date: '2024-10-14'
+  link: https://doi.org/g8s4px
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1007/s12600-024-01208-9
+  title: Genetic diversity in the tomato leafminer <i>Tuta absoluta</i> (Meyrick)
+    in Tunisia
+  authors:
+  - Asma Ghedir
+  - Nihel Oueslati
+  - Laila Gasmi
+  - Ayda Khorramnejad
+  - Khaled Said
+  - Lino Ometto
+  publisher: Phytoparasitica
+  date: '2024-10-11'
+  link: https://doi.org/g8s4pz
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1038/s44185-024-00054-6
+  title: 'The European Reference Genome Atlas: piloting a decentralised approach to
+    equitable biodiversity genomics'
+  authors:
+  - Ann M. Mc Cartney
+  - Giulio Formenti
+  - Alice Mouton
+  - Diego De Panis
+  - "Lu\xEDsa S. Marins"
+  - "Henrique G. Leit\xE3o"
+  - Genevieve Diedericks
+  - Joseph Kirangwa
+  - Marco Morselli
+  - Judit Salces-Ortiz
+  - Nuria Escudero
+  - Alessio Iannucci
+  - Chiara Natali
+  - Hannes Svardal
+  - "Rosa Fern\xE1ndez"
+  - Tim De Pooter
+  - Geert Joris
+  - Mojca Strazisar
+  - Jonathan M. D. Wood
+  - Katie E. Herron
+  - Ole Seehausen
+  - Phillip C. Watts
+  - Felix Shaw
+  - Robert P. Davey
+  - Alice Minotto
+  - "Jos\xE9 M. Fern\xE1ndez"
+  - "Astrid B\xF6hne"
+  - Carla Alegria
+  - Tyler Alioto
+  - Paulo C. Alves
+  - Isabel R. Amorim
+  - Jean-Marc Aury
+  - Niclas Backstrom
+  - Petr Baldrian
+  - Laima Baltrunaite
+  - Endre Barta
+  - Bertrand BedHom
+  - Caroline Belser
+  - Johannes Bergsten
+  - Laurie Bertrand
+  - Helena Bilandija
+  - Mahesh Binzer-Panchal
+  - Iliana Bista
+  - Mark Blaxter
+  - Paulo A. V. Borges
+  - Guilherme Borges Dias
+  - Mirte Bosse
+  - Tom Brown
+  - "R\xE9my Bruggmann"
+  - Elena Buena-Atienza
+  - Josephine Burgin
+  - Elena Buzan
+  - Alessia Cariani
+  - Nicolas Casadei
+  - Matteo Chiara
+  - Sergio Chozas
+  - "Fedor \u010Ciampor"
+  - Angelica Crottini
+  - Corinne Cruaud
+  - Fernando Cruz
+  - Love Dalen
+  - Alessio De Biase
+  - Javier del Campo
+  - Teo Delic
+  - Alice B. Dennis
+  - Martijn F. L. Derks
+  - Maria Angela Diroma
+  - Mihajla Djan
+  - Simone Duprat
+  - Klara Eleftheriadi
+  - Philine G. D. Feulner
+  - "Jean-Fran\xE7ois Flot"
+  - Giobbe Forni
+  - Bruno Fosso
+  - Pascal Fournier
+  - Christine Fournier-Chambrillon
+  - Toni Gabaldon
+  - Shilpa Garg
+  - Carmela Gissi
+  - Luca Giupponi
+  - Jessica Gomez-Garrido
+  - "Josefa Gonz\xE1lez"
+  - Miguel L. Grilo
+  - "Bj\xF6rn Gr\xFCning"
+  - Thomas Guerin
+  - Nadege Guiglielmoni
+  - Marta Gut
+  - Marcel P. Haesler
+  - Christoph Hahn
+  - Balint Halpern
+  - Peter W. Harrison
+  - Julia Heintz
+  - Maris Hindrikson
+  - "Jacob H\xF6glund"
+  - Kerstin Howe
+  - Graham M. Hughes
+  - Benjamin Istace
+  - Mark J. Cock
+  - "Franc Jan\u017Eekovi\u010D"
+  - Zophonias O. Jonsson
+  - Sagane Joye-Dind
+  - "Janne J. Koskim\xE4ki"
+  - Boris Krystufek
+  - Justyna Kubacka
+  - Heiner Kuhl
+  - Szilvia Kusza
+  - Karine Labadie
+  - "Meri L\xE4hteenaro"
+  - Henrik Lantz
+  - Anton Lavrinienko
+  - "Lucas Lecl\xE8re"
+  - Ricardo Jorge Lopes
+  - Ole Madsen
+  - Ghislaine Magdelenat
+  - Giulia Magoga
+  - Tereza Manousaki
+  - Tapio Mappes
+  - Joao Pedro Marques
+  - Gemma I. Martinez Redondo
+  - Florian Maumus
+  - Shane A. McCarthy
+  - Hendrik-Jan Megens
+  - Jose Melo-Ferreira
+  - Sofia L. Mendes
+  - Matteo Montagna
+  - Joao Moreno
+  - Mai-Britt Mosbech
+  - "M\xF3nica Moura"
+  - Zuzana Musilova
+  - Eugene Myers
+  - Will J. Nash
+  - Alexander Nater
+  - Pamela Nicholson
+  - Manuel Niell
+  - Reindert Nijland
+  - Benjamin Noel
+  - Karin Noren
+  - Pedro H. Oliveira
+  - Remi-Andre Olsen
+  - Lino Ometto
+  - Rebekah A. Oomen
+  - Stephan Ossowski
+  - Vaidas Palinauskas
+  - Snaebjorn Palsson
+  - Jerome P. Panibe
+  - Joana Pauperio
+  - Martina Pavlek
+  - Emilie Payen
+  - Julia Pawlowska
+  - Jaume Pellicer
+  - Graziano Pesole
+  - Joao Pimenta
+  - Martin Pippel
+  - "Anna Maria Pirttil\xE4"
+  - Nikos Poulakakis
+  - Jeena Rajan
+  - "R\xFAben M.C. Rego"
+  - Roberto Resendes
+  - Philipp Resl
+  - Ana Riesgo
+  - Patrik Rodin-Morch
+  - Andre E. R. Soares
+  - Carlos Rodriguez Fernandes
+  - Maria M. Romeiras
+  - Guilherme Roxo
+  - "Lukas R\xFCber"
+  - Maria Jose Ruiz-Lopez
+  - Urmas Saarma
+  - Luis P. da Silva
+  - Manuela Sim-Sim
+  - Lucile Soler
+  - Vitor C. Sousa
+  - Carla Sousa Santos
+  - Alberto Spada
+  - Milomir Stefanovic
+  - Viktor Steger
+  - Josefin Stiller
+  - "Matthias St\xF6ck"
+  - Torsten H. Struck
+  - Hiranya Sudasinghe
+  - Riikka Tapanainen
+  - Christian Tellgren-Roth
+  - Helena Trindade
+  - Yevhen Tukalenko
+  - Ilenia Urso
+  - Benoit Vacherie
+  - Steven M. Van Belleghem
+  - Kees Van Oers
+  - Carlos Vargas-Chavez
+  - Nevena Velickovic
+  - Noel Vella
+  - Adriana Vella
+  - Cristiano Vernesi
+  - Sara Vicente
+  - Sara Villa
+  - Olga Vinnere Pettersson
+  - Filip A. M. Volckaert
+  - Judit Voros
+  - Patrick Wincker
+  - Sylke Winkler
+  - Claudio Ciofi
+  - Robert M. Waterhouse
+  - Camila J. Mazzoni
+  publisher: npj Biodiversity
+  date: '2024-09-17'
+  link: https://doi.org/g8tgnx
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1186/s12052-024-00203-2
+  title: 'Evolution content in school textbooks: data from eight European countries'
+  authors:
+  - Andreas Panayides
+  - "Xana S\xE1-Pinto"
+  - Evangelia Mavrikaki
+  - Duur K. Aanen
+  - Sara Aboim
+  - Bento Cavadas
+  - Radka Marta Dvorakova
+  - Marcel Eens
+  - Eliska Filova
+  - "Tanja Gregor\u010Di\u010D"
+  - Nausica Kapsala
+  - Mathijs Nieuwenhuis
+  - Lino Ometto
+  - Penelope Papadopoulou
+  - Rianne Pinxten
+  - Giulia Realdon
+  - Nuno Ribeiro
+  - "Jos\xE9 Luis Coelho da Silva"
+  - Bruno Sousa
+  - Gregor Torkar
+  - Konstantinos Korfiatis
+  publisher: 'Evolution: Education and Outreach'
+  date: '2024-07-09'
+  link: https://doi.org/g8tgnz
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/molbev/msad193
+  title: Relaxation of Natural Selection in the Evolution of the Giant Lungfish Genomes
+  authors:
+  - Silvia Fuselli
+  - Samuele Greco
+  - Roberto Biello
+  - Sergio Palmitessa
+  - Marta Lago
+  - Corrado Meneghetti
+  - Carmel McDougall
+  - Emiliano Trucchi
+  - Omar Rota Stabelli
+  - Assunta Maria Biscotti
+  - Daniel J Schmidt
+  - David T Roberts
+  - Thomas Espinoza
+  - Jane Margaret Hughes
+  - Lino Ometto
+  - Marco Gerdol
+  - Giorgio Bertorelle
+  publisher: Molecular Biology and Evolution
+  date: '2023-09-01'
+  link: https://doi.org/g8tgn2
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1038/s41437-022-00564-8
+  title: Selection-driven adaptation to the extreme Antarctic environment in the Emperor
+    penguin
+  authors:
+  - Federica Pirri
+  - Lino Ometto
+  - Silvia Fuselli
+  - "Fl\xE1via A. N. Fernandes"
+  - Lorena Ancona
+  - Nunzio Perta
+  - Daniele Di Marino
+  - "C\xE9line Le Bohec"
+  - Lorenzo Zane
+  - Emiliano Trucchi
+  publisher: Heredity
+  date: '2022-10-07'
+  link: https://doi.org/g8s4p4
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.3390/insects13070603
+  title: The Impact of Fast Radiation on the Phylogeny of <i>Bactrocera</i> Fruit
+    Flies as Revealed by Multiple Evolutionary Models and Mutation Rate-Calibrated
+    Clock
+  authors:
+  - Federica Valerio
+  - Nicola Zadra
+  - Omar Rota-Stabelli
+  - Lino Ometto
+  publisher: Insects
+  date: '2022-06-30'
+  link: https://doi.org/grxgcd
+  plugin: sources.py
+  file: sources.yaml
+- id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+  title: 'The complete mitogenome of the European mantis, <i>Mantis religiosa</i>,
+    from Italy: implications for the origin of North American mantis population'
+  authors:
+  - Andrea Luchetti
+  - Lino Ometto
+  - Omar Rota-Stabelli
+  publisher: Bulletin of Insectology
+  date: '2021-11-01'
+  link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+  plugin: sources.py
+  file: sources.yaml
