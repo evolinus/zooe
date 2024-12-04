@@ -1141,3 +1141,93 @@
   link: https://doi.org/f3xs8c
   plugin: sources.py
   file: sources.yaml
+- id: doi:10.1073/pnas.1104825108
+  title: Relaxed selection is a precursor to the evolution of phenotypic plasticity
+  authors:
+  - Brendan G. Hunt
+  - Lino Ometto
+  - Yannick Wurm
+  - DeWayne Shoemaker
+  - Soojin V. Yi
+  - Laurent Keller
+  - Michael A. D. Goodisman
+  publisher: Proceedings of the National Academy of Sciences
+  date: '2011-09-12'
+  link: https://doi.org/cvkzrt
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/molbev/msq322
+  title: 'Evolution of Gene Expression in Fire Ants: The Effects of Developmental
+    Stage, Caste, and Species'
+  authors:
+  - L. Ometto
+  - D. Shoemaker
+  - K. G. Ross
+  - L. Keller
+  publisher: Molecular Biology and Evolution
+  date: '2010-12-20'
+  link: https://doi.org/bq2bv4
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1098/rsbl.2006.0521
+  title: Contrasting patterns of sequence divergence and base composition between
+    <i>Drosophila</i> introns and intergenic regions
+  authors:
+  - Lino Ometto
+  - David De Lorenzo
+  - Wolfgang Stephan
+  publisher: Biology Letters
+  date: '2006-08-01'
+  link: https://doi.org/cgxfsb
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/molbev/msi207
+  title: Inferring the Effects of Demography and Selection on <i>Drosophila melanogaster</i>
+    Populations from a Chromosome-Wide Scan of DNA Variation
+  authors:
+  - Lino Ometto
+  - Sascha Glinka
+  - David De Lorenzo
+  - Wolfgang Stephan
+  publisher: Molecular Biology and Evolution
+  date: '2005-06-29'
+  link: https://doi.org/d88gg2
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1534/genetics.104.037689
+  title: Insertion/Deletion and Nucleotide Polymorphism Data Reveal Constraints in
+    <i>Drosophila melanogaster</i> Introns and Intergenic Regions
+  authors:
+  - Lino Ometto
+  - Wolfgang Stephan
+  - David De Lorenzo
+  publisher: Genetics
+  date: '2005-03-01'
+  link: https://doi.org/dmx7g6
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/genetics/165.3.1269
+  title: 'Demography and Natural Selection Have Shaped Genetic Variation in <i>Drosophila
+    melanogaster</i>: A Multi-locus Approach'
+  authors:
+  - Sascha Glinka
+  - Lino Ometto
+  - Sylvain Mousset
+  - Wolfgang Stephan
+  - David De Lorenzo
+  publisher: Genetics
+  date: '2003-11-01'
+  link: https://doi.org/g8tgn5
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1006/eesa.2000.2005
+  title: Teratogenic and Toxic Effects of Alcohol Ethoxylate and Alcohol Ethoxy Sulfate
+    Surfactants on <i>Xenopus laevis</i> Embryos and Tadpoles
+  authors:
+  - Pietro Cardellini
+  - Lino Ometto
+  publisher: Ecotoxicology and Environmental Safety
+  date: '2001-02-01'
+  link: https://doi.org/d37bxd
+  plugin: sources.py
+  file: sources.yaml
