@@ -977,3 +977,114 @@
   link: https://doi.org/f82rnn
   plugin: sources.py
   file: sources.yaml
+- id: doi:10.1007/s10340-016-0753-8
+  title: 'Multiple lines of evidence for reproductive winter diapause in the invasive
+    pest <i>Drosophila suzukii</i>: useful clues for control strategies'
+  authors:
+  - Marco Valerio Rossi-Stacconi
+  - Rupinder Kaur
+  - Valerio Mazzoni
+  - Lino Ometto
+  - Alberto Grassi
+  - Angela Gottardello
+  - Omar Rota-Stabelli
+  - Gianfranco Anfora
+  publisher: Journal of Pest Science
+  date: '2016-03-24'
+  link: https://doi.org/f8v6hn
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1111/2041-210X.12453
+  title: 'Extracting spatio-temporal patterns in animal trajectories: an ecological
+    application of sequence analysis methods'
+  authors:
+  - Johannes De Groeve
+  - Nico Van de Weghe
+  - Nathan Ranc
+  - Tijs Neutens
+  - Lino Ometto
+  - "Omar Rota\u2010Stabelli"
+  - Francesca Cagnacci
+  publisher: Methods in Ecology and Evolution
+  date: '2015-09-06'
+  link: https://doi.org/f8grz3
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1371/journal.pone.0125199
+  title: Demographic History, Population Structure, and Local Adaptation in Alpine
+    Populations of <i>Cardamine impatiens</i> and <i>Cardamine resedifolia</i>
+  authors:
+  - Lino Ometto
+  - Mingai Li
+  - Luisa Bresadola
+  - Enrico Barbaro
+  - Markus Neteler
+  - Claudio Varotto
+  publisher: PLOS ONE
+  date: '2015-05-01'
+  link: https://doi.org/g8s4p9
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/molbev/msu075
+  title: Interkingdom Transfer of the Acne-Causing Agent, <i>Propionibacterium acnes</i>,
+    from Human to Grapevine
+  authors:
+  - Andrea Campisano
+  - Lino Ometto
+  - "St\xE9phane Compant"
+  - Michael Pancher
+  - Livio Antonielli
+  - Sohail Yousaf
+  - Claudio Varotto
+  - Gianfranco Anfora
+  - Ilaria Pertot
+  - Angela Sessitsch
+  - Omar Rota-Stabelli
+  publisher: Molecular Biology and Evolution
+  date: '2014-02-19'
+  link: https://doi.org/gkxxgw
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/gbe/evt034
+  title: Linking Genomics and Ecology to Investigate the Complex Evolution of an Invasive
+    <i>Drosophila</i> Pest
+  authors:
+  - Lino Ometto
+  - Alessandro Cestaro
+  - Sukanya Ramasamy
+  - Alberto Grassi
+  - Santosh Revadi
+  - Stefanos Siozios
+  - Marco Moretto
+  - Paolo Fontana
+  - Claudio Varotto
+  - Davide Pisani
+  - Teun Dekker
+  - Nicola Wrobel
+  - Roberto Viola
+  - Ilaria Pertot
+  - Duccio Cavalieri
+  - Mark Blaxter
+  - Gianfranco Anfora
+  - Omar Rota-Stabelli
+  publisher: Genome Biology and Evolution
+  date: '2013-03-15'
+  link: https://doi.org/pdz
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1111/nph.12163
+  title: Spatiotemporal reconstruction of the <i>Aquilegia</i> rapid radiation through
+    next-generation sequencing of rapidly evolving cpDNA regions
+  authors:
+  - Simone Fior
+  - Mingai Li
+  - Bengt Oxelman
+  - Roberto Viola
+  - Scott A. Hodges
+  - Lino Ometto
+  - Claudio Varotto
+  publisher: New Phytologist
+  date: '2013-02-05'
+  link: https://doi.org/f23z6r
+  plugin: sources.py
+  file: sources.yaml
