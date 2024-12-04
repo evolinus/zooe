@@ -4,3 +4,29 @@
 - id: doi:10.1101/2024.11.10.622744
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
   publisher: bioRxiv
+- id: doi:10.22541/au.172510123.38206942/v1
+  title: 'Harmonising genomics research excellence and stakeholder needs in conservation management'
+  publisher: Authorea
+- id: doi:10.1007/s12600-024-01205-y
+  title: 'An initial investigation into the genetic diversity, phylogenetic relationships, and population structure of the Olive Psyllid <i>Euphyllura olivina</i> in Tunisia'
+- id: doi:10.1007/s12600-024-01208-9
+  title: 'Genetic diversity in the tomato leafminer <i>Tuta absoluta</i> (Meyrick) in Tunisia'
+- id: doi:10.1038/s44185-024-00054-6
+  title: 'The European Reference Genome Atlas: piloting a decentralised approach to equitable biodiversity genomics'
+- id: doi:10.1186/s12052-024-00203-2
+  title: 'Evolution content in school textbooks: data from eight European countries'
+- id: doi:10.1093/molbev/msad193
+  title: 'Relaxation of Natural Selection in the Evolution of the Giant Lungfish Genomes'
+- id: doi:10.1038/s41437-022-00564-8
+  title: 'Selection-driven adaptation to the extreme Antarctic environment in the Emperor penguin'
+- id: doi:10.3390/insects13070603
+  title: 'The Impact of Fast Radiation on the Phylogeny of <i>Bactrocera</i> Fruit Flies as Revealed by Multiple Evolutionary Models and Mutation Rate-Calibrated Clock'
+- id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+  title: 'The complete mitogenome of the European mantis, <i>Mantis religiosa</i>, from Italy: implications for the origin of North American mantis population'
+  authors:
+  - Andrea Luchetti
+  - Lino Ometto
+  - Omar Rota-Stabelli
+  publisher: Bulletin of Insectology
+  date: '2021-11-01'
+  link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
