@@ -3,7 +3,7 @@
 
 # Zoology and Evolution
 
-In the zoo_e lab we study the genetic basis of biodiversity with a combination of computational and experimental approaches in insects and other organisms.
+In the zoo_e lab we study the genetic basis of biodiversity with a combination of computational and experimental approaches.
 
 {% include section.html %}
 
@@ -11,7 +11,7 @@ In the zoo_e lab we study the genetic basis of biodiversity with a combination o
 
 {% capture text %}
 
-We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of insects&co.
+We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of in insects and other organisms.
 
 {%
   include button.html
@@ -26,7 +26,7 @@ We use molecular evolution and population genetics to characterize the neutral a
 
 {%
   include feature.html
-  image="images/bai.png"
+  image="images/asciifly.png"
   link="research"
   title="Our Research"
   text=text
@@ -34,7 +34,7 @@ We use molecular evolution and population genetics to characterize the neutral a
 
 {% capture text %}
 
-Can Transposable Elements provide adaptive variation in invading mosquitoes? 
+Can transposable elements provide adaptive variation in invading mosquitoes? 
 What happened to introduced ant populations?
 And other stories.
 
@@ -76,7 +76,7 @@ Meet the people behind the quest
 
 {%
   include feature.html
-  image="images/riso.png"
+  image="images/bai.png"
   link="team"
   title="Our Team"
   text=text
