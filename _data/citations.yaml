@@ -1088,3 +1088,17 @@
   link: https://doi.org/f23z6r
   plugin: sources.py
   file: sources.yaml
+- id: doi:10.1371/journal.pone.0056629.s003
+  title: Selective Sweep in the <i>Flotillin-2</i> Region of European <i>Drosophila
+    melanogaster</i>
+  authors:
+  - Annegret Werzner
+  - Pavlos Pavlidis
+  - Lino Ometto
+  - Wolfgang Stephan
+  - Stefan Laurent
+  publisher: PLOS ONE
+  date: '2013-02-21'
+  link: https://doi.org/g8tgn4
+  plugin: sources.py
+  file: sources.yaml
