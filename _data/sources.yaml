@@ -82,3 +82,14 @@
   - Stefan Laurent
   publisher: PLOS ONE
   date: '2013-02-21'
+- id: doi:10.1093/molbev/mss234
+  title: 'Evolution at Two Levels in Fire Ants: The Relationship between Patterns of Gene Expression and Protein Sequence Evolution'
+- id: doi:10.1186/1471-2148-12-7
+  title: 'Rates of evolution in stress-related genes are associated with habitat preference in two <i>Cardamine</i> lineages'
+- id: doi:10.1111/j.1365-294X.2012.05544.x
+  title: 'Disruption of gene expression in hybrids of the fire ants <i>Solenopsis invicta</i> and <i>Solenopsis richteri</i>'
+  authors:
+  - Lino Ometto
+  - Kenneth G. Ross
+  - DeWayne Shoemaker
+  - Laurent Keller
