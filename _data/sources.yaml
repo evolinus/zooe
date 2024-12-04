@@ -104,6 +104,11 @@
   title: 'Relaxed selection is a precursor to the evolution of phenotypic plasticity'
 - id: doi:10.1093/molbev/msq322
   title: 'Evolution of Gene Expression in Fire Ants: The Effects of Developmental Stage, Caste, and Species'
+  authors:
+  - Lino Ometto
+  - DeWayne Shoemaker
+  - Kenneth G. Ross
+  - Laurent Keller
 - id: doi:10.1098/rsbl.2006.0521
   title: 'Contrasting patterns of sequence divergence and base composition between <i>Drosophila</i> introns and intergenic regions'
 - id: doi:10.1093/molbev/msi207
