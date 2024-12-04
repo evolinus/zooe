@@ -167,6 +167,7 @@
   publisher: Phytoparasitica
   date: '2024-10-14'
   link: https://doi.org/g8s4px
+  image: evolinus/zooe/images/article_thumbnails/thumb.olivina.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s12600-024-01208-9
@@ -182,6 +183,7 @@
   publisher: Phytoparasitica
   date: '2024-10-11'
   link: https://doi.org/g8s4pz
+  image: images/article_thumbnails/thumb.tuta.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1038/s44185-024-00054-6
@@ -394,6 +396,7 @@
   publisher: npj Biodiversity
   date: '2024-09-17'
   link: https://doi.org/g8tgnx
+  image: evolinus/zooe/images/article_thumbnails/thumb.erga.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/s12052-024-00203-2
@@ -423,6 +426,7 @@
   publisher: 'Evolution: Education and Outreach'
   date: '2024-07-09'
   link: https://doi.org/g8tgnz
+  image: evolinus/zooe/images/article_thumbnails/thumb.evotexts.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/msad193
@@ -448,6 +452,7 @@
   publisher: Molecular Biology and Evolution
   date: '2023-09-01'
   link: https://doi.org/g8tgn2
+  image: evolinus/zooe/images/article_thumbnails/thumb.lungfish.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1038/s41437-022-00564-8
@@ -467,6 +472,7 @@
   publisher: Heredity
   date: '2022-10-07'
   link: https://doi.org/g8s4p4
+  image: evolinus/zooe/images/article_thumbnails/thumb.penguin.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.3390/insects13070603
@@ -682,7 +688,7 @@
   file: sources.yaml
 - id: doi:10.1371/journal.pntd.0007919
   title: Polymorphism analyses and protein modelling inform on functional specialization
-    of Piwi clade genes in the arboviral vector <i>Aedes albopictus</i>
+    of <i>Piwi</i> clade genes in the arboviral vector <i>Aedes albopictus</i>
   authors:
   - Michele Marconcini
   - Luis Hernandez
@@ -1099,7 +1105,7 @@
   - Stefan Laurent
   publisher: PLOS ONE
   date: '2013-02-21'
-  link: https://doi.org/g8tgn4
+  link: https://doi.org/10.1371/journal.pone.0056629
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/mss234
