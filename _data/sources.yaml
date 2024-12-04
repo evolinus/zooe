@@ -9,16 +9,22 @@
   publisher: Authorea
 - id: doi:10.1007/s12600-024-01205-y
   title: 'An initial investigation into the genetic diversity, phylogenetic relationships, and population structure of the Olive Psyllid <i>Euphyllura olivina</i> in Tunisia'
+  image: evolinus/zooe/images/article_thumbnails/thumb.olivina.jpg
 - id: doi:10.1007/s12600-024-01208-9
   title: 'Genetic diversity in the tomato leafminer <i>Tuta absoluta</i> (Meyrick) in Tunisia'
+  image: images/article_thumbnails/thumb.tuta.jpg
 - id: doi:10.1038/s44185-024-00054-6
   title: 'The European Reference Genome Atlas: piloting a decentralised approach to equitable biodiversity genomics'
+  image: evolinus/zooe/images/article_thumbnails/thumb.erga.jpg
 - id: doi:10.1186/s12052-024-00203-2
   title: 'Evolution content in school textbooks: data from eight European countries'
+  image: evolinus/zooe/images/article_thumbnails/thumb.evotexts.jpg
 - id: doi:10.1093/molbev/msad193
   title: 'Relaxation of Natural Selection in the Evolution of the Giant Lungfish Genomes'
+  image: evolinus/zooe/images/article_thumbnails/thumb.lungfish.jpg
 - id: doi:10.1038/s41437-022-00564-8
   title: 'Selection-driven adaptation to the extreme Antarctic environment in the Emperor penguin'
+  image: evolinus/zooe/images/article_thumbnails/thumb.penguin.jpg
 - id: doi:10.3390/insects13070603
   title: 'The Impact of Fast Radiation on the Phylogeny of <i>Bactrocera</i> Fruit Flies as Revealed by Multiple Evolutionary Models and Mutation Rate-Calibrated Clock'
 - id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
@@ -41,7 +47,7 @@
 - id: doi:10.1007/s10340-019-01172-y
   title: 'Distinct genotypes and phenotypes in European and American strains of <i>Drosophila suzukii</i>: implications for biology and management of an invasive organism'
 - id: doi:10.1371/journal.pntd.0007919
-  title: 'Polymorphism analyses and protein modelling inform on functional specialization of Piwi clade genes in the arboviral vector <i>Aedes albopictus</i>'
+  title: 'Polymorphism analyses and protein modelling inform on functional specialization of <i>Piwi</i> clade genes in the arboviral vector <i>Aedes albopictus</i>'
 - id: doi:10.1038/s41467-019-12175-9
   title: 'A chromosome-level genome assembly of <i>Cydia pomonella</i> provides insights into chemical ecology and insecticide resistance'
 - id: doi:10.1186/s13059-019-1768-2
@@ -82,6 +88,7 @@
   - Stefan Laurent
   publisher: PLOS ONE
   date: '2013-02-21'
+  link: https://doi.org/10.1371/journal.pone.0056629
 - id: doi:10.1093/molbev/mss234
   title: 'Evolution at Two Levels in Fire Ants: The Relationship between Patterns of Gene Expression and Protein Sequence Evolution'
 - id: doi:10.1186/1471-2148-12-7
