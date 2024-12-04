@@ -495,3 +495,485 @@
   link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
   plugin: sources.py
   file: sources.yaml
+- id: doi:10.1093/gbe/evab170
+  title: Phylogenomics of Opsin Genes in Diptera Reveals Lineage-Specific Events and
+    Contrasting Evolutionary Dynamics in <i>Anopheles</i> and <i>Drosophila</i>
+  authors:
+  - Roberto Feuda
+  - Matthew Goulty
+  - Nicola Zadra
+  - Tiziana Gasparetti
+  - Ezio Rosato
+  - Davide Pisani
+  - Annapaola Rizzoli
+  - Nicola Segata
+  - Lino Ometto
+  - Omar Rota Stabelli
+  publisher: Genome Biology and Evolution
+  date: '2021-07-16'
+  link: https://doi.org/gmv6b8
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/molbev/msab259
+  title: '<i>Drosophila</i> Evolution over Space and Time (DEST): A New Population
+    Genomics Resource'
+  authors:
+  - Martin Kapun
+  - Joaquin C B Nunez
+  - "Mar\xEDa Bogaerts-M\xE1rquez"
+  - "Jes\xFAs Murga-Moreno"
+  - Margot Paris
+  - Joseph Outten
+  - Marta Coronado-Zamora
+  - Courtney Tern
+  - Omar Rota-Stabelli
+  - "Maria P Garc\xEDa Guerreiro"
+  - "S\xF2nia Casillas"
+  - Dorcas J Orengo
+  - Eva Puerma
+  - Maaria Kankare
+  - Lino Ometto
+  - Volker Loeschcke
+  - Banu S Onder
+  - Jessica K Abbott
+  - Stephen W Schaeffer
+  - Subhash Rajpurohit
+  - Emily L Behrman
+  - Mads F Schou
+  - Thomas J S Merritt
+  - Brian P Lazzaro
+  - Amanda Glaser-Schmitt
+  - Eliza Argyridou
+  - Fabian Staubach
+  - Yun Wang
+  - Eran Tauber
+  - Svitlana V Serga
+  - Daniel K Fabian
+  - Kelly A Dyer
+  - Christopher W Wheat
+  - John Parsch
+  - Sonja Grath
+  - Marija Savic Veselinovic
+  - Marina Stamenkovic-Radak
+  - Mihailo Jelic
+  - "Antonio J Buend\xEDa-Ru\xEDz"
+  - "Maria Josefa G\xF3mez-Juli\xE1n"
+  - Maria Luisa Espinosa-Jimenez
+  - "Francisco D Gallardo-Jim\xE9nez"
+  - Aleksandra Patenkovic
+  - Katarina Eric
+  - Marija Tanaskovic
+  - Anna Ullastres
+  - Lain Guio
+  - Miriam Merenciano
+  - Sara Guirao-Rico
+  - "Vivien Horv\xE1th"
+  - Darren J Obbard
+  - Elena Pasyukova
+  - Vladimir E Alatortsev
+  - Cristina P Vieira
+  - Jorge Vieira
+  - Jorge Roberto Torres
+  - Iryna Kozeretska
+  - Oleksandr M Maistrenko
+  - Catherine Montchamp-Moreau
+  - Dmitry V Mukha
+  - Heather E Machado
+  - Keric Lamb
+  - "T\xE2nia Paulo"
+  - Leeban Yusuf
+  - Antonio Barbadilla
+  - Dmitri Petrov
+  - Paul Schmidt
+  - Josefa Gonzalez
+  - Thomas Flatt
+  - Alan O Bergland
+  publisher: Molecular Biology and Evolution
+  date: '2021-09-01'
+  link: https://doi.org/gn8vcs
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/ve/veab031
+  title: The discovery, distribution, and diversity of DNA viruses associated with
+    <i>Drosophila melanogaster</i> in Europe
+  authors:
+  - Megan A Wallace
+  - Kelsey A Coffman
+  - "Cl\xE9ment Gilbert"
+  - Sanjana Ravindran
+  - Gregory F Albery
+  - Jessica Abbott
+  - Eliza Argyridou
+  - Paola Bellosta
+  - Andrea J Betancourt
+  - "Herv\xE9 Colinet"
+  - Katarina Eric
+  - Amanda Glaser-Schmitt
+  - Sonja Grath
+  - Mihailo Jelic
+  - Maaria Kankare
+  - Iryna Kozeretska
+  - Volker Loeschcke
+  - Catherine Montchamp-Moreau
+  - Lino Ometto
+  - Banu Sebnem Onder
+  - Dorcas J Orengo
+  - John Parsch
+  - Marta Pascual
+  - Aleksandra Patenkovic
+  - Eva Puerma
+  - Michael G Ritchie
+  - Omar Rota-Stabelli
+  - Mads Fristrup Schou
+  - Svitlana V Serga
+  - Marina Stamenkovic-Radak
+  - Marija Tanaskovic
+  - Marija Savic Veselinovic
+  - Jorge Vieira
+  - Cristina P Vieira
+  - Martin Kapun
+  - Thomas Flatt
+  - "Josefa Gonz\xE1lez"
+  - Fabian Staubach
+  - Darren J Obbard
+  publisher: Virus Evolution
+  date: '2021-01-01'
+  link: https://doi.org/gmwmx2
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1016/j.ibmb.2020.103474
+  title: Linking omics and ecology to dissect interactions between the apple proliferation
+    phytoplasma and its psyllid vector <i>Cacopsylla melanoneura</i>
+  authors:
+  - Tobias Weil
+  - Lino Ometto
+  - Anna Esteve-Codina
+  - "J\xE8ssica G\xF3mez-Garrido"
+  - Tiziana Oppedisano
+  - Cesare Lotti
+  - Marc Dabad
+  - Tyler Alioto
+  - Urska Vrhovsek
+  - Saskia Hogenhout
+  - Gianfranco Anfora
+  publisher: Insect Biochemistry and Molecular Biology
+  date: '2020-12-01'
+  link: https://doi.org/g8s4p7
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1007/s10340-019-01172-y
+  title: 'Distinct genotypes and phenotypes in European and American strains of <i>Drosophila
+    suzukii</i>: implications for biology and management of an invasive organism'
+  authors:
+  - Omar Rota-Stabelli
+  - Lino Ometto
+  - Gabriella Tait
+  - Silvia Ghirotto
+  - Rupinder Kaur
+  - Francesco Drago
+  - "Josefa Gonz\xE1lez"
+  - Vaughn M. Walton
+  - Gianfranco Anfora
+  - Marco Valerio Rossi-Stacconi
+  publisher: Journal of Pest Science
+  date: '2019-11-06'
+  link: https://doi.org/ggrtmw
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1371/journal.pntd.0007919
+  title: Polymorphism analyses and protein modelling inform on functional specialization
+    of Piwi clade genes in the arboviral vector <i>Aedes albopictus</i>
+  authors:
+  - Michele Marconcini
+  - Luis Hernandez
+  - Giuseppe Iovino
+  - "Vincent Hou\xE9"
+  - Federica Valerio
+  - Umberto Palatini
+  - Elisa Pischedda
+  - Jacob E. Crawford
+  - Bradley J. White
+  - Teresa Lin
+  - Rebeca Carballar-Lejarazu
+  - Lino Ometto
+  - Federico Forneris
+  - Anna-Bella Failloux
+  - Mariangela Bonizzoni
+  publisher: PLOS Neglected Tropical Diseases
+  date: '2019-12-02'
+  link: https://doi.org/gsw24t
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1038/s41467-019-12175-9
+  title: A chromosome-level genome assembly of <i>Cydia pomonella</i> provides insights
+    into chemical ecology and insecticide resistance
+  authors:
+  - Fanghao Wan
+  - Chuanlin Yin
+  - Rui Tang
+  - Maohua Chen
+  - Qiang Wu
+  - Cong Huang
+  - Wanqiang Qian
+  - Omar Rota-Stabelli
+  - Nianwan Yang
+  - Shuping Wang
+  - Guirong Wang
+  - Guifen Zhang
+  - Jianyang Guo
+  - Liuqi Gu
+  - Longfei Chen
+  - Longsheng Xing
+  - Yu Xi
+  - Feiling Liu
+  - Kejian Lin
+  - Mengbo Guo
+  - Wei Liu
+  - Kang He
+  - Ruizheng Tian
+  - Emmanuelle Jacquin-Joly
+  - Pierre Franck
+  - Myriam Siegwart
+  - Lino Ometto
+  - Gianfranco Anfora
+  - Mark Blaxter
+  - Camille Meslin
+  - Petr Nguyen
+  - "Martina Dal\xEDkov\xE1"
+  - "Franti\u0161ek Marec"
+  - "J\xE9r\xF4me Olivares"
+  - Sandrine Maugin
+  - Jianru Shen
+  - Jinding Liu
+  - Jinmeng Guo
+  - Jiapeng Luo
+  - Bo Liu
+  - Wei Fan
+  - Likai Feng
+  - Xianxin Zhao
+  - Xiong Peng
+  - Kang Wang
+  - Lang Liu
+  - Haixia Zhan
+  - Wanxue Liu
+  - Guoliang Shi
+  - Chunyan Jiang
+  - Jisu Jin
+  - Xiaoqing Xian
+  - Sha Lu
+  - Mingli Ye
+  - Meizhen Li
+  - Minglu Yang
+  - Renci Xiong
+  - James R. Walters
+  - Fei Li
+  publisher: Nature Communications
+  date: '2019-09-17'
+  link: https://doi.org/ggn4kb
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1186/s13059-019-1768-2
+  title: Comparative genomic analysis of six <i>Glossina</i> genomes, vectors of African
+    trypanosomes
+  authors:
+  - Geoffrey M. Attardo
+  - Adly M. M. Abd-Alla
+  - Alvaro Acosta-Serrano
+  - James E. Allen
+  - Rosemary Bateta
+  - Joshua B. Benoit
+  - Kostas Bourtzis
+  - Jelle Caers
+  - Guy Caljon
+  - Mikkel B. Christensen
+  - David W. Farrow
+  - Markus Friedrich
+  - "Aur\xE9lie Hua-Van"
+  - Emily C. Jennings
+  - Denis M. Larkin
+  - Daniel Lawson
+  - Michael J. Lehane
+  - Vasileios P. Lenis
+  - Ernesto Lowy-Gallego
+  - Rosaline W. Macharia
+  - Anna R. Malacrida
+  - Heather G. Marco
+  - Daniel Masiga
+  - Gareth L. Maslen
+  - Irina Matetovici
+  - Richard P. Meisel
+  - Irene Meki
+  - Veronika Michalkova
+  - Wolfgang J. Miller
+  - Patrick Minx
+  - Paul O. Mireji
+  - Lino Ometto
+  - Andrew G. Parker
+  - Rita Rio
+  - Clair Rose
+  - Andrew J. Rosendale
+  - Omar Rota-Stabelli
+  - Grazia Savini
+  - Liliane Schoofs
+  - Francesca Scolari
+  - Martin T. Swain
+  - "Peter Tak\xE1\u010D"
+  - Chad Tomlinson
+  - George Tsiamis
+  - Jan Van Den Abbeele
+  - Aurelien Vigneron
+  - Jingwen Wang
+  - Wesley C. Warren
+  - Robert M. Waterhouse
+  - Matthew T. Weirauch
+  - Brian L. Weiss
+  - Richard K. Wilson
+  - Xin Zhao
+  - Serap Aksoy
+  publisher: Genome Biology
+  date: '2019-09-02'
+  link: https://doi.org/g8s4p8
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1007/s10340-018-0985-x
+  title: Large-scale spatial dynamics of <i>Drosophila suzukii</i> in Trentino, Italy
+  authors:
+  - Gabriella Tait
+  - Alberto Grassi
+  - Ferdinand Pfab
+  - Cristina M. Crava
+  - Daniel T. Dalton
+  - Roger Magarey
+  - Lino Ometto
+  - Silvia Vezzulli
+  - M. Valerio Rossi-Stacconi
+  - Angela Gottardello
+  - Andrea Pugliese
+  - Giuseppe Firrao
+  - Vaughn M. Walton
+  - Gianfranco Anfora
+  publisher: Journal of Pest Science
+  date: '2018-05-05'
+  link: https://doi.org/gd2hf7
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1073/pnas.1707279114
+  title: 'Survival and divergence in a small group: The extraordinary genomic history
+    of the endangered Apennine brown bear stragglers'
+  authors:
+  - Andrea Benazzo
+  - Emiliano Trucchi
+  - James A. Cahill
+  - Pierpaolo Maisano Delser
+  - Stefano Mona
+  - Matteo Fumagalli
+  - Lynsey Bunnefeld
+  - Luca Cornetti
+  - Silvia Ghirotto
+  - Matteo Girardi
+  - Lino Ometto
+  - Alex Panziera
+  - Omar Rota-Stabelli
+  - Enrico Zanetti
+  - Alexandros Karamanlidis
+  - Claudio Groff
+  - Ladislav Paule
+  - Leonardo Gentile
+  - "Carles Vil\xE0"
+  - Saverio Vicario
+  - Luigi Boitani
+  - Ludovic Orlando
+  - Silvia Fuselli
+  - Cristiano Vernesi
+  - Beth Shapiro
+  - Paolo Ciucci
+  - Giorgio Bertorelle
+  publisher: Proceedings of the National Academy of Sciences
+  date: '2017-10-24'
+  link: https://doi.org/gcj9xr
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1186/s12863-017-0558-7
+  title: Genetic variability in Italian populations of <i>Drosophila suzukii</i>
+  authors:
+  - Gabriella Tait
+  - Silvia Vezzulli
+  - "Fabiana Sass\xF9"
+  - Gloria Antonini
+  - Antonio Biondi
+  - Nuray Baser
+  - Giorgia Sollai
+  - Alessandro Cini
+  - Lorenzo Tonina
+  - Lino Ometto
+  - Gianfranco Anfora
+  publisher: BMC Genetics
+  date: '2017-11-03'
+  link: https://doi.org/ggjcxr
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1002/ece3.3449
+  title: Genome comparisons indicate recent transfer of <i>w</i>Ri-like <i>Wolbachia</i>
+    between sister species <i>Drosophila suzukii</i> and <i>D. subpulchrella</i>
+  authors:
+  - William R. Conner
+  - Mark L. Blaxter
+  - Gianfranco Anfora
+  - Lino Ometto
+  - "Omar Rota\u2010Stabelli"
+  - Michael Turelli
+  publisher: Ecology and Evolution
+  date: '2017-10-08'
+  link: https://doi.org/gcn6dp
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1186/s12864-017-3903-3
+  title: Comparative genomics shows that viral integrations are abundant and express
+    piRNAs in the arboviral vectors <i>Aedes aegypti</i> and <i>Aedes albopictus</i>
+  authors:
+  - Umberto Palatini
+  - Pascal Miesen
+  - Rebeca Carballar-Lejarazu
+  - Lino Ometto
+  - Ettore Rizzo
+  - Zhijian Tu
+  - Ronald P. van Rij
+  - Mariangela Bonizzoni
+  publisher: BMC Genomics
+  date: '2017-07-05'
+  link: https://doi.org/ghbkwc
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1534/g3.116.036467
+  title: Evolutionary Insights into Taste Perception of the Invasive Pest <i>Drosophila
+    suzukii</i>
+  authors:
+  - Cristina M Crava
+  - Sukanya Ramasamy
+  - Lino Ometto
+  - Gianfranco Anfora
+  - Omar Rota-Stabelli
+  publisher: G3 Genes|Genomes|Genetics
+  date: '2016-12-01'
+  link: https://doi.org/gh2zgf
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1093/gbe/evw160
+  title: The Evolution of Olfactory Gene Families in <i>Drosophila</i> and the Genomic
+    Basis of chemical-Ecological Adaptation in<i>Drosophila suzukii</i>
+  authors:
+  - Sukanya Ramasamy
+  - Lino Ometto
+  - Cristina M. Crava
+  - Santosh Revadi
+  - Rupinder Kaur
+  - David S. Horner
+  - Davide Pisani
+  - Teun Dekker
+  - Gianfranco Anfora
+  - Omar Rota-Stabelli
+  publisher: Genome Biology and Evolution
+  date: '2016-07-19'
+  link: https://doi.org/f82rnn
+  plugin: sources.py
+  file: sources.yaml
