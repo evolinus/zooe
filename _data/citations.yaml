@@ -167,7 +167,7 @@
   publisher: Phytoparasitica
   date: '2024-10-14'
   link: https://doi.org/g8s4px
-  image: evolinus/zooe/images/article_thumbnails/thumb.olivina.jpg
+  image: images/article_thumbnails/thumb.olivina.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s12600-024-01208-9
@@ -396,7 +396,7 @@
   publisher: npj Biodiversity
   date: '2024-09-17'
   link: https://doi.org/g8tgnx
-  image: evolinus/zooe/images/article_thumbnails/thumb.erga.jpg
+  image: images/article_thumbnails/thumb.erga.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/s12052-024-00203-2
@@ -426,7 +426,7 @@
   publisher: 'Evolution: Education and Outreach'
   date: '2024-07-09'
   link: https://doi.org/g8tgnz
-  image: evolinus/zooe/images/article_thumbnails/thumb.evotexts.jpg
+  image: images/article_thumbnails/thumb.evotexts.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/msad193
@@ -452,7 +452,7 @@
   publisher: Molecular Biology and Evolution
   date: '2023-09-01'
   link: https://doi.org/g8tgn2
-  image: evolinus/zooe/images/article_thumbnails/thumb.lungfish.jpg
+  image: images/article_thumbnails/thumb.lungfish.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1038/s41437-022-00564-8
@@ -472,7 +472,7 @@
   publisher: Heredity
   date: '2022-10-07'
   link: https://doi.org/g8s4p4
-  image: evolinus/zooe/images/article_thumbnails/thumb.penguin.jpg
+  image: images/article_thumbnails/thumb.penguin.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.3390/insects13070603
@@ -499,6 +499,7 @@
   publisher: Bulletin of Insectology
   date: '2021-11-01'
   link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+  image: images/article_thumbnails/thumb.mantis.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/gbe/evab170
@@ -518,6 +519,7 @@
   publisher: Genome Biology and Evolution
   date: '2021-07-16'
   link: https://doi.org/gmv6b8
+  image: images/article_thumbnails/thumb.diptera_rh.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/msab259
@@ -597,6 +599,7 @@
   publisher: Molecular Biology and Evolution
   date: '2021-09-01'
   link: https://doi.org/gn8vcs
+  image: images/article_thumbnails/thumb.droso_dest.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/ve/veab031
@@ -645,6 +648,7 @@
   publisher: Virus Evolution
   date: '2021-01-01'
   link: https://doi.org/gmwmx2
+  image: images/article_thumbnails/thumb.droso_virus.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1016/j.ibmb.2020.103474
@@ -665,6 +669,7 @@
   publisher: Insect Biochemistry and Molecular Biology
   date: '2020-12-01'
   link: https://doi.org/g8s4p7
+  image: images/article_thumbnails/thumb.cacopsylla.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s10340-019-01172-y
@@ -684,6 +689,7 @@
   publisher: Journal of Pest Science
   date: '2019-11-06'
   link: https://doi.org/ggrtmw
+  image: images/article_thumbnails/thumb.suz_ITvsUSA.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1371/journal.pntd.0007919
@@ -708,6 +714,7 @@
   publisher: PLOS Neglected Tropical Diseases
   date: '2019-12-02'
   link: https://doi.org/gsw24t
+  image: images/article_thumbnails/thumb.mosq_piwi.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1038/s41467-019-12175-9
@@ -776,6 +783,7 @@
   publisher: Nature Communications
   date: '2019-09-17'
   link: https://doi.org/ggn4kb
+  image: images/article_thumbnails/thumb.pomonella.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/s13059-019-1768-2
@@ -839,6 +847,7 @@
   publisher: Genome Biology
   date: '2019-09-02'
   link: https://doi.org/g8s4p8
+  image: images/article_thumbnails/thumb.glossina.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s10340-018-0985-x
@@ -861,6 +870,7 @@
   publisher: Journal of Pest Science
   date: '2018-05-05'
   link: https://doi.org/gd2hf7
+  image: images/article_thumbnails/thumb.suz_trentino.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1073/pnas.1707279114
@@ -897,6 +907,7 @@
   publisher: Proceedings of the National Academy of Sciences
   date: '2017-10-24'
   link: https://doi.org/gcj9xr
+  image: images/article_thumbnails/thumb.orso.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/s12863-017-0558-7
@@ -916,6 +927,7 @@
   publisher: BMC Genetics
   date: '2017-11-03'
   link: https://doi.org/ggjcxr
+  image: images/article_thumbnails/thumb.suz_ita.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1002/ece3.3449
@@ -931,6 +943,7 @@
   publisher: Ecology and Evolution
   date: '2017-10-08'
   link: https://doi.org/gcn6dp
+  image: images/article_thumbnails/thumb.droso_wRi.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/s12864-017-3903-3
@@ -948,6 +961,7 @@
   publisher: BMC Genomics
   date: '2017-07-05'
   link: https://doi.org/ghbkwc
+  image: images/article_thumbnails/thumb.mosq_nirvs.gif
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1534/g3.116.036467
@@ -962,6 +976,7 @@
   publisher: G3 Genes|Genomes|Genetics
   date: '2016-12-01'
   link: https://doi.org/gh2zgf
+  image: images/article_thumbnails/thumb.suz_taste.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/gbe/evw160
@@ -981,6 +996,7 @@
   publisher: Genome Biology and Evolution
   date: '2016-07-19'
   link: https://doi.org/f82rnn
+  image: images/article_thumbnails/thumb.suz_orgr.jpeg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s10340-016-0753-8
@@ -998,6 +1014,7 @@
   publisher: Journal of Pest Science
   date: '2016-03-24'
   link: https://doi.org/f8v6hn
+  image: images/article_thumbnails/thumb.suz_pest.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1111/2041-210X.12453
@@ -1014,6 +1031,7 @@
   publisher: Methods in Ecology and Evolution
   date: '2015-09-06'
   link: https://doi.org/f8grz3
+  image: images/article_thumbnails/thumb.capriolo.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1371/journal.pone.0125199
@@ -1029,6 +1047,7 @@
   publisher: PLOS ONE
   date: '2015-05-01'
   link: https://doi.org/g8s4p9
+  image: images/article_thumbnails/thumb.cardamine.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/msu075
@@ -1049,6 +1068,7 @@
   publisher: Molecular Biology and Evolution
   date: '2014-02-19'
   link: https://doi.org/gkxxgw
+  image: images/article_thumbnails/thumb.acne.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/gbe/evt034
@@ -1076,6 +1096,7 @@
   publisher: Genome Biology and Evolution
   date: '2013-03-15'
   link: https://doi.org/pdz
+  image: images/article_thumbnails/thumb.suz_genome.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1111/nph.12163
@@ -1092,6 +1113,7 @@
   publisher: New Phytologist
   date: '2013-02-05'
   link: https://doi.org/f23z6r
+  image: images/article_thumbnails/thumb.aquilegia.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1371/journal.pone.0056629.s003
@@ -1106,6 +1128,7 @@
   publisher: PLOS ONE
   date: '2013-02-21'
   link: https://doi.org/10.1371/journal.pone.0056629
+  image: images/article_thumbnails/thumb.droso_flotillin.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/mss234
@@ -1119,6 +1142,7 @@
   publisher: Molecular Biology and Evolution
   date: '2012-10-10'
   link: https://doi.org/f4k4xp
+  image: images/article_thumbnails/thumb.ants_2levels.jpeg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/1471-2148-12-7
@@ -1132,6 +1156,7 @@
   publisher: BMC Evolutionary Biology
   date: '2012-01-18'
   link: https://doi.org/fx2vxg
+  image: images/article_thumbnails/thumb.cardamine_cold.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1111/j.1365-294X.2012.05544.x
@@ -1145,6 +1170,7 @@
   publisher: Molecular Ecology
   date: '2012-03-30'
   link: https://doi.org/f3xs8c
+  image: images/article_thumbnails/thumb.ants_hybr.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1073/pnas.1104825108
@@ -1160,6 +1186,7 @@
   publisher: Proceedings of the National Academy of Sciences
   date: '2011-09-12'
   link: https://doi.org/cvkzrt
+  image: images/article_thumbnails/thumb.ants_relax.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/msq322
@@ -1173,6 +1200,7 @@
   publisher: Molecular Biology and Evolution
   date: '2010-12-20'
   link: https://doi.org/bq2bv4
+  image: images/article_thumbnails/thumb.ants_genex.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1098/rsbl.2006.0521
@@ -1185,6 +1213,7 @@
   publisher: Biology Letters
   date: '2006-08-01'
   link: https://doi.org/cgxfsb
+  image: images/article_thumbnails/thumb.droso_interintron.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/molbev/msi207
@@ -1198,6 +1227,7 @@
   publisher: Molecular Biology and Evolution
   date: '2005-06-29'
   link: https://doi.org/d88gg2
+  image: images/article_thumbnails/thumb.droso_euro.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1534/genetics.104.037689
@@ -1210,6 +1240,7 @@
   publisher: Genetics
   date: '2005-03-01'
   link: https://doi.org/dmx7g6
+  image: images/article_thumbnails/thumb.drso_indels.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1093/genetics/165.3.1269
@@ -1224,6 +1255,7 @@
   publisher: Genetics
   date: '2003-11-01'
   link: https://doi.org/g8tgn5
+  image: images/article_thumbnails/thumb.droso_glinka.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1006/eesa.2000.2005
@@ -1235,5 +1267,6 @@
   publisher: Ecotoxicology and Environmental Safety
   date: '2001-02-01'
   link: https://doi.org/d37bxd
+  image: images/article_thumbnails/thumb.xenopus.png
   plugin: sources.py
   file: sources.yaml
