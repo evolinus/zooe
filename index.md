@@ -61,7 +61,7 @@ And other stories.
 
 {% capture text %}
 
-The people behind the quest 
+The people behind the quest (want to join?)
 
 {%
   include button.html

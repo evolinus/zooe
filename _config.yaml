@@ -2,9 +2,9 @@
 title: zoo_e lab
 subtitle: 
 description: Zoology and Evolution @ unipv.it
-header: images/background.jpg
-footer: images/background.jpg
-proofer: false
+header: images/background.blu.png
+footer: images/background.blu2.png
+# proofer: false
 
 # site social media and other links
 links:

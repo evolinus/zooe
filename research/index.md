@@ -7,14 +7,15 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-microscope" %}Research
 
-If you wish the .pdf copy of an article, please do contact us.
+WWhen possible we publish our work open access, if you need a copy of you have any question related to our work, please contact us.
 
 {% include section.html %}
 
-## All
 
 {% include search-box.html %}
 
 {% include search-info.html %}
+
+## Published work (peer-reviewed or pre-print)
 
 {% include list.html data="citations" component="citation" style="rich" %}
