@@ -487,6 +487,7 @@
   publisher: Insects
   date: '2022-06-30'
   link: https://doi.org/grxgcd
+  image: images/article_thumbnails/thumb.bactrocera.png
   plugin: sources.py
   file: sources.yaml
 - id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
