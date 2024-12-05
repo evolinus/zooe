@@ -7,7 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-regular fa-envelope" %}Contact
 
-Our lab is located at the Department of Biology and Biotechnology of the University of Pavia.
+Our lab is located at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).
 
 {%
   include button.html
@@ -24,9 +24,20 @@ Our lab is located at the Department of Biology and Biotechnology of the Univers
 {%
   include button.html
   type="address"
+  text="Find us on the map"
   tooltip="Department of Biology and Biotechnology - University of Pavia - Via Ferrata 9 - 27100 Pavia - Italy"
-  link="https://maps.app.goo.gl/9ZSSNfQ7WQkuJpNN7"
+  link="https://maps.app.goo.gl/fLJnAQTo72NxbecJ8"
 %}
+
+{:.center}
+
+### <i class "fas fa-mail-bulk"></i>Mailing Address
+Dipartimento di Biologia e Biotecnologie "L. Spallanzani"
+Università di Pavia
+Via Ferrata 9
+27100 Pavia
+Italy
+{:.center}
 
 {% include section.html %}
 
@@ -34,12 +45,12 @@ Our lab is located at the Department of Biology and Biotechnology of the Univers
 
 {%
   include figure.html
-  image="images/photo.jpg"
-  caption="Lorem ipsum"
+  image="images/ponte.png"
 %}
 
 {% endcapture %}
 
+<!--
 {% capture col2 %}
 
 {%
@@ -73,3 +84,4 @@ sed do eiusmod tempor
 {% endcapture %}
 
 {% include cols.html col1=col1 col2=col2 col3=col3 %}
+-->
