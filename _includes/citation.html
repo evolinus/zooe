@@ -1,5 +1,6 @@
-<script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
-
+<!--  
+  <script type='text/javascript' src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'></script>
+-->
 <script async src="https://badge.dimensions.ai/badge.js" charset="utf-8"></script>
 
 {%- assign emptyarray = "" | split: "," -%}
@@ -12,6 +13,25 @@
     {%- assign citation = c -%}
   {%- endif -%}
 {%- endfor -%}
+
+<div
+class="citation-authors"
+{% if citation.authors.size > 10 %}
+  data-tooltip="{{ citation.authors | join: ", " | xml_escape }}"
+{% endif %}
+tabindex="0"
+>
+{{
+  citation.authors
+  | join: ","
+  | split: ","
+  | array_carve: 5
+  | join: ", "
+  | markdownify
+  | remove: "<p>" | remove: "</p>"
+  | default: "[no author info]"
+}}
+</div>
 
 {%- assign link = citation.link | default: "" -%}
 {%- assign image = citation.image | default: "" -%}
@@ -74,7 +94,6 @@
 </div>
 
 <div data-badge-popover="left" data-badge-type="medium-donut" data-doi="{{ id }}" data-hide-no-mentions="true" class="altmetric-embed"></div>
-
 
 <div class="__dimensions_badge_embed__" data-doi="{{ id }}"></div>
 
