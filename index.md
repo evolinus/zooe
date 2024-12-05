@@ -61,7 +61,7 @@ And other stories.
 
 {% capture text %}
 
-Meet the people behind the quest 
+The people behind the quest 
 
 {%
   include button.html
