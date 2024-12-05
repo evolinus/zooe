@@ -1,32 +1,55 @@
+
+
 - id: doi:10.1101/2024.08.02.606442
   title: 'A Framework to Identify Opportunities to Address Socioscientific Issues in the Elementary School Curricula: A Case Study from England, Italy, and Portugal'
   publisher: bioRxiv
+
+
 - id: doi:10.1101/2024.11.10.622744
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
   publisher: bioRxiv
+
+
 - id: doi:10.22541/au.172510123.38206942/v1
   title: 'Harmonising genomics research excellence and stakeholder needs in conservation management'
   publisher: Authorea
+
+
 - id: doi:10.1007/s12600-024-01205-y
   title: 'An initial investigation into the genetic diversity, phylogenetic relationships, and population structure of the Olive Psyllid <i>Euphyllura olivina</i> in Tunisia'
   image: images/article_thumbnails/thumb.olivina.jpg
+
+
 - id: doi:10.1007/s12600-024-01208-9
   title: 'Genetic diversity in the tomato leafminer <i>Tuta absoluta</i> (Meyrick) in Tunisia'
   image: images/article_thumbnails/thumb.tuta.jpg
+
+
 - id: doi:10.1038/s44185-024-00054-6
   title: 'The European Reference Genome Atlas: piloting a decentralised approach to equitable biodiversity genomics'
   image: images/article_thumbnails/thumb.erga.jpg
+
+
 - id: doi:10.1186/s12052-024-00203-2
   title: 'Evolution content in school textbooks: data from eight European countries'
   image: images/article_thumbnails/thumb.evotexts.png
+
+
 - id: doi:10.1093/molbev/msad193
   title: 'Relaxation of Natural Selection in the Evolution of the Giant Lungfish Genomes'
   image: images/article_thumbnails/thumb.lungfish.jpg
+
+
 - id: doi:10.1038/s41437-022-00564-8
   title: 'Selection-driven adaptation to the extreme Antarctic environment in the Emperor penguin'
   image: images/article_thumbnails/thumb.penguin.png
+
+
 - id: doi:10.3390/insects13070603
   title: 'The Impact of Fast Radiation on the Phylogeny of <i>Bactrocera</i> Fruit Flies as Revealed by Multiple Evolutionary Models and Mutation Rate-Calibrated Clock'
+  image: images/article_thumbnails/thumb.bactrocera.png
+
+
 - id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
   title: 'The complete mitogenome of the European mantis, <i>Mantis religiosa</i>, from Italy: implications for the origin of North American mantis population'
   authors:
@@ -37,69 +60,113 @@
   date: '2021-11-01'
   image: images/article_thumbnails/thumb.mantis.png
   link: http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
+
+
 - id: doi:10.1093/gbe/evab170
   title: 'Phylogenomics of Opsin Genes in Diptera Reveals Lineage-Specific Events and Contrasting Evolutionary Dynamics in <i>Anopheles</i> and <i>Drosophila</i>'
   image: images/article_thumbnails/thumb.diptera_rh.jpg
+
+
 - id: doi:10.1093/molbev/msab259
   title: '<i>Drosophila</i> Evolution over Space and Time (DEST): A New Population Genomics Resource'
   image: images/article_thumbnails/thumb.droso_dest.jpg
+
+
 - id: doi:10.1093/ve/veab031
   title: 'The discovery, distribution, and diversity of DNA viruses associated with <i>Drosophila melanogaster</i> in Europe'
   image: images/article_thumbnails/thumb.droso_virus.jpg
+
+
 - id: doi:10.1016/j.ibmb.2020.103474
   title: 'Linking omics and ecology to dissect interactions between the apple proliferation phytoplasma and its psyllid vector <i>Cacopsylla melanoneura</i>'
   image: images/article_thumbnails/thumb.cacopsylla.jpg
+
+
 - id: doi:10.1007/s10340-019-01172-y
   title: 'Distinct genotypes and phenotypes in European and American strains of <i>Drosophila suzukii</i>: implications for biology and management of an invasive organism'
   image: images/article_thumbnails/thumb.suz_ITvsUSA.jpg
+
+
 - id: doi:10.1371/journal.pntd.0007919
   title: 'Polymorphism analyses and protein modelling inform on functional specialization of <i>Piwi</i> clade genes in the arboviral vector <i>Aedes albopictus</i>'
   image: images/article_thumbnails/thumb.mosq_piwi.jpg
+
+
 - id: doi:10.1038/s41467-019-12175-9
   title: 'A chromosome-level genome assembly of <i>Cydia pomonella</i> provides insights into chemical ecology and insecticide resistance'
   image: images/article_thumbnails/thumb.pomonella.jpg
+
+
 - id: doi:10.1186/s13059-019-1768-2
   title: 'Comparative genomic analysis of six <i>Glossina</i> genomes, vectors of African trypanosomes'
   image: images/article_thumbnails/thumb.glossina.jpg
+
+
 - id: doi:10.1007/s10340-018-0985-x
   title: 'Large-scale spatial dynamics of <i>Drosophila suzukii</i> in Trentino, Italy'
   image: images/article_thumbnails/thumb.suz_trentino.jpg
+
+
 - id: doi:10.1073/pnas.1707279114
   title: 'Survival and divergence in a small group: The extraordinary genomic history of the endangered Apennine brown bear stragglers'
   image: images/article_thumbnails/thumb.orso.jpg
+
+
 - id: doi:10.1186/s12863-017-0558-7
   title: 'Genetic variability in Italian populations of <i>Drosophila suzukii</i>'
   image: images/article_thumbnails/thumb.suz_ita.png
+
+
 - id: doi:10.1002/ece3.3449
   title: 'Genome comparisons indicate recent transfer of <i>w</i>Ri-like <i>Wolbachia</i> between sister species <i>Drosophila suzukii</i> and <i>D. subpulchrella</i>'
   image: images/article_thumbnails/thumb.droso_wRi.jpg
+
+
 - id: doi:10.1186/s12864-017-3903-3
   title: 'Comparative genomics shows that viral integrations are abundant and express piRNAs in the arboviral vectors <i>Aedes aegypti</i> and <i>Aedes albopictus</i>'
   image: images/article_thumbnails/thumb.mosq_nirvs.gif
+
+
 - id: doi:10.1534/g3.116.036467
   title: 'Evolutionary Insights into Taste Perception of the Invasive Pest <i>Drosophila suzukii</i>'
   image: images/article_thumbnails/thumb.suz_taste.png
+
+
 - id: doi:10.1093/gbe/evw160
   title: 'The Evolution of Olfactory Gene Families in <i>Drosophila</i> and the Genomic Basis of chemical-Ecological Adaptation in<i>Drosophila suzukii</i>'
   image: images/article_thumbnails/thumb.suz_orgr.jpeg
+
+
 - id: doi:10.1007/s10340-016-0753-8
   title: 'Multiple lines of evidence for reproductive winter diapause in the invasive pest <i>Drosophila suzukii</i>: useful clues for control strategies'
   image: images/article_thumbnails/thumb.suz_pest.png
+
+
 - id: doi:10.1111/2041-210X.12453
   title: 'Extracting spatio-temporal patterns in animal trajectories: an ecological application of sequence analysis methods'
   image: images/article_thumbnails/thumb.capriolo.png
+
+
 - id: doi:10.1371/journal.pone.0125199
   title: 'Demographic History, Population Structure, and Local Adaptation in Alpine Populations of <i>Cardamine impatiens</i> and <i>Cardamine resedifolia</i>'
   image: images/article_thumbnails/thumb.cardamine.png
+
+
 - id: doi:10.1093/molbev/msu075
   title: 'Interkingdom Transfer of the Acne-Causing Agent, <i>Propionibacterium acnes</i>, from Human to Grapevine'
   image: images/article_thumbnails/thumb.acne.jpg
+
+
 - id: doi:10.1093/gbe/evt034
   title: 'Linking Genomics and Ecology to Investigate the Complex Evolution of an Invasive <i>Drosophila</i> Pest'
   image: images/article_thumbnails/thumb.suz_genome.jpg
+
+
 - id: doi:10.1111/nph.12163
   title: 'Spatiotemporal reconstruction of the <i>Aquilegia</i> rapid radiation through next-generation sequencing of rapidly evolving cpDNA regions'
   image: images/article_thumbnails/thumb.aquilegia.jpg
+
+
 - id: doi:10.1371/journal.pone.0056629.s003
   title: 'Selective Sweep in the <i>Flotillin-2</i> Region of European <i>Drosophila melanogaster</i>'
   authors:
@@ -112,12 +179,18 @@
   date: '2013-02-21'
   link: https://doi.org/10.1371/journal.pone.0056629
   image: images/article_thumbnails/thumb.droso_flotillin.png
+
+
 - id: doi:10.1093/molbev/mss234
   title: 'Evolution at Two Levels in Fire Ants: The Relationship between Patterns of Gene Expression and Protein Sequence Evolution'
   image: images/article_thumbnails/thumb.ants_2levels.jpeg
+
+
 - id: doi:10.1186/1471-2148-12-7
   title: 'Rates of evolution in stress-related genes are associated with habitat preference in two <i>Cardamine</i> lineages'
   image: images/article_thumbnails/thumb.cardamine_cold.jpg
+
+
 - id: doi:10.1111/j.1365-294X.2012.05544.x
   title: 'Disruption of gene expression in hybrids of the fire ants <i>Solenopsis invicta</i> and <i>Solenopsis richteri</i>'
   authors:
@@ -126,9 +199,13 @@
   - DeWayne Shoemaker
   - Laurent Keller
   image: images/article_thumbnails/thumb.ants_hybr.png
+
+
 - id: doi:10.1073/pnas.1104825108
   title: 'Relaxed selection is a precursor to the evolution of phenotypic plasticity'
   image: images/article_thumbnails/thumb.ants_relax.png
+
+
 - id: doi:10.1093/molbev/msq322
   title: 'Evolution of Gene Expression in Fire Ants: The Effects of Developmental Stage, Caste, and Species'
   authors:
@@ -137,18 +214,28 @@
   - Kenneth G. Ross
   - Laurent Keller
   image: images/article_thumbnails/thumb.ants_genex.png
+
+
 - id: doi:10.1098/rsbl.2006.0521
   title: 'Contrasting patterns of sequence divergence and base composition between <i>Drosophila</i> introns and intergenic regions'
   image: images/article_thumbnails/thumb.droso_interintron.png
+
+
 - id: doi:10.1093/molbev/msi207
   title: 'Inferring the Effects of Demography and Selection on <i>Drosophila melanogaster</i> Populations from a Chromosome-Wide Scan of DNA Variation'
   image: images/article_thumbnails/thumb.droso_euro.png
+
+
 - id: doi:10.1534/genetics.104.037689
   title: 'Insertion/Deletion and Nucleotide Polymorphism Data Reveal Constraints in <i>Drosophila melanogaster</i> Introns and Intergenic Regions'
   image: images/article_thumbnails/thumb.droso_indels.png
+
+
 - id: doi:10.1093/genetics/165.3.1269
   title: 'Demography and Natural Selection Have Shaped Genetic Variation in <i>Drosophila melanogaster</i>: A Multi-locus Approach'
   image: images/article_thumbnails/thumb.droso_glinka.png
+
+
 - id: doi:10.1006/eesa.2000.2005
   title: 'Teratogenic and Toxic Effects of Alcohol Ethoxylate and Alcohol Ethoxy Sulfate Surfactants on <i>Xenopus laevis</i> Embryos and Tadpoles'
   image: images/article_thumbnails/thumb.xenopus.png
