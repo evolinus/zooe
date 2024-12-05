@@ -18,13 +18,13 @@
   image: images/article_thumbnails/thumb.erga.jpg
 - id: doi:10.1186/s12052-024-00203-2
   title: 'Evolution content in school textbooks: data from eight European countries'
-  image: images/article_thumbnails/thumb.evotexts.jpg
+  image: images/article_thumbnails/thumb.evotexts.png
 - id: doi:10.1093/molbev/msad193
   title: 'Relaxation of Natural Selection in the Evolution of the Giant Lungfish Genomes'
   image: images/article_thumbnails/thumb.lungfish.jpg
 - id: doi:10.1038/s41437-022-00564-8
   title: 'Selection-driven adaptation to the extreme Antarctic environment in the Emperor penguin'
-  image: images/article_thumbnails/thumb.penguin.jpg
+  image: images/article_thumbnails/thumb.penguin.png
 - id: doi:10.3390/insects13070603
   title: 'The Impact of Fast Radiation on the Phylogeny of <i>Bactrocera</i> Fruit Flies as Revealed by Multiple Evolutionary Models and Mutation Rate-Calibrated Clock'
 - id: http:http://www.bulletinofinsectology.org/pdfarticles/vol74-2021-253-257luchetti.pdf
@@ -145,7 +145,7 @@
   image: images/article_thumbnails/thumb.droso_euro.png
 - id: doi:10.1534/genetics.104.037689
   title: 'Insertion/Deletion and Nucleotide Polymorphism Data Reveal Constraints in <i>Drosophila melanogaster</i> Introns and Intergenic Regions'
-  image: images/article_thumbnails/thumb.drso_indels.png
+  image: images/article_thumbnails/thumb.droso_indels.png
 - id: doi:10.1093/genetics/165.3.1269
   title: 'Demography and Natural Selection Have Shaped Genetic Variation in <i>Drosophila melanogaster</i>: A Multi-locus Approach'
   image: images/article_thumbnails/thumb.droso_glinka.png
