@@ -33,14 +33,20 @@ Our lab is located at the [Department of Biological Sciences](https://dbb.dip.un
 
 ## Mailing Address
 Dipartimento di Biologia e Biotecnologie "L. Spallanzani"
+
 Università di Pavia
+
 Via Ferrata 9
+
 27100 Pavia
+
 Italy
 
+{:.center}
 
 {%
   include figure.html
   image="images/ponte.png"
 %}
+
 
