@@ -1,333 +1,7 @@
-<!DOCTYPE html>
-<html lang="en" data-dark="false">
-  <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <!--
-  put your analytics (e.g. Google Analytics) tracking code here
--->
-
-  <!--
-  put your search engine verification (e.g. Google Search Console) tag here
--->
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Sarah Johnson | zoo_e lab</title>
-
-<link rel="icon" href="/zooe/images/icon.png">
-
-<meta name="title" content="Sarah Johnson">
-<meta name="description" content="Lead Programmer">
-
-<meta property="og:title" content="Sarah Johnson">
-<meta property="og:site_title" content="zoo_e lab">
-<meta property="og:description" content="Lead Programmer">
-<meta property="og:url" content="https://evolinus.github.io/zooe">
-<meta property="og:image" content="/zooe/images/share.jpg">
-<meta property="og:locale" content="en_US">
-
-<meta property="twitter:title" content="Sarah Johnson">
-<meta property="twitter:description" content="Lead Programmer">
-<meta property="twitter:url" content="https://evolinus.github.io/zooe">
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:image" content="/zooe/images/share.jpg">
-
-
-  <meta property="og:type" content="website">
-
-
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    
-      "@type": "WebSite",
-    
-    "name": "Sarah Johnson",
-    "description": "Lead Programmer",
-    "headline": "Sarah Johnson",
-    "publisher": {
-      "@type": "Organization",
-      "logo": { "@type": "ImageObject", "url": "/zooe/images/icon.png" }
-    },
-    "url": "https://evolinus.github.io/zooe"
-  }
-</script>
-
-<link rel="alternate" type="application/rss+xml" href="https://evolinus.github.io/zooe/feed.xml">
-
-  <!-- Google Fonts -->
-<!-- automatically get url from fonts used in theme file -->
-
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?display=swap&&family=Barlow:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600&amp;family=Roboto+Mono:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600" rel="stylesheet">
-
-<!-- Font Awesome icons (load asynchronously due to size) -->
-
-<link href="https://use.fontawesome.com/releases/v6.5.0/css/all.css" rel="stylesheet" media="none" onload="this.removeAttribute('media'); this.onload = null;">
-<noscript>
-  <link href="https://use.fontawesome.com/releases/v6.5.0/css/all.css" rel="stylesheet">
-</noscript>
-
-  <!-- third party styles -->
-<!-- https://stylishthemes.github.io/Syntax-Themes/pygments/ -->
-<link href="https://cdn.jsdelivr.net/gh/StylishThemes/Syntax-Themes/pygments/css-github/pygments-tomorrow-night-eighties.css" rel="stylesheet">
-
-<!-- include all sass in styles folder -->
-
-
-  
-    <link href="/zooe/_styles/-theme.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/alert.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/all.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/anchor.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/background.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/body.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/bold.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/button.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/card.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/checkbox.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/citation.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/code.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/cols.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/dark-toggle.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/details.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/feature.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/figure.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/float.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/font.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/footer.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/form.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/grid.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/header.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/heading.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/highlight.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/icon.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/image.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/link.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/list.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/main.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/paragraph.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/portrait.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/post-excerpt.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/post-info.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/post-nav.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/quote.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/rule.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/search-box.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/search-info.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/section.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/table.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/tags.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/textbox.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/tooltip.css" rel="stylesheet">
-  
-
-  
-    <link href="/zooe/_styles/util.css" rel="stylesheet">
-  
-
-
-<!-- include all css in styles folder -->
-
-
-
-  <!-- third party scripts -->
-<script src="https://unpkg.com/@popperjs/core@2" defer></script>
-<script src="https://unpkg.com/tippy.js@6" defer></script>
-<script src="https://unpkg.com/mark.js@8" defer></script>
-
-<!-- include all js in scripts folder -->
-
-
-  <script src="/zooe/_scripts/anchors.js"></script>
-
-  <script src="/zooe/_scripts/dark-mode.js"></script>
-
-  <script src="/zooe/_scripts/fetch-tags.js"></script>
-
-  <script src="/zooe/_scripts/search.js"></script>
-
-  <script src="/zooe/_scripts/site-search.js"></script>
-
-  <script src="/zooe/_scripts/table-wrap.js"></script>
-
-  <script src="/zooe/_scripts/tooltip.js"></script>
-
-
-</head>
-
-  <body>
-    
-
-
-
-
-
-
-
-<header class="background" style="--image: url('/zooe/images/background.blu.png')" data-dark="true">
-  <a href="/zooe/" class="home">
-    
-      <span class="logo">
-        
-          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="100%" viewbox="0 0 1819 2048" enable-background="new 0 0 1819 2048" xml:space="preserve">
-<path fill="#000000" opacity="1.000000" stroke="none" d="
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="100%" viewBox="0 0 1819 2048" enable-background="new 0 0 1819 2048" xml:space="preserve">
+<path fill="#000000" opacity="1.000000" stroke="none" 
+	d="
 M1168.000000,2049.000000 
 	C778.666687,2049.000000 389.833344,2049.000000 1.000000,2049.000000 
 	C1.000000,1366.333374 1.000000,683.666687 1.000000,1.000000 
@@ -455,8 +129,9 @@ M1661.000366,1131.495605
 	C1623.803711,1288.044189 1630.461304,1259.193237 1637.281250,1230.380493 
 	C1641.430420,1212.851929 1645.760132,1195.365967 1649.999878,1177.858765 
 	C1653.672485,1162.693848 1657.332642,1147.525757 1661.000366,1131.495605 
-z"></path>
-<path fill="#FFFFFF" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#FFFFFF" opacity="1.000000" stroke="none" 
+	d="
 M1660.999268,1131.927368 
 	C1657.332642,1147.525757 1653.672485,1162.693848 1649.999878,1177.858765 
 	C1645.760132,1195.365967 1641.430420,1212.851929 1637.281250,1230.380493 
@@ -646,8 +321,9 @@ M632.500000,1410.831177
 	C1335.686646,1479.093506 1351.999023,1457.071533 1344.434082,1434.322144 
 	C1339.445435,1419.320190 1326.644653,1410.834106 1308.925293,1410.833862 
 	C1083.783569,1410.829712 858.641785,1410.831177 632.500000,1410.831177 
-z"></path>
-<path fill="#010101" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#010101" opacity="1.000000" stroke="none" 
+	d="
 M896.797913,688.725586 
 	C900.141602,655.203674 911.953979,625.296204 931.676514,598.769104 
 	C965.202881,553.675781 1011.324829,529.928589 1066.120239,521.983643 
@@ -669,8 +345,9 @@ M1046.878662,635.312439
 	C1194.344971,736.905701 1195.259277,709.013123 1187.410645,680.796326 
 	C1181.863281,660.852600 1170.846558,643.963196 1152.552124,633.918640 
 	C1117.667358,614.765198 1082.330200,615.470947 1046.878662,635.312439 
-z"></path>
-<path fill="#010101" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#010101" opacity="1.000000" stroke="none" 
+	d="
 M537.763184,1026.764771 
 	C570.714905,992.827820 611.060364,974.529785 657.033875,967.977905 
 	C695.201843,962.538391 732.880005,965.064026 769.333069,978.082275 
@@ -690,8 +367,9 @@ M608.086487,1119.661743
 	C770.705750,1101.100464 755.249268,1083.293823 731.408630,1073.474121 
 	C716.186096,1067.204224 700.137695,1065.881226 683.851318,1066.887207 
 	C648.257568,1069.085693 622.474121,1085.555054 608.086487,1119.661743 
-z"></path>
-<path fill="#FFC001" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#FFC001" opacity="1.000000" stroke="none" 
+	d="
 M1317.312988,1072.697998 
 	C1328.144287,1100.956665 1332.006592,1130.013550 1332.103760,1159.701172 
 	C1332.142578,1171.525146 1332.110229,1183.349243 1332.110229,1195.764526 
@@ -716,8 +394,9 @@ M1213.885254,1093.768433
 	C1072.925049,1089.943115 1068.361328,1102.856079 1067.708984,1117.408325 
 	C1117.716309,1117.408325 1167.278931,1117.408325 1218.286255,1117.408325 
 	C1216.811523,1109.411987 1215.440063,1101.975464 1213.885254,1093.768433 
-z"></path>
-<path fill="#000000" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#000000" opacity="1.000000" stroke="none" 
+	d="
 M623.000000,899.000000 
 	C586.372803,899.000000 550.245605,899.000000 513.627441,899.000000 
 	C513.627441,897.188965 513.627502,895.747070 513.627502,894.305176 
@@ -736,8 +415,9 @@ M623.000000,899.000000
 	C706.965271,806.728455 774.624146,806.728455 842.622192,806.728455 
 	C842.622192,837.607544 842.622192,867.999878 842.622192,899.000000 
 	C769.663696,899.000000 696.581848,899.000000 623.000000,899.000000 
-z"></path>
-<path fill="#C00101" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#C00101" opacity="1.000000" stroke="none" 
+	d="
 M633.000000,1410.831177 
 	C858.641785,1410.831177 1083.783569,1410.829712 1308.925293,1410.833862 
 	C1326.644653,1410.834106 1339.445435,1419.320190 1344.434082,1434.322144 
@@ -748,8 +428,9 @@ M633.000000,1410.831177
 	C477.498779,1439.302734 492.312958,1412.502197 516.524536,1411.105347 
 	C528.152893,1410.434326 539.845947,1410.849243 551.509827,1410.838867 
 	C578.506531,1410.814697 605.503296,1410.831177 633.000000,1410.831177 
-z"></path>
-<path fill="#FEFEFE" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#FEFEFE" opacity="1.000000" stroke="none" 
+	d="
 M1047.186401,635.122437 
 	C1082.330200,615.470947 1117.667358,614.765198 1152.552124,633.918640 
 	C1170.846558,643.963196 1181.863281,660.852600 1187.410645,680.796326 
@@ -759,8 +440,9 @@ M1047.186401,635.122437
 	C1036.806030,789.987122 1021.326721,770.779114 1014.254028,744.979065 
 	C1007.423828,720.063782 1008.359741,695.174988 1018.219421,671.046936 
 	C1024.212402,656.381348 1033.896484,644.474060 1047.186401,635.122437 
-z"></path>
-<path fill="#FEFEFE" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#FEFEFE" opacity="1.000000" stroke="none" 
+	d="
 M608.232178,1119.303101 
 	C622.474121,1085.555054 648.257568,1069.085693 683.851318,1066.887207 
 	C700.137695,1065.881226 716.186096,1067.204224 731.408630,1073.474121 
@@ -770,257 +452,14 @@ M608.232178,1119.303101
 	C690.210022,1254.498657 671.148804,1253.481201 652.961121,1246.095337 
 	C626.955444,1235.534424 611.505005,1215.583252 604.698975,1188.909912 
 	C598.754150,1165.611816 599.788330,1142.393677 608.232178,1119.303101 
-z"></path>
-<path fill="#FFFEFC" opacity="1.000000" stroke="none" d="
+z"/>
+<path fill="#FFFEFC" opacity="1.000000" stroke="none" 
+	d="
 M1213.976807,1094.153809 
 	C1215.440063,1101.975464 1216.811523,1109.411987 1218.286255,1117.408325 
 	C1167.278931,1117.408325 1117.716309,1117.408325 1067.708984,1117.408325 
 	C1068.361328,1102.856079 1072.925049,1089.943115 1081.783813,1078.955444 
 	C1100.900146,1055.245117 1126.320801,1045.926392 1156.173218,1048.857422 
 	C1184.617310,1051.650146 1203.499878,1067.421143 1213.976807,1094.153809 
-z"></path>
+z"/>
 </svg>
-        
-      </span>
-    
-    
-  </a>
-
-  <input class="nav-toggle" type="checkbox" aria-label="show/hide nav">
-
-  <nav>
-    
-    
-      
-        <a href="/zooe/research/" data-tooltip="Published works">
-          Research
-        </a>
-      
-    
-      
-        <a href="/zooe/projects/" data-tooltip="Software, datasets, and more">
-          Projects
-        </a>
-      
-    
-      
-        <a href="/zooe/team/" data-tooltip="About our team">
-          Team
-        </a>
-      
-    
-      
-        <a href="/zooe/blog/" data-tooltip="Musings and miscellany">
-          Blog
-        </a>
-      
-    
-      
-        <a href="/zooe/contact/" data-tooltip="Email, address, and location">
-          Contact
-        </a>
-      
-    
-  </nav>
-</header>
-
-    <main>
-      <!--
-  modify main content of page:
-  - add section breaks
-  - attach section properties
-  - filter out blank sections
--->
-
-
-
-
-
-
-  
-  
-  
-
-  <section class="background" data-size="page">
-    <div class="float">
-  
-<div class="portrait-wrapper">
-  <a class="portrait" data-style="" aria-label="Sarah Johnson">
-    
-      <i class="icon fa-solid fa-code"></i>
-    
-
-    <img src="/zooe/images/photo.jpg" class="portrait-image" alt="member portrait" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-
-    
-      <span class="portrait-name">
-        Sarah Johnson
-      </span>
-    
-
-    
-      <span class="portrait-description">
-        Lead Programmer
-      </span>
-    
-
-    
-  </a>
-</div>
-
-<div>
-  
-    
-    
-    
-
-
-
-  <div class="button-wrapper">
-    <a class="button" href="mailto:sarah.johnson@gmail.com" data-tooltip="Email" data-style="bare" aria-label="Email">
-      <i class="icon fa-solid fa-envelope"></i>
-      
-        <span>Email</span>
-      
-    </a>
-  </div>
-
-<br>
-  
-    
-    
-    
-
-
-
-  <div class="button-wrapper">
-    <a class="button" href="https://twitter.com/sarahjohnson" data-tooltip="Twitter" data-style="bare" aria-label="Twitter">
-      <i class="icon fa-brands fa-twitter"></i>
-      
-        <span>Twitter</span>
-      
-    </a>
-  </div>
-
-<br>
-  
-</div>
-
-
-</div>
-
-
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-
-
-
-
-
-<p class="center">
-  <a href="/zooe/research/?search=%22Sarah%20Johnson%22%20">
-    Search for Sarah Johnson's papers on the Research page
-  </a>
-</p>
-
-
-
-<!--
-<p class="center">
-  <a href="/zooe/blog/?search=Sarah%20Johnson">
-    See Sarah Johnson's posts on the Blog page
-  </a>
-</p>
--->
-  </section>
-
-
-    </main>
-    
-
-
-<footer class="background" style="--image: url('/zooe/zooe/images/background.blu2.png')" data-dark="true" data-size="wide">
-  <!--
-    <div>
-      Extra details like contact info or address
-    </div>
-  -->
-
-  <div>
-    
-      
-      
-      
-
-
-
-  <div class="button-wrapper">
-    <a class="button" href="mailto:lino.ometto@unipv.it" data-tooltip="Email" data-style="bare" aria-label="Email">
-      <i class="icon fa-solid fa-envelope"></i>
-      
-    </a>
-  </div>
-
-
-    
-      
-      
-      
-
-
-
-  <div class="button-wrapper">
-    <a class="button" href="https://orcid.org/0000-0002-2679-625X" data-tooltip="ORCID" data-style="bare" aria-label="ORCID">
-      <i class="icon fa-brands fa-orcid"></i>
-      
-    </a>
-  </div>
-
-
-    
-      
-      
-      
-
-
-
-  <div class="button-wrapper">
-    <a class="button" href="https://scholar.google.com/citations?user=RVjMHWgAAAAJ" data-tooltip="Google Scholar" data-style="bare" aria-label="Google Scholar">
-      <i class="icon fa-brands fa-google"></i>
-      
-    </a>
-  </div>
-
-
-    
-      
-      
-      
-
-
-
-  <div class="button-wrapper">
-    <a class="button" href="https://github.com/evolinus" data-tooltip="GitHub" data-style="bare" aria-label="GitHub">
-      <i class="icon fa-brands fa-github"></i>
-      
-    </a>
-  </div>
-
-
-    
-  </div>
-
-  <div>
-    © 2024
-    zoo_e lab
-      |   Built with
-    <a href="https://github.com/greenelab/lab-website-template">
-      Lab Website Template
-    </a>
-  </div>
-
-  <input type="checkbox" class="dark-toggle" data-tooltip="Dark mode" aria-label="toggle dark mode" oninput="onDarkToggleChange(event)">
-</footer>
-
-  </body>
-</html>
