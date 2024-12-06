@@ -7,11 +7,12 @@
 - title: Formica
   group: featured
   image: images/formica.png
-  description: The mountain wood ant Formica paralugubris, native of the western Alps, is extremely important for the forest ecosystem functioning. Because of the intense predatory activity on other arthropods, this species has been introduced to the Apennines (Italy) and other localities for pest control. We are currently sequencing individuals sampled from the native and introduced ranges, as well as historical specimens from thetranslocation experiments, to assess the evolution in space and time of this ant species. This project benefits from a collaboration with with [Fabrizio Ghiselli](https://scholar.google.com/citations?user=of14yMwAAAAJ) and [Andrea Luchetti](https://scholar.google.com/citations?hl=en&user=zSmoXaoAAAAJ) (University of Bologna), [Alberto Masoni and Giacomo Santini]( https://www.ecologyandbiodiversity.unifi.it/vp-6-members.html#) (University of Florence), [Anna Olivieri](https://dbb.dip.unipv.it/it/node/576) (University of Pavia), and the [Kosmos](https://dbb.dip.unipv.it/it/node/576) natural history museum of Pavia.
+  description: The mountain wood ant <i>Formica paralugubris</>, native of the western Alps, is extremely important for the forest ecosystem functioning. Because of the intense predatory activity on other arthropods, this species has been introduced to the Apennines (Italy) and other localities for pest control. We are currently sequencing individuals sampled from the native and introduced ranges, as well as historical specimens from the translocation experiments, to assess the evolution in space and time of this ant species. This project benefits from a collaboration with with [Fabrizio Ghiselli and Andrea Luchetti](https://sites.google.com/view/evo-com-unibo/home) (University of Bologna), [Alberto Masoni and Giacomo Santini]( https://www.ecologyandbiodiversity.unifi.it/vp-6-members.html#) (University of Florence), [Anna Olivieri](https://dbb.dip.unipv.it/it/node/576) (University of Pavia), and the [Kosmos](https://dbb.dip.unipv.it/it/node/576) natural history museum of Pavia.
 
-- title: Cool Tutorial
-  image: images/photo.jpg
-  description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- title: Somatic mutations
+  group: featured
+  image: images/botryllus.png
+  description: In this project, we combine bioinformatic and experimental approaches to characterize the pattern of somatic genetic variation in the colonial tunicate Botryllus schlosseri and to test its dynamics with respect to different levels of selection (colonies, modules and cells). In particular, we are using deep-sequencing to identify somatic mutations in laboratory-reared colonies. This will allow us to test whether selection or somatic drift can increase their frequency in the colony and whether they can eventually be passed on to the next generation. This project is leaded by [Stefano Tiozzo](https://www.tiozzolab.org) (CNRS/Sorbonne Université) and sees the collaboration of [Alex Cagan](https://www.gen.cam.ac.uk/research/research-groups/cagan-group) (University of Cambridge) and [Jean-François Flot](https://ebe.ulb.ac.be/ebe/Flot.html) (Université Libre de Bruxelles).
   # repo: greenelab/lab-website-template
 
 - title: Cool Web App
