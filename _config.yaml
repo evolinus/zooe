@@ -5,7 +5,8 @@ description: Zoology and Evolution @ unipv.it
 header: images/background.blu.png
 footer: images/background.blu2.png
 logo: images/logo.zoo_e.png
-# proofer: false
+
+proofer: false
 
 # site social media and other links
 links:

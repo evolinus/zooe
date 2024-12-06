@@ -48,6 +48,9 @@ Italy
 {%
   include figure.html
   image="images/ponte.png"
+  width="100%"
 %}
+
+{% include section.html %}
 
 

@@ -3,7 +3,8 @@
 
 # Zoology and Evolution
 
-In the zoo_e lab we study the genetic basis of biodiversity with a combination of computational and experimental approaches.
+The zoo_e lab is at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).
+We study the genetic basis of biodiversity with a combination of computational and experimental approaches.
 
 {% include section.html %}
 
