@@ -15,16 +15,15 @@
   description: In this project, we combine bioinformatic and experimental approaches to characterize the pattern of somatic genetic variation in the colonial tunicate Botryllus schlosseri and to test its dynamics with respect to different levels of selection (colonies, modules and cells). In particular, we are using deep-sequencing to identify somatic mutations in laboratory-reared colonies. This will allow us to test whether selection or somatic drift can increase their frequency in the colony and whether they can eventually be passed on to the next generation. This project is leaded by [Stefano Tiozzo](https://www.tiozzolab.org) (CNRS/Sorbonne Université) and sees the collaboration of [Alex Cagan](https://www.gen.cam.ac.uk/research/research-groups/cagan-group) (University of Cambridge) and [Jean-François Flot](https://ebe.ulb.ac.be/ebe/Flot.html) (Université Libre de Bruxelles).
   # repo: greenelab/lab-website-template
 
-- title: Cool Web App
-  image: images/photo.jpg
-  link: https://github.com/
-  description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+- title: DrosEU
+  image: images/droseu.png
+  link: https://droseu.net
+  description: We are part of the European Drosophila Population Genomics Consortium, which brings together researchers from around the world to study _Drosophila_ evolution over space and time. 
   repo: greenelab/lab-website-template
   #tags:
   #  - software
 
-- title: Cool Web Server
-  image: images/photo.jpg
-  link: https://github.com/
-  description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  repo: greenelab/lab-website-template
+- title: ERGA
+  image: images/erga.png
+  link: https://www.erga-biodiversity.eu
+  description: The European Reference Genome Atlas (ERGA) consortium is a pan-European scientific initiative that aims at producing high-quality reference genomes of European species, to better understand how biodiversity functions. Lino is member of the [Citizen Science](https://www.erga-biodiversity.eu/team-1/cs---citizen-science) and the [Training and Knowledge Transfer](https://www.erga-biodiversity.eu/team-1/tkt---training-and-knowledge-transfer) steering committees.
