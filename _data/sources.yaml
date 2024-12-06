@@ -67,6 +67,12 @@
   image: images/article_thumbnails/thumb.diptera_rh.jpg
 
 
+- id: doi:10.1186/s12915-021-01148-4
+  title: 'Viviparity and habitat restrictions may influence the evolution of male reproductive genes in tsetse fly (<i>Glossina</i>) species'
+  image: images/article_thumbnails/thumb.glossinamags.jpg
+
+
+
 - id: doi:10.1093/molbev/msab259
   title: '<i>Drosophila</i> Evolution over Space and Time (DEST): A New Population Genomics Resource'
   image: images/article_thumbnails/thumb.droso_dest.jpg
@@ -159,7 +165,7 @@
 
 - id: doi:10.1093/gbe/evt034
   title: 'Linking Genomics and Ecology to Investigate the Complex Evolution of an Invasive <i>Drosophila</i> Pest'
-  image: images/article_thumbnails/thumb.suz_genome.jpg
+  image: images/article_thumbnails/thumb.suz_genome.png
 
 
 - id: doi:10.1111/nph.12163
