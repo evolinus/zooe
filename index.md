@@ -9,15 +9,13 @@ We study the genetic basis of biodiversity with a combination of computational a
 
 {% include section.html %}
 
-## Highlights
-
 {% capture text %}
 
 We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of in insects and other organisms.
 
 {%
   include button.html
-  link="research"
+  link="publications"
   text="See our publications"
   icon="fa-solid fa-arrow-right"
   flip=true
@@ -29,8 +27,8 @@ We use molecular evolution and population genetics to characterize the neutral a
 {%
   include feature.html
   image="images/asciifly.png"
-  link="research"
-  title="Our Research"
+  link="publications"
+  title="Our Research Publications"
   text=text
 %}
 
@@ -42,8 +40,8 @@ And other stories.
 
 {%
   include button.html
-  link="projects"
-  text="Browse our projects"
+  link="research"
+  text="Browse our research projects"
   icon="fa-solid fa-arrow-right"
   flip=true
   style="bare"
@@ -54,8 +52,8 @@ And other stories.
 {%
   include feature.html
   image="images/farfalla.png"
-  link="projects"
-  title="Our Projects"
+  link="research"
+  title="Our Research Projects"
   flip=true
   style="bare"
   text=text
