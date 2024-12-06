@@ -523,6 +523,27 @@
   image: images/article_thumbnails/thumb.diptera_rh.jpg
   plugin: sources.py
   file: sources.yaml
+- id: doi:10.1186/s12915-021-01148-4
+  title: Viviparity and habitat restrictions may influence the evolution of male reproductive
+    genes in tsetse fly (<i>Glossina</i>) species
+  authors:
+  - Grazia Savini
+  - Francesca Scolari
+  - Lino Ometto
+  - Omar Rota-Stabelli
+  - Davide Carraretto
+  - Ludvik M. Gomulski
+  - Giuliano Gasperi
+  - Adly M. M. Abd-Alla
+  - Serap Aksoy
+  - Geoffrey M. Attardo
+  - Anna R. Malacrida
+  publisher: BMC Biology
+  date: '2021-09-23'
+  link: https://doi.org/g8tx8c
+  image: images/article_thumbnails/thumb.glossinamags.jpg
+  plugin: sources.py
+  file: sources.yaml
 - id: doi:10.1093/molbev/msab259
   title: '<i>Drosophila</i> Evolution over Space and Time (DEST): A New Population
     Genomics Resource'
@@ -1097,7 +1118,7 @@
   publisher: Genome Biology and Evolution
   date: '2013-03-15'
   link: https://doi.org/pdz
-  image: images/article_thumbnails/thumb.suz_genome.jpg
+  image: images/article_thumbnails/thumb.suz_genome.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1111/nph.12163
