@@ -5,18 +5,17 @@ nav:
   tooltip: Projects and more
 ---
 
+
 # {% include icon.html icon="fa-solid fa-wrench" %}Research Projects
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+In the **zoo_e** lab, we mainly use comparative approaches to study the genetic basis of adaptation and evolution in animals. Insects are the main group of organisms we study (because they are fantastic), but we also enjoy studying other animals. We have ongoing collaborations with research groups in Italy and abroad, providing a constant flow of ideas, new skills and abilities, passion and enthusiasm. 
 
+<!--
 {% include tags.html tags="publication, resource, website" %}
-
+-->
 {% include search-info.html %}
 
 {% include section.html %}
-
-## Featured
 
 {% include list.html component="card" data="projects" filter="group == 'featured'" %}
 

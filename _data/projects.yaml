@@ -1,12 +1,8 @@
-- title: Cool Dataset
-  subtitle: a subtitle
+- title: Mosquitos & TEs
   group: featured
-  image: images/photo.jpg
-  link: https://github.com/
-  description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  repo: greenelab/lab-website-template
-  tags:
-    - resource
+  image: images/zanzaTE.png
+  # link: https://github.com/
+  description: Despite the severe bottleneck associated with its invasion, the tiger mosquito <i>Aedes albopictus</i> shows a remarkable ability to adapt to its new temperate environment. Can transposable elements (TEs) play a role as mutational agents allowing such rapid adaptation? This is particularly relevant for <i>A. albopictus</i>, where more than half of the genome consists of TEs. To explore this possibility, we are currently studying the TE landscape across the entire Culicidae family and in natural population of the tiger mosquito, as well as using laboratory experiments to test the hypothesis that TEs are mobilized under (thermal) stress. These complementary analyses have the potential to provide new insights into mosquito genome evolution and invasiveness. This project is in tight collaboration with [Omar Rota-Stabelli](https://scholar.google.com/citations?user=of14yMwAAAAJ) (University of Trento) and [Andrea Luchetti](https://scholar.google.com/citations?hl=en&user=zSmoXaoAAAAJ) (University of Bologna)
 
 - title: Cool Package
   subtitle: a subtitle

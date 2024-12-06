@@ -28,7 +28,7 @@ We use molecular evolution and population genetics to characterize the neutral a
   include feature.html
   image="images/asciifly.png"
   link="publications"
-  title="Our Research Publications"
+  title="Our Publications"
   text=text
 %}
 
