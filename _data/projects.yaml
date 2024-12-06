@@ -1,7 +1,6 @@
 - title: Mosquitos & TEs
   group: featured
   image: images/zanzaTE.png
-  # link: https://github.com/
   description: Despite the severe bottleneck associated with its invasion, the tiger mosquito <i>Aedes albopictus</i> shows a remarkable ability to adapt to its new temperate environment. Can transposable elements (TEs) play a role as mutational agents allowing such rapid adaptation? This is particularly relevant for <i>A. albopictus</i>, where more than half of the genome consists of TEs. To explore this possibility, we are currently studying the TE landscape across the entire Culicidae family and in natural population of the tiger mosquito, as well as using laboratory experiments to test the hypothesis that TEs are mobilized under (thermal) stress. These complementary analyses have the potential to provide new insights into mosquito genome evolution and invasiveness. This project is in tight collaboration with [Omar Rota-Stabelli](https://scholar.google.com/citations?user=of14yMwAAAAJ) (University of Trento) and [Andrea Luchetti](https://scholar.google.com/citations?hl=en&user=zSmoXaoAAAAJ) (University of Bologna)
 
 - title: Formica
@@ -13,14 +12,15 @@
   group: featured
   image: images/botryllus.png
   description: In this project, we combine bioinformatic and experimental approaches to characterize the pattern of somatic genetic variation in the colonial tunicate Botryllus schlosseri and to test its dynamics with respect to different levels of selection (colonies, modules and cells). In particular, we are using deep-sequencing to identify somatic mutations in laboratory-reared colonies. This will allow us to test whether selection or somatic drift can increase their frequency in the colony and whether they can eventually be passed on to the next generation. This project is leaded by [Stefano Tiozzo](https://www.tiozzolab.org) (CNRS/Sorbonne Université) and sees the collaboration of [Alex Cagan](https://www.gen.cam.ac.uk/research/research-groups/cagan-group) (University of Cambridge) and [Jean-François Flot](https://ebe.ulb.ac.be/ebe/Flot.html) (Université Libre de Bruxelles).
+  # link: https://github.com/
   # repo: greenelab/lab-website-template
+  # tags:
+  #  - software
 
 - title: DrosEU
   image: images/droseu.png
   link: https://droseu.net
   description: We are part of the European Drosophila Population Genomics Consortium, which brings together researchers from around the world to study _Drosophila_ evolution over space and time. 
-  #tags:
-  #  - software
 
 - title: ERGA
   image: images/erga.png
