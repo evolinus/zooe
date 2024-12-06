@@ -1,5 +1,5 @@
 ---
-title: Teaching et al.
+title: Teaching&al
 nav:
   order: 4
   tooltip: Courses, seminars and other
