@@ -1,10 +1,9 @@
 # site properties and page defaults
 title: zoo_e lab
-subtitle: 
 description: Zoology and Evolution @ unipv.it
+logo-text: false
 header: images/background.blu.png
 footer: images/background.blu2.png
-logo: images/logo.zoo_e.png
 
 proofer: false
 
