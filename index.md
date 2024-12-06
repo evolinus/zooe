@@ -38,7 +38,7 @@ And other stories.
 
 {% capture text %}
 
-Collaboration among lab members and with numerous colleagues has led to interesting discoveries about the processes and mechanisms that accompany the evolution of insects & co.
+Collaboration among lab members and with numerous colleagues has led to the discovery of novel insights into the processes and mechanisms that accompany the evolution of insects and other organisms.
 {%
   include button.html
   link="publications"
