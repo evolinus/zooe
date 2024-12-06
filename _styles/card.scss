@@ -6,7 +6,6 @@
   justify-content: stretch;
   align-items: center;
   flex-direction: column;
-  /*width: 350px;*/
   width: 450px;
   max-width: calc(100% - 20px - 20px);
   margin: 20px;
@@ -18,11 +17,11 @@
 }
 
 .card[data-style="small"] {
-  width: 250px;
+  width: 350px;
 }
 
 .card-image img {
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 4 / 2;
   object-fit: cover;
   width: 100%;
   // box-shadow: var(--shadow);
