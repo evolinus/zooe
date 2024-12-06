@@ -4,7 +4,7 @@ title: Zoology and Evolution
 
 # Zoology and Evolution
 
-The zoo_e lab is at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).
+The **zoo_e** lab is at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).  
 We study the genetic basis of biodiversity with a combination of computational and experimental approaches.
 
 {% include section.html %}
@@ -36,8 +36,8 @@ We use molecular evolution and population genetics to characterize the neutral a
 
 {% capture text %}
 
-Can transposable elements provide adaptive variation in invading mosquitoes? 
-What happened to introduced ant populations?
+Can transposable elements provide adaptive variation in invading mosquitoes?  
+What happened to introduced ant populations?  
 And other stories.
 
 {%

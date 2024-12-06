@@ -2,20 +2,26 @@
 title: Research
 nav:
   order: 1
-  tooltip: Published works
+  tooltip: Software, datasets, and more
 ---
 
-# {% include icon.html icon="fa-solid fa-microscope" %}Research
+# {% include icon.html icon="fa-solid fa-wrench" %}Projects
 
-When possible we publish our work open access, if you have any question or request, please contact us.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-{% include section.html %}
-
-
-{% include search-box.html %}
+{% include tags.html tags="publication, resource, website" %}
 
 {% include search-info.html %}
 
-## Published work (peer-reviewed or pre-print)
+{% include section.html %}
 
-{% include list.html data="citations" component="citation" style="rich" %}
+## Featured
+
+{% include list.html component="card" data="projects" filter="group == 'featured'" %}
+
+{% include section.html %}
+
+## More
+
+{% include list.html component="card" data="projects" filter="!group" style="small" %}
