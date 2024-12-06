@@ -11,29 +11,6 @@ We study the genetic basis of biodiversity with a combination of computational a
 
 {% capture text %}
 
-We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of in insects and other organisms.
-
-{%
-  include button.html
-  link="publications"
-  text="See our publications"
-  icon="fa-solid fa-arrow-right"
-  flip=true
-  style="bare"
-%}
-
-{% endcapture %}
-
-{%
-  include feature.html
-  image="images/asciifly.png"
-  link="publications"
-  title="Results"
-  text=text
-%}
-
-{% capture text %}
-
 Can transposable elements provide adaptive variation in invading mosquitoes?  
 What happened to introduced ant populations?  
 And other stories.
@@ -56,6 +33,29 @@ And other stories.
   title="Our Research Projects"
   flip=true
   style="bare"
+  text=text
+%}
+
+{% capture text %}
+
+We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of in insects and other organisms.
+
+{%
+  include button.html
+  link="publications"
+  text="See our publications"
+  icon="fa-solid fa-arrow-right"
+  flip=true
+  style="bare"
+%}
+
+{% endcapture %}
+
+{%
+  include feature.html
+  image="images/asciifly.png"
+  link="publications"
+  title="Results"
   text=text
 %}
 
