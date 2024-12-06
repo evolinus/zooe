@@ -4,40 +4,26 @@
   # link: https://github.com/
   description: Despite the severe bottleneck associated with its invasion, the tiger mosquito <i>Aedes albopictus</i> shows a remarkable ability to adapt to its new temperate environment. Can transposable elements (TEs) play a role as mutational agents allowing such rapid adaptation? This is particularly relevant for <i>A. albopictus</i>, where more than half of the genome consists of TEs. To explore this possibility, we are currently studying the TE landscape across the entire Culicidae family and in natural population of the tiger mosquito, as well as using laboratory experiments to test the hypothesis that TEs are mobilized under (thermal) stress. These complementary analyses have the potential to provide new insights into mosquito genome evolution and invasiveness. This project is in tight collaboration with [Omar Rota-Stabelli](https://scholar.google.com/citations?user=of14yMwAAAAJ) (University of Trento) and [Andrea Luchetti](https://scholar.google.com/citations?hl=en&user=zSmoXaoAAAAJ) (University of Bologna)
 
-- title: Cool Package
-  subtitle: a subtitle
+- title: Formica
   group: featured
-  image: images/photo.jpg
-  link: https://github.com/
-  description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  repo: greenelab/lab-website-template
-  tags:
-    - resource
+  image: images/formica.png
+  description: The mountain wood ant Formica paralugubris, native of the western Alps, is extremely important for the forest ecosystem functioning. Because of the intense predatory activity on other arthropods, this species has been introduced to the Apennines (Italy) and other localities for pest control. We are currently sequencing individuals sampled from the native and introduced ranges, as well as historical specimens from thetranslocation experiments, to assess the evolution in space and time of this ant species. This project benefits from a collaboration with with [Fabrizio Ghiselli](https://scholar.google.com/citations?user=of14yMwAAAAJ) and [Andrea Luchetti](https://scholar.google.com/citations?hl=en&user=zSmoXaoAAAAJ) (University of Bologna), [Alberto Masoni and Giacomo Santini]( https://www.ecologyandbiodiversity.unifi.it/vp-6-members.html#) (University of Florence), [Anna Olivieri](https://dbb.dip.unipv.it/it/node/576) (University of Pavia), and the [Kosmos](https://dbb.dip.unipv.it/it/node/576) natural history museum of Pavia.
 
 - title: Cool Tutorial
-  subtitle: a subtitle
   image: images/photo.jpg
-  link: https://github.com/
   description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-  repo: greenelab/lab-website-template
-  tags:
-    - resource
-    - publication
+  # repo: greenelab/lab-website-template
 
 - title: Cool Web App
-  subtitle: a subtitle
   image: images/photo.jpg
   link: https://github.com/
   description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   repo: greenelab/lab-website-template
-  tags:
-    - software
+  #tags:
+  #  - software
 
 - title: Cool Web Server
-  subtitle: a subtitle
   image: images/photo.jpg
   link: https://github.com/
   description: Lorem ipsum _dolor sit amet_, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   repo: greenelab/lab-website-template
-  tags:
-    - software
