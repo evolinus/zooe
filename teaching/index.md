@@ -1,5 +1,5 @@
 ---
-title: Teaching&al
+title: (Ou)T(r)eaching
 nav:
   order: 4
   tooltip: Courses, seminars and other
