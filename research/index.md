@@ -24,3 +24,10 @@ In the **zoo_e** lab, we mainly use comparative approaches to study the genetic 
 ## More
 
 {% include list.html component="card" data="projects" filter="!group" style="small" %}
+
+{%
+  include figure.html
+  image="images/nbfc.png"
+  width="100%"
+%}
+
