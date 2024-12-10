@@ -40,18 +40,14 @@ Università di Pavia
 Via Ferrata 9  
 27100 Pavia  
 Italy
-
 {% endcapture %}
 
 {%
   include feature.html
   image="images/unipv.png"
-  link="team"
   flip=true
   text=text
 %}
-
-
 
 {%
   include figure.html
