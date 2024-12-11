@@ -7,7 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-users" %}Team
 
-The *zoo_e lab* enjoys the collaboration of enthusiastic scientific researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind the evolution of organisms.
+The **zoo_e lab** enjoys the collaboration of enthusiastic scientific researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind the evolution of organisms.
 
 {% include section.html %}
 
