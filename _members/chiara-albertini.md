@@ -1,10 +1,11 @@
 ---
-name: John Doe
+name: Chiara Albertini
 image: images/photo.jpg
 role: phd
-group: alum
+# group: alum
 links:
-  github: john-doe
+  email: chiara.albertini01@universitadipavia.it
+  #github: john-doe
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
