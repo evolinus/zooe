@@ -7,9 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-users" %}Team
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+The *zoo_e lab* enjoys the collaboration of enthusiastic scientific researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind the evolution of organisms.
 
 {% include section.html %}
 
@@ -24,6 +22,7 @@ nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 {% include section.html %}
 
+<!--
 {% capture content %}
 
 {% include figure.html image="images/photo.jpg" %}
@@ -33,3 +32,5 @@ nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 {% endcapture %}
 
 {% include grid.html style="square" content=content %}
+-->
+

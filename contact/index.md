@@ -7,7 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-regular fa-envelope" %}Contact
 
-Our lab is located at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).
+Our lab is located at the [Department of Biology and Biotechnology](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).
 {:.center}
 
 {%
