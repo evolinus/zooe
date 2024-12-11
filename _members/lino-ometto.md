@@ -5,7 +5,9 @@ role: pi
 #affiliation: University of Pavia
 aliases:
   - L. Ometto
+  - Lino Ometto
   - L Ometto
+  - Ometto
 links:
   home-page: https://unipv.unifind.cineca.it/get/person/047052
   email: lino.ometto@unipv.it
