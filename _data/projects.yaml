@@ -8,10 +8,11 @@
   image: images/formica.png
   description: The mountain wood ant <i>Formica paralugubris</i>, native of the western Alps, is extremely important for the forest ecosystem functioning. Because of the intense predatory activity on other arthropods, this species has been introduced to the Apennines (Italy) and other localities for pest control. We are currently sequencing individuals sampled from the native and introduced ranges, as well as historical specimens from the translocation experiments, to assess the evolution in space and time of this ant species. This project benefits from a collaboration with with [Fabrizio Ghiselli and Andrea Luchetti](https://sites.google.com/view/evo-com-unibo/home) (University of Bologna), [Alberto Masoni and Giacomo Santini]( https://www.ecologyandbiodiversity.unifi.it/vp-6-members.html#) (University of Florence), [Anna Olivieri](https://dbb.dip.unipv.it/it/node/576) (University of Pavia), and the [Kosmos](https://dbb.dip.unipv.it/it/node/576) natural history museum of Pavia.
 
-- title: Flies
+- title: Insect comparative genomics
   group: featured
-  image: images/tff.jpg
-  description: We study the genetic basis of the remarkable diversity in Diptera biology. Several students in our lab have used or are using this system to learn the approaches and tools necessary to study and understand the evolution of gene families, including the dynamics of duplication and loss in chemosensory genes and opsins, and the mechanisms (e.g., natural selection) that can be inferred from the pattern of their molecular evolution. We are taking advantage of the increasing amount of genomic data available in public databases, focusing in particular on Tephritidae (true fruit flies such as _Bactrocera_ and _Zeugodacus_) and Drosophilidae, which include several important agricultural pests of global importance, and on _Glossina_ (tse-tse flies), which are vectors for trypanosomes. 
+  #image: images/tff.jpg
+  image: images/tephritidae.png
+  description: We study the genetic basis of the remarkable diversity in Diptera biology. Several students in our lab have used or are using this system to learn the comparative approaches and bioinformatucs tools necessary to study and understand the evolution of, for example, chemosensory genes and opsins. We are taking advantage of the increasing amount of genomic data available in public databases, focusing in particular on Drosophilidae and Tephritidae (true fruit flies, such as _Bactrocera_ and _Zeugodacus_), which include several important agricultural pests of global importance, and on _Glossina_ (tse-tse flies), which are vectors for trypanosomes. 
 
 - title: Somatic mutations
   group: featured
@@ -21,10 +22,6 @@
   # repo: greenelab/lab-website-template
   # tags:
   #  - software
-
-- title: Insect comparative genomics
-  image: images/tephritidae.png
-  description: We study the genetic basis of host preference in the true fruit flies (Tephritidae) and of the biology of tse-tse flies (_Glossina_) using comparative approaches and bioinformatucs tools. Examples include the evolution of chemosensory gene families in _Bactrocera_ and of opsins in Diptera.
 
 - title: DrosEU
   image: images/droseu.png
