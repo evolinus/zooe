@@ -23,8 +23,8 @@ Curriculum _Molecular and Digital Biology_
 
 ## Outreach – interventi e seminari pubblici e nelle scuole
 Partecipiamo regolarmente alla [Notte dei Ricercatori](https://www.sharper-night.it/sharper-pavia/) (Researcher's Night).  
-Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodiversità nelle scuole, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/): 
- 
+Inoltre teniamo seminari e laboratori didattici nelle scuole, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/), riguardo l'evoluzione e la biodiversità:  
+
 *Scuola Primaria*  
 **Vestiti da vespa**  
 Gli animali se ne inventano di tutte le forme e colori per passare felici le loro giornate. Ma come mai gli insetti si travestono da foglie? E perché invece la vespa si veste di giallo e nero? Grandi storie di piccoli animali, da fare e da ascoltare.
