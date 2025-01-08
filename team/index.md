@@ -22,7 +22,7 @@ Federica Valerio, Nihel Oueslati (co-supervised, visiting from University of Mon
 Aromita Mallik, Corinne Castellano, Verdiana Fazio, Alessandro Macchia, Lucia Foresto, Saja Boulad, Paola Staffiere.  
 
 *BSc students*  
-Lorenzo Vecchio, Mattia Vignoli, Margherita Toppi, Anita Raccanello, Giulia Mercati, Samuele Tarozzo, Mariam Mahmoud, Emma Pesenti, Elisa Miragliotta, Erica Melchionda., Morea Tomasi, Chiara Albertini, Corinne Castellano, Daria Marzanati.  
+Lorenzo Vecchio, Mattia Vignoli, Margherita Toppi, Anita Raccanello, Giulia Mercati, Samuele Tarozzo, Mariam Mahmoud, Emma Pesenti, Elisa Miragliotta, Erica Melchionda, Morea Tomasi, Chiara Albertini, Corinne Castellano, Daria Marzanati.  
 
 {% include section.html background="images/background.jpg" dark=true %}
 

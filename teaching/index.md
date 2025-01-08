@@ -12,9 +12,9 @@ nav:
 **Laurea Triennale in Scienze Biologiche**  
 [Zoologia](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F508065#Syllabus) (9 CFU, 1° anno, 2° semestre)
 
-**Master's degree in Molecular Biology and Genetics**  
+**Laurea Magistrale in Biologia Sperimentale ed Applicata**  
 Percorso _Biologia Ambientale e Biodiversità_  
-[Biologia delle Popolazioni e Comunità](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F506232#Syllabus) (6 CFU, 1° anno, 1° semestre))
+[Biologia delle Popolazioni e Comunità](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F506232#Syllabus) (6 CFU, 1° anno, 1° semestre)
 
 **Master's degree in Molecular Biology and Genetics**  
 Curriculum _Molecular and Digital Biology_  
