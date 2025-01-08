@@ -18,7 +18,7 @@ Percorso _Biologia Ambientale e Biodiversità_
 
 **Master's degree in Molecular Biology and Genetics**  
 Curriculum _Molecular and Digital Biology_  
-[Genomics and Evolution in Emerging Infectious Diseases](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F450530#Syllabus) (6 CFU, 2^nd^ year, 1^st^ semester)
+[Genomics and Evolution in Emerging Infectious Diseases](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F450530#Syllabus) (6 CFU, 2nd year, 1st semester)
 
 
 ## Outreach – interventi e seminari pubblici e nelle scuole
