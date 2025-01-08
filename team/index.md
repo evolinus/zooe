@@ -7,7 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-users" %}Team
 
-The **zoo_e lab** enjoys the collaboration of enthusiastic scientific researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind the evolution of organisms.
+The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">**e**</span> **lab** enjoys the collaboration of enthusiastic scientific researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind the evolution of organisms.
 
 {% include section.html %}
 
@@ -16,7 +16,7 @@ The **zoo_e lab** enjoys the collaboration of enthusiastic scientific researcher
 
 ## Alumni (at UniPV)
 *PhD students*  
-Federica Valerio, Nihel Ouslati (co-supervised, visiting from University of Monastir, Tunisia), Asma Ghedir (co-supervised, visiting from University of Monastir, Tunisia)  
+Federica Valerio, Nihel Oueslati (co-supervised, visiting from University of Monastir, Tunisia), Asma Ghedir (co-supervised, visiting from University of Monastir, Tunisia)  
 
 *MSc students*  
 Aromita Mallik, Corinne Castellano, Verdiana Fazio, Alessandro Macchia, Lucia Foresto, Saja Boulad, Paola Staffiere.  
