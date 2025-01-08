@@ -14,11 +14,21 @@ The **zoo_e lab** enjoys the collaboration of enthusiastic scientific researcher
 {% include list.html data="members" component="portrait" filter="role == 'pi'" %}
 {% include list.html data="members" component="portrait" filter="role != 'pi'" %}
 
+## Alumni (at UniPV)
+*PhD students*  
+Federica Valerio, Nihel Ouslati (co-supervised, visiting from University of Monastir, Tunisia), Asma Ghedir (co-supervised, visiting from University of Monastir, Tunisia)  
+
+*MSc students*  
+Aromita Mallik, Corinne Castellano, Verdiana Fazio, Alessandro Macchia, Lucia Foresto, Saja Boulad, Paola Staffiere.  
+
+*BSc students*  
+Lorenzo Vecchio, Mattia Vignoli, Margherita Toppi, Anita Raccanello, Giulia Mercati, Samuele Tarozzo, Mariam Mahmoud, Emma Pesenti, Elisa Miragliotta, Erica Melchionda., Morea Tomasi, Chiara Albertini, Corinne Castellano, Daria Marzanati.  
+
 {% include section.html background="images/background.jpg" dark=true %}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Would you like to join us? We are looking for enthusiastic people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to contact [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) for more information.
+
+[Italiano] Vorresti lavorare con noi? Cerchiamo persone entusiaste che amino lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa. Contatta [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) per informazioni.
 
 {% include section.html %}
 
