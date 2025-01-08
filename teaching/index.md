@@ -7,17 +7,18 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-feather-pointed" %}Teaching and Outreach
 
-University courses – Corsi universitary. 
-**Laurea Triennale in Scienze Biologiche**
-[Zoologia](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F508065#Syllabus)
+## University courses – Corsi universitari
+  
+**Laurea Triennale in Scienze Biologiche**  
+[Zoologia](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F508065#Syllabus) (9 CFU, 1° anno, 2° semestre)
 
-**Master's degree in Molecular Biology and Genetics**
-Percorso _Biologia Ambientale e Biodiversità_
-[Biologia delle Popolazionin e Comunità](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F506232#Syllabus)
+**Master's degree in Molecular Biology and Genetics**  
+Percorso _Biologia Ambientale e Biodiversità_  
+[Biologia delle Popolazioni e Comunità](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F506232#Syllabus) (6 CFU, 1° anno, 1° semestre))
 
-**Master's degree in Molecular Biology and Genetics**
-Curriculum _Molecular and Digital Biology_
-[Genomics and Evolution in Emerging Infectious Diseases](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F450530#Syllabus) 
+**Master's degree in Molecular Biology and Genetics**  
+Curriculum _Molecular and Digital Biology_  
+[Genomics and Evolution in Emerging Infectious Diseases](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F450530#Syllabus) (6 CFU, 2^nd^ year, 1^st^ semester)
 
 
 ## Outreach – interventi e seminari pubblici e nelle scuole
