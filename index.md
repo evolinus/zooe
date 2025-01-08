@@ -4,7 +4,7 @@ title: Zoology and Evolution
 
 # Zoology and Evolution
 
-The **zoo_e** lab is at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).  
+The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">**e**</span> lab is at the [Department of Biological Sciences](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it).  
 We study the genetic basis of biodiversity with a combination of computational and experimental approaches. We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural populations of in insects and other organisms.
 
 {% include section.html %}
