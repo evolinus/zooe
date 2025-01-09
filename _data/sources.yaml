@@ -1,5 +1,11 @@
+# books
+- id: isbn-13:978-8871926247
+  title: 'Evoluzione. Modelli e processi'
+  publisher: Pearson Education
+  image: images/article_thumbnails/thumb.evoluzione_libro.jpg
 
 
+# articles
 - id: doi:10.1101/2024.08.02.606442
   title: 'A Framework to Identify Opportunities to Address Socioscientific Issues in the Elementary School Curricula: A Case Study from England, Italy, and Portugal'
   publisher: bioRxiv
@@ -70,7 +76,6 @@
 - id: doi:10.1186/s12915-021-01148-4
   title: 'Viviparity and habitat restrictions may influence the evolution of male reproductive genes in tsetse fly (<i>Glossina</i>) species'
   image: images/article_thumbnails/thumb.glossinamags.png
-
 
 
 - id: doi:10.1093/molbev/msab259
