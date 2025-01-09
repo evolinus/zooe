@@ -1,5 +1,14 @@
 # DO NOT EDIT, GENERATED AUTOMATICALLY
 
+- id: isbn-13:978-8871926247
+  title: Evoluzione. Modelli e processi
+  authors: []
+  publisher: Pearson Education
+  date: ''
+  link: https://isbndb.com/book/978
+  image: images/article_thumbnails/thumb.evoluzione_libro.jpg
+  plugin: sources.py
+  file: sources.yaml
 - id: doi:10.1101/2024.08.02.606442
   title: 'A Framework to Identify Opportunities to Address Socioscientific Issues
     in the Elementary School Curricula: A Case Study from England, Italy, and Portugal'
