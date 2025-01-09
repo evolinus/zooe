@@ -22,19 +22,25 @@ Curriculum _Molecular and Digital Biology_
 
 
 ## Outreach – interventi e seminari pubblici e nelle scuole
-Partecipiamo regolarmente alla [Notte dei Ricercatori](https://www.sharper-night.it/sharper-pavia/) (Researcher's Night).  
+{% capture text %}
+Partecipiamo regolarmente alla [Notte dei Ricercatori](https://www.sharper-night.it/sharper-pavia/) (Researcher's Night).
+{% endcapture %}
+{%
+  include feature.html
+  image="images/evogif2.gif"
+  title="evo-drawing"
+  text=text
+%}
+
 Inoltre teniamo seminari e laboratori didattici nelle scuole, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/), riguardo l'evoluzione e la biodiversità:  
 
 *Scuola Primaria*  
-**Vestiti da vespa**  
-Gli animali se ne inventano di tutte le forme e colori per passare felici le loro giornate. Ma come mai gli insetti si travestono da foglie? E perché invece la vespa si veste di giallo e nero? Grandi storie di piccoli animali, da fare e da ascoltare.
+**Vestiti da vespa**: Gli animali se ne inventano di tutte le forme e colori per passare felici le loro giornate. Ma come mai gli insetti si travestono da foglie? E perché invece la vespa si veste di giallo e nero? Grandi storie di piccoli animali, da fare e da ascoltare.
 
 *Scuola Secondaria di Primo Grado*  
-**Dall’Alga alla Zebra**  
-Come si origina la biodiversità? Perché alcuni animali hanno le ali e alcune piante hanno i fiori? La storia della vita è ricca di sorprendenti adattamenti, forme mirabolanti, inaspettate estinzioni: capiamole insieme alla luce dell’evoluzione.
+**Dall’Alga alla Zebra**: Come si origina la biodiversità? Perché alcuni animali hanno le ali e alcune piante hanno i fiori? La storia della vita è ricca di sorprendenti adattamenti, forme mirabolanti, inaspettate estinzioni: capiamole insieme alla luce dell’evoluzione.
 
 *Scuola Secondaria di Secondo Grado*  
-**Mutazioni ed evoluzione**  
-Virus o elefanti poco importa: sono il risultato di miliardi di anni di evoluzione e di infinite mutazioni casuali. Ma cosa sono le mutazioni? Perché avvengono e che fine fanno? Alle origini delle meraviglie della biodiversità, con la matita in mano.
+**Mutazioni ed evoluzione**: Virus o elefanti poco importa: sono il risultato di miliardi di anni di evoluzione e di infinite mutazioni casuali. Ma cosa sono le mutazioni? Perché avvengono e che fine fanno? Alle origini delle meraviglie della biodiversità, con la matita in mano.
 
 Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html).

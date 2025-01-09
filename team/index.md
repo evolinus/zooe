@@ -16,7 +16,7 @@ The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">*
 
 ## Alumni (at UniPV)
 *PhD students*  
-Federica Valerio, Nihel Oueslati (co-supervised, visiting from University of Monastir, Tunisia), Asma Ghedir (co-supervised, visiting from University of Monastir, Tunisia)  
+Federica Valerio, Nihel Oueslati (co-supervision; visiting from University of Monastir, Tunisia), Asma Ghedir (co-supervision; visiting from University of Monastir, Tunisia)  
 
 *MSc students*  
 Aromita Mallik, Corinne Castellano, Verdiana Fazio, Alessandro Macchia, Lucia Foresto, Saja Boulad, Paola Staffiere.  
@@ -26,9 +26,9 @@ Lorenzo Vecchio, Mattia Vignoli, Margherita Toppi, Anita Raccanello, Giulia Merc
 
 {% include section.html background="images/background.jpg" dark=true %}
 
-Would you like to join us? We are looking for enthusiastic people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to contact [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) for more information.
+Would you like to join us? We are looking for people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to contact [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) for more information.
 
-[Italiano] Vorresti lavorare con noi? Cerchiamo persone entusiaste che amino lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa. Contatta [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) per informazioni.
+[Italiano] Vorresti lavorare con noi? Cerchiamo persone che amino lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa. Contatta [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) per informazioni.
 
 {% include section.html %}
 
