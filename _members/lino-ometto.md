@@ -1,6 +1,6 @@
 ---
 name: Lino Ometto
-image: images/photo.jpg
+image: images/Lino-Ometto.png
 role: pi
 #affiliation: University of Pavia
 aliases:
