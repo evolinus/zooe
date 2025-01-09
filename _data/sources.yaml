@@ -34,6 +34,9 @@
 - id: doi:10.1038/s44185-024-00054-6
   title: 'The European Reference Genome Atlas: piloting a decentralised approach to equitable biodiversity genomics'
   image: images/article_thumbnails/thumb.erga.jpg
+  buttons:
+  - type: pdf
+    link: pdfs/McCartney_2024_npjBiodiversity.pdf
 
 
 - id: doi:10.1186/s12052-024-00203-2
