@@ -1,9 +1,21 @@
 # books
-- id: isbn-13:978-8871926247
-  title: 'Evoluzione. Modelli e processi'
+- id: isbn-13:9788871926247
+  title: Evoluzione. Modelli e processi
+  authors:
+  - Marco Ferraguti
+  - Carla Castellacci
+  - Giuliana Allegrucci
+  - Giorgio Binelli
+  - Maurizio Casiraghi
+  - Roberta Cimmaruta
+  - Giuseppe Fusco
+  - Mauro Mandrioli
+  - Lino Ometto
+  - Marco Passamonti
   publisher: Pearson Education
+  date: '2011-03-16'
+  link: https://isbndb.com/book/978
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
-
 
 # articles
 - id: doi:10.1101/2024.08.02.606442
