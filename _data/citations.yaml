@@ -406,6 +406,9 @@
   date: '2024-09-17'
   link: https://doi.org/g8tgnx
   image: images/article_thumbnails/thumb.erga.jpg
+  buttons:
+  - type: pdf
+    link: pdfs/McCartney_2024_npjBiodiversity.pdf
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1186/s12052-024-00203-2
