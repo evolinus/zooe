@@ -30,6 +30,7 @@ Inoltre teniamo seminari e laboratori didattici nelle scuole, per esempio all'in
   include feature.html
   image="images/evogif2.gif"
   width="100%"
+  text=text
 %}
 
 Seminari per le scuole:  
