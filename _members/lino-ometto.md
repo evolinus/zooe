@@ -21,7 +21,7 @@ I currently hold the position of Associate Professor of Zoology at the [Departme
 I have been fortunate to experience a variety of educational and research contexts, both in terms of cultural diversity and of research fields. After receiving a  MSc in Biology from the [University of Padova](https://www.biologia.unipd.it/), I obtained my Ph.D. in Natural Sciences from the [Ludwig-Maximilians University of Munich](https://evol.bio.lmu.de/) under the supervision of [Wolfgang Stephan](https://www.evol.bio.lmu.de/people/professor_emeritus/stephan_w/index.html). I then studied the evolution of gene expression in ants in [Laurent Keller](https://laurentkeller.ch/en/home/)'s lab at the [University of Lausanne](https://www.unil.ch/dee/en/home.html). 
 You can find my full CV [here](https://evolinus.github.io/zooe/pdfs/LinoOmetto.CV.pdf).
 
-I have always enjoyed sharing my passion and interests with students and people in general, and I am regularly involved in (outreach initiatives)[https://evolinus.github.io/zooe/teaching/].
+I have always enjoyed sharing my passion and interests with students and people in general, and I am regularly involved in [outreach initiatives](https://evolinus.github.io/zooe/teaching/).
 
 I am president of the [Italian Society for Evolutionary Biology](https://www.sibe-iseb.it/). 
 
