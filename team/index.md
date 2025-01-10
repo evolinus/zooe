@@ -24,7 +24,7 @@ Aromita Mallik, Corinne Castellano, Verdiana Fazio, Alessandro Macchia, Lucia Fo
 *BSc students*  
 Lorenzo Vecchio, Mattia Vignoli, Margherita Toppi, Anita Raccanello, Giulia Mercati, Samuele Tarozzo, Mariam Mahmoud, Emma Pesenti, Elisa Miragliotta, Erica Melchionda, Morea Tomasi, Chiara Albertini, Corinne Castellano, Daria Marzanati.  
 
-{% include section.html background="images/background.blu.png" %}
+{% include section.html background="images/background.blu.png" dark=true %}
 
 Would you like to join us? We are looking for people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to contact [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) for more information.
 
