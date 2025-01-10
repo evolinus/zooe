@@ -14,9 +14,11 @@ The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">*
 {% include list.html data="members" component="portrait" filter="role == 'pi'" %}
 {% include list.html data="members" component="portrait" filter="role != 'pi'" %}
 
+
+
 ### Alumni (at UniPV)
 *PhD students*  
-Federica Valerio, Nihel Oueslati (co-supervision; visiting from University of Monastir, Tunisia), Asma Ghedir (co-supervision; visiting from University of Monastir, Tunisia).  
+Federica Valerio, Nihel Oueslati and Asma Ghedir (co-supervision; visiting from University of Monastir, Tunisia).  
 
 *MSc students*  
 Aromita Mallik, Corinne Castellano, Verdiana Fazio, Alessandro Macchia, Lucia Foresto, Saja Boulad, Paola Staffiere.  
