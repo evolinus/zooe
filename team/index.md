@@ -28,7 +28,7 @@ Lorenzo Vecchio, Mattia Vignoli, Margherita Toppi, Anita Raccanello, Giulia Merc
 
 Would you like to join us? We are looking for people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to contact [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) for more information.
 
-[Italiano] Vorresti lavorare con noi? Cerchiamo persone che amino lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa. Contatta [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html) per informazioni.
+[Italiano] Se ti piace lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa contatta [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html).
 
 {% include section.html %}
 
