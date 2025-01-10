@@ -38,7 +38,7 @@ And other stories.
 
 {% capture text %}
 
-Our research, also in collaboration with colleagues in Italy and abroad, has led to the discovery of new insights into the processes and mechanisms that accompany the evolution of insects and other organisms.
+Our research, also in collaboration with colleagues in Italy and abroad, has led to the discovery of new insights into the evolutionary history of insects and other organisms.
 {%
   include button.html
   link="publications"
