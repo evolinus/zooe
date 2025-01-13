@@ -1,7 +1,7 @@
 ---
 name: Giulia Mercati
 image: images/Giulia-Mercati.png
-# description: Lead Programmer
+# description: MSc student
 role: undergrad
 links:
   email: giulia.mercati01@universitadipavia.it
