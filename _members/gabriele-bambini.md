@@ -1,6 +1,6 @@
 ---
 name: Gabriele Bambini
-#image: images/Giulia-Mercati.png
+#image: images/sassi.png
 # description: Lead Programmer
 role: undergrad
 links:
