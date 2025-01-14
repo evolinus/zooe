@@ -45,7 +45,7 @@ collections:
     output: true
 
 # jekyll plugins
-url: "https://evolinus.github.io/zooe/" # the base hostname & protocol for your site
+# url: "https://evolinus.github.io/zooe/" # the base hostname & protocol for your site
 plugins:
   - jekyll-spaceship
   - jekyll-sitemap
