@@ -72,3 +72,6 @@ exclude:
   - README.md
   - LICENSE.md
   - CITATION.cff
+
+- name: generate-sitemap
+  uses: cicirello/generate-sitemap@v1.10.1
