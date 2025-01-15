@@ -39,6 +39,7 @@ If you have any question about our work, please [contact us](https://evolinus.gi
 {% include section.html %}
 
 ## All
+
 {% 
   include list.html
   data="citations"
