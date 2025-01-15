@@ -21,16 +21,20 @@
 - id: doi:10.1101/2024.08.02.606442
   title: 'A Framework to Identify Opportunities to Address Socioscientific Issues in the Elementary School Curricula: A Case Study from England, Italy, and Portugal'
   publisher: bioRxiv
+  # group: featured 
+  group: preprint 
 
 
 - id: doi:10.1101/2024.11.10.622744
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
   publisher: bioRxiv
+  group: preprint 
 
 
 - id: doi:10.22541/au.172510123.38206942/v1
   title: 'Harmonising genomics research excellence and stakeholder needs in conservation management'
   publisher: Authorea
+  group: preprint 
 
 
 - id: doi:10.1007/s12600-024-01205-y
