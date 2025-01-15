@@ -13,6 +13,7 @@ If you have any question about our work, please [contact us](https://evolinus.gi
 {% include search-info.html %}
 
 <!--
+
 ## Highlights
 
 {%
@@ -22,9 +23,7 @@ If you have any question about our work, please [contact us](https://evolinus.gi
   filters="group: featured"
   style="rich"
 %}
--->
 
-<!--
 ## Pre-prints
 
 {%
@@ -34,9 +33,11 @@ If you have any question about our work, please [contact us](https://evolinus.gi
   filters="group: preprint"
   style="rich"
 %}
--->
 
 {% include section.html %}
+
+-->
+
 
 ## All
 
