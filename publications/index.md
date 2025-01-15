@@ -7,7 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-microscope" %}Publications
 
-If you have any question or request about our work, please [contact us](https://evolinus.github.io/zooe/contact/).
+If you have any question about our work, please [contact us](https://evolinus.github.io/zooe/contact/).
 
 {% include search-box.html %}
 {% include search-info.html %}
