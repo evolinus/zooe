@@ -12,7 +12,21 @@ If you have any question or request about our work, please [contact us](https://
 {% include search-box.html %}
 {% include search-info.html %}
 
+<!--
+## Highlights
+
+{%
+  include list.html
+  data="citations"
+  component="citation"
+  filters="group: featured"
+  style="rich"
+%}
+-->
+
+<!--
 ## Pre-prints
+
 {%
   include list.html
   data="citations"
@@ -20,6 +34,7 @@ If you have any question or request about our work, please [contact us](https://
   filters="group: preprint"
   style="rich"
 %}
+-->
 
 {% include section.html %}
 
