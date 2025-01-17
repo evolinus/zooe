@@ -24,7 +24,7 @@ Curriculum _Molecular and Digital Biology_
 ## Outreach – interventi e seminari pubblici e nelle scuole
 {% capture text %}
 Partecipiamo regolarmente alla [Notte dei Ricercatori](https://www.sharper-night.it/sharper-pavia/) (Researcher's Night).  
-Inoltre teniamo seminari e laboratori didattici nelle scuole, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/), riguardo l'evoluzione e la biodiversità.
+Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodiversità, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/).
 {% endcapture %}
 {%
   include feature.html
