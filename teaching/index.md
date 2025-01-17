@@ -33,7 +33,7 @@ Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodi
   text=text
 %}
 
-Seminari per le scuole:  
+### Seminari per le scuole  
 
 *Scuola Primaria*  
 **Vestiti da vespa**: Gli animali se ne inventano di tutte le forme e colori per passare felici le loro giornate. Ma come mai gli insetti si travestono da foglie? E perché invece la vespa si veste di giallo e nero? Grandi storie di piccoli animali, da fare e da ascoltare.
