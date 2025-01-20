@@ -17,7 +17,7 @@ links:
 
 ---
 
-I hold the position of Associate Professor of Zoology at the [Department of Biology and Biotechnology](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it). My research interests are aimed at better understanding the origin of adaptive traits in insects (& friends) using population genetics and molecular evolution approaches. I grew up with a keen interest in animals and I like to think of myself as a zoologist with a sweep net in one hand and a genome in the other. 
+I hold the position of Associate Professor of Zoology at the [Department of Biology and Biotechnology](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it). I grew up with a keen interest in animals and I like to think of myself as a zoologist with a sweep net in one hand and a genome in the other. My research interests are aimed at better understanding the origin of adaptive traits in insects (& friends) using population genetics and molecular evolution approaches.  
 After graduating in Biology from the [University of Padova](https://www.biologia.unipd.it/), I obtained my Ph.D. in Natural Sciences from the [Ludwig-Maximilians University of Munich](https://evol.bio.lmu.de/) under the supervision of [Wolfgang Stephan](https://www.evol.bio.lmu.de/people/professor_emeritus/stephan_w/index.html). I then studied the evolution of gene expression in ants in [Laurent Keller](https://laurentkeller.ch/en/home/)'s lab at the [University of Lausanne](https://www.unil.ch/dee/en/home.html). 
 You can find my full CV [here](https://evolinus.github.io/zooe/pdfs/LinoOmetto.CV.pdf).
 
