@@ -24,7 +24,7 @@ Federica Valerio; Nihel Oueslati and Asma Ghedir (co-supervision; visiting from 
 Aromita Mallik; Corinne Castellano; Verdiana Fazio; Alessandro Macchia; Lucia Foresto; Saja Boulad; Paola Staffiere.  
 
 *BSc students*  
-Lorenzo Vecchio; Mattia Vignoli; Margherita Toppi; Anita Raccanello; Giulia Mercati; Samuele Tarozzo; Mariam Mahmoud, Emma Pesenti; Elisa Miragliotta; Erica Melchionda; Morea Tomasi; Daria Marzanati.  
+Lorenzo Vecchio; Mattia Vignoli; Margherita Toppi; Anita Raccanello; Giulia Mercati; Samuele Tarozzo; Mariam Mahmoud; Emma Pesenti; Elisa Miragliotta; Erica Melchionda; Morea Tomasi; Daria Marzanati.  
 
 {% include section.html background="images/backgrounds/background.blu.png" %}
 
