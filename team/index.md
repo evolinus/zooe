@@ -16,7 +16,7 @@ The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">*
 
 
 
-### Alumni (at UniPV)
+#### Alumni
 *PhD students*  
 Federica Valerio; Nihel Oueslati and Asma Ghedir (co-supervision; visiting from University of Monastir, Tunisia).  
 
