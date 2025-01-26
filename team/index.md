@@ -7,7 +7,7 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-users" %}People
 
-The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">**e**</span> lab enjoys the collaboration of enthusiastic scientific researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind animal evolution.
+The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">**e**</span> lab enjoys the collaboration of enthusiastic researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind animal evolution.
 
 {% include section.html %}
 
