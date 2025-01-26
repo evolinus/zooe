@@ -28,6 +28,7 @@ Lorenzo Vecchio; Mattia Vignoli; Margherita Toppi; Anita Raccanello; Giulia Merc
 
 {% include section.html background="images/backgrounds/background.blu.png" %}
 
+#### Join us
 Se ti piace lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa, [contattaci](https://evolinus.github.io/zooe/contact/).  
 
 Would you like to join us? We are looking for people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to [contact us](https://evolinus.github.io/zooe/contact/) for more information.
