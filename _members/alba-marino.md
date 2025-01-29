@@ -8,10 +8,9 @@ aliases:
   - Alba Marino
 
 links:
-  # home-page: https://www.cleliasportfolio.xyz
-  # email: astra.bertelli01@universitadipavia.it
+  # email: 
   orcid: 0009-0005-0984-2524
-  # github: AstraBert
+  github: albmarino
   google-scholar: NQOGMNMAAAAJ 
 ---
 I am a post-doctoral researcher at the [Department of Biology and Biotechnology](https://dbb.dip.unipv.it/it) of the [University of Pavia](https://portale.unipv.it/it).
