@@ -24,16 +24,17 @@ Curriculum _Molecular and Digital Biology_
 ## Outreach – interventi e seminari pubblici e nelle scuole
 {% capture text %}
 Partecipiamo regolarmente alla [Notte dei Ricercatori](https://www.sharper-night.it/sharper-pavia/) (Researcher's Night).  
-Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodiversità, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/).
+Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodiversità, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/).  
+
+### Seminari per le scuole  
 {% endcapture %}
 {%
   include feature.html
   image="images/evogif2.gif"
+  flip=true
   width="80%"
   text=text
 %}
-
-### Seminari per le scuole  
 
 *Scuola Primaria*  
 **Vestiti da vespa**: Gli animali se ne inventano di tutte le forme e colori per passare felici le loro giornate. Ma come mai gli insetti si travestono da foglie? E perché invece la vespa si veste di giallo e nero? Grandi storie di piccoli animali, da fare e da ascoltare.
@@ -48,7 +49,8 @@ Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/member
 
 ### L'Evoluzione nelle scuole  
 {% capture text %}
-Insegnare correttamente l'evoluzione non è facile. All'interno delle COST Action [EvoKE](https://evokeproject.org) e [EuroScitizen](https://www.euroscitizen.eu), insieme a ricercatori ed educatori da tutta Europa, abbiamo abbiamo analizzato quali concetti di evoluzione sono trattati nei libri di testo scientifici europei (leggi [qui](https://doi.org/10.1186/s12052-024-00203-2)) e come l'evoluzione possa essere insegnata usando questioni socio-scientifiche. Il libro "**Apprendere l’evoluzione attraverso le questioni socio-scientifiche**" è disponibile gratuitamente in [italiano](https://ria.ua.pt/bitstream/10773/43992/1/SSI%20IT.pdf) e [inglese](https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf).  
+Insegnare correttamente l'evoluzione non è facile. All'interno delle COST Action [EvoKE](https://evokeproject.org) e [EuroScitizen](https://www.euroscitizen.eu), insieme a ricercatori ed educatori da tutta Europa, abbiamo abbiamo analizzato quali concetti di evoluzione sono trattati nei libri di testo scientifici europei (leggi [qui](https://doi.org/10.1186/s12052-024-00203-2)) e come l'evoluzione possa essere insegnata usando questioni socio-scientifiche.  
+Il libro "**Apprendere l’evoluzione attraverso le questioni socio-scientifiche**" è disponibile gratuitamente in [italiano](https://ria.ua.pt/bitstream/10773/43992/1/SSI%20IT.pdf) e [inglese](https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf).  
 {% endcapture %}
 {%
   include feature.html
