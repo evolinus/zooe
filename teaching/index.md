@@ -46,14 +46,15 @@ Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodi
 
 Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html).
 
-### L'Evoluzione nelle scuole  
+### Evolution at school – L'evoluzione a scuola  
 {% capture text %}
-Insegnare correttamente l'evoluzione non è facile. All'interno delle COST Action [EvoKE](https://evokeproject.org) e [EuroScitizen](https://www.euroscitizen.eu), insieme a ricercatori ed educatori da tutta Europa, abbiamo abbiamo analizzato quali concetti di evoluzione sono trattati nei libri di testo scientifici europei (leggi [qui](https://doi.org/10.1186/s12052-024-00203-2)) e come l'evoluzione possa essere insegnata usando questioni socio-scientifiche. Il libro "**Apprendere l’evoluzione attraverso le questioni socio-scientifiche**" è disponibile gratuitamente in [italiano](https://ria.ua.pt/bitstream/10773/43992/1/SSI%20IT.pdf) e [inglese](https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf).  
+[EN] Teaching evolution correctly is not easy. Within the COST Actions [EvoKE](https://evokeproject.org) and [EuroScitizen](https://www.euroscitizen.eu), together with researchers and educators from all over Europe, we analysed which evolutionary concepts are covered in European science textbooks (read [here](https://doi.org/10.1186/s12052-024-00203-2)) and how evolution can be taught using socio-scientific issues. The e-book ‘**Learning evolution through socio-scientific issues**’ is available for free [here](https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf). 
+[IT] Insegnare correttamente l'evoluzione non è facile. All'interno delle COST Action [EvoKE](https://evokeproject.org) e [EuroScitizen](https://www.euroscitizen.eu), insieme a ricercatori ed educatori da tutta Europa, abbiamo analizzato quali concetti di evoluzione sono trattati nei libri di testo scientifici europei (leggi [qui](https://doi.org/10.1186/s12052-024-00203-2)) e come l'evoluzione possa essere insegnata usando questioni socio-scientifiche. Il libro "**Apprendere l’evoluzione attraverso le questioni socio-scientifiche**" è disponibile gratuitamente [qui](https://ria.ua.pt/bitstream/10773/43992/1/SSI%20IT.pdf).  
 {% endcapture %}
 {%
   include feature.html
   image="images/evoSSI.png"
-  width="80%"
+  width="100%"
   flip=true
   text=text
 %}
