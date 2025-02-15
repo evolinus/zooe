@@ -46,7 +46,7 @@ Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodi
 
 Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html).
 
-### Evolution at school – L'evoluzione a scuola  
+## Evolution at school – L'evoluzione a scuola  
 {% capture text %}
 [EN] Teaching evolution correctly is not easy. Within the COST Actions [EvoKE](https://evokeproject.org) and [EuroScitizen](https://www.euroscitizen.eu), together with researchers and educators from all over Europe, we analysed which evolutionary concepts are covered in European science textbooks (read [here](https://doi.org/10.1186/s12052-024-00203-2)) and how evolution can be taught using socio-scientific issues. The e-book ‘**Learning evolution through socio-scientific issues**’ is available for free [here](https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf).  
 
