@@ -19,28 +19,6 @@
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
   plugin: sources.py
   file: sources.yaml
-- id: doi:10.1101/2024.08.02.606442
-  title: 'A framework to identify opportunities to address socioscientific issues
-    in the elementary school curricula: A case study from England, Italy, and Portugal'
-  authors:
-  - "Patr\xEDcia Pessoa"
-  - Joelyn de Lima
-  - Valentina Piacentini
-  - Giulia Realdon
-  - Alex Jeffries
-  - Lino Ometto
-  - J. Bernardino Lopes
-  - Dana L. Zeidler
-  - "Maria Jo\xE3o Fonseca"
-  - Bruno Sousa
-  - Alexandre Pinto
-  - "Xana S\xE1-Pinto"
-  publisher: bioRxiv
-  date: '2024-08-06'
-  link: https://doi.org/g8s4p3
-  group: preprint
-  plugin: sources.py
-  file: sources.yaml
 - id: doi:10.1101/2024.11.10.622744
   title: Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i>
     through the expanded DEST 2.0 genomic resource
@@ -174,6 +152,28 @@
   date: '2024-08-31'
   link: https://doi.org/g8s4p2
   group: preprint
+  plugin: sources.py
+  file: sources.yaml
+- id: doi:10.1371/journal.pone.0308901
+  title: 'A framework to identify opportunities to address socioscientific issues
+    in the elementary school curricula: A case study from England, Italy, and Portugal'
+  authors:
+  - "Patr\xEDcia Pessoa"
+  - Joelyn de Lima
+  - Valentina Piacentini
+  - Giulia Realdon
+  - Alex Jeffries
+  - Lino Ometto
+  - J. Bernardino Lopes
+  - Dana L. Zeidler
+  - "Maria Jo\xE3o Fonseca"
+  - Bruno Sousa
+  - Alexandre Pinto
+  - "Xana S\xE1-Pinto"
+  publisher: PLOS ONE
+  date: '2025-03-19'
+  link: https://doi.org/g8856v
+  image: images/article_thumbnails/thumb.SSI.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/s12600-024-01205-y
