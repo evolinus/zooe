@@ -20,12 +20,6 @@
 
 
 # preprints
-- id: doi:10.1101/2024.08.02.606442
-  title: 'A framework to identify opportunities to address socioscientific issues in the elementary school curricula: A case study from England, Italy, and Portugal'
-  publisher: bioRxiv
-  # group: featured 
-  group: preprint 
-
 - id: doi:10.1101/2024.11.10.622744
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
   publisher: bioRxiv
@@ -39,6 +33,10 @@
 
 
 # articles
+- id: doi:10.1371/journal.pone.0308901
+  title: 'A framework to identify opportunities to address socioscientific issues in the elementary school curricula: A case study from England, Italy, and Portugal'
+  image: images/article_thumbnails/thumb.SSI.png
+
 - id: doi:10.1007/s12600-024-01205-y
   title: 'An initial investigation into the genetic diversity, phylogenetic relationships, and population structure of the Olive Psyllid <i>Euphyllura olivina</i> in Tunisia'
   image: images/article_thumbnails/thumb.olivina.jpg
