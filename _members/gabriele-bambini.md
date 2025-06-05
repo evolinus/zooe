@@ -2,7 +2,7 @@
 name: Gabriele Bambini
 image: images/sassi.png
 # description: MSc student
-role: undergrad
+role: grad
 links:
   email: gabriele.bambini01@universitadipavia.it
 ---
