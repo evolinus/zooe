@@ -130,28 +130,28 @@
   group: preprint
   plugin: sources.py
   file: sources.yaml
-- id: doi:10.22541/au.172510123.38206942/v1
-  title: Harmonising genomics research excellence and stakeholder needs in conservation
-    management
+- id: doi:10.1111/mec.70001
+  title: Biodiversity genomics research practices require harmonising to meet stakeholder
+    needs in conservation
   authors:
   - Elena Buzan
   - Christian de Guttry
   - Chiara Bortoluzzi
-  - Nathaniel Street
+  - Nathaniel R. Street
   - Kay Lucek
   - Anna Rosling
   - Lino Ometto
   - Alice Mouton
-  - "Lu\xEDsa Marins"
-  - "Mar\xEDa Jos\xE9 Ruiz-L\xF3pez"
-  - "Jos\xE9 Melo-Ferreira"
+  - "Lu\xEDsa S. Marins"
+  - "Mar\xEDa Jos\xE9 Ruiz\u2010L\xF3pez"
+  - "Jos\xE9 Melo\u2010Ferreira"
   - Elisabet Ottosson
-  - Camila Mazzoni
-  - Robert Waterhouse
-  publisher: Authorea
-  date: '2024-08-31'
-  link: https://doi.org/g8s4p2
-  group: preprint
+  - Camila J. Mazzoni
+  - Robert M. Waterhouse
+  publisher: Molecular Ecology
+  date: '2025-06-26'
+  link: https://doi.org/g9sbmx
+  image: images/article_thumbnails/thumb.stake.jpg
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1371/journal.pone.0308901
