@@ -25,14 +25,13 @@
   publisher: bioRxiv
   group: preprint 
 
-- id: doi:10.22541/au.172510123.38206942/v1
-  title: 'Harmonising genomics research excellence and stakeholder needs in conservation management'
-  publisher: Authorea
-  group: preprint 
-
 
 
 # articles
+- id: doi:10.1111/mec.70001
+  title: 'Biodiversity genomics research practices require harmonising to meet stakeholder needs in conservation'
+  image: images/article_thumbnails/thumb.stake.jpg
+
 - id: doi:10.1371/journal.pone.0308901
   title: 'A framework to identify opportunities to address socioscientific issues in the elementary school curricula: A case study from England, Italy, and Portugal'
   image: images/article_thumbnails/thumb.SSI.png
