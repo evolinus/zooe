@@ -18,13 +18,11 @@
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
 
 
-
 # preprints
 - id: doi:10.1101/2024.11.10.622744
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
   publisher: bioRxiv
   group: preprint 
-
 
 
 # articles
