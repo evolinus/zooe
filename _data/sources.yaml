@@ -17,8 +17,9 @@
   link: https://books.google.it/books/about/Evoluzione_Modelli_e_processi.html?id=fz9RYgEACAAJ&redir_esc=y
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
 
-- id: isbn-13:9781071645857
+- id: https://doi.org/10.1007/978-1-0716-4583-3
   title: Insect Genomics.Methods and Protocols
+  image: images/article_thumbnails/thumb.insectgenomics.jpg
 
 # articles
 - id: https://doi.org/10.1093/molbev/msaf132
