@@ -24,7 +24,7 @@
 # articles
 - id: https://doi.org/10.1093/molbev/msaf132
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
-  image: bioimages/article_thumbnails/thumb.DEST2.png
+  image: images/article_thumbnails/thumb.DEST2.png
 
 - id: doi:10.1111/mec.70001
   title: 'Biodiversity genomics research practices require harmonising to meet stakeholder needs in conservation'
