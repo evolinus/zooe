@@ -25,31 +25,6 @@ If you have any question about our work, please [contact us](https://evolinus.gi
   style="rich" 
 %}
 
-<!--
-
-## Highlights
-
-{%
-  include list.html
-  data="citations"
-  component="citation"
-  filters="group: featured"
-  style="rich"
-%}
-
-## Pre-prints
-
-{%
-  include list.html
-  data="citations"
-  component="citation"
-  filters="group: preprint"
-  style="rich"
-%}
-
-{% include section.html %}
-
--->
 
 
 
