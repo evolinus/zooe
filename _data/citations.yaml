@@ -20,14 +20,14 @@
   plugin: sources.py
   file: sources.yaml
 - id: https://doi.org/10.1007/978-1-0716-4583-3
-  title: Insect Genomics.Methods and Protocols
+  title: 'Insect Genomics: Methods and Protocols'
   authors:
   - Mariangela Bonizzoni
   - Lino Ometto
   publisher: Humana - Springer Nature
   date: '2025-08-20'
   link: https://link.springer.com/book/10.1007/978-1-0716-4583-3
-  image: images/article_thumbnails/thumb.insectgenomics.png
+  image: images/article_thumbnails/thumb.insectgenomics.jpg
   plugin: sources.py
   file: sources.yaml
 - id: https://doi.org/10.1093/molbev/msaf132
