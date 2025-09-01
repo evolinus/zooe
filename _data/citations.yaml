@@ -19,49 +19,57 @@
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
   plugin: sources.py
   file: sources.yaml
-- id: doi:10.1101/2024.11.10.622744
+- id: isbn-13:9781071645857
+  title: Insect Genomics.Methods and Protocols
+  authors: []
+  publisher: ''
+  date: ''
+  link: http://isbndb.com/search-all.html?kw=9781071645857
+  plugin: sources.py
+  file: sources.yaml
+- id: https://doi.org/10.1093/molbev/msaf132
   title: Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i>
     through the expanded DEST 2.0 genomic resource
   authors:
-  - Joaquin C. B. Nunez
+  - Joaquin C B Nunez
   - Marta Coronado-Zamora
   - Mathieu Gautier
   - Martin Kapun
   - Sonja Steindl
   - Lino Ometto
-  - Katja M. Hoedjes
+  - Katja Hoedjes
   - Julia Beets
-  - R. Axel W. Wiberg
-  - Giovanni R. Mazzeo
-  - David J. Bass
+  - R Axel W Wiberg
+  - Giovanni R Mazzeo
+  - David J Bass
   - Denys Radionov
   - Iryna Kozeretska
   - Mariia Zinchenko
   - Oleksandra Protsenko
-  - Svitlana Serga
+  - Svitlana V Serga
   - Cristina Amor-Jimenez
   - "S\xF2nia Casillas"
-  - Alejandro Sanchez-Gracia
+  - "Alejandro S\xE1nchez-Gracia"
   - Aleksandra Patenkovic
   - Amanda Glaser-Schmitt
   - Antonio Barbadilla
-  - Antonio J. Buendia-Ruiz
+  - "Antonio J Buendia-Ru\xEDz"
   - Astra Clelia Bertelli
   - "Bal\xE1zs Kiss"
   - "Banu Sebnem \xD6nder"
   - "B\xE9len Rold\xE1n Matr\xEDn"
   - Bregje Wertheim
   - Candice Deschamps
-  - Carlos E. Arboleda-Bustos
+  - Carlos E Arboleda-Bustos
   - Carlos Tinedo
   - Christian Feller
   - "Christian Schl\xF6tterer"
   - Clancy Lawler
   - Claudia Fricke
-  - Cristina P. Vieira
+  - Cristina P Vieira
   - Cristina Vieira
-  - Darren J. Obbard
-  - Dorcas Orengo
+  - Darren J Obbard
+  - Dorcas Juana Orengo
   - Doris Vela
   - Eduardo Amat
   - Elgion Loreto
@@ -69,10 +77,10 @@
   - Esra Durmaz Mitchell
   - Eva Puerma
   - Fabian Staubach
-  - Florencia Camus
+  - M Florencia Camus
   - "Herv\xE9 Colinet"
   - Jan Hrcek
-  - "Jesper G. S\xF8rensen"
+  - "Jesper Givskov S\xF8rensen"
   - Jessica Abbott
   - Joan Torro
   - John Parsch
@@ -82,10 +90,10 @@
   - Krzysztof Wojciechowski
   - Lilian Madi-Ravazzi
   - Maaria Kankare
-  - Mads F. Schou
-  - Manolis Ladoukakis
-  - Maria Josefa Gomez-Julian
-  - Maria Luisa Espinosa-Jimenez
+  - Mads F Schou
+  - Emmanuel D Ladoukakis
+  - "M Josefa G\xF3mez-Juli\xE1n"
+  - M Luisa Espinosa-Jimenez
   - Maria Pilar Garcia Guerreiro
   - Maria-Eleni Parakatselaki
   - Marija Savic Veselinovic
@@ -93,7 +101,7 @@
   - Marina Stamenkovic-Radak
   - Margot Paris
   - Marta Pascual
-  - Michael G. Ritchie
+  - Michael G Ritchie
   - Michel Rera
   - "Mihailo Jeli\u0107"
   - Mina Hojat Ansari
@@ -107,27 +115,27 @@
   - Patricia Gibert
   - Pau Carazo
   - Pinar Kohlmeier
-  - Priscilla A. Erickson
+  - Priscilla A Erickson
   - Renaud Vitalis
-  - Roberto Torres
+  - Jorge Roberto Torres
   - Sara Guirao-Rico
-  - Sebastian E. Ramos-Onsins
+  - Sebastian E Ramos-Onsins
   - Silvana Castillo
-  - "T\xE2nia F. Paulo"
+  - "T\xE2nia F Paulo"
   - Venera Tyukmaeva
   - Zahara Alonso
-  - Vladimir Alatortsev
+  - Vladimir E Alatortsev
   - Elena Pasyukova
-  - Dmitry Mukha
-  - Dmitri Petrov
+  - Dmitry V Mukha
+  - Dmitri A Petrov
   - Paul Schmidt
   - Thomas Flatt
-  - Alan O. Bergland
+  - Alan O Bergland
   - Josefa Gonzalez
-  publisher: bioRxiv
-  date: '2024-11-11'
-  link: https://doi.org/g8s4pw
-  group: preprint
+  publisher: Molecular Biology and Evolution
+  date: '2025-07-30'
+  link: https://academic.oup.com/mbe/article/doi/10.1093/molbev/msaf132/8237493
+  image: bioimages/article_thumbnails/thumb.DEST2.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1111/mec.70001
