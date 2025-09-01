@@ -17,15 +17,14 @@
   link: https://books.google.it/books/about/Evoluzione_Modelli_e_processi.html?id=fz9RYgEACAAJ&redir_esc=y
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
 
-
-# preprints
-- id: doi:10.1101/2024.11.10.622744
-  title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
-  publisher: bioRxiv
-  group: preprint 
-
+- id: isbn-13:9781071645857
+  title: Insect Genomics.Methods and Protocols
 
 # articles
+- id: https://doi.org/10.1093/molbev/msaf132
+  title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
+  image: bioimages/article_thumbnails/thumb.DEST2.png
+
 - id: doi:10.1111/mec.70001
   title: 'Biodiversity genomics research practices require harmonising to meet stakeholder needs in conservation'
   image: images/article_thumbnails/thumb.stake.jpg
@@ -45,9 +44,6 @@
 - id: doi:10.1038/s44185-024-00054-6
   title: 'The European Reference Genome Atlas: piloting a decentralised approach to equitable biodiversity genomics'
   image: images/article_thumbnails/thumb.erga.jpg
-  #buttons:
-  #- type: pdf
-  #  link: pdfs/McCartney_2024_npjBiodiversity.pdf
 
 - id: doi:10.1186/s12052-024-00203-2
   title: 'Evolution content in school textbooks: data from eight European countries'
