@@ -19,12 +19,13 @@
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
   plugin: sources.py
   file: sources.yaml
-- id: isbn-13:9781071645857
+- id: https://doi.org/10.1007/978-1-0716-4583-3
   title: Insect Genomics.Methods and Protocols
   authors: []
   publisher: ''
   date: ''
-  link: http://isbndb.com/search-all.html?kw=9781071645857
+  link: https://link.springer.com/book/10.1007/978-1-0716-4583-3
+  image: images/article_thumbnails/thumb.insectgenomics.jpg
   plugin: sources.py
   file: sources.yaml
 - id: https://doi.org/10.1093/molbev/msaf132
