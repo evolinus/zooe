@@ -136,7 +136,7 @@
   publisher: Molecular Biology and Evolution
   date: '2025-07-30'
   link: https://academic.oup.com/mbe/article/doi/10.1093/molbev/msaf132/8237493
-  image: bioimages/article_thumbnails/thumb.DEST2.png
+  image: images/article_thumbnails/thumb.DEST2.png
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1111/mec.70001
