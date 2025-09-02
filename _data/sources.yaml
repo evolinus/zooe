@@ -21,10 +21,10 @@
   title: 'Insect Genomics: Methods and Protocols'
   authors:
   - Mariangela Bonizzoni
-  - Lino Ometto (Eds.)
+  - Lino Ometto
   publisher: Humana - Springer Nature
   date: '2025-08-20'
-  image: images/article_thumbnails/thumb.insectgenomics.jpg
+  image: images/article_thumbnails/thumb.insectgenomics.png
 
 # articles
 - id: https://doi.org/10.1093/molbev/msaf132
