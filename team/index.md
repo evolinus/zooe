@@ -21,7 +21,7 @@ The **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00">*
 Federica Valerio; Nihel Oueslati and Asma Ghedir (co-supervision; visiting from University of Monastir, Tunisia).  
 
 *MSc students*  
-Giulia Mercati; Dibyojyoti Chattopadhyay; Aromita Mallik; Corinne Castellano; Verdiana Fazio; Alessandro Macchia; Lucia Foresto; Saja Boulad; Paola Staffiere.  
+Gabriele Bambini; Giulia Mercati; Dibyojyoti Chattopadhyay; Aromita Mallik; Corinne Castellano; Verdiana Fazio; Alessandro Macchia; Lucia Foresto; Saja Boulad; Paola Staffiere.  
 
 *BSc students*  
 [Astra Clelia Bertelli](https://www.cleliasportfolio.xyz); Gaia Ruga; Lorenzo Vecchio; Mattia Vignoli; Margherita Toppi; Anita Raccanello; Giulia Mercati; Samuele Tarozzo; Mariam Mahmoud; Emma Pesenti; Elisa Miragliotta; Erica Melchionda; Morea Tomasi; Daria Marzanati.  
