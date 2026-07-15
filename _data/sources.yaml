@@ -27,6 +27,18 @@
   image: images/article_thumbnails/thumb.insectgenomics.png
 
 # articles
+- id: https://doi.org/10.1016/j.biocon.2026.111991 
+  title: 'Engaging European local communities in biodiversity genomics research: A five-step framework for scientists'
+  image: images/article_thumbnails/thumb.communities.jpg
+
+- id: https://doi.org/10.1016/j.ibmb.2026.104609
+  title: 'Endogenous viral elements and PIWI gene evolution in <i>Spodoptera</i>: diversity, conservation, and piRNA production'
+  image: images/article_thumbnails/thumb.spodoptera.jpg
+
+- id: https://doi.org/10.1186/s12864-026-12622-0  
+  title: 'Evolutionary genomics and divergence of <i>Cacopsylla</i> species with a special focus on the apple proliferation vectors <i>Cacopsylla melanoneura</i> and <i>Cacopsylla picta</i>'
+  image: images/article_thumbnails/thumb.cacopsylla2.png
+
 - id: https://doi.org/10.1093/molbev/msaf132
   title: 'Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i> through the expanded DEST 2.0 genomic resource'
   image: images/article_thumbnails/thumb.DEST2.png

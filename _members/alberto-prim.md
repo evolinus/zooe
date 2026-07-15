@@ -1,6 +1,6 @@
 ---
-name: Gabriele Bambini
-image: images/sassi.png
+name: Alberto Prim
+image: images/riso.png
 # description: BSc student
 role: undergrad
 links:
