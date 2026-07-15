@@ -31,6 +31,50 @@
   image: images/article_thumbnails/thumb.insectgenomics.png
   plugin: sources.py
   file: sources.yaml
+- id: https://doi.org/10.1016/j.biocon.2026.111991
+  title: 'Engaging European local communities in biodiversity genomics research: A
+    five-step framework for scientists'
+  authors: []
+  publisher: ''
+  date: ''
+  link: https://doi.org/10.1016/j.biocon.2026.111991
+  image: images/article_thumbnails/thumb.communities.jpg
+  plugin: sources.py
+  file: sources.yaml
+- id: https://doi.org/10.1016/j.ibmb.2026.104609
+  title: 'Endogenous viral elements and PIWI gene evolution in <i>Spodoptera</i>:
+    diversity, conservation, and piRNA production'
+  authors: []
+  publisher: ''
+  date: ''
+  link: https://doi.org/10.1016/j.ibmb.2026.104609
+  image: images/article_thumbnails/thumb.spodoptera.jpg
+  plugin: sources.py
+  file: sources.yaml
+- id: https://doi.org/10.1186/s12864-026-12622-0
+  title: Evolutionary genomics and divergence of <i>Cacopsylla</i> species with a
+    special focus on the apple proliferation vectors <i>Cacopsylla melanoneura</i>
+    and <i>Cacopsylla picta</i>
+  authors:
+  - Lapo Ragionieri
+  - "Liliya \u0160tarhov\xE1 Serbina"
+  - Erika Corretto
+  - James M. Howie
+  - Fernando Cruz
+  - Tyler S. Alioto
+  - Nicola Zadra
+  - Tobias Weil
+  - Gianfranco Anfora
+  - Christian Stauffer
+  - Lino Ometto
+  - Omar Rota-Stabelli
+  - Hannes Schuler
+  publisher: BMC Genomics
+  date: '2026-03-19'
+  link: https://doi.org/10.1186/s12864-026-12622-0
+  image: images/article_thumbnails/thumb.cacopsylla2.png
+  plugin: sources.py
+  file: sources.yaml
 - id: https://doi.org/10.1093/molbev/msaf132
   title: Footprints of worldwide adaptation in structured populations of <i>D. melanogaster</i>
     through the expanded DEST 2.0 genomic resource
