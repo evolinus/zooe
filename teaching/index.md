@@ -10,21 +10,21 @@ nav:
 ## University courses – Corsi universitari
   
 **Laurea Triennale in Scienze Biologiche**  
-[Zoologia](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F508065#Syllabus) (9 CFU, 1° anno, 2° semestre)
+[Zoologia](https://unipv.coursecatalogue.cineca.it/corsi/2025/10834/insegnamenti/2025/8205-LZ/2025/9999?coorte=2025&schemaid=17078&adCodFraz=500327) (9 CFU, 1° anno, 2° semestre)
 
 **Laurea Magistrale in Biologia Sperimentale ed Applicata**  
 Percorso _Biologia Ambientale e Biodiversità_  
-[Biologia delle Popolazioni e Comunità](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F506232#Syllabus) (6 CFU, 1° anno, 1° semestre)
+[Biologia delle Popolazioni e Comunità](https://unipv.coursecatalogue.cineca.it/corsi/2025/10835/insegnamenti/2025/8350/2025/2?schemaid=17083) (6 CFU, 1° anno, 1° semestre)
 
 **Master's degree in Molecular Biology and Genetics**  
 Curriculum _Molecular and Digital Biology_  
-[Genomics and Evolution in Emerging Infectious Diseases](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Faf%2F450530#Syllabus) (6 CFU, 2nd year, 1st semester)
+[Genomics and Evolution in Emerging Infectious Diseases](https://unipv.coursecatalogue.cineca.it/corsi/2025/10837/insegnamenti/2026/20022/2025/2?coorte=2025&schemaid=17144) (6 CFU, 2nd year, 1st semester)
 
 
 ## Outreach – interventi e seminari pubblici e nelle scuole
 {% capture text %}
 Partecipiamo regolarmente alla [Notte dei Ricercatori](https://www.sharper-night.it/sharper-pavia/) (Researcher's Night).  
-Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodiversità, per esempio all'interno degli eventi [1h con il Ricercatore](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/).  
+Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodiversità, per esempio all'interno degli eventi [researchers@school](https://www.sharper-night.it/researchers-at-schools/pavia-scuole/).  
 
 ### Seminari per le scuole  
 {% endcapture %}
