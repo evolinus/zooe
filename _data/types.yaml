@@ -2,7 +2,11 @@
 
 # team member roles
 
+<<<<<<< HEAD
 pi:
+=======
+principal-investigator:
+>>>>>>> template/main
   icon: fa-solid fa-microscope
   description: Principal Investigator
 
@@ -14,6 +18,7 @@ phd:
   icon: fa-solid fa-graduation-cap
   description: PhD Student
 
+<<<<<<< HEAD
 grad:
   icon: fa-solid fa-user-graduate
   description: MSc Student
@@ -21,6 +26,11 @@ grad:
 undergrad:
   icon: fa-solid fa-user-graduate
   description: BSc Student
+=======
+undergrad:
+  icon: fa-solid fa-user-graduate
+  description: Undergraduate Student
+>>>>>>> template/main
 
 programmer:
   icon: fa-solid fa-code
@@ -100,6 +110,15 @@ twitter:
   tooltip: Twitter
   link: https://twitter.com/$VALUE
 
+<<<<<<< HEAD
+=======
+bluesky:
+  icon: fa-brands fa-bluesky
+  text: Bluesky
+  tooltip: Bluesky
+  link: https://bsky.app/profile/$VALUE
+
+>>>>>>> template/main
 facebook:
   icon: fa-brands fa-facebook
   text: Facebook
