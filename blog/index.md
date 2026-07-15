@@ -1,13 +1,7 @@
 ---
 title: Blog
-<<<<<<< HEAD
 # nav:
 #  tooltip: Musings and miscellany
-=======
-nav:
-  order: 4
-  tooltip: Musings and miscellany
->>>>>>> template/main
 ---
 
 # {% include icon.html icon="fa-solid fa-feather-pointed" %}Blog

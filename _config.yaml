@@ -1,37 +1,20 @@
 # site properties and page defaults
-<<<<<<< HEAD
 title: the zoo_e lab
 description: Zoology and Evolution @ unipv.it
 # logo-text: false
 header: images/backgrounds/nuvola.png
 footer: images/backgrounds/background.blu.png
 
-=======
-title: Lab Website Template
-subtitle: by the Greene Lab
-description: An easy-to-use, flexible website template for labs, with automatic citations, GitHub tag imports, pre-built components, and more.
-header: images/background.jpg
-footer: images/background.jpg
->>>>>>> template/main
 proofer: false
 
 # site social media and other links
 links:
-<<<<<<< HEAD
   email: lino.ometto@unipv.it
   orcid: 0000-0002-2679-625X
   google-scholar: RVjMHWgAAAAJ
   github: evolinus
   # twitter: evolinus
   # youtube: evolinus
-=======
-  email: contact@your-lab.com
-  orcid: 0000-0001-8713-9213
-  google-scholar: ETJoidYAAAAJ
-  github: your-lab
-  twitter: YourLabHandle
-  youtube: YourLabChannel
->>>>>>> template/main
 
 ### jekyll settings
 
@@ -89,12 +72,9 @@ exclude:
   - README.md
   - LICENSE.md
   - CITATION.cff
-<<<<<<< HEAD
-=======
 
 # configure jekyll spaceship
 jekyll-spaceship:
   mathjax-processor:
     src:
       - https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js
->>>>>>> template/main
