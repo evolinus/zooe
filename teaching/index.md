@@ -46,6 +46,12 @@ Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodi
 
 Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html).
 
+## Evolutionary Laboratories
+
+Interactive browser-based simulations for teaching core concepts in evolutionary biology: genetic drift, selection, adaptation, lineage branching, and copying/mutation. Built for classroom and outreach use.
+
+{% include button.html type="app" text="Open Evolutionary Laboratories" link="teaching/evolutionary-laboratories/main.html" tooltip="Launch the interactive simulations" %}
+
 ## Evolution at school – L'evoluzione a scuola  
 {% capture text %}
 [EN] Teaching evolution correctly is not easy. Within the COST Actions [EvoKE](https://evokeproject.org) and [EuroScitizen](https://www.euroscitizen.eu), together with researchers and educators from all over Europe, we analysed which evolutionary concepts are covered in European science textbooks (read [here](https://doi.org/10.1186/s12052-024-00203-2)) and how evolution can be taught using socio-scientific issues (read [here](https://doi.org/10.1371/journal.pone.0308901)). The e-book ‘**Learning evolution through socio-scientific issues**’ is available for free [here](https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf).  
