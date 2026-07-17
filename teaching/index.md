@@ -7,6 +7,12 @@ nav:
 
 # {% include icon.html icon="fa-solid fa-feather-pointed" %}Teaching and Outreach
 
+## Evolutionary Laboratories
+
+Interactive browser-based simulations for teaching core concepts in evolutionary biology: genetic drift, selection, adaptation, lineage branching, and copying/mutation. Built for classroom and outreach use.
+
+{% include button.html type="app" text="Open Evolutionary Laboratories" link="teaching/evolutionary-laboratories/main.html" tooltip="Launch the interactive simulations" %}
+
 ## University courses – Corsi universitari
   
 **Laurea Triennale in Scienze Biologiche**  
@@ -45,12 +51,6 @@ Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodi
 **Mutazioni ed evoluzione**: Virus o elefanti poco importa: sono il risultato di miliardi di anni di evoluzione e di infinite mutazioni casuali. Ma cosa sono le mutazioni? Perché avvengono e che fine fanno? Alle origini delle meraviglie della biodiversità, con la matita in mano.
 
 Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/members/lino-ometto.html).
-
-## Evolutionary Laboratories
-
-Interactive browser-based simulations for teaching core concepts in evolutionary biology: genetic drift, selection, adaptation, lineage branching, and copying/mutation. Built for classroom and outreach use.
-
-{% include button.html type="app" text="Open Evolutionary Laboratories" link="teaching/evolutionary-laboratories/main.html" tooltip="Launch the interactive simulations" %}
 
 ## Evolution at school – L'evoluzione a scuola  
 {% capture text %}
