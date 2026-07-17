@@ -92,9 +92,13 @@
     margin-bottom: 22px;
     display:flex;
     justify-content:space-between;
-    align-items:flex-end;
+    align-items:stretch;
     gap: 20px;
     flex-wrap: wrap;
+  }
+  header.masthead .sub .sub-label{
+    color: var(--stamp);
+    font-weight: 700;
   }
   header.masthead h1{
     margin:0;
@@ -117,16 +121,6 @@
     line-height: 1.5;
     margin: 0;
   }
-  header.masthead .datebox{
-    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: 12px;
-    text-align:right;
-    color: var(--stamp);
-    border-left: 1px solid var(--rule);
-    padding-left: 14px;
-    line-height: 1.6;
-  }
-
   /* control deck */
   .deck{
     background: var(--paper-dim);
@@ -153,6 +147,57 @@
   .readme-content p{ margin: 0 0 16px; }
   .readme-content p:last-child{ margin-bottom: 0; }
   .readme-content a{ color: var(--stamp); }
+
+  /* zoo_e lab brand block (logo + wordmark) */
+  .brand-link{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+  }
+  .brand-logo{
+    width:90px;
+    height:auto;
+    object-fit:contain;
+    display:block;
+    box-shadow: var(--card-shadow);
+  }
+  .brand-text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight:800;
+    font-size:12px;
+    letter-spacing:0.2px;
+    white-space:nowrap;
+  }
+  .brand-text .c-black{ color:#111111; }
+  .brand-text .c-red{ color:#B3141F; }
+  .brand-text .c-yellow{ color:#C9971A; }
+
+  .masthead-brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-left: 1px solid var(--rule);
+    padding-left: 14px;
+  }
+
+  .readme-row{
+    display:flex;
+    align-items:stretch;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .readme-brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 0 8px;
+  }
+  .readme-brand .brand-logo{ width:150px; height:auto; }
+  .readme-brand .brand-text{ font-size:15px; }
+
   .field{ display:flex; flex-direction:column; gap:6px; }
   .field label{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -553,7 +598,7 @@
 
   @media (max-width: 900px){
     .stage-area{ grid-template-columns: 1fr !important; }
-    header.masthead .datebox{ display:none; }
+    header.masthead .masthead-brand{ display:none; }
     .adapt-lineage-grid{ grid-template-columns: 1fr !important; }
     .adapt-consensus-wrap{ grid-template-columns: 1fr 1fr !important; }
     .adapt-n-row{ grid-template-columns: 1fr !important; }
@@ -583,9 +628,17 @@
       </div>
     </header>
 
-    <div class="readme-content">
-      <p>Welcome to the Evolutionary Laboratories. On these pages you can use interactive simulations to explore evolutionary mechanisms and processes in an intuitive, hands-on way.</p>
-      <p>This is a beta version and may still contain bugs — we're continually working to improve each room. If you run into problems, have questions, or have suggestions, please get in touch with Lino Ometto at <a href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>.</p>
+    <div class="readme-row">
+      <div class="readme-content">
+        <p>Welcome to the Evolutionary Laboratories. On these pages you can use interactive simulations to explore evolutionary mechanisms and processes in an intuitive, hands-on way.</p>
+        <p>This is a beta version and may still contain bugs — we're continually working to improve each room. If you run into problems, have questions, or have suggestions, please get in touch with Lino Ometto at <a href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>.</p>
+      </div>
+      <div class="readme-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
     </div>
   </div>
 
@@ -596,11 +649,13 @@
     <header class="masthead">
       <div>
         <h1>The Copying Room</h1>
-        <p class="sub">One shape is copied by hand, again and again. Each copy is drawn from the last one, with a small, honest mistake. Nothing is steered toward a goal — the changes simply pile up.</p>
+        <p class="sub"><span class="sub-label">Descent with modification</span> – One shape is copied by hand, again and again. Each copy is drawn from the last one, with a small, honest mistake. Nothing is steered toward a goal — the changes simply pile up.</p>
       </div>
-      <div class="datebox mono">
-        Field demonstration<br>
-        Descent with modification
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
       </div>
     </header>
 
@@ -671,11 +726,13 @@
     <header class="masthead">
       <div>
         <h1>The Branching Room</h1>
-        <p class="sub">One ancestor, copied and mutated generation after generation, occasionally splits into two independent lineages. Neither split is steered toward any goal — each new branch just keeps drifting on its own.</p>
+        <p class="sub"><span class="sub-label">Divergence &amp; speciation</span> – One ancestor, copied and mutated generation after generation, occasionally splits into two independent lineages. Neither split is steered toward any goal — each new branch just keeps drifting on its own.</p>
       </div>
-      <div class="datebox mono">
-        Field demonstration<br>
-        Divergence &amp; speciation
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
       </div>
     </header>
 
@@ -749,11 +806,13 @@
     <header class="masthead">
       <div>
         <h1>The Drift Room</h1>
-        <p class="sub">Simulating allele frequencies in a finite population over generations. Each generation is a random sample drawn from the previous one. Over time, random variance causes alleles to drift toward fixation or loss.</p>
+        <p class="sub"><span class="sub-label">Wright–Fisher model</span> – Simulating allele frequencies in a finite population over generations. Each generation is a random sample drawn from the previous one. Over time, random variance causes alleles to drift toward fixation or loss.</p>
       </div>
-      <div class="datebox mono">
-        Field demonstration<br>
-        Wright–Fisher model
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
       </div>
     </header>
 
@@ -863,11 +922,13 @@
     <header class="masthead">
       <div>
         <h1>The Selection Room</h1>
-        <p class="sub">The same finite-population sampling as the Drift Room, but allele A now carries a fitness advantage: individuals carrying it are more likely to be copied into the next generation. Watch how selection strength (s) and population size (N) compete with random drift.</p>
+        <p class="sub"><span class="sub-label">Wright–Fisher model + selection</span> – The same finite-population sampling as the Drift Room, but allele A now carries a fitness advantage: individuals carrying it are more likely to be copied into the next generation. Watch how selection strength (s) and population size (N) compete with random drift.</p>
       </div>
-      <div class="datebox mono">
-        Field demonstration<br>
-        Wright–Fisher model + selection
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
       </div>
     </header>
 
@@ -986,11 +1047,13 @@
     <header class="masthead">
       <div>
         <h1>The Adaptation Room</h1>
-        <p class="sub">Three founder fish — Gigi, Mario, and Nani — each split into a neutral lineage and a habitat-assigned lineage. Five traits (shape, colour, eye size, fin size, tail size) each mutate and fix independently under selection + drift, exactly as in the Selection Room, one trait "locus" at a time. Watch whether habitat-driven selection reaches a characteristic look faster, and more reliably, than drift alone.</p>
+        <p class="sub"><span class="sub-label">Multi-trait selection vs. drift</span> – Three founder fish — Gigi, Mario, and Nani — each split into a neutral lineage and a habitat-assigned lineage. Five traits (shape, colour, eye size, fin size, tail size) each mutate and fix independently under selection + drift, exactly as in the Selection Room, one trait "locus" at a time. Watch whether habitat-driven selection reaches a characteristic look faster, and more reliably, than drift alone.</p>
       </div>
-      <div class="datebox mono">
-        Field demonstration<br>
-        Multi-trait selection vs. drift
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
       </div>
     </header>
 
