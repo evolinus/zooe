@@ -30,7 +30,7 @@ Inoltre teniamo seminari e laboratori didattici riguardo l'evoluzione e la biodi
 {% endcapture %}
 {%
   include feature.html
-  image="images/evogif2.gif"
+  image="images/pages/evogif2.gif"
   flip=true
   width="80%"
   text=text
@@ -54,7 +54,7 @@ Per informazioni contattate [Lino Ometto](https://evolinus.github.io/zooe/member
 {% endcapture %}
 {%
   include feature.html
-  image="images/evoSSI.png"
+  image="images/pages/evoSSI.png"
   width="100%"
   flip=true
   text=text

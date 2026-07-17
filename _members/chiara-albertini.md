@@ -1,6 +1,6 @@
 ---
 name: Chiara Albertini
-image: images/Chiara-Albertini.jpg
+image: images/team/Chiara-Albertini.jpg
 role: phd
 aliases:
   - Chiara Albertini

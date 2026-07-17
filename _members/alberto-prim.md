@@ -1,6 +1,6 @@
 ---
 name: Alberto Prim
-image: images/riso.png
+image: images/team/riso.png
 # description: BSc student
 role: undergrad
 links:

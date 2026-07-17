@@ -1,6 +1,6 @@
 ---
 name: Tina Kaveh Haghighi
-image: images/rosasirfide.jpg
+image: images/team/rosasirfide.jpg
 # description: MSc student
 role: grad
 links:

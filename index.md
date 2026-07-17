@@ -28,7 +28,7 @@ And other stories.
 
 {%
   include feature.html
-  image="images/farfalla.png"
+  image="images/pages/farfalla.png"
   link="research"
   title="Our Research Projects"
   flip=true
@@ -52,7 +52,7 @@ Our research, also in collaboration with colleagues in Italy and abroad, has led
 
 {%
   include feature.html
-  image="images/asciifly.png"
+  image="images/pages/asciifly.png"
   link="publications"
   title="Results"
   text=text
@@ -75,7 +75,7 @@ The people behind the quest (want to join?)
 
 {%
   include feature.html
-  image="images/bai.png"
+  image="images/pages/bai.png"
   link="team"
   title="Our Team"
   flip=true

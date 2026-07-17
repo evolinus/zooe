@@ -44,14 +44,14 @@ Italy
 
 {%
   include feature.html
-  image="images/unipv.png"
+  image="images/pages/unipv.png"
   flip=true
   text=text
 %}
 
 {%
   include figure.html
-  image="images/nuvola.png"
+  image="images/pages/nuvola.png"
   width="100%"
 %}
 

@@ -27,7 +27,7 @@ In the **zoo**<span style="color:#e30022">**_**</span><span style="color:#ffbf00
 
 {%
   include figure.html
-  image="images/nbfc.png"
+  image="images/pages/nbfc.png"
   width="100%"
 %}
 
