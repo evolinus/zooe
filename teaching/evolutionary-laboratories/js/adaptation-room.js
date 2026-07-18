@@ -25,7 +25,7 @@
   const HABITAT_LABEL = { stream: 'Stream', pond: 'Pond', river: 'River' };
   const HABITAT_DESCRIPTION = {
     stream: 'Favors: slender shape, blue colour, long tail, short fins',
-    pond: 'Favors: round shape, red colour, long & less-forked tail, long fins',
+    pond: 'Favors: round shape, red colour, short & less-forked tail, long fins',
     river: 'Favors: green colour, dark fins, big eyes'
   };
 
@@ -43,33 +43,36 @@
   }
 
   // Signed score: positive means the derived values are favored over the
-  // ancestral ones for this trait in this habitat. null = not under
-  // selection here (effective s stays 0 regardless of direction). Where a
-  // trait bundles more than one sub-preference (e.g. Pond's tail wants both
-  // longer AND less forked), each sub-score is normalized to a comparable
-  // ~0-1 scale before being averaged, so no single sub-parameter dominates
-  // just because its natural units happen to be bigger.
+  // ancestral ones for this trait in this habitat. null = not under selection
+  // here (effective s stays 0 regardless of direction). Only the SIGN of the
+  // score is used (see stepLocus: sEff = sign(score) · sMag), so a single-
+  // preference scorer needs no normalization — its raw difference already has
+  // the right sign. Normalization matters only where a trait bundles two
+  // sub-preferences (Pond's tail, River's colour): there each half is scaled
+  // to a comparable ~0-1 range first, so the SIGN of their sum reflects both
+  // preferences fairly rather than being dominated by whichever sub-parameter
+  // happens to have the bigger natural units.
   const HABITAT_SCORERS = {
     stream: {
-      shape: (a, d) => roundnessOf(a) - roundnessOf(d),        // favors slender (lower roundness)
-      colour: (a, d) => (hueDist(a.bodyHue, 210) - hueDist(d.bodyHue, 210)) / 180, // favors blue
+      shape: (a, d) => roundnessOf(a) - roundnessOf(d),          // favors slender (lower roundness)
+      colour: (a, d) => hueDist(a.bodyHue, 210) - hueDist(d.bodyHue, 210), // favors blue
       eyeSize: null,
-      finSize: (a, d) => finSizeOf(a) - finSizeOf(d),           // favors shorter fins
-      tailSize: (a, d) => tailSizeOf(d) - tailSizeOf(a),        // favors longer tail
+      finSize: (a, d) => finSizeOf(a) - finSizeOf(d),            // favors shorter fins
+      tailSize: (a, d) => tailSizeOf(d) - tailSizeOf(a),         // favors longer tail
     },
     pond: {
-      shape: (a, d) => roundnessOf(d) - roundnessOf(a),         // favors round
-      colour: (a, d) => (hueDist(a.bodyHue, 15) - hueDist(d.bodyHue, 15)) / 180,  // favors red
+      shape: (a, d) => roundnessOf(d) - roundnessOf(a),          // favors round
+      colour: (a, d) => hueDist(a.bodyHue, 15) - hueDist(d.bodyHue, 15),  // favors red
       eyeSize: null,
-      finSize: (a, d) => finSizeOf(d) - finSizeOf(a),           // favors longer fins
-      // favors a longer AND less-bifurcated (less forked) tail, averaged
-      tailSize: (a, d) => 0.5 * ((tailSizeOf(d) - tailSizeOf(a)) / 32) + 0.5 * (bifurcationOf(a) - bifurcationOf(d)),
+      finSize: (a, d) => finSizeOf(d) - finSizeOf(a),            // favors longer fins
+      // favors a shorter AND less-bifurcated (less forked) tail, averaged
+      tailSize: (a, d) => 0.5 * ((tailSizeOf(a) - tailSizeOf(d)) / 32) + 0.5 * (bifurcationOf(a) - bifurcationOf(d)),
     },
     river: {
-      shape: null,                                              // no shape preference
+      shape: null,                                               // no shape preference
       // favors greenish body AND dark fins, averaged
       colour: (a, d) => 0.5 * ((hueDist(a.bodyHue, 120) - hueDist(d.bodyHue, 120)) / 180) + 0.5 * ((a.finLightness - d.finLightness) / 45),
-      eyeSize: (a, d) => d.eyeR - a.eyeR,                       // favors bigger eye
+      eyeSize: (a, d) => d.eyeR - a.eyeR,                        // favors bigger eye
       finSize: null,
       tailSize: null,
     }
@@ -108,14 +111,28 @@
     nSliders[f] = DOMg(`sliderN_${f}`);
     nVals[f] = DOMg(`nVal_${f}`);
   });
-  const habitatSegs = {}, habitatNames = {};
-  FOUNDERS.forEach(f => { habitatSegs[f] = DOMg(`habitatSeg_${f}`); habitatNames[f] = DOMg(`habitatName_${f}`); });
-  const g0Canvases = {}, consensusCanvases = {}, traitTableWraps = {}, samplesRows = {}, habitatCaptions = {};
+  const habitatSegs = {}, habitatNames = {}, founderRows = {};
+  FOUNDERS.forEach(f => {
+    habitatSegs[f] = DOMg(`habitatSeg_${f}`);
+    habitatNames[f] = DOMg(`habitatName_${f}`);
+    founderRows[f] = DOMg(`founderRow_${f}`);
+  });
+  // Drives both the habitat fish card's border and its Gen-0 connector line
+  // (via the --habitat-color custom property, read by the CSS in main.html).
+  function applyHabitatColor(f) {
+    founderRows[f].style.setProperty('--habitat-color', `var(--habitat-${params.habitat[f]})`);
+  }
+  // One G0 canvas per founder, shared by its Neutral and Habitat lineages —
+  // both start from the same generation-0 genome, so it's drawn once in the
+  // center "Gen 0" slot of the founder's row.
+  const g0Canvases = {};
+  FOUNDERS.forEach(f => { g0Canvases[f] = DOMg(`g0Canvas_${f}`); });
+  const connectorSvgs = {};
+  FOUNDERS.forEach(f => { connectorSvgs[f] = DOMg(`connectorSvg_${f}`); });
+  const consensusCanvases = {}, traitTableWraps = {}, habitatCaptions = {};
   FOUNDERS.forEach(f => CONDITIONS.forEach(c => {
-    g0Canvases[`${f}_${c}`] = DOMg(`g0Canvas_${f}_${c}`);
     consensusCanvases[`${f}_${c}`] = DOMg(`consensusCanvas_${f}_${c}`);
     traitTableWraps[`${f}_${c}`] = DOMg(`traitTableWrap_${f}_${c}`);
-    samplesRows[`${f}_${c}`] = DOMg(`samplesRow_${f}_${c}`);
     habitatCaptions[`${f}_${c}`] = DOMg(`habitatCaption_${f}_${c}`);
   }));
 
@@ -130,11 +147,11 @@
     const n = +nSliders[f].value;
     CONDITIONS.forEach(c => { params.N[`${f}_${c}`] = n; });
     params.habitat[f] = habitatSegs[f].querySelector('button.active').dataset.habitat;
+    applyHabitatColor(f);
   });
 
   let founders = {}; // f -> full ancestor genome (all fish params)
   let checkpoints = null; // array of { gen, lineages: { key -> { loci: {trait -> snapshot} } } }
-  let decileHistory = null; // { gens: [10 generation marks], genomes: { key -> [consensus genome per mark] } }
 
   function freshFounder() {
     // A moderate one-time perturbation of the default fish ancestor so Gigi,
@@ -230,11 +247,12 @@
   // computes instead of only being replayable afterward.
   function renderLiveGen(gen, loci, lineageKeys) {
     DOM.scrubVal.textContent = gen;
+    FOUNDERS.forEach(renderFounderG0);
     lineageKeys.forEach(key => {
       const f = key.split('_')[0];
       const snapLineage = {};
       TRAITS.forEach(t => { snapLineage[t] = snapshotLocus(loci[key][t]); });
-      renderLineageCard(key, snapLineage, founders[f], gen);
+      renderLineageCard(key, snapLineage, founders[f]);
     });
   }
 
@@ -247,15 +265,11 @@
     await new Promise(r => setTimeout(r, 20)); // let the UI paint before the heavy loop
 
     const G = params.G;
-    const CHECKPOINT_COUNT = 200;
-    const interval = Math.max(1, Math.round(G / CHECKPOINT_COUNT));
+    const interval = 10; // one checkpoint every 10 generations
     // Panels update live every G/100 generations as the run computes, paced
     // so the whole run — live plotting included — takes a fixed 8s total,
     // independent of G (the same total duration the old replay-after-the-
-    // fact used). The filmstrip still only gains a new shape every G/8
-    // generations (decileGens below), since renderLineageCard only draws
-    // whichever deciles have data so far — coarser than the render cadence,
-    // so a new shape lands within one tick of its decile being reached.
+    // fact used).
     const RENDER_TICKS = 100;
     const TOTAL_DURATION_MS = 8000;
     const renderInterval = Math.max(1, Math.round(G / RENDER_TICKS));
@@ -283,15 +297,6 @@
 
     pushCheckpoint(0);
 
-    // Consensus-shape snapshots at every G/8 generations, captured (and
-    // rendered, via the live render tick below) as the run happens — lets
-    // the samples row show accumulated substitutions building up over time,
-    // instead of re-deriving genotype diversity from a single checkpoint.
-    const decileGens = Array.from({ length: DECILE_COUNT }, (_, i) => Math.round((i + 1) * G / DECILE_COUNT));
-    const decileGenomes = {};
-    lineageKeys.forEach(key => { decileGenomes[key] = new Array(decileGens.length).fill(null); });
-    decileHistory = { gens: decileGens, genomes: decileGenomes };
-
     for (let gen = 1; gen <= G; gen++) {
       for (const key of lineageKeys) {
         const f = key.split('_')[0], c = key.split('_')[1];
@@ -301,15 +306,6 @@
           stepLocus(loci[key][t], t, N, params.mu[t], params.s[t], habitat, params.mutSize);
         }
       }
-      decileGens.forEach((dg, i) => {
-        if (dg !== gen) return;
-        lineageKeys.forEach(key => {
-          const f = key.split('_')[0];
-          const snapLineage = {};
-          TRAITS.forEach(t => { snapLineage[t] = snapshotLocus(loci[key][t]); });
-          decileGenomes[key][i] = consensusGenomeFor(snapLineage, founders[f]);
-        });
-      });
       if (gen % interval === 0 || gen === G) pushCheckpoint(gen);
       if (gen % renderInterval === 0 || gen === G) {
         DOM.statusBar.textContent = `Simulating… generation ${gen} / ${G}`;
@@ -389,72 +385,87 @@
     return fullGenome(founderGenome, overrides);
   }
 
-  const DECILE_COUNT = 8; // 8 is the most that fits on one filmstrip row without wrapping
-
   // Sizes a canvas to its real rendered width and draws into it — but only if
   // it's actually visible. If the tab is hidden, getBoundingClientRect()
   // returns 0, and setting that (or any guessed fallback) as the canvas's
   // width would stick as an inline style that every later "measure current
   // size" call would just read back, permanently wrong. Skipping instead
   // leaves it for the resize handler to render correctly once visible.
+  // Measures the parent card, not the canvas itself: scaleCanvas() sets an
+  // inline pixel width on the canvas, so measuring the canvas's own rect
+  // would be self-referential and could never grow back after the card's
+  // fluid (100%-width) size changes, e.g. across the mobile breakpoint.
   function sizeAndDraw(canvas, genome) {
-    const size = Math.round(canvas.getBoundingClientRect().width);
+    const size = Math.round((canvas.parentElement || canvas).getBoundingClientRect().width);
     if (size <= 0) return;
     const ctx = canvas.getContext('2d');
     scaleCanvas(canvas, ctx, size, size);
     drawGenome(ctx, size, size, genome, 'fish');
   }
 
-  function renderLineageCard(key, snapLineage, founderGenome, currentGen) {
+  // The Gen-0 fish is shared by a founder's Neutral and Habitat row (it's
+  // the same genome either way), so it's drawn once per founder rather than
+  // once per lineage.
+  function renderFounderG0(f) {
+    sizeAndDraw(g0Canvases[f], founders[f]);
+  }
+
+  // Draws the Gen-0-to-Neutral (black) and Gen-0-to-Habitat (habitat-colored)
+  // connector lines as real SVG lines, positioned from the cards' actual
+  // rendered geometry — robust to whatever size/margin the CSS gives the
+  // fish cards, unlike a fixed-offset CSS pseudo-element. Called once both
+  // neighbors of a founder's Gen-0 card are sized and drawn.
+  function drawFounderConnectors(f) {
+    const svg = connectorSvgs[f];
+    const container = svg.parentElement;
+    const neutralCanvas = consensusCanvases[`${f}_neutral`];
+    const g0Canvas = g0Canvases[f];
+    const habitatCanvas = consensusCanvases[`${f}_habitat`];
+    const containerRect = container.getBoundingClientRect();
+    const nRect = neutralCanvas.getBoundingClientRect();
+    const gRect = g0Canvas.getBoundingClientRect();
+    const hRect = habitatCanvas.getBoundingClientRect();
+    if (nRect.width === 0 || gRect.width === 0 || hRect.width === 0) { svg.innerHTML = ''; return; }
+    const toLocal = (r) => ({
+      left: r.left - containerRect.left,
+      right: r.right - containerRect.left,
+      cy: r.top - containerRect.top + r.height / 2
+    });
+    const n = toLocal(nRect), g = toLocal(gRect), h = toLocal(hRect);
+    const habitatColor = `var(--habitat-${params.habitat[f]})`;
+    svg.innerHTML =
+      `<line x1="${n.right}" y1="${n.cy}" x2="${g.left}" y2="${g.cy}" stroke="var(--ink)" stroke-width="2"/>` +
+      `<line x1="${g.right}" y1="${g.cy}" x2="${h.left}" y2="${h.cy}" stroke="${habitatColor}" stroke-width="2"/>`;
+  }
+
+  function renderLineageCard(key, snapLineage, founderGenome) {
     const [f, c] = key.split('_');
     const habitat = c === 'habitat' ? params.habitat[f] : null;
 
     traitTableWraps[key].innerHTML = traitTableHTML(snapLineage, habitat);
 
     habitatCaptions[key].textContent = habitat
-      ? HABITAT_DESCRIPTION[habitat]
+      ? `${HABITAT_LABEL[habitat]} habitat - ${HABITAT_DESCRIPTION[habitat]}`
       : 'No selection — drift only';
-
-    sizeAndDraw(g0Canvases[key], founderGenome);
 
     const consensusGenome = consensusGenomeFor(snapLineage, founderGenome);
     sizeAndDraw(consensusCanvases[key], consensusGenome);
 
-    // Consensus shape at every G/8 generations reached so far — a filmstrip
-    // of accumulating substitutions over time, rather than a snapshot of the
-    // current checkpoint's genotype diversity. Only deciles at or before
-    // currentGen are shown, so scrubbing/playing forward visibly grows it.
-    const row = samplesRows[key];
-    row.innerHTML = '';
-    if (decileHistory && currentGen !== undefined) {
-      decileHistory.gens.forEach((g, i) => {
-        if (g > currentGen) return;
-        const genome = decileHistory.genomes[key][i];
-        if (!genome) return;
-        const slot = document.createElement('div');
-        slot.className = 'adapt-fish-slot';
-        const cvs = document.createElement('canvas');
-        slot.appendChild(cvs);
-        const label = document.createElement('div');
-        label.className = 'adapt-fish-label';
-        label.textContent = `G${g}`;
-        slot.appendChild(label);
-        row.appendChild(slot);
-        const size = 55;
-        const ctx = cvs.getContext('2d');
-        scaleCanvas(cvs, ctx, size, size);
-        drawGenome(ctx, size, size, genome, 'fish');
-      });
-    }
+    // Both of this founder's cards (Neutral, then Habitat) are sized and
+    // drawn by this point in every call site's per-founder loop, so it's
+    // safe to (re)draw the Gen-0 connector lines once the Habitat lineage
+    // is reached.
+    if (c === 'habitat') drawFounderConnectors(f);
   }
 
   function renderCheckpoint(idx) {
     if (!checkpoints || !checkpoints[idx]) return;
     const snap = checkpoints[idx];
     DOM.scrubVal.textContent = snap.gen;
+    FOUNDERS.forEach(renderFounderG0);
     FOUNDERS.forEach(f => CONDITIONS.forEach(c => {
       const key = `${f}_${c}`;
-      renderLineageCard(key, snap.lineages[key], founders[f], snap.gen);
+      renderLineageCard(key, snap.lineages[key], founders[f]);
     }));
   }
 
@@ -679,7 +690,8 @@
       btn.addEventListener('click', () => {
         params.habitat[f] = btn.dataset.habitat;
         habitatSegs[f].querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-        habitatNames[f].textContent = `${f.charAt(0).toUpperCase() + f.slice(1)} — ${HABITAT_LABEL[params.habitat[f]]}`;
+        habitatNames[f].textContent = `${HABITAT_LABEL[params.habitat[f]]} — Now`;
+        applyHabitatColor(f);
         // Re-render (not just the caption text) since the trait table's row
         // shading depends on which traits this habitat selects on.
         renderCurrentView();
@@ -691,7 +703,6 @@
 
   DOM.btnReset.addEventListener('click', () => {
     checkpoints = null;
-    decileHistory = null;
     DOM.timeScrubber.min = 0; DOM.timeScrubber.max = 0; DOM.timeScrubber.value = 0;
     DOM.timeScrubber.disabled = true;
     DOM.scrubVal.textContent = 0; DOM.scrubMaxLabel.textContent = 0;
@@ -711,6 +722,7 @@
       renderCheckpoint(parseInt(DOM.timeScrubber.value) || checkpoints.length - 1);
     } else {
       // No run yet — show each lineage as an unmutated copy of its founder.
+      FOUNDERS.forEach(renderFounderG0);
       FOUNDERS.forEach(f => CONDITIONS.forEach(c => {
         const key = `${f}_${c}`;
         const zeroSnap = {};

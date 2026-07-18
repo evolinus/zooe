@@ -22,6 +22,10 @@
     --leaf-g: #B8862E;
     --leaf-h: #7A5C99;
     --leaf-i: #388047;
+    /* Adaptation Room habitat colors — same muted palette as the Branching Room */
+    --habitat-stream: #2E5C8A;
+    --habitat-pond: #A8442A;
+    --habitat-river: #B8862E;
   }
   
   *{ box-sizing:border-box; }
@@ -255,6 +259,16 @@
     color: var(--paper);
   }
 
+  /* Habitat choice buttons (Adaptation Room) — color-coded like the
+     Branching Room's leaf palette: font colored when unselected, button
+     fill colored when selected. */
+  .segmented.segmented-habitat button[data-habitat="stream"]{ color: var(--habitat-stream); }
+  .segmented.segmented-habitat button[data-habitat="pond"]{ color: var(--habitat-pond); }
+  .segmented.segmented-habitat button[data-habitat="river"]{ color: var(--habitat-river); }
+  .segmented.segmented-habitat button[data-habitat="stream"].active{ background: var(--habitat-stream); color: var(--paper); }
+  .segmented.segmented-habitat button[data-habitat="pond"].active{ background: var(--habitat-pond); color: var(--paper); }
+  .segmented.segmented-habitat button[data-habitat="river"].active{ background: var(--habitat-river); color: var(--paper); }
+
   .transport{
     display:flex;
     gap:8px;
@@ -449,37 +463,68 @@
   }
 
   /* Room 5 (Adaptation) Specific Styles */
-  .adapt-lineage-grid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-  .adapt-lineage-card{
+  /* Each founder gets its own row, a 5-column grid:
+     Neutral trait table | Neutral "Now" fish | shared Gen-0 fish |
+     Habitat "Now" fish | Habitat trait table. The three fish columns are
+     equal width so the Gen-0 card lines up exactly with its two neighbors,
+     which are joined to it by SVG connector lines (drawn in JS from the
+     cards' real positions — see .adapt-connector-svg). A habitat caption
+     sits below each side. */
+  .adapt-founder-row{
     background: var(--paper-dim);
     border: 1px solid var(--rule);
     border-radius: 6px;
     padding: 14px;
+    margin-bottom: 16px;
+    /* Overridden per-founder in JS to the selected habitat's color; used by
+       both the habitat fish card's border and its Gen-0 connector line. */
+    --habitat-color: var(--ink);
   }
-  .adapt-lineage-card .lineage-head{ margin-bottom: 10px; }
-  .adapt-consensus-wrap{
+  .adapt-founder-row:last-child{ margin-bottom: 0; }
+  .adapt-founder-name{
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+  .adapt-row-grid{
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 10px;
+    grid-template-columns: 0.75fr 1.3fr 1.3fr 1.3fr 0.75fr;
+    gap: 14px;
     align-items: start;
+    position: relative;
+    z-index: 0; /* keeps the connector SVG's negative z-index contained locally */
+  }
+  .adapt-row-grid > *{ min-width: 0; }
+  /* Connector lines from the Gen-0 card to its Neutral (black) and Habitat
+     (colored) neighbors, drawn as real SVG lines (coordinates computed in JS
+     from the actual card positions) rather than a fixed-size CSS trick — this
+     keeps them correctly anchored regardless of card size or viewport width. */
+  .adapt-connector-svg{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: -1;
   }
   .adapt-fish-slot{
     text-align: center;
   }
-  .adapt-fish-slot canvas{
-    width: 137px; height: 137px;
-    max-width: 100%;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    display: block;
+  .adapt-fish-card{
+    position: relative;
+    width: 80%;
     margin: 0 auto;
+    aspect-ratio: 1 / 1;
   }
+  .adapt-fish-card canvas{
+    width: 100%; height: 100%;
+    display: block;
+    background: var(--paper);
+    border: 6px solid var(--ink);
+    border-radius: 10px;
+  }
+  .adapt-habitat-fish-card canvas{ border-color: var(--habitat-color); }
   .adapt-fish-slot .adapt-fish-label{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 10px;
@@ -487,17 +532,15 @@
     margin-top: 4px;
   }
   .adapt-habitat-caption{
-    grid-column: 1 / -1;
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: 10px;
+    font-size: 13px;
     color: var(--stamp);
     text-align: left;
-    line-height: 1.4;
-    margin-top: 6px;
+    line-height: 1.45;
+    margin-top: 8px;
   }
-  .adapt-table-slot{
-    grid-row: 1 / 3;
-  }
+  .adapt-caption-neutral{ grid-column: 1 / 3; }
+  .adapt-caption-habitat{ grid-column: 4 / 6; color: var(--habitat-color); font-weight: 600; }
   table.adapt-trait-table{
     border-collapse: collapse;
     width: 100%;
@@ -507,7 +550,7 @@
   }
   table.adapt-trait-table th, table.adapt-trait-table td{
     border: 1px solid var(--rule);
-    padding: 3px 7px;
+    padding: 3px 4px;
     text-align: left;
   }
   table.adapt-trait-table th{ background: var(--paper); color: var(--ink); font-weight: normal; }
@@ -517,19 +560,6 @@
   table.adapt-trait-table tr.adapt-row-neutralsum{ background: rgba(168, 52, 42, 0.15); }
   table.adapt-trait-table tr.adapt-row-selected{ background: rgba(46, 90, 140, 0.15); }
   table.adapt-trait-table tr.adapt-row-other{ background: var(--paper-dim); }
-  .adapt-samples-row{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 8px;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 4px;
-    padding: 6px;
-  }
-  .adapt-samples-row canvas{
-    width: 55px; height: 55px;
-  }
-  .adapt-samples-row .adapt-fish-slot{ width: 55px; }
   .adapt-n-row{
     grid-column: 1 / -1;
     display: grid;
@@ -598,8 +628,9 @@
   @media (max-width: 900px){
     .stage-area{ grid-template-columns: 1fr !important; }
     header.masthead .masthead-brand{ display:none; }
-    .adapt-lineage-grid{ grid-template-columns: 1fr !important; }
-    .adapt-consensus-wrap{ grid-template-columns: 1fr 1fr !important; }
+    .adapt-row-grid{ grid-template-columns: 1fr !important; }
+    .adapt-caption-neutral, .adapt-caption-habitat{ grid-column: 1 !important; }
+    .adapt-connector-svg{ display: none !important; }
     .adapt-n-row{ grid-template-columns: 1fr !important; }
   }
 </style>
@@ -1058,8 +1089,8 @@
 
     <div class="deck">
       <div class="field">
-        <label>Generations G <span class="value" id="gVal_adapt">3000</span></label>
-        <input type="range" id="sliderG_adapt" min="1000" max="10000" step="100" value="3000">
+        <label>Generations G <span class="value" id="gVal_adapt">5000</span></label>
+        <input type="range" id="sliderG_adapt" min="1000" max="10000" step="100" value="5000">
       </div>
 
       <details class="adapt-advanced">
@@ -1136,7 +1167,7 @@
       <div class="adapt-section-label">Habitats (freely assignable — try giving two founders the same one)</div>
       <div class="field">
         <label>Gigi's habitat lineage</label>
-        <div class="segmented" id="habitatSeg_gigi_adapt">
+        <div class="segmented segmented-habitat" id="habitatSeg_gigi_adapt">
           <button data-habitat="stream" class="active">Stream</button>
           <button data-habitat="pond">Pond</button>
           <button data-habitat="river">River</button>
@@ -1144,7 +1175,7 @@
       </div>
       <div class="field">
         <label>Mario's habitat lineage</label>
-        <div class="segmented" id="habitatSeg_mario_adapt">
+        <div class="segmented segmented-habitat" id="habitatSeg_mario_adapt">
           <button data-habitat="stream">Stream</button>
           <button data-habitat="pond" class="active">Pond</button>
           <button data-habitat="river">River</button>
@@ -1152,7 +1183,7 @@
       </div>
       <div class="field">
         <label>Nani's habitat lineage</label>
-        <div class="segmented" id="habitatSeg_nani_adapt">
+        <div class="segmented segmented-habitat" id="habitatSeg_nani_adapt">
           <button data-habitat="stream">Stream</button>
           <button data-habitat="pond">Pond</button>
           <button data-habitat="river" class="active">River</button>
@@ -1173,70 +1204,46 @@
       </div>
     </div>
 
-    <div class="adapt-lineage-grid">
-      <div class="adapt-lineage-card">
-        <div class="lineage-head"><span class="name">Gigi — Neutral</span></div>
-        <div class="adapt-consensus-wrap">
-          <div class="adapt-fish-slot"><canvas id="g0Canvas_gigi_neutral_adapt"></canvas><div class="adapt-fish-label">Gen 0</div></div>
-          <div class="adapt-fish-slot"><canvas id="consensusCanvas_gigi_neutral_adapt"></canvas><div class="adapt-fish-label">Now</div></div>
-          <div class="adapt-table-slot" id="traitTableWrap_gigi_neutral_adapt"></div>
-          <div class="adapt-habitat-caption" id="habitatCaption_gigi_neutral_adapt"></div>
-        </div>
-        <div class="adapt-samples-row" id="samplesRow_gigi_neutral_adapt"></div>
+    <div class="adapt-founder-row" id="founderRow_gigi_adapt">
+      <div class="adapt-founder-name">Gigi</div>
+      <div class="adapt-row-grid">
+        <svg class="adapt-connector-svg" id="connectorSvg_gigi_adapt" aria-hidden="true"></svg>
+        <div id="traitTableWrap_gigi_neutral_adapt"></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card"><canvas id="consensusCanvas_gigi_neutral_adapt" role="img" aria-label="Gigi's neutral lineage — current consensus fish"></canvas></div><div class="adapt-fish-label">Neutral — Now</div></div>
+        <div class="adapt-fish-slot adapt-g0-slot"><div class="adapt-fish-card"><canvas id="g0Canvas_gigi_adapt" role="img" aria-label="Gigi's founder fish at generation 0"></canvas></div><div class="adapt-fish-label">Gen 0</div></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card adapt-habitat-fish-card"><canvas id="consensusCanvas_gigi_habitat_adapt" role="img" aria-label="Gigi's habitat lineage — current consensus fish"></canvas></div><div class="adapt-fish-label" id="habitatName_gigi_adapt">Stream — Now</div></div>
+        <div id="traitTableWrap_gigi_habitat_adapt"></div>
+        <div class="adapt-habitat-caption adapt-caption-neutral" id="habitatCaption_gigi_neutral_adapt"></div>
+        <div class="adapt-habitat-caption adapt-caption-habitat" id="habitatCaption_gigi_habitat_adapt"></div>
       </div>
-      <div class="adapt-lineage-card">
-        <div class="lineage-head"><span class="name" id="habitatName_gigi_adapt">Gigi — Stream</span></div>
-        <div class="adapt-consensus-wrap">
-          <div class="adapt-fish-slot"><canvas id="g0Canvas_gigi_habitat_adapt"></canvas><div class="adapt-fish-label">Gen 0</div></div>
-          <div class="adapt-fish-slot"><canvas id="consensusCanvas_gigi_habitat_adapt"></canvas><div class="adapt-fish-label">Now</div></div>
-          <div class="adapt-table-slot" id="traitTableWrap_gigi_habitat_adapt"></div>
-          <div class="adapt-habitat-caption" id="habitatCaption_gigi_habitat_adapt"></div>
-        </div>
-        <div class="adapt-samples-row" id="samplesRow_gigi_habitat_adapt"></div>
-      </div>
+    </div>
 
-      <div class="adapt-lineage-card">
-        <div class="lineage-head"><span class="name">Mario — Neutral</span></div>
-        <div class="adapt-consensus-wrap">
-          <div class="adapt-fish-slot"><canvas id="g0Canvas_mario_neutral_adapt"></canvas><div class="adapt-fish-label">Gen 0</div></div>
-          <div class="adapt-fish-slot"><canvas id="consensusCanvas_mario_neutral_adapt"></canvas><div class="adapt-fish-label">Now</div></div>
-          <div class="adapt-table-slot" id="traitTableWrap_mario_neutral_adapt"></div>
-          <div class="adapt-habitat-caption" id="habitatCaption_mario_neutral_adapt"></div>
-        </div>
-        <div class="adapt-samples-row" id="samplesRow_mario_neutral_adapt"></div>
+    <div class="adapt-founder-row" id="founderRow_mario_adapt">
+      <div class="adapt-founder-name">Mario</div>
+      <div class="adapt-row-grid">
+        <svg class="adapt-connector-svg" id="connectorSvg_mario_adapt" aria-hidden="true"></svg>
+        <div id="traitTableWrap_mario_neutral_adapt"></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card"><canvas id="consensusCanvas_mario_neutral_adapt" role="img" aria-label="Mario's neutral lineage — current consensus fish"></canvas></div><div class="adapt-fish-label">Neutral — Now</div></div>
+        <div class="adapt-fish-slot adapt-g0-slot"><div class="adapt-fish-card"><canvas id="g0Canvas_mario_adapt" role="img" aria-label="Mario's founder fish at generation 0"></canvas></div><div class="adapt-fish-label">Gen 0</div></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card adapt-habitat-fish-card"><canvas id="consensusCanvas_mario_habitat_adapt" role="img" aria-label="Mario's habitat lineage — current consensus fish"></canvas></div><div class="adapt-fish-label" id="habitatName_mario_adapt">Pond — Now</div></div>
+        <div id="traitTableWrap_mario_habitat_adapt"></div>
+        <div class="adapt-habitat-caption adapt-caption-neutral" id="habitatCaption_mario_neutral_adapt"></div>
+        <div class="adapt-habitat-caption adapt-caption-habitat" id="habitatCaption_mario_habitat_adapt"></div>
       </div>
-      <div class="adapt-lineage-card">
-        <div class="lineage-head"><span class="name" id="habitatName_mario_adapt">Mario — Pond</span></div>
-        <div class="adapt-consensus-wrap">
-          <div class="adapt-fish-slot"><canvas id="g0Canvas_mario_habitat_adapt"></canvas><div class="adapt-fish-label">Gen 0</div></div>
-          <div class="adapt-fish-slot"><canvas id="consensusCanvas_mario_habitat_adapt"></canvas><div class="adapt-fish-label">Now</div></div>
-          <div class="adapt-table-slot" id="traitTableWrap_mario_habitat_adapt"></div>
-          <div class="adapt-habitat-caption" id="habitatCaption_mario_habitat_adapt"></div>
-        </div>
-        <div class="adapt-samples-row" id="samplesRow_mario_habitat_adapt"></div>
-      </div>
+    </div>
 
-      <div class="adapt-lineage-card">
-        <div class="lineage-head"><span class="name">Nani — Neutral</span></div>
-        <div class="adapt-consensus-wrap">
-          <div class="adapt-fish-slot"><canvas id="g0Canvas_nani_neutral_adapt"></canvas><div class="adapt-fish-label">Gen 0</div></div>
-          <div class="adapt-fish-slot"><canvas id="consensusCanvas_nani_neutral_adapt"></canvas><div class="adapt-fish-label">Now</div></div>
-          <div class="adapt-table-slot" id="traitTableWrap_nani_neutral_adapt"></div>
-          <div class="adapt-habitat-caption" id="habitatCaption_nani_neutral_adapt"></div>
-        </div>
-        <div class="adapt-samples-row" id="samplesRow_nani_neutral_adapt"></div>
+    <div class="adapt-founder-row" id="founderRow_nani_adapt">
+      <div class="adapt-founder-name">Nani</div>
+      <div class="adapt-row-grid">
+        <svg class="adapt-connector-svg" id="connectorSvg_nani_adapt" aria-hidden="true"></svg>
+        <div id="traitTableWrap_nani_neutral_adapt"></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card"><canvas id="consensusCanvas_nani_neutral_adapt" role="img" aria-label="Nani's neutral lineage — current consensus fish"></canvas></div><div class="adapt-fish-label">Neutral — Now</div></div>
+        <div class="adapt-fish-slot adapt-g0-slot"><div class="adapt-fish-card"><canvas id="g0Canvas_nani_adapt" role="img" aria-label="Nani's founder fish at generation 0"></canvas></div><div class="adapt-fish-label">Gen 0</div></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card adapt-habitat-fish-card"><canvas id="consensusCanvas_nani_habitat_adapt" role="img" aria-label="Nani's habitat lineage — current consensus fish"></canvas></div><div class="adapt-fish-label" id="habitatName_nani_adapt">River — Now</div></div>
+        <div id="traitTableWrap_nani_habitat_adapt"></div>
+        <div class="adapt-habitat-caption adapt-caption-neutral" id="habitatCaption_nani_neutral_adapt"></div>
+        <div class="adapt-habitat-caption adapt-caption-habitat" id="habitatCaption_nani_habitat_adapt"></div>
       </div>
-      <div class="adapt-lineage-card">
-        <div class="lineage-head"><span class="name" id="habitatName_nani_adapt">Nani — River</span></div>
-        <div class="adapt-consensus-wrap">
-          <div class="adapt-fish-slot"><canvas id="g0Canvas_nani_habitat_adapt"></canvas><div class="adapt-fish-label">Gen 0</div></div>
-          <div class="adapt-fish-slot"><canvas id="consensusCanvas_nani_habitat_adapt"></canvas><div class="adapt-fish-label">Now</div></div>
-          <div class="adapt-table-slot" id="traitTableWrap_nani_habitat_adapt"></div>
-          <div class="adapt-habitat-caption" id="habitatCaption_nani_habitat_adapt"></div>
-        </div>
-        <div class="adapt-samples-row" id="samplesRow_nani_habitat_adapt"></div>
-      </div>
-
     </div>
 
     <div class="reading">
@@ -1261,14 +1268,14 @@
   <!-- js/, add a <script src> line for it below, and add its markup     -->
   <!-- and tab button above.                                             -->
   <!-- ========================================== -->
-  <script src="js/nav.js?v=1784312744"></script>
-  <script src="js/shapes-engine.js?v=1784312744"></script>
-  <script src="js/canvas-utils.js?v=1784312744"></script>
-  <script src="js/copying-room.js?v=1784312744"></script>
-  <script src="js/branching-room.js?v=1784312744"></script>
-  <script src="js/wright-fisher-core.js?v=1784312744"></script>
-  <script src="js/drift-room.js?v=1784312744"></script>
-  <script src="js/selection-room.js?v=1784312744"></script>
-  <script src="js/adaptation-room.js?v=1784312744"></script>
+  <script src="js/nav.js?v=1784381614"></script>
+  <script src="js/shapes-engine.js?v=1784381614"></script>
+  <script src="js/canvas-utils.js?v=1784381614"></script>
+  <script src="js/copying-room.js?v=1784381614"></script>
+  <script src="js/branching-room.js?v=1784381614"></script>
+  <script src="js/wright-fisher-core.js?v=1784381614"></script>
+  <script src="js/drift-room.js?v=1784381614"></script>
+  <script src="js/selection-room.js?v=1784381614"></script>
+  <script src="js/adaptation-room.js?v=1784381614"></script>
 </body>
 </html>
