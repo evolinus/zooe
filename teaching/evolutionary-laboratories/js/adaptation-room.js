@@ -111,10 +111,9 @@
     nSliders[f] = DOMg(`sliderN_${f}`);
     nVals[f] = DOMg(`nVal_${f}`);
   });
-  const habitatSegs = {}, habitatNames = {}, founderRows = {};
+  const habitatSegs = {}, founderRows = {};
   FOUNDERS.forEach(f => {
     habitatSegs[f] = DOMg(`habitatSeg_${f}`);
-    habitatNames[f] = DOMg(`habitatName_${f}`);
     founderRows[f] = DOMg(`founderRow_${f}`);
   });
   // Drives both the habitat fish card's border and its Gen-0 connector line
@@ -446,7 +445,7 @@
 
     habitatCaptions[key].textContent = habitat
       ? `${HABITAT_LABEL[habitat]} habitat - ${HABITAT_DESCRIPTION[habitat]}`
-      : 'No selection — drift only';
+      : 'No selection - drift only';
 
     const consensusGenome = consensusGenomeFor(snapLineage, founderGenome);
     sizeAndDraw(consensusCanvases[key], consensusGenome);
@@ -690,10 +689,10 @@
       btn.addEventListener('click', () => {
         params.habitat[f] = btn.dataset.habitat;
         habitatSegs[f].querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-        habitatNames[f].textContent = `${HABITAT_LABEL[params.habitat[f]]} — Now`;
         applyHabitatColor(f);
         // Re-render (not just the caption text) since the trait table's row
-        // shading depends on which traits this habitat selects on.
+        // shading depends on which traits this habitat selects on, and the
+        // habitat card's caption restates the new habitat's favored traits.
         renderCurrentView();
       });
     });
