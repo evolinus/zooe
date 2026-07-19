@@ -85,6 +85,16 @@
           </div>
         {% endif %}
 
+        {% if citation.id contains "doi:" %}
+          <div
+            class="altmetric-embed citation-altmetric"
+            data-badge-type="donut"
+            data-badge-popover="right"
+            data-hide-no-mentions="true"
+            data-doi="{{ citation.id | remove_first: 'doi:' }}"
+          ></div>
+        {% endif %}
+
         {% if citation.buttons.size > 0 %}
           <div class="citation-buttons">
             {% for button in citation.buttons %}

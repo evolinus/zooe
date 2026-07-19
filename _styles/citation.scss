@@ -75,6 +75,14 @@ $wrap: 800px;
   color: var(--gray);
 }
 
+.citation-altmetric {
+  width: 100%;
+  // badge renders nothing when the doi has no mentions
+  &:empty {
+    display: none;
+  }
+}
+
 .citation-buttons {
   display: flex;
   flex-wrap: wrap;
