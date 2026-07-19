@@ -26,6 +26,7 @@
     --habitat-stream: #2E5C8A;
     --habitat-pond: #A8442A;
     --habitat-river: #B8862E;
+    --help-red: #B3141F;
   }
   
   *{ box-sizing:border-box; }
@@ -133,7 +134,8 @@
     padding: 16px 18px;
     margin-bottom: 26px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    /* 200px min keeps a label plus its help button on a single line. */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px 22px;
     align-items: end;
   }
@@ -143,7 +145,7 @@
     border: 1px solid var(--rule);
     border-radius: 6px;
     padding: 28px 32px;
-    max-width: 72ch;
+    max-width: 94ch;
     font-size: 15px;
     line-height: 1.75;
     color: var(--ink);
@@ -151,6 +153,39 @@
   .readme-content p{ margin: 0 0 16px; }
   .readme-content p:last-child{ margin-bottom: 0; }
   .readme-content a{ color: var(--stamp); }
+  .readme-content h2{
+    font-size: 21px;
+    margin: 30px 0 4px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+  }
+  .readme-content h2:first-of-type{ margin-top: 22px; }
+  .readme-content h2 .room-num{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--stamp);
+    margin-right: 8px;
+  }
+  .readme-content h3{
+    font-size: 15px;
+    margin: 24px 0 8px;
+    letter-spacing: 0.2px;
+  }
+  .readme-content .room-kicker{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--stamp);
+    margin: 0 0 12px;
+  }
+  .readme-content .lead{ font-size: 16px; }
+  .readme-content ul{ margin: 0 0 16px; padding-left: 22px; }
+  .readme-content li{ margin-bottom: 7px; }
+  .readme-content .room-open{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 14px;
+  }
 
   /* zoo_e lab brand block (logo + wordmark) */
   .brand-link{
@@ -194,9 +229,9 @@
   }
   .readme-brand{
     display:flex;
-    align-items:center;
+    align-items:flex-start;
     justify-content:center;
-    padding: 0 8px;
+    padding: 8px 8px 0;
   }
   .readme-brand .brand-logo{ width:150px; height:auto; }
   .readme-brand .brand-text{ font-size:15px; }
@@ -209,6 +244,7 @@
     text-transform: uppercase;
     color: var(--ink-soft);
   }
+  .field label .sym{ text-transform: none; }
   .field .value{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 12px;
@@ -268,6 +304,128 @@
   .segmented.segmented-habitat button[data-habitat="stream"].active{ background: var(--habitat-stream); color: var(--paper); }
   .segmented.segmented-habitat button[data-habitat="pond"].active{ background: var(--habitat-pond); color: var(--paper); }
   .segmented.segmented-habitat button[data-habitat="river"].active{ background: var(--habitat-river); color: var(--paper); }
+
+  /* Help system — a small red "?" beside a control or panel opens a modal
+     explaining it. The glyph comes from CSS so buttons rendered by a room's
+     JS need only the markup <button class="help-btn" data-help="topicId">. */
+  .help-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    margin-left: 6px;
+    border: none;
+    border-radius: 50%;
+    background: var(--help-red);
+    color: #fff;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+    flex: none;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .help-btn::before{ content: '?'; }
+  .help-btn:hover{ background: #8f0f18; }
+  .help-btn:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .help-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(38, 34, 32, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .help-overlay.open{ display: flex; }
+  .help-dialog{
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 0 18px 50px -12px rgba(38,34,32,0.5);
+    width: 100%;
+    max-width: 560px;
+    max-height: 82vh;
+    overflow-y: auto;
+    padding: 18px 22px 22px;
+  }
+  .help-dialog-head{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .help-dialog-head h2{
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.25;
+  }
+  .help-close{
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 26px;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+    flex: none;
+  }
+  .help-close:hover{ color: var(--ink); }
+  .help-dialog-body p{
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+  }
+  .help-dialog-body p:last-child{ margin-bottom: 0; }
+  .help-dialog-body ul{
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+    padding-left: 20px;
+  }
+  .help-dialog-body li{ margin-bottom: 5px; }
+  .help-dialog-body code{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: var(--paper-dim);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .help-inline-note{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .lineage-head .name-group{ display: flex; align-items: center; min-width: 0; }
+
+  .infer-toggle{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .infer-toggle .infer-toggle-label{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--stamp);
+  }
+  .infer-toggle .segmented{ width: auto; }
+  .infer-toggle .segmented button{ padding: 6px 14px; }
 
   .transport{
     display:flex;
@@ -657,8 +815,57 @@
 
     <div class="readme-row">
       <div class="readme-content">
-        <p>Welcome to the Evolutionary Laboratories. On these pages you can use interactive simulations to explore evolutionary mechanisms and processes in an intuitive, hands-on way.</p>
+        <p class="lead">Welcome to the Evolutionary Laboratories. On these pages you can use interactive simulations to explore evolutionary mechanisms and processes in an intuitive, hands-on way.</p>
+
+        <h3>How to use the rooms</h3>
+        <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong> (or Start), and <strong>read the panels</strong> that fill in below. Nothing is precomputed — each run is a fresh simulation, so running the same settings twice will not give the same result: these are random processes, and the parameters set tendencies, never outcomes.</p>
+        <p>Two features are worth knowing about before you start:</p>
+        <ul>
+          <li>The <strong>History Scrubber</strong> at the bottom of each room lets you drag back through a finished run and replay any generation. Nothing is lost when a run ends.</li>
+          <li>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</li>
+        </ul>
+        <p>The five rooms build on each other. The first two use <em>shapes</em> to make the idea of accumulated change visible; the middle two introduce the actual population-genetics machinery with <em>alleles</em>; the last one puts both together. Working through them in order is recommended, but each room stands on its own.</p>
+
+        <h2><span class="room-num">01</span>The Copying Room</h2>
+        <p class="room-kicker">Mutation &amp; accumulated change</p>
+        <p><strong>What it shows.</strong> A single starting figure is copied over and over. Every copy introduces a small random error — no error is large, and none of them is aimed at anything. You can run up to 100 lineages side by side, all starting from the identical same figure.</p>
+        <p><strong>Try this.</strong> Set 2 lineages and press <em>Start copying</em>. Watch the two shapes, which began identical, slowly stop resembling each other. Then set the mutation size to its smallest value and run it again for many generations. Finally, switch to 100 lineages to see the whole cloud of possibilities at once.</p>
+        <p><strong>What to notice.</strong> There is no selection here and no goal — yet the shapes still change, and they change in <em>different directions</em>. The divergence readout (Δ) climbs steadily. This is the base fact all the other rooms build on: copying is imperfect, it introduces mutations, which are not bad or good <em>per se</em>.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('copying'); window.scrollTo(0,0); return false;">→ Open the Copying Room</a></p>
+
+        <h2><span class="room-num">02</span>The Branching Room</h2>
+        <p class="room-kicker">Divergence &amp; speciation</p>
+        <p><strong>What it shows.</strong> The same copying process, but now lineages <em>split</em>. One ancestor becomes two independent lineages, each of which keeps drifting on its own and may split again. You choose when the splits happen by dragging the marks on the little tree diagram.</p>
+        <p><strong>Try this.</strong> Run it once with the default splits. When it finishes, scroll to the <em>Tanglegram</em> at the bottom: on the left is the true history you just watched, on the right is the family tree an algorithm reconstructs using <em>only</em> the final shapes. Compare them. Then drag the splits so they all happen close together and run it again.</p>
+        <p><strong>What to notice.</strong> The reconstructed tree often disagrees with the real one. Lineages that happened to drift very little can look like close relatives even when they separated long ago, and a fast-changing lineage can look like an outsider. This is the central problem of real phylogenetics: <em>similarity is not the same thing as ancestry</em>.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('branching'); window.scrollTo(0,0); return false;">→ Open the Branching Room</a></p>
+
+        <h2><span class="room-num">03</span>The Drift Room</h2>
+        <p class="room-kicker">The Wright–Fisher model</p>
+        <p><strong>What it shows.</strong> This is where the real population genetics starts. A population of N individuals carries two alleles, A and B. Each generation is built by <em>randomly sampling</em> the previous one — the spinning wheel makes a single draw, and a full generation means one draw per gene copy. Nobody has any advantage; the only force at work is chance.</p>
+        <p><strong>Try this.</strong> Run the default settings and watch the first three generations sample one individual at a time. Then set N = 10 and run, and afterwards set N = 200 and run again with everything else unchanged. Finally press <em>Run 10 Simulations</em> to see ten independent populations at once.</p>
+        <p><strong>What to notice.</strong> Small populations lurch around and quickly end up with only one allele left; large populations barely move, but will eventually also fix an allele, although after more generations. In fact, one important point to note is that in evolution time is measured in generations, not years. Once an allele reaches 0 or 1 it can never come back — drift permanently destroys variation. And across ten identical runs the outcomes differ wildly, which is why a single run can never tell you what a random process "does".</p>
+        <p class="room-open"><a href="#" onclick="switchTab('drifting'); window.scrollTo(0,0); return false;">→ Open the Drift Room</a></p>
+
+        <h2><span class="room-num">04</span>The Selection Room</h2>
+        <p class="room-kicker">Wright–Fisher + selection</p>
+        <p><strong>What it shows.</strong> Exactly the same sampling machinery as the Drift Room, with one addition: allele A now carries a fitness advantage <em>s</em>. Before each generation is drawn, the frequency is reweighted by fitness — so selection <em>tilts the odds</em>, and then ordinary random sampling does the drawing. Under diploid settings you can also set dominance <em>h</em>.</p>
+        <p><strong>Try this.</strong> Run with s = 0.1 at N = 200, and notice how closely the real trajectory tracks the dashed line (which is what selection would do with no randomness at all). Then run the same s = 0.1 at N = 10. Finally switch to Diploid, set s = 0.2, and compare h = 1 against h = 0.</p>
+        <p><strong>What to notice.</strong> What matters is not <em>s</em> by itself but <strong>N·s</strong> — the product of population size and advantage. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (h = 0) is nearly invisible to selection while it is rare, because it is hiding inside heterozygotes, so it too can be lost like a neutral allele.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('selection'); window.scrollTo(0,0); return false;">→ Open the Selection Room</a></p>
+
+        <h2><span class="room-num">05</span>The Adaptation Room</h2>
+        <p class="room-kicker">Multi-trait selection vs. drift</p>
+        <p><strong>What it shows.</strong> Everything so far, combined. Three founder fish — Gigi, Mario and Nani — each split into two lineages: a <strong>Neutral</strong> one where nothing is selected, and a <strong>Habitat</strong> one assigned to a Stream, Pond or River. Five traits (shape, colour, eye size, fin size, tail size) each behave as an independent gene, mutating and then running a full Wright–Fisher trajectory exactly as in the Selection Room. Each habitat favours a different combination of traits.</p>
+        <p><strong>Try this.</strong> Press Run and watch the two lineages of each founder evolve side by side from the same ancestor. When it finishes, compare the <em>Average divergence from own founder</em> for Neutral versus Habitat. Then assign the same habitat to two different founders and run again. As a control, open <em>More parameters</em> and set every selection coefficient to 0.</p>
+        <p><strong>What to notice.</strong> The Habitat lineages travel much further from their ancestor than the Neutral ones — that gap is what selection contributes on top of drift. Two unrelated founders placed in the <em>same</em> habitat tend to converge on a similar look, which is convergent evolution. And in the trait tables, both lineages accumulate a similar number of <em>mutations</em>; selection's real effect is on how many of them become <em>substitutions</em>.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('adaptation'); window.scrollTo(0,0); return false;">→ Open the Adaptation Room</a></p>
+
+        <h2>A note on this beta</h2>
         <p>This is a beta version and may still contain bugs — we're continually working to improve each room. If you run into problems, have questions, or have suggestions, please get in touch with Lino Ometto at <a href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>.</p>
+
+        <h2>Acknowledgements</h2>
+        <p>These laboratories were conceived and directed by Lino Ometto, who set the scientific content, the pedagogical design, and the choices behind every model. The simulation code, interface, and explanatory texts were written collaboratively with <a href="https://www.anthropic.com/claude" target="_blank" rel="noopener">Claude</a>, Anthropic's AI assistant, working through <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>.</p>
       </div>
       <div class="readme-brand">
         <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
@@ -706,7 +913,7 @@
       </div>
 
       <div class="field">
-        <label>Mutation size <span class="value" id="mutVal_copy">5</span></label>
+        <label>Mutation size <span class="value" id="mutVal_copy">5</span><button class="help-btn" data-help="mutSize"></button></label>
         <input type="range" id="mutRate_copy" min="1" max="10" value="5">
       </div>
 
@@ -740,6 +947,7 @@
    <div class="reading">
       <p id="readingText_copy">Press <strong>Start copying</strong> to watch generation 0 begin its journey. Each lineage starts from the exact same figure — any difference you see later came from nowhere but accumulated copying error.</p>
       <div class="divergence-line mono" id="divergenceLine_copy"></div>
+      <div class="help-inline-note">Pairwise divergence <button class="help-btn" data-help="divergence"></button></div>
     </div>
 
     <footer class="note">A FIGURE COPY MACHINE — Fish features are independently locked inside evolutionary bounds (e.g. eye must stay in the head). Distance figures are a normalized Euclidean measure across all traits, 0.00 (identical) to ~1.00+ (unrecognizable).</footer>
@@ -773,7 +981,7 @@
       </div>
 
       <div class="field">
-        <label>Mutation size <span class="value" id="mutVal_branch">5</span></label>
+        <label>Mutation size <span class="value" id="mutVal_branch">5</span><button class="help-btn" data-help="mutSize"></button></label>
         <input type="range" id="mutRate_branch" min="1" max="10" value="5">
       </div>
 
@@ -788,7 +996,7 @@
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label>Split generations (drag each mark) <span class="value" id="splitVals_branch">B→D,E: 200 · E→F,G: 350 · F→H,I: 450</span></label>
+        <label>Split generations (drag each mark)<button class="help-btn" data-help="splitGens"></button> <span class="value" id="splitVals_branch">B→D,E: 200 · E→F,G: 350 · F→H,I: 450</span></label>
         <div id="treeSelector_branch" style="width: 100%; height: 80px; position: relative; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; touch-action: none; margin-top: 6px;">
           <svg id="selSvg_branch" width="100%" height="100%" style="overflow: visible; display: block;"></svg>
         </div>
@@ -803,6 +1011,7 @@
     </div>
 
     <div class="legend" id="legend_branch"></div>
+    <div class="help-inline-note">Lineage colours <button class="help-btn" data-help="legend"></button> &nbsp;·&nbsp; Cards &amp; split snapshots <button class="help-btn" data-help="frozenCard"></button></div>
 
     <div class="tree-wrap">
       <div class="tree-canvas" id="treeCanvas_branch">
@@ -845,19 +1054,19 @@
 
     <div class="deck">
       <div class="field">
-        <label>Population size N <span class="value" id="nVal_drift">50</span></label>
+        <label>Population size N <span class="value" id="nVal_drift">50</span><button class="help-btn" data-help="popN"></button></label>
         <input type="range" id="sliderN_drift" min="10" max="200" step="1" value="50">
       </div>
       <div class="field">
-        <label>Initial frequency f <span class="value" id="fVal_drift">0.50</span></label>
+        <label>Initial freq. <span class="sym">f</span> <span class="value" id="fVal_drift">0.50</span><button class="help-btn" data-help="freqF"></button></label>
         <input type="range" id="sliderF_drift" min="0.01" max="0.99" step="0.01" value="0.50">
       </div>
       <div class="field">
-        <label>Generations G <span class="value" id="gVal_drift">100</span></label>
+        <label>Generations G <span class="value" id="gVal_drift">100</span><button class="help-btn" data-help="genG"></button></label>
         <input type="range" id="sliderG_drift" min="5" max="900" step="1" value="100">
       </div>
       <div class="field">
-        <label>Ploidy</label>
+        <label>Ploidy<button class="help-btn" data-help="ploidy"></button></label>
         <div class="segmented" id="ploidySeg_drift">
           <button data-ploidy="1" class="active">Haploid</button>
           <button data-ploidy="2">Diploid</button>
@@ -866,7 +1075,7 @@
 
       <div class="transport">
         <button class="btn" id="btnRun_drift">▶ Run Simulation</button>
-        <button class="btn secondary" id="btnRun10_drift">▶ Run 10 Simulations</button>
+        <button class="btn secondary" id="btnRun10_drift">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
         <button class="btn secondary" id="btnPause_drift" style="display:none;">⏸ Pause after gen</button>
         <button class="btn secondary" id="btnReset_drift">↺ Reset</button>
         <span class="status mono" id="statusBar_drift">Configure parameters and press Run.</span>
@@ -879,7 +1088,7 @@
       <!-- Card 1: Wheel & Status -->
       <div class="lineage-card" style="display:flex; flex-direction:column; align-items:center;">
         <div class="lineage-head" style="width:100%;">
-          <span class="name">Sampling Wheel</span>
+          <span class="name">Sampling Wheel<button class="help-btn" data-help="wheel"></button></span>
         </div>
         <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
           <canvas id="wheelCanvas_drift"></canvas>
@@ -895,7 +1104,7 @@
       <!-- Card 2: Population Display -->
       <div class="lineage-card" style="grid-column: span 2;">
         <div class="lineage-head">
-          <span class="name" id="popTitle_drift">Current Population</span>
+          <span class="name-group"><span class="name" id="popTitle_drift">Current Population</span><button class="help-btn" data-help="popGrid"></button></span>
           <span class="stat mono" style="color:var(--ink);"><span style="color:#3D6E6E;">●</span> Allele A &nbsp;&nbsp; <span id="legendAB_drift" style="display:none;"><span style="color:#A8442A;">◐</span> Heterozygote &nbsp;&nbsp; </span><span style="color:#A8442A;">●</span> Allele B</span>
         </div>
         <div class="canvas-wrap tall">
@@ -909,19 +1118,19 @@
       
       <!-- Chart 1: Allele frequency -->
       <div class="lineage-card" style="grid-column: 1 / -1;">
-        <div class="lineage-head"><span class="name">Allele Frequency (f) over Generations</span><span class="stat mono" id="multiRunSummary_drift"></span></div>
+        <div class="lineage-head"><span class="name">Allele Frequency (f) over Generations<button class="help-btn" data-help="freqChart"></button></span><span class="stat mono" id="multiRunSummary_drift"></span></div>
         <div class="canvas-wrap" id="chartWrap_drift"><canvas id="chartCanvas_drift"></canvas></div>
       </div>
 
       <!-- Chart 2: Binomial Distribution -->
       <div class="lineage-card" id="binomCard_drift">
-        <div class="lineage-head"><span class="name">Binomial Distribution P(k | N, f)</span><span class="stat mono">E[k] = <span id="kFormula_drift">N·f</span> = <span id="expectedK_drift">—</span> · O[k] = <span id="realizedK_drift">—</span></span></div>
+        <div class="lineage-head"><span class="name">Binomial Distribution P(k | N, f)<button class="help-btn" data-help="binomDist"></button></span><span class="stat mono">E[k] = <span id="kFormula_drift">N·f</span> = <span id="expectedK_drift">—</span> · O[k] = <span id="realizedK_drift">—</span></span></div>
         <div class="canvas-wrap"><canvas id="binomCanvas_drift"></canvas></div>
       </div>
 
       <!-- Chart 3: Binomial Variance -->
       <div class="lineage-card" id="varCard_drift">
-        <div class="lineage-head"><span class="name">Binomial Variance V = f·(1−f) / <span id="varFormula_drift">N</span></span></div>
+        <div class="lineage-head"><span class="name">Binomial Variance V = f·(1−f) / <span id="varFormula_drift">N</span><button class="help-btn" data-help="binomVar"></button></span></div>
         <div class="canvas-wrap"><canvas id="varCanvas_drift"></canvas></div>
       </div>
 
@@ -929,6 +1138,7 @@
 
     <div class="reading" id="readingRow_drift">
       <div class="divergence-line mono" id="fixBanner_drift"></div>
+      <div class="help-inline-note">Fixation &amp; loss <button class="help-btn" data-help="fixation"></button></div>
     </div>
     
     <div class="time-machine-container" id="scrubberRow_drift" style="margin-top: 20px;">
@@ -961,36 +1171,36 @@
 
     <div class="deck">
       <div class="field">
-        <label>Population size N <span class="value" id="nVal_selection">50</span></label>
+        <label>Population size N <span class="value" id="nVal_selection">50</span><button class="help-btn" data-help="popN"></button></label>
         <input type="range" id="sliderN_selection" min="10" max="200" step="1" value="50">
       </div>
       <div class="field">
-        <label>Initial frequency f <span class="value" id="fVal_selection">0.50</span></label>
+        <label>Initial freq. <span class="sym">f</span> <span class="value" id="fVal_selection">0.50</span><button class="help-btn" data-help="freqF"></button></label>
         <input type="range" id="sliderF_selection" min="0.01" max="0.99" step="0.01" value="0.50">
       </div>
       <div class="field">
-        <label>Generations G <span class="value" id="gVal_selection">100</span></label>
+        <label>Generations G <span class="value" id="gVal_selection">100</span><button class="help-btn" data-help="genG"></button></label>
         <input type="range" id="sliderG_selection" min="5" max="900" step="1" value="100">
       </div>
       <div class="field">
-        <label>Selection coefficient s <span class="value" id="sVal_selection">0.10</span></label>
+        <label>Selection coeff. <span class="sym">s</span> <span class="value" id="sVal_selection">0.10</span><button class="help-btn" data-help="selS"></button></label>
         <input type="range" id="sliderS_selection" min="0" max="1" step="0.01" value="0.10">
       </div>
       <div class="field">
-        <label>Ploidy</label>
+        <label>Ploidy<button class="help-btn" data-help="ploidy"></button></label>
         <div class="segmented" id="ploidySeg_selection">
           <button data-ploidy="1" class="active">Haploid</button>
           <button data-ploidy="2">Diploid</button>
         </div>
       </div>
       <div class="field" id="dominanceField_selection" style="display:none;">
-        <label>Dominance h <span class="value" id="hVal_selection">0.50</span></label>
+        <label>Dominance <span class="sym">h</span> <span class="value" id="hVal_selection">0.50</span><button class="help-btn" data-help="domH"></button></label>
         <input type="range" id="sliderH_selection" min="0" max="1" step="0.01" value="0.50">
       </div>
 
       <div class="transport">
         <button class="btn" id="btnRun_selection">▶ Run Simulation</button>
-        <button class="btn secondary" id="btnRun10_selection">▶ Run 10 Simulations</button>
+        <button class="btn secondary" id="btnRun10_selection">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
         <button class="btn secondary" id="btnPause_selection" style="display:none;">⏸ Pause after gen</button>
         <button class="btn secondary" id="btnReset_selection">↺ Reset</button>
         <span class="status mono" id="statusBar_selection">Configure parameters and press Run.</span>
@@ -1003,7 +1213,7 @@
       <!-- Card 1: Wheel & Status -->
       <div class="lineage-card" style="display:flex; flex-direction:column; align-items:center;">
         <div class="lineage-head" style="width:100%;">
-          <span class="name">Sampling Wheel</span>
+          <span class="name">Sampling Wheel<button class="help-btn" data-help="wheelSelection"></button></span>
         </div>
         <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
           <canvas id="wheelCanvas_selection"></canvas>
@@ -1020,7 +1230,7 @@
       <!-- Card 2: Population Display -->
       <div class="lineage-card" style="grid-column: span 2;">
         <div class="lineage-head">
-          <span class="name" id="popTitle_selection">Current Population</span>
+          <span class="name-group"><span class="name" id="popTitle_selection">Current Population</span><button class="help-btn" data-help="popGrid"></button></span>
           <span class="stat mono" style="color:var(--ink);"><span style="color:#3D6E6E;">●</span> Allele A &nbsp;&nbsp; <span id="legendAB_selection" style="display:none;"><span style="color:#A8442A;">◐</span> Heterozygote &nbsp;&nbsp; </span><span style="color:#A8442A;">●</span> Allele B</span>
         </div>
         <div class="canvas-wrap tall">
@@ -1034,19 +1244,19 @@
       
       <!-- Chart 1: Allele frequency -->
       <div class="lineage-card" style="grid-column: 1 / -1;">
-        <div class="lineage-head"><span class="name">Allele Frequency (f) over Generations</span><span class="stat mono" id="multiRunSummary_selection"></span></div>
+        <div class="lineage-head"><span class="name">Allele Frequency (f) over Generations<button class="help-btn" data-help="freqChart"></button><button class="help-btn" data-help="deterministic"></button></span><span class="stat mono" id="multiRunSummary_selection"></span></div>
         <div class="canvas-wrap" id="chartWrap_selection"><canvas id="chartCanvas_selection"></canvas></div>
       </div>
 
       <!-- Chart 2: Binomial Distribution -->
       <div class="lineage-card" id="binomCard_selection">
-        <div class="lineage-head"><span class="name">Binomial Distribution P(k | N, f′)</span><span class="stat mono">E[k] = <span id="kFormula_selection">N·f′</span> = <span id="expectedK_selection">—</span> · O[k] = <span id="realizedK_selection">—</span></span></div>
+        <div class="lineage-head"><span class="name">Binomial Distribution P(k | N, f′)<button class="help-btn" data-help="binomDist"></button></span><span class="stat mono">E[k] = <span id="kFormula_selection">N·f′</span> = <span id="expectedK_selection">—</span> · O[k] = <span id="realizedK_selection">—</span></span></div>
         <div class="canvas-wrap"><canvas id="binomCanvas_selection"></canvas></div>
       </div>
 
       <!-- Chart 3: Binomial Variance -->
       <div class="lineage-card" id="varCard_selection">
-        <div class="lineage-head"><span class="name">Binomial Variance V = f·(1−f) / <span id="varFormula_selection">N</span></span></div>
+        <div class="lineage-head"><span class="name">Binomial Variance V = f·(1−f) / <span id="varFormula_selection">N</span><button class="help-btn" data-help="binomVar"></button></span></div>
         <div class="canvas-wrap"><canvas id="varCanvas_selection"></canvas></div>
       </div>
 
@@ -1054,6 +1264,7 @@
 
     <div class="reading" id="readingRow_selection">
       <div class="divergence-line mono" id="fixBanner_selection"></div>
+      <div class="help-inline-note">Fixation &amp; loss <button class="help-btn" data-help="fixation"></button></div>
     </div>
     
     <div class="time-machine-container" id="scrubberRow_selection" style="margin-top: 20px;">
@@ -1086,7 +1297,7 @@
 
     <div class="deck">
       <div class="field">
-        <label>Generations G <span class="value" id="gVal_adapt">5000</span></label>
+        <label>Generations G <span class="value" id="gVal_adapt">5000</span><button class="help-btn" data-help="genG"></button></label>
         <input type="range" id="sliderG_adapt" min="1000" max="10000" step="100" value="5000">
       </div>
 
@@ -1094,55 +1305,55 @@
         <summary>More parameters (mutation size, selection &amp; mutation rate per trait, population size)</summary>
         <div class="adapt-advanced-grid">
           <div class="field">
-            <label>Mutation size <span class="value" id="mutSizeVal_adapt">0.30</span></label>
+            <label>Mutation size <span class="value" id="mutSizeVal_adapt">0.30</span><button class="help-btn" data-help="mutSizeAdapt"></button></label>
             <input type="range" id="sliderMutSize_adapt" min="0.1" max="1" step="0.05" value="0.30">
           </div>
 
-          <div class="adapt-section-label" style="margin-top:0; padding-top:0; border-top:none;">Selection coefficient per trait (magnitude; habitat sets direction)</div>
+          <div class="adapt-section-label" style="margin-top:0; padding-top:0; border-top:none;">Selection coefficient per trait (magnitude; habitat sets direction)<button class="help-btn" data-help="traitS"></button></div>
           <div class="field">
-            <label>Shape s <span class="value" id="sShapeVal_adapt">0.20</span></label>
+            <label>Shape <span class="sym">s</span> <span class="value" id="sShapeVal_adapt">0.20</span></label>
             <input type="range" id="sliderSShape_adapt" min="0" max="1" step="0.01" value="0.20">
           </div>
           <div class="field">
-            <label>Colour s <span class="value" id="sColourVal_adapt">0.20</span></label>
+            <label>Colour <span class="sym">s</span> <span class="value" id="sColourVal_adapt">0.20</span></label>
             <input type="range" id="sliderSColour_adapt" min="0" max="1" step="0.01" value="0.20">
           </div>
           <div class="field">
-            <label>Eye size s <span class="value" id="sEyeVal_adapt">0.20</span></label>
+            <label>Eye size <span class="sym">s</span> <span class="value" id="sEyeVal_adapt">0.20</span></label>
             <input type="range" id="sliderSEye_adapt" min="0" max="1" step="0.01" value="0.20">
           </div>
           <div class="field">
-            <label>Fin size s <span class="value" id="sFinVal_adapt">0.20</span></label>
+            <label>Fin size <span class="sym">s</span> <span class="value" id="sFinVal_adapt">0.20</span></label>
             <input type="range" id="sliderSFin_adapt" min="0" max="1" step="0.01" value="0.20">
           </div>
           <div class="field">
-            <label>Tail size s <span class="value" id="sTailVal_adapt">0.20</span></label>
+            <label>Tail size <span class="sym">s</span> <span class="value" id="sTailVal_adapt">0.20</span></label>
             <input type="range" id="sliderSTail_adapt" min="0" max="1" step="0.01" value="0.20">
           </div>
 
-          <div class="adapt-section-label">Mutation rate per trait (chance/generation a new variant arises)</div>
+          <div class="adapt-section-label">Mutation rate per trait (chance/generation a new variant arises)<button class="help-btn" data-help="traitMu"></button></div>
           <div class="field">
-            <label>Shape μ <span class="value" id="muShapeVal_adapt">0.010</span></label>
+            <label>Shape <span class="sym">μ</span> <span class="value" id="muShapeVal_adapt">0.010</span></label>
             <input type="range" id="sliderMuShape_adapt" min="0" max="0.05" step="0.001" value="0.010">
           </div>
           <div class="field">
-            <label>Colour μ <span class="value" id="muColourVal_adapt">0.010</span></label>
+            <label>Colour <span class="sym">μ</span> <span class="value" id="muColourVal_adapt">0.010</span></label>
             <input type="range" id="sliderMuColour_adapt" min="0" max="0.05" step="0.001" value="0.010">
           </div>
           <div class="field">
-            <label>Eye size μ <span class="value" id="muEyeVal_adapt">0.010</span></label>
+            <label>Eye size <span class="sym">μ</span> <span class="value" id="muEyeVal_adapt">0.010</span></label>
             <input type="range" id="sliderMuEye_adapt" min="0" max="0.05" step="0.001" value="0.010">
           </div>
           <div class="field">
-            <label>Fin size μ <span class="value" id="muFinVal_adapt">0.010</span></label>
+            <label>Fin size <span class="sym">μ</span> <span class="value" id="muFinVal_adapt">0.010</span></label>
             <input type="range" id="sliderMuFin_adapt" min="0" max="0.05" step="0.001" value="0.010">
           </div>
           <div class="field">
-            <label>Tail size μ <span class="value" id="muTailVal_adapt">0.010</span></label>
+            <label>Tail size <span class="sym">μ</span> <span class="value" id="muTailVal_adapt">0.010</span></label>
             <input type="range" id="sliderMuTail_adapt" min="0" max="0.05" step="0.001" value="0.010">
           </div>
 
-          <div class="adapt-section-label">Population size (diploid individuals per lineage; shared by its Neutral &amp; Habitat pair)</div>
+          <div class="adapt-section-label">Population size (diploid individuals per lineage; shared by its Neutral &amp; Habitat pair)<button class="help-btn" data-help="popN"></button></div>
           <div class="adapt-n-row">
             <div class="adapt-n-row-label">N</div>
             <div class="field">
@@ -1201,6 +1412,7 @@
       </div>
     </div>
 
+    <div class="help-inline-note" style="margin-bottom:10px;">Each row compares one founder's Neutral and Habitat lineage, both starting from the same ancestor. The fish shown is that lineage's consensus — its typical individual <button class="help-btn" data-help="consensusFish"></button></div>
     <div class="adapt-founder-row" id="founderRow_gigi_adapt">
       <div class="adapt-founder-name">Gigi</div>
       <div class="adapt-row-grid">
@@ -1238,10 +1450,10 @@
     </div>
 
     <div class="reading">
-      <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong> generation-0 founder (rows) vs. each lineage's final consensus fish (columns).</p>
+      <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong><button class="help-btn" data-help="adaptDivMatrix"></button> generation-0 founder (rows) vs. each lineage's final consensus fish (columns).</p>
       <div id="divMatrixWrap_adapt"></div>
       <p><strong>Average divergence from own founder:</strong> <span id="avgDeltaSummary_adapt" class="mono"></span></p>
-      <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>Tanglegram Comparison:</strong><br>
+      <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>Tanglegram Comparison:</strong><button class="help-btn" data-help="tanglegram"></button><br>
       <span style="font-size: 13px; color: var(--ink-soft);">Left: the actual lineage history — Gigi, Mario, and Nani arise independently (a root polytomy, not a nested split), each then dividing into a Neutral and a Habitat lineage. Right: the phylogenetic tree inferred by UPGMA clustering using only the six lineages' final observable shapes. Notice any discrepancies?</span></p>
       <div id="tanglegramWrap_adapt" style="overflow-x: auto; margin-top: 14px;"></div>
     </div>
@@ -1259,14 +1471,16 @@
   <!-- js/, add a <script src> line for it below, and add its markup     -->
   <!-- and tab button above.                                             -->
   <!-- ========================================== -->
-  <script src="js/nav.js?v=1784398552"></script>
-  <script src="js/shapes-engine.js?v=1784398552"></script>
-  <script src="js/canvas-utils.js?v=1784398552"></script>
-  <script src="js/copying-room.js?v=1784398552"></script>
-  <script src="js/branching-room.js?v=1784398552"></script>
-  <script src="js/wright-fisher-core.js?v=1784398552"></script>
-  <script src="js/drift-room.js?v=1784398552"></script>
-  <script src="js/selection-room.js?v=1784398552"></script>
-  <script src="js/adaptation-room.js?v=1784398552"></script>
+  <script src="js/nav.js?v=1784491290"></script>
+  <script src="js/help.js?v=1784491290"></script>
+  <script src="js/shapes-engine.js?v=1784491290"></script>
+  <script src="js/canvas-utils.js?v=1784491290"></script>
+  <script src="js/phylo.js?v=1784491290"></script>
+  <script src="js/copying-room.js?v=1784491290"></script>
+  <script src="js/branching-room.js?v=1784491290"></script>
+  <script src="js/wright-fisher-core.js?v=1784491290"></script>
+  <script src="js/drift-room.js?v=1784491290"></script>
+  <script src="js/selection-room.js?v=1784491290"></script>
+  <script src="js/adaptation-room.js?v=1784491290"></script>
 </body>
 </html>
