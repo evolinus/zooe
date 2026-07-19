@@ -16,6 +16,11 @@
     const SHAPES = {
       polygon: {
         label: 'polygon',
+        // Side of the square drawing box drawGenome fits into the canvas.
+        // Must cover the furthest a polygon can reach from the origin:
+        // vertices go to ±100 and are stroked (up to ±3 more), and a dot can
+        // reach 80 + 18 = 98 — so ±103, i.e. a 206-unit box. 210 adds margin.
+        extent: 210,
         params: {
           hue:    {min:0,   max:360, circular:true},
           v1x:    {min:-100,max:0,   circular:false}, v1y:    {min:-100,max:0,   circular:false},
@@ -47,6 +52,9 @@
       },
       fish: {
         label: 'fish',
+        // The fish is re-centred on its own nose-to-tail extent when drawn, and
+        // its widest reach (body + fins + tail spread) stays inside ±95.
+        extent: 190,
         params: {
           bodyHue:   {min:0,   max:360, circular:true},
           bodyLightness: {min:15, max:70, circular:false},
@@ -223,6 +231,6 @@
 
     function drawGenome(ctx, w, h, genome, shapeKey){
       ctx.clearRect(0,0,w,h); ctx.save(); ctx.translate(w/2, h/2);
-      const scale = Math.min(w,h) / 190; ctx.scale(scale, scale);
+      const scale = Math.min(w,h) / (SHAPES[shapeKey].extent || 190); ctx.scale(scale, scale);
       SHAPES[shapeKey].draw(ctx, genome); ctx.restore();
     }

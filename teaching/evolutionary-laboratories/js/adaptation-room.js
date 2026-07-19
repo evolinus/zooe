@@ -149,6 +149,7 @@
     applyHabitatColor(f);
   });
 
+  let inferMethod = 'upgma'; // which reconstruction the tanglegram draws
   let founders = {}; // f -> full ancestor genome (all fish params)
   let checkpoints = null; // array of { gen, lineages: { key -> { loci: {trait -> snapshot} } } }
 
@@ -363,7 +364,7 @@
     });
     rows += `<tr class="adapt-row-neutralsum"><td>Neutral</td><td class="adapt-num">${neutralMuts}</td><td class="adapt-num">${neutralSubs}</td></tr>`;
     rows += `<tr class="adapt-total"><td>Total</td><td class="adapt-num">${totalMuts}</td><td class="adapt-num">${totalSubs}</td></tr>`;
-    return `<table class="adapt-trait-table"><tr><th>Trait</th><th>Mut.</th><th>Subs.</th></tr>${rows}</table>`;
+    return `<table class="adapt-trait-table"><tr><th>Trait<button class="help-btn" data-help="traitTable"></button></th><th>Mut.</th><th>Subs.</th></tr>${rows}</table>`;
   }
 
   // Consensus: for each trait, majority phenotype (>50% of individuals),
@@ -568,8 +569,13 @@
     const OUTER_MARGIN = 20, TREE_SPAN = 400;
     const LEFT_START = OUTER_MARGIN, LEFT_END = LEFT_START + TREE_SPAN;
     const GAP_START = LEFT_END, GAP_END = 1000 - OUTER_MARGIN - TREE_SPAN, RIGHT_LEAF_X = GAP_END;
-    const RIGHT_MERGE_START = RIGHT_LEAF_X + 40, RIGHT_MERGE_SPAN = TREE_SPAN - 40 - 20;
-    const RIGHT_MERGE_END = RIGHT_MERGE_START + RIGHT_MERGE_SPAN, RIGHT_STUB_END = RIGHT_MERGE_END + 20;
+    // Branch lengths are proportional to divergence: a node sits at its own
+    // cluster height, measured from the leaf column (height 0). No constant
+    // offset is added, so the horizontal run from a leaf to an ancestor is that
+    // ancestor's height, and a leaf-to-leaf path is twice it — exactly the Δ
+    // between them. See the axis drawn under the tree.
+    const RIGHT_SPAN = TREE_SPAN - 20;
+    const RIGHT_MERGE_END = RIGHT_LEAF_X + RIGHT_SPAN, RIGHT_STUB_END = RIGHT_MERGE_END + 20;
     const ROOT_X = LEFT_START, FOUNDER_X = LEFT_START + TREE_SPAN * 0.32, SPLIT_X = LEFT_START + TREE_SPAN * 0.64;
 
     let svgLines = '';
@@ -610,27 +616,44 @@
       svgLines += `<text x="${iconX + ICON_W / 2}" y="${ty[key] + 52}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="var(--ink-soft)">${LINEAGE_COL_LABEL(key)}</text>`;
     });
 
-    let upgmaNodes = [];
-    function traverseUpgma(node) {
-      if (!node.left && !node.right) {
-        node.y = ty[node.id]; node.genome = finalGenomes[node.id]; node.isLeaf = true; node.x = RIGHT_LEAF_X;
-        return;
+    let inferredNodes = [];
+    let njScale = 0;
+
+    if (inferMethod === 'upgma') {
+      function traverseUpgma(node) {
+        if (!node.left && !node.right) {
+          node.y = ty[node.id]; node.genome = finalGenomes[node.id]; node.isLeaf = true; node.x = RIGHT_LEAF_X;
+          return;
+        }
+        traverseUpgma(node.left); traverseUpgma(node.right);
+        node.y = (node.left.y + node.right.y) / 2;
+        node.genome = averageGenome(node.left.genome, node.right.genome, 'fish');
+        node.isLeaf = false;
+        node.x = RIGHT_LEAF_X + (node.height / maxH) * RIGHT_SPAN;
+        inferredNodes.push(node);
+
+        svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
+        svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="var(--ink)" stroke-width="2"/>`;
+        svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
       }
-      traverseUpgma(node.left); traverseUpgma(node.right);
-      node.y = (node.left.y + node.right.y) / 2;
-      node.genome = averageGenome(node.left.genome, node.right.genome, 'fish');
-      node.isLeaf = false;
-      node.x = RIGHT_MERGE_START + (node.height / maxH) * RIGHT_MERGE_SPAN;
-      upgmaNodes.push(node);
-
-      svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
+      traverseUpgma(rootCluster);
+      svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="2"/>`;
+    } else {
+      // Neighbour-joining: each lineage gets its own branch length, so a
+      // lineage that evolved faster sticks out further from the root.
+      const njRoot = neighborJoining(LINEAGE_ORDER, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
+      njScale = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN).scale;
+      (function genomes(n) {
+        if (n.isLeaf) { n.genome = finalGenomes[n.id]; return; }
+        n.children.forEach(genomes);
+        n.genome = n.children.map(c => c.genome).reduce((acc, g) => acc ? averageGenome(acc, g, 'fish') : g, null);
+        inferredNodes.push(n);
+      })(njRoot);
+      svgLines += phylogramSvg(njRoot, { leafColumnX: RIGHT_LEAF_X, inkColor: 'var(--ink)' });
+      svgLines += `<line x1="${njRoot.x}" y1="${njRoot.y}" x2="${RIGHT_STUB_END}" y2="${njRoot.y}" stroke="var(--ink)" stroke-width="2"/>`;
     }
-    traverseUpgma(rootCluster);
-    svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="2"/>`;
 
-    upgmaNodes.forEach((node, i) => {
+    inferredNodes.forEach((node, i) => {
       svgLines += `
         <foreignObject x="${node.x - 25}" y="${node.y - 25}" width="50" height="50">
           <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%; border-radius:50%; background:var(--paper); border: 2px dashed var(--ink); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -641,11 +664,25 @@
 
     svgLines += `<text x="${(LEFT_START + LEFT_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">True History</text>`;
     svgLines += `<text x="${(GAP_START + GAP_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Final Shapes</text>`;
-    svgLines += `<text x="${(RIGHT_LEAF_X + RIGHT_STUB_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Inferred (UPGMA)</text>`;
+    svgLines += `<text x="${(RIGHT_LEAF_X + RIGHT_STUB_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Inferred (${inferMethod === 'upgma' ? 'UPGMA' : 'Neighbour-joining'})</text>`;
 
-    const totalHeight = Math.max(...LINEAGE_ORDER.map(k => ty[k])) + 60;
+    // Leave room below the lowest lineage (and its caption) for the Δ axis.
+    const lowestLeafY = Math.max(...LINEAGE_ORDER.map(k => ty[k]));
+    const axisY = lowestLeafY + 80;
+    svgLines += inferMethod === 'upgma'
+      ? upgmaAxisSvg(RIGHT_LEAF_X, RIGHT_SPAN, rootCluster.height, axisY, 'var(--ink-soft)')
+      : scaleBarSvg(RIGHT_LEAF_X, axisY, njScale, 'var(--ink-soft)');
+    const totalHeight = axisY + 45;
 
     DOM.tanglegramWrap.innerHTML = `
+      <div class="infer-toggle">
+        <span class="infer-toggle-label">Reconstruction method</span>
+        <div class="segmented" id="inferSeg_adapt">
+          <button data-method="upgma" class="${inferMethod === 'upgma' ? 'active' : ''}">UPGMA</button>
+          <button data-method="nj" class="${inferMethod === 'nj' ? 'active' : ''}">Neighbour-joining</button>
+        </div>
+        <button class="help-btn" data-help="treeMethod"></button>
+      </div>
       <svg width="1000" height="${totalHeight}" style="background:var(--paper); border:1px solid var(--rule); border-radius:6px; display:block; min-width: 1000px;">
         ${svgLines}
       </svg>`;
@@ -659,12 +696,21 @@
         const ctx = document.getElementById(`adapt_final_${key}`)?.getContext('2d');
         if (ctx) drawGenome(ctx, 160, 160, finalGenomes[key], 'fish');
       });
-      upgmaNodes.forEach((node, i) => {
+      inferredNodes.forEach((node, i) => {
         const ctx = document.getElementById(`adapt_upgma_${i}`)?.getContext('2d');
         if (ctx) drawGenome(ctx, 100, 100, node.genome, 'fish');
       });
     }, 50);
   }
+
+  // The toggle sits inside the generated tanglegram, so bind by delegation
+  // and re-render from the same final checkpoint.
+  DOM.tanglegramWrap.addEventListener('click', (e) => {
+    const btn = e.target.closest('#inferSeg_adapt button[data-method]');
+    if (!btn || btn.dataset.method === inferMethod) return;
+    inferMethod = btn.dataset.method;
+    renderTanglegram();
+  });
 
   DOM.timeScrubber.addEventListener('input', (e) => {
     renderCheckpoint(parseInt(e.target.value));

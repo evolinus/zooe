@@ -20,6 +20,7 @@
       return {defs, milestones:{s1,s2,s3,s4,end}, numLanes:5};
     }
 
+    let inferMethod = 'upgma'; // which reconstruction the right-hand panel draws
     let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (5/50)*0.12; let speedMs = 50; let N = 500;
     let playing = false; let timer = null; let g = 0;
 
@@ -353,7 +354,13 @@
 
       const OUTER_MARGIN = 20; const TREE_SPAN = 400; const LEFT_START = OUTER_MARGIN; const LEFT_END = LEFT_START + TREE_SPAN;    
       const GAP_START = LEFT_END; const GAP_END = 1000 - OUTER_MARGIN - TREE_SPAN; const RIGHT_LEAF_X = GAP_END;                          
-      const RIGHT_MERGE_START = RIGHT_LEAF_X + 40; const RIGHT_MERGE_SPAN = TREE_SPAN - 40 - 20; const RIGHT_MERGE_END = RIGHT_MERGE_START + RIGHT_MERGE_SPAN; const RIGHT_STUB_END = RIGHT_MERGE_END + 20;          
+      // Branch lengths are proportional to divergence: a node sits at its own
+      // cluster height, measured from the leaf column (height 0). No constant
+      // offset is added, so the horizontal run from a leaf to an ancestor is
+      // that ancestor's height, and a leaf-to-leaf path is twice it — exactly
+      // the Δ between them. See the axis drawn under the tree.
+      const RIGHT_SPAN = TREE_SPAN - 20; const RIGHT_MERGE_END = RIGHT_LEAF_X + RIGHT_SPAN; const RIGHT_STUB_END = RIGHT_MERGE_END + 20;
+      const RIGHT_AXIS_Y = 545;
 
       const trueX = (t) => LEFT_START + (t / N) * TREE_SPAN;
       const s1x = trueX(topo.milestones.s1); const s2x = trueX(topo.milestones.s2); const s3x = trueX(topo.milestones.s3); const s4x = trueX(topo.milestones.s4);
@@ -393,21 +400,44 @@
           </foreignObject>`;
       });
 
-      let upgmaNodes = [];
-      function traverseUpgma(node) {
-        if (!node.left && !node.right) { node.y = ty[node.id]; node.genome = nodesById[node.id].genome; node.isLeaf = true; node.x = RIGHT_LEAF_X; return; }
-        traverseUpgma(node.left); traverseUpgma(node.right);
-        node.y = (node.left.y + node.right.y) / 2; node.genome = averageGenome(node.left.genome, node.right.genome, currentShape);
-        node.isLeaf = false; node.x = RIGHT_MERGE_START + (node.height / maxH) * RIGHT_MERGE_SPAN; upgmaNodes.push(node);
+      // Inferred ancestors get a canvas each, whichever method drew the tree.
+      let inferredNodes = [];
 
-        svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
-        svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="${node.left.isLeaf ? LEAF_COLOR[node.left.id] : 'var(--ink)'}" stroke-width="2"/>`;
-        svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="${node.right.isLeaf ? LEAF_COLOR[node.right.id] : 'var(--ink)'}" stroke-width="2"/>`;
+      if (inferMethod === 'upgma') {
+        function traverseUpgma(node) {
+          if (!node.left && !node.right) { node.y = ty[node.id]; node.genome = nodesById[node.id].genome; node.isLeaf = true; node.x = RIGHT_LEAF_X; return; }
+          traverseUpgma(node.left); traverseUpgma(node.right);
+          node.y = (node.left.y + node.right.y) / 2; node.genome = averageGenome(node.left.genome, node.right.genome, currentShape);
+          node.isLeaf = false; node.x = RIGHT_LEAF_X + (node.height / maxH) * RIGHT_SPAN; inferredNodes.push(node);
+
+          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="${node.left.isLeaf ? LEAF_COLOR[node.left.id] : 'var(--ink)'}" stroke-width="2"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="${node.right.isLeaf ? LEAF_COLOR[node.right.id] : 'var(--ink)'}" stroke-width="2"/>`;
+        }
+        traverseUpgma(rootCluster);
+        svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="2"/>`;
+        svgLines += upgmaAxisSvg(RIGHT_LEAF_X, RIGHT_SPAN, rootCluster.height, RIGHT_AXIS_Y, 'var(--ink-soft)');
+      } else {
+        // Neighbour-joining: branch lengths differ per lineage, so leaves are
+        // NOT aligned — that is the whole point of showing it.
+        const njRoot = neighborJoining(leafOrder, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
+        const { scale } = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN);
+        (function genomes(n) {
+          if (n.isLeaf) { n.genome = nodesById[n.id].genome; return; }
+          n.children.forEach(genomes);
+          n.genome = n.children.map(c => c.genome).reduce((acc, g) => acc ? averageGenome(acc, g, currentShape) : g, null);
+          inferredNodes.push(n);
+        })(njRoot);
+        svgLines += phylogramSvg(njRoot, {
+          leafColumnX: RIGHT_LEAF_X,
+          leafColor: (id) => LEAF_COLOR[id],
+          inkColor: 'var(--ink)'
+        });
+        svgLines += `<line x1="${njRoot.x}" y1="${njRoot.y}" x2="${RIGHT_STUB_END}" y2="${njRoot.y}" stroke="var(--ink)" stroke-width="2"/>`;
+        svgLines += scaleBarSvg(RIGHT_LEAF_X, RIGHT_AXIS_Y, scale, 'var(--ink-soft)');
       }
-      traverseUpgma(rootCluster);
-      svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="2"/>`;
 
-      upgmaNodes.forEach((node, i) => {
+      inferredNodes.forEach((node, i) => {
         svgLines += `
           <foreignObject x="${node.x - 25}" y="${node.y - 25}" width="50" height="50">
             <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%; border-radius:50%; background:var(--paper); border: 2px dashed var(--ink); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
@@ -418,15 +448,23 @@
 
       svgLines += `<text x="${(LEFT_START+LEFT_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">True History</text>`;
       svgLines += `<text x="${(GAP_START+GAP_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Final Shapes</text>`;
-      svgLines += `<text x="${(RIGHT_LEAF_X+RIGHT_STUB_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Inferred (UPGMA)</text>`;
+      svgLines += `<text x="${(RIGHT_LEAF_X+RIGHT_STUB_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Inferred (${inferMethod === 'upgma' ? 'UPGMA' : 'Neighbour-joining'})</text>`;
 
       finalStats.innerHTML = `
-        <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong></p>
+        <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong><button class="help-btn" data-help="branchDivMatrix"></button></p>
         ${html}
-        <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>Tanglegram Comparison:</strong><br>
+        <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>Tanglegram Comparison:</strong><button class="help-btn" data-help="tanglegram"></button><br>
         <span style="font-size: 13px; color: var(--ink-soft);">Left: The actual evolutionary timeline you just watched (solid borders mark the true divergence shape). Right: The phylogenetic tree inferred by an algorithm using only the final observable shapes (dashed borders show mathematically inferred ancestral states). Notice any discrepancies?</span></p>
+        <div class="infer-toggle">
+          <span class="infer-toggle-label">Reconstruction method</span>
+          <div class="segmented" id="inferSeg_branch">
+            <button data-method="upgma" class="${inferMethod === 'upgma' ? 'active' : ''}">UPGMA</button>
+            <button data-method="nj" class="${inferMethod === 'nj' ? 'active' : ''}">Neighbour-joining</button>
+          </div>
+          <button class="help-btn" data-help="treeMethod"></button>
+        </div>
         <div style="overflow-x: auto; margin-top: 14px;">
-          <svg width="1000" height="540" style="background:var(--paper); border:1px solid var(--rule); border-radius:6px; display:block; min-width: 1000px;">
+          <svg width="1000" height="600" style="background:var(--paper); border:1px solid var(--rule); border-radius:6px; display:block; min-width: 1000px;">
             ${svgLines}
           </svg>
         </div>
@@ -441,7 +479,7 @@
           const ctx = document.getElementById(`true_canvas_${id}`)?.getContext('2d');
           if(ctx) drawGenome(ctx, 100, 100, nodesById[id].genome, currentShape);
         });
-        upgmaNodes.forEach((node, i) => {
+        inferredNodes.forEach((node, i) => {
           const ctx = document.getElementById(`upgma_canvas_${i}`)?.getContext('2d');
           if(ctx) drawGenome(ctx, 100, 100, node.genome, currentShape);
         });
@@ -474,6 +512,15 @@
       }
     });
     resetBtn.addEventListener('click', ()=>{ rootAncestorGenome = mutate(freshAncestor(currentShape), 0.4, currentShape); buildStage(); });
+
+    // The toggle lives inside the generated results panel, so it is bound by
+    // delegation and simply re-renders that panel from the same final genomes.
+    finalStats.addEventListener('click', (e)=>{
+      const btn = e.target.closest('#inferSeg_branch button[data-method]');
+      if(!btn || btn.dataset.method === inferMethod) return;
+      inferMethod = btn.dataset.method;
+      showFinalStats();
+    });
 
     mutRate.addEventListener('input', ()=>{ mutVal.textContent = mutRate.value; mutSigmaFrac = 0.005 + (mutRate.value/50)*0.12; });
     speedInput.addEventListener('input', ()=>{
