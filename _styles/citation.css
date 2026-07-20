@@ -68,10 +68,16 @@
   color: var(--gray);
 }
 
-.citation-altmetric {
+.citation-metrics {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   width: 100%;
 }
-.citation-altmetric:empty {
+.citation-metrics:empty {
+  display: none;
+}
+.citation-metrics > div:empty {
   display: none;
 }
 
