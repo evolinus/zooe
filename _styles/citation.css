@@ -77,7 +77,7 @@
 .citation-metrics:empty {
   display: none;
 }
-.citation-metrics > div:empty {
+.citation-metrics > :empty {
   display: none;
 }
 
