@@ -1247,7 +1247,7 @@
   image: images/article_thumbnails/thumb.aquilegia.jpg
   plugin: sources.py
   file: sources.yaml
-- id: doi:10.1371/journal.pone.0056629.s003
+- id: doi:10.1371/journal.pone.0056629
   title: Selective sweep in the <i>Flotillin-2</i> region of European <i>Drosophila
     melanogaster</i>
   authors:
@@ -1256,9 +1256,9 @@
   - Lino Ometto
   - Wolfgang Stephan
   - Stefan Laurent
-  publisher: PLOS ONE
+  publisher: PLoS ONE
   date: '2013-02-21'
-  link: https://doi.org/10.1371/journal.pone.0056629
+  link: https://doi.org/f4njvf
   image: images/article_thumbnails/thumb.droso_flotillin.png
   plugin: sources.py
   file: sources.yaml
