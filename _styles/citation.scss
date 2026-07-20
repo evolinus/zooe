@@ -84,7 +84,7 @@ $wrap: 800px;
   &:empty {
     display: none;
   }
-  > div:empty {
+  > :empty {
     display: none;
   }
 }

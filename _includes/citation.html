@@ -101,6 +101,13 @@
               data-legend="hover-right"
               data-doi="{{ citation.id | remove_first: 'doi:' }}"
             ></div>
+            <a
+              class="plumx-plum-print-popup"
+              data-size="medium"
+              data-popup="right"
+              data-hide-when-empty="true"
+              href="https://plu.mx/plum/a/?doi={{ citation.id | remove_first: 'doi:' | uri_escape }}"
+            ></a>
           </div>
         {% endif %}
 
