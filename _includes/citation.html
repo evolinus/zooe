@@ -106,9 +106,6 @@
               data-size="medium"
               data-popup="right"
               data-hide-when-empty="true"
-              {%- comment -%}
-                plumx's api is case-sensitive on dois, unlike the doi spec
-              {%- endcomment -%}
               href="https://plu.mx/plum/a/?doi={{ citation.id | remove_first: 'doi:' | downcase | uri_escape }}"
             ></a>
           </div>
