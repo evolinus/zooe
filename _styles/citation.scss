@@ -75,10 +75,16 @@ $wrap: 800px;
   color: var(--gray);
 }
 
-.citation-altmetric {
+.citation-metrics {
+  display: flex;
+  align-items: center;
+  gap: 15px;
   width: 100%;
-  // badge renders nothing when the doi has no mentions
+  // badges render nothing when the doi has no mentions/citations
   &:empty {
+    display: none;
+  }
+  > div:empty {
     display: none;
   }
 }

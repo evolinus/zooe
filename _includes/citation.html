@@ -86,13 +86,22 @@
         {% endif %}
 
         {% if citation.id contains "doi:" %}
-          <div
-            class="altmetric-embed citation-altmetric"
-            data-badge-type="donut"
-            data-badge-popover="right"
-            data-hide-no-mentions="true"
-            data-doi="{{ citation.id | remove_first: 'doi:' }}"
-          ></div>
+          <div class="citation-metrics">
+            <div
+              class="altmetric-embed"
+              data-badge-type="donut"
+              data-badge-popover="right"
+              data-hide-no-mentions="true"
+              data-doi="{{ citation.id | remove_first: 'doi:' }}"
+            ></div>
+            <div
+              class="__dimensions_badge_embed__"
+              data-style="small_circle"
+              data-hide-zero-citations="true"
+              data-legend="hover-right"
+              data-doi="{{ citation.id | remove_first: 'doi:' }}"
+            ></div>
+          </div>
         {% endif %}
 
         {% if citation.buttons.size > 0 %}
