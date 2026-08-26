@@ -1,0 +1,112 @@
+{% comment %}
+  people page in the first-run language. cards come from _members/*.md — the
+  +/– disclosure opens the member's own opening paragraph and links, and the
+  full profile page is still one click away. alumni come from _data/alumni.yaml.
+{% endcomment %}
+{% assign pi = site.members | where_exp: "m", "m.role == 'principal-investigator'" %}
+{% assign rest = site.members | where_exp: "m", "m.role != 'principal-investigator'" | sort: "name" %}
+{% assign team = pi | concat: rest %}
+
+<div class="fr-page">
+  <div class="fr-strip">
+    <div class="fr-head-split">
+      <div>
+        <p class="fr-eyebrow">People</p>
+        <h1 class="fr-title">The people behind the quest.</h1>
+        <p class="fr-intro">
+          We value personal initiative, skills, passion and curiosity, which we share
+          to explore the mechanisms behind animal evolution.
+        </p>
+      </div>
+
+      <div class="fr-ink">
+        <p class="fr-eyebrow">Join the lab</p>
+        <p class="fr-ink-text">
+          Se ti piace lavorare in un ambiente interdisciplinare che unisce zoologia,
+          evoluzione e genomica comparativa, scrivici. We are looking for people who
+          enjoy working in an interdisciplinary environment that combines zoology,
+          evolution and comparative genomics — BSc and MSc projects open every year.
+        </p>
+        <a class="fr-btn fr-btn-primary fr-btn-block" href="mailto:{{ site.links.email }}">{{ site.links.email }}</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="fr-strip" style="padding-bottom: 12px; border-bottom: none">
+    <h2 class="fr-h6">The team</h2>
+  </div>
+
+  <div class="fr-team">
+    {% for member in team %}
+      {% assign type = site.data.types[member.role] %}
+      <div class="fr-member">
+        <div class="fr-member-figure">
+          <img
+            src="{{ member.image | relative_url | uri_escape }}"
+            alt="{{ member.name }}"
+            loading="lazy"
+            {% include fallback.html %}
+          >
+        </div>
+
+        <div class="fr-member-head">
+          <div>
+            <h3 class="fr-member-name">{{ member.name }}</h3>
+            <span class="fr-member-role">{{ member.description | default: type.description }}</span>
+          </div>
+          <button
+            type="button"
+            class="fr-plus"
+            aria-expanded="false"
+            aria-label="More about {{ member.name }}"
+            data-fr-disclose="member-{{ forloop.index }}"
+          >+</button>
+        </div>
+
+        <div class="fr-more" id="member-{{ forloop.index }}" hidden>
+          {{ member.excerpt | markdownify | strip_html | truncate: 420 }}
+          <div class="fr-more-links">
+            {% for link in member.links %}
+              {% assign key = link[0] %}
+              {% assign kind = site.data.types[key] %}
+              <a href="{{ kind.link | default: "$VALUE" | replace: "$VALUE", link[1] }}">
+                {{ kind.text | default: key }}
+              </a>
+            {% endfor %}
+            <a href="{{ member.url | relative_url }}">Full profile &rarr;</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="fr-strip fr-strip-last">
+    <div class="fr-pub-head" data-fr-filter="alumni-list">
+      <h2 class="fr-h6" style="margin-right: auto">Alumni</h2>
+      <div class="fr-seg">
+        <button type="button" class="fr-seg-opt" data-fr-option="all" aria-selected="true">All</button>
+        {% for group in site.data.alumni %}
+          <button type="button" class="fr-seg-opt" data-fr-option="{{ group.key | slugify }}" aria-selected="false">{{ group.key }}</button>
+        {% endfor %}
+      </div>
+      <span class="fr-label" data-fr-filter-count="alumni"></span>
+    </div>
+
+    <div class="fr-alumni" id="alumni-list">
+      {% for group in site.data.alumni %}
+        {% for person in group.people %}
+          <div class="fr-alumni-row" data-fr-key="{{ group.key | slugify }}">
+            <span class="fr-alumni-name">
+              {% if person.link %}
+                <a href="{{ person.link }}">{{ person.name }}</a>
+              {% else %}
+                {{ person.name }}
+              {% endif %}
+            </span>
+            <span class="fr-alumni-note">{{ person.note | default: group.key }}</span>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>

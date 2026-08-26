@@ -4,7 +4,8 @@
   set are simply the ones on show.
 */
 
-{
+// scripts.html loads this in <head> with no defer, so wait for the DOM
+const frFirstRun = () => {
   const select = (container, attr, value) => {
     container.querySelectorAll("[" + attr + "]").forEach((el) => {
       el.setAttribute("aria-selected", String(el.getAttribute(attr) === value));
@@ -50,4 +51,8 @@
 
     showCount("people");
   }
-}
+};
+
+if (document.readyState === "loading")
+  document.addEventListener("DOMContentLoaded", frFirstRun);
+else frFirstRun();

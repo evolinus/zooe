@@ -17,6 +17,7 @@
   date: '2011-03-16'
   link: https://books.google.it/books/about/Evoluzione_Modelli_e_processi.html?id=fz9RYgEACAAJ&redir_esc=y
   image: images/article_thumbnails/thumb.evoluzione_libro.jpg
+  type: book
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1007/978-1-0716-4583-3
@@ -28,6 +29,7 @@
   date: '2025-08-20'
   link: https://doi.org/hcbp24
   image: images/article_thumbnails/thumb.insectgenomics.png
+  type: book
   plugin: sources.py
   file: sources.yaml
 - id: doi:10.1016/j.biocon.2026.111991

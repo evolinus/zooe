@@ -1,0 +1,81 @@
+{% comment %}
+  research page in the first-run language. rows come from _data/projects.yaml:
+  featured entries carry organism / method / question / credit (+ fit), and the
+  full description — links and all — is what the +/– disclosure reveals.
+{% endcomment %}
+{% assign featured = site.data.projects | where_exp: "p", "p.group == 'featured'" %}
+{% assign more = site.data.projects | where_exp: "p", "p.group == nil" %}
+
+<div class="fr-page">
+  <div class="fr-strip">
+    <p class="fr-eyebrow">Research</p>
+    <h1 class="fr-title">Comparative approaches to the genetics of adaptation.</h1>
+    <p class="fr-intro">
+      Insects are the main group we study (because they are fantastic), but we also
+      enjoy other animals. We work in close contact with the department's
+      <a href="https://dbb.dip.unipv.it/en/research/research-teams-and-topics/genomics-and-biotechnology-insects-agricultural-and-sanitary">insect genomics groups</a>
+      and with collaborators in Italy and abroad, which keeps a constant flow of
+      ideas, skills and enthusiasm.
+    </p>
+  </div>
+
+  {% for p in featured %}
+    <div class="fr-proj">
+      <div class="fr-figure" data-fit="{{ p.fit | default: "cover" }}">
+        <img src="{{ p.image | relative_url | uri_escape }}" alt="{{ p.title }}" loading="lazy">
+      </div>
+
+      <div>
+        {% if p.organism %}<p class="fr-label"><em>{{ p.organism }}</em></p>{% endif %}
+
+        <div class="fr-proj-head">
+          <h2 class="fr-proj-title">{{ p.title }}</h2>
+          <button
+            type="button"
+            class="fr-plus"
+            aria-expanded="false"
+            aria-label="Read the full {{ p.title }} project"
+            data-fr-disclose="project-{{ forloop.index }}"
+          >+</button>
+        </div>
+
+        {% if p.question %}<p class="fr-panel-question">{{ p.question }}</p>{% endif %}
+        <p class="fr-panel-text">
+          {{ p.blurb | default: p.description | markdownify | strip_html | truncate: 320 }}
+        </p>
+
+        <div class="fr-proj-meta">
+          {% if p.method %}<span class="fr-label">{{ p.method }}</span>{% endif %}
+          {% if p.credit %}<span class="fr-proj-credit">{{ p.credit }}</span>{% endif %}
+        </div>
+
+        <div class="fr-more" id="project-{{ forloop.index }}" hidden>
+          {{ p.description | markdownify }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+
+  <div class="fr-cols fr-cols-2">
+    <div>
+      <h2 class="fr-h6">Also part of</h2>
+      {% for p in more %}
+        <div class="fr-logo-row" style="margin-top: 14px">
+          {% if p.image %}
+            <a href="{{ p.link }}"><img src="{{ p.image | relative_url | uri_escape }}" alt="{{ p.title }}" loading="lazy"></a>
+          {% endif %}
+          <div>{{ p.description | markdownify | remove: "<p>" | remove: "</p>" }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <div>
+      <h2 class="fr-h6">Funded within</h2>
+      <img
+        src="{{ "images/pages/nbfc.png" | relative_url }}"
+        alt="National Biodiversity Future Center"
+        style="width: 100%; height: auto; margin-top: 14px"
+        loading="lazy"
+      >
+    </div>
+  </div>
+</div>
