@@ -1,6 +1,6 @@
 ---
 name: Lino Ometto
-image: images/team/Lino-Ometto.png
+image: images/team/Lino-Ometto.jpg
 role: principal-investigator
 #affiliation: University of Pavia
 aliases:
