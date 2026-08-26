@@ -389,8 +389,10 @@ $wrap: 900px;
 .fr-contact-figure {
   flex: 1;
   min-height: 240px;
+  padding: 40px;
   overflow: hidden;
-  img { width: 100%; height: 100%; object-fit: cover; }
+  /* a logo, not a photograph: show it whole rather than cropping to fill */
+  img { width: 100%; height: 100%; object-fit: contain; }
 }
 .fr-contact-stack { display: flex; flex-direction: column; gap: 10px; max-width: 340px; }
 .fr-address { font-size: 15px; line-height: 1.8; }
