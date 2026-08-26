@@ -68,22 +68,22 @@
   align-items: end;
 }
 
-/* ink panel — the black block used for calls to action */
+/* the block panel used for calls to action */
 .fr-ink {
   display: flex;
   flex-direction: column;
   padding: 22px 24px;
-  background: var(--text);
-  color: var(--background);
+  background: var(--panel);
+  color: var(--panel-ink);
 }
 .fr-ink a:not(.fr-btn) {
-  color: var(--background);
+  color: var(--panel-ink);
 }
 .fr-ink .fr-eyebrow {
-  color: var(--background);
+  color: var(--panel-ink);
 }
 .fr-ink h3 {
-  color: var(--background);
+  color: var(--panel-ink);
 }
 
 .fr-ink-text {
@@ -286,7 +286,7 @@
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-member-note {
@@ -396,7 +396,7 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-pub-year {
@@ -423,7 +423,28 @@
   /* film first, at 60% of the third it used to take; the text fills the rest */
   grid-template-columns: 1fr 4fr;
   gap: 40px;
-  align-items: start;
+  align-items: center;
+}
+
+/* the schools block sits on the highlight colour, end to end */
+.fr-schools {
+  background: var(--secondary);
+  color: var(--text);
+}
+.fr-schools a {
+  color: var(--primary-deep);
+}
+.fr-schools .fr-h6,
+.fr-schools .fr-intro,
+.fr-schools .fr-member-name,
+.fr-schools p {
+  color: var(--text);
+}
+.fr-schools .fr-member-role {
+  color: var(--primary-deep);
+}
+.fr-schools .fr-cols {
+  border-bottom: none;
 }
 
 .fr-film {
@@ -464,7 +485,7 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-figure-split {
@@ -518,12 +539,14 @@
 .fr-contact-figure {
   flex: 1;
   min-height: 240px;
+  padding: 40px;
   overflow: hidden;
+  /* a logo, not a photograph: show it whole rather than cropping to fill */
 }
 .fr-contact-figure img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .fr-contact-stack {
