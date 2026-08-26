@@ -27,16 +27,18 @@
       <span class="fr-value">Associate Professor of Zoology</span>
     </div>
 
-    <div class="fr-highlight">
-      <p class="fr-label fr-label-accent">Outreach</p>
-      <p class="fr-highlight-title">Evolutionary Laboratories</p>
-      <p class="fr-highlight-text">
-        Browser simulations of drift, selection and adaptation, used in schools
-      </p>
-      <a class="fr-btn fr-btn-ghost" href="{{ "teaching/evolutionary-laboratories/main.html" | relative_url }}">
-        Open the simulations &rarr;
-      </a>
-    </div>
+    {% comment %}
+      the lab at a glance: members, study systems and fieldwork, greyed and
+      pulled toward the rail so it sits behind the text rather than competing
+      with it. built from the images already in the repo — see the note in
+      _styles/first-run.scss.
+    {% endcomment %}
+    <img
+      class="fr-mosaic"
+      src="{{ "images/pages/lab-mosaic.jpg" | relative_url }}"
+      alt="The lab at a glance: its members, the animals it studies and its fieldwork"
+      loading="lazy"
+    >
 
   </aside>
 </div>
