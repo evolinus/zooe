@@ -6,6 +6,23 @@
 $page: 1200px;
 $wrap: 900px;
 
+/* a coloured panel drawn as a rounded polygon: the fill sits on a ::before
+   layer clipped to one of the fr-poly-N silhouettes (see _includes/fr-shapes.html),
+   so the panel's own text and images stay rectangular and fully inside the shape */
+@mixin fr-shape($fill, $clip) {
+  position: relative;
+  background: none;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: $fill;
+    clip-path: url(##{$clip});
+  }
+  > * { position: relative; z-index: 1; }
+}
+
 .fr-page {
   --pad: max(40px, calc((100% - #{$page}) / 2));
   text-align: left;
@@ -66,10 +83,10 @@ $wrap: 900px;
 
 /* the block panel used for calls to action */
 .fr-ink {
+  @include fr-shape(var(--panel), fr-poly-2);
   display: flex;
   flex-direction: column;
-  padding: 22px 24px;
-  background: var(--panel);
+  padding: 30px 30px 34px;
   color: var(--panel-ink);
   a:not(.fr-btn) { color: var(--panel-ink); }
   .fr-eyebrow { color: var(--panel-ink); }
@@ -345,6 +362,9 @@ $wrap: 900px;
 /* the schools block sits on the highlight colour, end to end */
 .fr-schools {
   background: var(--secondary);
+  /* full-width band: a large even radius reads as a rounded polygon without the
+     corner distortion an objectBoundingBox clip would suffer at this width */
+  border-radius: 40px;
   color: var(--text);
   a { color: var(--primary-deep); }
   .fr-h6,
@@ -423,10 +443,10 @@ $wrap: 900px;
   gap: 0;
   align-self: start;
 }
-/* the photo sits matted on the red panel, with a heavier bottom band */
+/* the photo sits matted on the red polygon, with a heavier bottom band */
 .fr-profile-photo {
-  padding: 14px 14px 34px;
-  background: var(--primary);
+  @include fr-shape(var(--primary), fr-poly-5);
+  padding: 18px 18px 30px;
   img {
     display: block;
     width: 100%;
@@ -435,10 +455,12 @@ $wrap: 900px;
     background: var(--background-alt);
   }
 }
-/* links ride the light-blue panel, like the teaching schools block */
+/* links ride the light-blue polygon, tucked slightly under the photo above */
 .fr-profile-links {
-  padding: 18px 20px;
-  background: var(--secondary);
+  @include fr-shape(var(--secondary), fr-poly-3);
+  z-index: 1;
+  margin-top: -20px;
+  padding: 30px 26px 26px;
   color: var(--text);
   .fr-eyebrow { color: var(--text); }
   ul {
