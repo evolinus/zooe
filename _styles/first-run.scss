@@ -3,7 +3,7 @@
 
 /* homepage first-run layout — Modernist: flush left, 2px rules, 0 radius */
 
-$page: 1000px;
+$page: 1200px;
 $wrap: 900px;
 
 /* the rail: ink against the red statement panel */
@@ -105,13 +105,16 @@ $rail: #201e1d;
 /* — hero: red on the left panel only, warm rail on the right — */
 .fr-hero {
   display: grid;
-  grid-template-columns: 1fr 360px;
-}
-.fr-hero-main {
-  /* full-bleed section, so the panel carries the page's own left padding */
-  padding: 60px 40px 56px max(40px, calc((100% - #{$page}) / 2));
+  /* an empty first column carries the page indent, so the hero text lands on the
+     same measure as every section below. a padding on the panel itself cannot do
+     this: its percentage would resolve against the 1fr column, not the page. */
+  grid-template-columns: max(40px, calc((100% - #{$page}) / 2)) minmax(0, 1fr) 360px;
   background: var(--primary);
   color: var(--background);
+}
+.fr-hero-main {
+  grid-column: 2;
+  padding: 60px 40px 56px 0;
 }
 .fr-hero-main a { color: var(--background); }
 .fr-hero-top {
@@ -123,6 +126,7 @@ $rail: #201e1d;
 .fr-hero-mark { height: 108px; width: auto; flex-shrink: 0; margin-top: -6px; }
 
 .fr-rail {
+  grid-column: 3;
   display: flex;
   flex-direction: column;
   padding: 32px 32px 28px;
@@ -322,7 +326,8 @@ $rail: #201e1d;
   .fr-hero,
   .fr-work { grid-template-columns: 1fr; gap: 0; }
   .fr-work { gap: 32px; }
-  .fr-hero-main { padding: 44px 40px; }
+  .fr-hero-main { grid-column: auto; padding: 44px 40px; }
+  .fr-rail { grid-column: auto; }
   .fr-index-row { grid-template-columns: 1fr; gap: 4px; }
   .fr-band { grid-template-columns: 1fr; }
   .fr-plate { border-right: none; border-bottom: 2px solid var(--divider); }

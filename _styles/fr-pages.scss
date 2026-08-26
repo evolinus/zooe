@@ -3,7 +3,7 @@
 
 /* interior pages in the first-run language — Modernist: flush left, 2px rules, 0 radius */
 
-$page: 1000px;
+$page: 1200px;
 $wrap: 900px;
 
 .fr-page {
@@ -133,8 +133,10 @@ $wrap: 900px;
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--divider);
-  font-size: 14px;
-  line-height: 1.6;
+  /* the long text sits a step below the summary above it */
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--dark-gray);
   p { margin: 0 0 10px; text-align: left; }
 }
 .fr-more-links {

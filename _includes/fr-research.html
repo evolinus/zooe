@@ -41,7 +41,11 @@
 
         {% if p.question %}<p class="fr-panel-question">{{ p.question }}</p>{% endif %}
         <p class="fr-panel-text">
-          {{ p.blurb | default: p.description | markdownify | strip_html | truncate: 320 }}
+          {% if p.blurb %}
+            {{ p.blurb }}
+          {% else %}
+            {{ p.description | markdownify | strip_html | truncate: 320 }}
+          {% endif %}
         </p>
 
         <div class="fr-proj-meta">
