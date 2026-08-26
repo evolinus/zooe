@@ -28,17 +28,13 @@ const frPages = () => {
     const list = document.getElementById(listId);
     if (!list) return;
 
-    const count = group.querySelector("[data-fr-filter-count]");
     const items = [...list.querySelectorAll("[data-fr-key]")];
 
     const apply = (key) => {
-      let shown = 0;
       items.forEach((item) => {
         const match = key === "all" || item.getAttribute("data-fr-key") === key;
         item.hidden = !match;
-        if (match) shown++;
       });
-      if (count) count.textContent = shown + " " + count.getAttribute("data-fr-filter-count");
     };
 
     group.addEventListener("click", (event) => {
