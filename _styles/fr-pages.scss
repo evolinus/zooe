@@ -326,6 +326,13 @@ $wrap: 900px;
   gap: 40px;
   padding: 32px var(--pad) 40px;
 }
+/* a cover shows whole, at its own aspect ratio */
+.fr-cover {
+  align-self: start;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--divider);
+}
 .fr-prose {
   font-size: 15px;
   line-height: 1.6;

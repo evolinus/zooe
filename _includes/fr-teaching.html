@@ -64,9 +64,13 @@
   </div>
 
   <div class="fr-figure-split">
-    <div class="fr-figure" data-fit="contain" style="align-self: start">
-      <img src="{{ "images/pages/evoSSI.png" | relative_url }}" alt="Evolution at school" loading="lazy">
-    </div>
+    {% comment %} a book cover, so it keeps its own proportions rather than a 4:3 crop {% endcomment %}
+    <img
+      class="fr-cover"
+      src="{{ "images/pages/SSI.jpg" | relative_url }}"
+      alt="Cover of the e-book “Apprendere l'evoluzione attraverso le questioni socio-scientifiche”"
+      loading="lazy"
+    >
     <div>
       <h2 class="fr-h6" style="margin-bottom: 10px">Evolution at school</h2>
       <div class="fr-prose">
