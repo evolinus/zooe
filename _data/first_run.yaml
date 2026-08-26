@@ -1,0 +1,54 @@
+# content for the homepage index switch and the closing image band
+# (People come from _members, Recent publications from _data/citations.yaml)
+
+sets:
+  - key: Teaching
+    rows:
+      - name: Zoologia
+        role: BSc Scienze Biologiche
+        note: 9 CFU &middot; 1&deg; anno, 2&deg; semestre
+      - name: Biologia delle Popolazioni e Comunità
+        role: MSc Biologia Sperimentale ed Applicata
+        note: 6 CFU &middot; 1st year
+      - name: Genomics and Evolution in Emerging Infectious Diseases
+        role: MSc Molecular Biology and Genetics
+        note: 6 CFU &middot; 2nd year
+      - name: Evolutionary Laboratories
+        role: Outreach
+        note: Browser simulations of drift, selection and adaptation
+        link: teaching/evolutionary-laboratories/main.html
+
+band:
+  - image: images/pages/farfalla.png
+    caption: Fieldwork · Lepidoptera
+  - image: images/pages/formica.png
+    caption: Formica paralugubris · western Alps
+  - image: images/pages/unipv.png
+    caption: Via Ferrata 9 · Pavia
+
+# university courses, listed on the teaching page
+courses:
+  - name: Zoologia
+    degree: Laurea Triennale in Scienze Biologiche
+    note: 9 CFU · 1° anno, 2° semestre
+    link: https://unipv.coursecatalogue.cineca.it/corsi/2026/10834/insegnamenti/2026/8205-LZ/2026/9999?coorte=2026&schemaid=18393&adCodFraz=500327
+  - name: Biologia delle Popolazioni e Comunità
+    degree: Laurea Magistrale in Biologia Sperimentale ed Applicata · Biologia Ambientale e Biodiversità
+    note: 6 CFU · 1° anno, 1° semestre
+    link: https://unipv.coursecatalogue.cineca.it/corsi/2026/10835/insegnamenti/2026/8350/2026/2?coorte=2026&schemaid=18399
+  - name: Genomics and Evolution in Emerging Infectious Diseases
+    degree: MSc in Molecular Biology and Genetics · Molecular and Digital Biology
+    note: 6 CFU · 2nd year, 1st semester
+    link: https://unipv.coursecatalogue.cineca.it/corsi/2025/10837/insegnamenti/2026/20022/2025/2?coorte=2025&schemaid=18416
+
+# seminars offered to schools
+seminars:
+  - level: Scuola primaria
+    title: Vestiti da vespa
+    text: Perché gli insetti si travestono da foglie, e la vespa si veste di giallo e nero? Grandi storie di piccoli animali, da fare e da ascoltare.
+  - level: Secondaria di I grado
+    title: Dall'Alga alla Zebra
+    text: Come si origina la biodiversità? Adattamenti sorprendenti, forme mirabolanti ed estinzioni inaspettate, lette alla luce dell'evoluzione.
+  - level: Secondaria di II grado
+    title: Mutazioni ed evoluzione
+    text: Cosa sono le mutazioni, perché avvengono e che fine fanno? Alle origini della biodiversità, con la matita in mano.

@@ -1,6 +1,6 @@
 ---
 name: Gabriele Bambini
-image: images/sassi.png
+image: images/team/sassi.jpg
 # description: MSc student
 role: grad
 links:

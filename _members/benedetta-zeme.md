@@ -1,6 +1,6 @@
 ---
 name: Benedetta Zeme
-image: images/team/sassi.png
+image: images/team/sassi.jpg
 # description: BSc student
 role: undergrad
 

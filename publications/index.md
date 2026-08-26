@@ -5,26 +5,6 @@ nav:
   tooltip: Published works
 ---
 
-# {% include icon.html icon="fa-solid fa-microscope" %}Publications
+{% include section.html size="full" %}
 
-If you have any question about our work, please [contact us](https://evolinus.github.io/zooe/contact/).
-
-{% include section.html %}
-
-{% include search-box.html %}
-
-{% include search-info.html %}
-
-
-## All
-
-{% 
-  include list.html
-  data="citations"
-  component="citation"
-  style="rich" 
-%}
-
-
-
-
+{% include fr-publications.html %}

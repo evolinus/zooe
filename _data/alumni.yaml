@@ -1,0 +1,50 @@
+# people who have worked in the lab, grouped by the role they held here.
+# used by the People page (_includes/fr-people.html).
+
+- key: Postdocs
+  people:
+    - name: Alba Marino
+
+- key: PhD
+  people:
+    - name: Federica Valerio
+    - name: Nihel Oueslati
+      note: Co-supervision · visiting from University of Monastir, Tunisia
+    - name: Asma Ghedir
+      note: Co-supervision · visiting from University of Monastir, Tunisia
+    - name: Burcu Köse
+      note: Visiting · Niğde Ömer Halisdemir University, Turkey
+
+- key: MSc
+  people:
+    - name: Vani Jain
+    - name: Gabriele Bambini
+    - name: Giulia Mercati
+    - name: Dibyojyoti Chattopadhyay
+    - name: Aromita Mallik
+    - name: Corinne Castellano
+    - name: Verdiana Fazio
+    - name: Alessandro Macchia
+    - name: Lucia Foresto
+    - name: Saja Boulad
+    - name: Paola Staffiere
+
+- key: BSc
+  people:
+    - name: Simone Raggi
+    - name: Giorgia Ruggenenti
+    - name: Astra Clelia Bertelli
+      link: https://www.cleliasportfolio.xyz
+    - name: Gaia Ruga
+    - name: Lorenzo Vecchio
+    - name: Mattia Vignoli
+    - name: Margherita Toppi
+    - name: Anita Raccanello
+    - name: Giulia Mercati
+    - name: Samuele Tarozzo
+    - name: Mariam Mahmoud
+    - name: Emma Pesenti
+    - name: Elisa Miragliotta
+    - name: Erica Melchionda
+    - name: Morea Tomasi
+    - name: Daria Marzanati

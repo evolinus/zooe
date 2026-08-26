@@ -1,6 +1,6 @@
 ---
 name: Giulia Mercati
-image: images/Giulia-Mercati.png
+image: images/team/Giulia-Mercati.jpg
 # description: MSc student
 role: grad
 links:

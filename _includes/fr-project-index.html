@@ -1,0 +1,53 @@
+{% comment %}
+  clickable index of the featured projects + a detail panel.
+  needs organism / question / method / credit (and optional fit) on each
+  featured entry in _data/projects.yaml — see _data/projects.patch.yaml.
+{% endcomment %}
+{% assign featured = site.data.projects | where_exp: "p", "p.group == 'featured'" %}
+
+<div class="fr fr-work" id="current-work" data-fr-index>
+  <div class="fr-work-list">
+    <div class="fr-section-head">
+      <h2 class="fr-h6">Current work</h2>
+    </div>
+
+    {% for p in featured %}
+      <button
+        type="button"
+        class="fr-row"
+        data-fr-row="{{ forloop.index0 }}"
+        aria-selected="{% if forloop.index0 == 1 %}true{% else %}false{% endif %}"
+      >
+        <span class="fr-row-body">
+          <span class="fr-row-title">{{ p.title }}</span>
+          {% if p.organism %}<em class="fr-row-organism">{{ p.organism }}</em>{% endif %}
+        </span>
+        {% if p.method %}<span class="fr-label">{{ p.method }}</span>{% endif %}
+      </button>
+    {% endfor %}
+
+    <a class="fr-btn fr-btn-ghost" href="{{ "research" | relative_url }}">All research projects &rarr;</a>
+  </div>
+
+  <div class="fr-work-detail">
+    {% for p in featured %}
+      <div
+        class="fr-panel"
+        data-fr-panel="{{ forloop.index0 }}"
+        {% unless forloop.index0 == 1 %}hidden{% endunless %}
+      >
+        {% comment %} fit: contain keeps a diagram whole; the default crops a photo {% endcomment %}
+        <div class="fr-figure" data-fit="{{ p.fit | default: "cover" }}">
+          <img src="{{ p.image | relative_url | uri_escape }}" alt="{{ p.title }}" loading="lazy">
+        </div>
+        {% if p.organism %}<p class="fr-label">{{ p.organism }}</p>{% endif %}
+        {% if p.question %}<p class="fr-panel-question">{{ p.question }}</p>{% endif %}
+        <p class="fr-panel-text">
+          {{ p.blurb | default: p.description | markdownify | strip_html | truncate: 320 }}
+        </p>
+        {% if p.credit %}<p class="fr-panel-credit">{{ p.credit }}</p>{% endif %}
+        <a class="fr-btn fr-btn-ghost" href="{{ "research" | relative_url }}">Read the full project &rarr;</a>
+      </div>
+    {% endfor %}
+  </div>
+</div>

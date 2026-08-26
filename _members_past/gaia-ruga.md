@@ -1,6 +1,6 @@
 ---
 name: Gaia Ruga
-image: images/Gaia-Ruga.png
+image: images/team/Gaia-Ruga.jpg
 # description: BSc student
 role: undergrad
 aliases:

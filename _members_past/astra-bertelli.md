@@ -1,6 +1,6 @@
 ---
 name: Astra Clelia Bertelli
-image: images/Astra-Bertelli.jpg
+image: images/team/Astra-Bertelli.jpg
 # description: BSc student
 role: undergrad
 aliases:

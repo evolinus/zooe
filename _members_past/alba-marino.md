@@ -1,6 +1,6 @@
 ---
 name: Alba Marino
-image: images/Alba-Marino.jpeg
+image: images/team/Alba-Marino.jpeg
 # description: BSc student
 role: postdoc
 aliases:

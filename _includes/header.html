@@ -8,11 +8,14 @@
 
 <header
   class="background"
-  style="--image: url('{{ image | relative_url | uri_escape }}')"
+  {% if image %}
+    style="--image: url('{{ image | relative_url | uri_escape }}')"
+  {% endif %}
   {% if dark == true or dark == false %}
     data-dark="{{ dark }}"
   {% endif %}
-  {% if page.url == "/" %}
+  {% comment %} CHANGED: the big centred header is now opt-out per page {% endcomment %}
+  {% if page.url == "/" and page.big-header != false %}
     data-big
   {% endif %}
 >

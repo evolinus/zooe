@@ -1,0 +1,97 @@
+{% comment %}
+  teaching page in the first-run language. courses and school seminars come from
+  _data/first_run.yaml; the simulations are the Evolutionary Laboratories app.
+{% endcomment %}
+{% assign fr = site.data.first_run %}
+
+<div class="fr-page">
+  <div class="fr-strip">
+    <p class="fr-eyebrow">Teaching &amp; outreach</p>
+    <h1 class="fr-title">Courses, simulations, and evolution in schools.</h1>
+  </div>
+
+  <div class="fr-cols fr-cols-2">
+    <div>
+      <h2 class="fr-h6">University courses</h2>
+      {% for course in fr.courses %}
+        <div class="fr-course">
+          <div>
+            <a class="fr-course-name" href="{{ course.link }}">{{ course.name }}</a>
+            <div class="fr-course-note">{{ course.degree }}</div>
+          </div>
+          <div class="fr-course-link">{{ course.note }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="fr-ink">
+      <p class="fr-eyebrow">Open in the browser</p>
+      <h3 style="margin: 8px 0 10px">Evolutionary Laboratories</h3>
+      <p class="fr-ink-text">
+        Interactive simulations for teaching genetic drift, selection, adaptation,
+        lineage branching and mutation. Built for classroom and outreach use — no
+        install, no account.
+      </p>
+      <a
+        class="fr-btn fr-btn-primary fr-btn-block"
+        style="margin-top: auto"
+        href="{{ "teaching/evolutionary-laboratories/main.html" | relative_url }}"
+      >Launch the simulations</a>
+    </div>
+  </div>
+
+  <div class="fr-strip" style="padding-bottom: 0">
+    <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
+    <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
+      Partecipiamo regolarmente alla
+      <a href="https://www.sharper-night.it/sharper-pavia/">Notte dei Ricercatori</a>
+      (Researchers' Night). Inoltre teniamo seminari e laboratori didattici riguardo
+      l'evoluzione e la biodiversità, per esempio all'interno degli eventi
+      <a href="https://www.sharper-night.it/researchers-at-schools/pavia-scuole/">researchers@school</a>.
+      Per informazioni contattate
+      <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
+    </p>
+  </div>
+
+  <div class="fr-cols fr-cols-3">
+    {% for seminar in fr.seminars %}
+      <div>
+        <p class="fr-member-role">{{ seminar.level }}</p>
+        <h3 class="fr-member-name" style="margin: 8px 0">{{ seminar.title }}</h3>
+        <p>{{ seminar.text }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="fr-figure-split">
+    <div class="fr-figure" data-fit="contain" style="align-self: start">
+      <img src="{{ "images/pages/evoSSI.png" | relative_url }}" alt="Evolution at school" loading="lazy">
+    </div>
+    <div>
+      <h2 class="fr-h6" style="margin-bottom: 10px">Evolution at school</h2>
+      <div class="fr-prose">
+        <p>
+          Insegnare l'evoluzione correttamente non è semplice. Nell'ambito della COST
+          Action <a href="https://www.euroscitizen.eu">EuroScitizen</a>, insieme a
+          ricercatori e docenti di tutta Europa, abbiamo analizzato quali concetti
+          evolutivi sono trattati nei libri di testo scientifici europei, e come
+          l'evoluzione possa essere insegnata attraverso questioni socio-scientifiche.
+        </p>
+        <p class="fr-prose-alt">
+          <em>
+            Teaching evolution correctly is not easy. Within the COST Action
+            EuroScitizen, with researchers and educators from across Europe, we analysed
+            which evolutionary concepts European science textbooks cover, and how
+            evolution can be taught through socio-scientific issues.
+          </em>
+        </p>
+      </div>
+      <div class="fr-more-links" style="font-size: 14px">
+        <a href="https://doi.org/10.1186/s12052-024-00203-2">Evolution content in school textbooks: eight European countries &rarr;</a>
+        <a href="https://doi.org/10.1371/journal.pone.0308901">Socioscientific issues in the elementary curricula &rarr;</a>
+        <a href="https://ria.ua.pt/bitstream/10773/35673/3/Learning_evolution_through_SSI.pdf">E-book: Learning evolution through socio-scientific issues (free) &rarr;</a>
+        <a href="https://ria.ua.pt/bitstream/10773/43992/1/SSI%20IT.pdf">E-book in italiano: Apprendere l'evoluzione attraverso le questioni socio-scientifiche &rarr;</a>
+      </div>
+    </div>
+  </div>
+</div>

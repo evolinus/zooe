@@ -1,0 +1,44 @@
+{% comment %} homepage hero: accent field on the left, warm rail on the right {% endcomment %}
+<div class="fr fr-hero">
+  <div class="fr-hero-main">
+    <div class="fr-hero-top">
+      <p class="fr-kicker">Zoology &amp; Evolution &middot; University of Pavia</p>
+      {% assign logo = "images/backgrounds/logo.png" %}
+      <img class="fr-hero-mark" src="{{ logo | relative_url | uri_escape }}" alt="{{ site.title }}">
+    </div>
+    <h1 class="fr-display">We study the genetic basis of biodiversity.</h1>
+    <p class="fr-lede">
+      Molecular evolution and population genetics, applied to natural insect
+      populations and other animals, to work out which processes &mdash; neutral
+      and selective &mdash; build adaptive traits.
+    </p>
+  </div>
+
+  <aside class="fr-rail">
+    <div class="fr-rail-row">
+      <span class="fr-label">Head of lab</span>
+      <span class="fr-value">
+        <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>,
+        Associate Professor of Zoology
+      </span>
+    </div>
+    <div class="fr-rail-row">
+      <span class="fr-label">Department</span>
+      <span class="fr-value">
+        zoo_e lab &middot; <a href="https://dbb.dip.unipv.it/en">Department of Biology and Biotechnology</a>, University of Pavia
+      </span>
+    </div>
+
+    <div class="fr-highlight">
+      <p class="fr-label fr-label-accent">Outreach</p>
+      <p class="fr-highlight-title">Evolutionary Laboratories</p>
+      <p class="fr-highlight-text">
+        Browser simulations of drift, selection and adaptation, used in schools
+      </p>
+      <a class="fr-btn fr-btn-ghost" href="{{ "teaching/evolutionary-laboratories/main.html" | relative_url }}">
+        Open the simulations &rarr;
+      </a>
+    </div>
+
+  </aside>
+</div>

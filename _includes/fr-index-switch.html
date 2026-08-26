@@ -1,0 +1,58 @@
+{% comment %}
+  one dense index, three sets:
+  People from _members, Teaching from _data/first_run.yaml,
+  Recent publications straight from the cited data (newest four).
+{% endcomment %}
+{% assign members = site.members | sort: "role" %}
+{% assign sets = site.data.first_run.sets %}
+{% assign recent = site.data.citations | sort: "date" | reverse %}
+
+<div class="fr fr-switch" data-fr-switch>
+  <div class="fr-switch-head">
+    <div class="fr-seg">
+      <button type="button" class="fr-seg-opt" data-fr-tab="people" aria-selected="true">People</button>
+      {% for set in sets %}
+        <button type="button" class="fr-seg-opt" data-fr-tab="{{ set.key | slugify }}" aria-selected="false">{{ set.key }}</button>
+      {% endfor %}
+      <button type="button" class="fr-seg-opt" data-fr-tab="recent-publications" aria-selected="false">Recent publications</button>
+    </div>
+  </div>
+
+  <div class="fr-set" data-fr-set="people">
+    {% for m in members %}
+      {% assign type = site.data.types[m.role] %}
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="{{ m.url | relative_url | uri_escape }}">{{ m.name }}</a>
+        <span class="fr-index-role">{{ m.description | default: type.description }}</span>
+        <span class="fr-index-note">{{ m.note }}</span>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% for set in sets %}
+    <div class="fr-set" data-fr-set="{{ set.key | slugify }}" hidden>
+      {% for row in set.rows %}
+        <div class="fr-index-row">
+          {% if row.link %}
+            <a class="fr-index-name" href="{{ row.link | relative_url }}">{{ row.name }}</a>
+          {% else %}
+            <span class="fr-index-name">{{ row.name }}</span>
+          {% endif %}
+          <span class="fr-index-role">{{ row.role }}</span>
+          <span class="fr-index-note">{{ row.note }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+
+  <div class="fr-set" data-fr-set="recent-publications" hidden>
+    {% for c in recent limit: 4 %}
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="{{ c.link | default: c.doi }}">{{ c.title }}</a>
+        <span class="fr-index-role">{{ c.publisher }}</span>
+        <span class="fr-index-note">{{ c.date | date: "%Y" }}{% if c.id %} &middot; {{ c.id | remove: "doi:" }}{% endif %}</span>
+      </div>
+    {% endfor %}
+    <a class="fr-btn fr-btn-ghost" href="{{ "publications" | relative_url }}">All publications, newest first &rarr;</a>
+  </div>
+</div>
