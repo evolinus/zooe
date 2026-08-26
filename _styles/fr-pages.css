@@ -224,6 +224,38 @@
   text-align: left;
 }
 
+/* the consortium panels: a half of the page each, side by side */
+.fr-networks > * {
+  padding-top: 24px;
+  padding-bottom: 28px;
+}
+
+.fr-network-mark {
+  display: block;
+  margin-bottom: 16px;
+}
+.fr-network-mark img {
+  height: 64px;
+  width: auto;
+  max-width: 100%;
+}
+
+.fr-network-title {
+  margin: 0 0 8px;
+  font-family: var(--heading);
+  font-weight: var(--bold);
+  font-size: 1.3rem;
+  text-align: left;
+}
+
+.fr-network-text {
+  margin: 0 0 10px;
+  max-width: 52ch;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: left;
+}
+
 .fr-logo-row {
   display: flex;
   align-items: center;
