@@ -145,14 +145,17 @@
 /* — hero: red on the left panel only, warm rail on the right — */
 .fr-hero {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  /* an empty first column carries the page indent, so the hero text lands on the
+     same measure as every section below. a padding on the panel itself cannot do
+     this: its percentage would resolve against the 1fr column, not the page. */
+  grid-template-columns: max(40px, (100% - 1200px) / 2) minmax(0, 1fr) 360px;
+  background: var(--primary);
+  color: var(--background);
 }
 
 .fr-hero-main {
-  /* full-bleed section, so the panel carries the page's own left padding */
-  padding: 60px 40px 56px max(40px, (100% - 1000px) / 2);
-  background: var(--primary);
-  color: var(--background);
+  grid-column: 2;
+  padding: 60px 40px 56px 0;
 }
 
 .fr-hero-main a {
@@ -174,6 +177,7 @@
 }
 
 .fr-rail {
+  grid-column: 3;
   display: flex;
   flex-direction: column;
   padding: 32px 32px 28px;
@@ -459,7 +463,11 @@
     gap: 32px;
   }
   .fr-hero-main {
+    grid-column: auto;
     padding: 44px 40px;
+  }
+  .fr-rail {
+    grid-column: auto;
   }
   .fr-index-row {
     grid-template-columns: 1fr;

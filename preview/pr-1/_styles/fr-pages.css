@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* interior pages in the first-run language — Modernist: flush left, 2px rules, 0 radius */
 .fr-page {
-  --pad: max(40px, calc((100% - 1000px) / 2));
+  --pad: max(40px, calc((100% - 1200px) / 2));
   text-align: left;
   font-family: var(--body);
 }
@@ -161,8 +161,10 @@
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--divider);
-  font-size: 14px;
-  line-height: 1.6;
+  /* the long text sits a step below the summary above it */
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--dark-gray);
 }
 .fr-more p {
   margin: 0 0 10px;
