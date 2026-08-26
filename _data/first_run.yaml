@@ -1,22 +1,5 @@
-# content for the homepage index switch and the closing image band
-# (People come from _members, Recent publications from _data/citations.yaml)
-
-sets:
-  - key: Teaching
-    rows:
-      - name: Zoologia
-        role: BSc Scienze Biologiche
-        note: 9 CFU &middot; 1&deg; anno, 2&deg; semestre
-      - name: Biologia delle Popolazioni e Comunità
-        role: MSc Biologia Sperimentale ed Applicata
-        note: 6 CFU &middot; 1st year
-      - name: Genomics and Evolution in Emerging Infectious Diseases
-        role: MSc Molecular Biology and Genetics
-        note: 6 CFU &middot; 2nd year
-      - name: Evolutionary Laboratories
-        role: Outreach
-        note: Browser simulations of drift, selection and adaptation
-        link: teaching/evolutionary-laboratories/main.html
+# the closing image band, the university courses and the school seminars
+# (recent publications come straight from _data/citations.yaml)
 
 band:
   - image: images/pages/farfalla.png
@@ -31,15 +14,15 @@ band:
 courses:
   - name: Zoologia
     degree: Laurea Triennale in Scienze Biologiche
-    note: 9 CFU · 1° anno, 2° semestre
+    note: 1° anno, 2° semestre
     link: https://unipv.coursecatalogue.cineca.it/corsi/2026/10834/insegnamenti/2026/8205-LZ/2026/9999?coorte=2026&schemaid=18393&adCodFraz=500327
   - name: Biologia delle Popolazioni e Comunità
     degree: Laurea Magistrale in Biologia Sperimentale ed Applicata · Biologia Ambientale e Biodiversità
-    note: 6 CFU · 1° anno, 1° semestre
+    note: 1° anno, 1° semestre
     link: https://unipv.coursecatalogue.cineca.it/corsi/2026/10835/insegnamenti/2026/8350/2026/2?coorte=2026&schemaid=18399
   - name: Genomics and Evolution in Emerging Infectious Diseases
     degree: MSc in Molecular Biology and Genetics · Molecular and Digital Biology
-    note: 6 CFU · 2nd year, 1st semester
+    note: 2nd year, 1st semester
     link: https://unipv.coursecatalogue.cineca.it/corsi/2025/10837/insegnamenti/2026/20022/2025/2?coorte=2025&schemaid=18416
 
 # seminars offered to schools
