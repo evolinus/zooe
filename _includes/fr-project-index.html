@@ -45,7 +45,6 @@
         <p class="fr-panel-text">
           {{ p.blurb | default: p.description | markdownify | strip_html | truncate: 320 }}
         </p>
-        {% if p.credit %}<p class="fr-panel-credit">{{ p.credit }}</p>{% endif %}
         <a class="fr-btn fr-btn-ghost" href="{{ "research" | relative_url }}">Read the full project &rarr;</a>
       </div>
     {% endfor %}
