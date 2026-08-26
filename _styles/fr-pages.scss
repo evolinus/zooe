@@ -305,7 +305,8 @@ $wrap: 900px;
 /* — teaching — */
 .fr-with-media {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  /* film first, at 60% of the third it used to take; the text fills the rest */
+  grid-template-columns: 1fr 4fr;
   gap: 40px;
   align-items: start;
 }

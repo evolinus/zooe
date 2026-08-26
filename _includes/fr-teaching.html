@@ -42,6 +42,17 @@
 
   <div class="fr-strip" style="padding-bottom: 0">
     <div class="fr-with-media">
+      {% comment %} silent, so it stays behind controls rather than autoplaying {% endcomment %}
+      <video
+        class="fr-film"
+        controls
+        playsinline
+        preload="none"
+        poster="{{ "images/pages/disegnolo.poster.jpg" | relative_url }}"
+      >
+        <source src="{{ "images/pages/disegnolo.mp4" | relative_url }}" type="video/mp4">
+      </video>
+
       <div>
         <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
         <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
@@ -54,17 +65,6 @@
           <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
         </p>
       </div>
-
-      {% comment %} silent, so it stays behind controls rather than autoplaying {% endcomment %}
-      <video
-        class="fr-film"
-        controls
-        playsinline
-        preload="none"
-        poster="{{ "images/pages/disegnolo.poster.jpg" | relative_url }}"
-      >
-        <source src="{{ "images/pages/disegnolo.mp4" | relative_url }}" type="video/mp4">
-      </video>
     </div>
   </div>
 
