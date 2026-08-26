@@ -2,9 +2,9 @@
 # (recent publications come straight from _data/citations.yaml)
 
 band:
-  - image: images/pages/farfalla.png
+  - image: images/pages/farfalla.jpg
     caption: Fieldwork · Lepidoptera
-  - image: images/pages/formica.png
+  - image: images/pages/formica.jpg
     caption: Formica paralugubris · western Alps
   - image: images/pages/UniPV_logo.png
     caption: Via Ferrata 9 · Pavia

@@ -4,7 +4,6 @@
   method: Population genomics · Lab experiments
   question: Can transposable elements supply the mutations that let an invading mosquito adapt this fast?
   blurb: More than half of the tiger mosquito genome is transposable elements. We are mapping the TE landscape across the Culicidae and in natural populations, and testing in the lab whether thermal stress mobilises them.
-  credit: With O. Rota-Stabelli (Trento) and A. Luchetti (Bologna)
   fit: contain
   image: images/pages/zanzaTE.png
   description: Despite the severe bottleneck associated with its invasion, the tiger mosquito *Aedes albopictus* shows a remarkable ability to adapt to its new temperate environment. Can transposable elements (TEs) play a role as mutational agents allowing such rapid adaptation? This is particularly relevant for *Ae. albopictus*, where more than half of the genome consists of TEs. To explore this possibility, we are currently studying the TE landscape across the entire Culicidae family and in natural population of the tiger mosquito, as well as using laboratory experiments to test the hypothesis that TEs are mobilized under (thermal) stress. These complementary analyses have the potential to provide new insights into mosquito genome evolution and invasiveness. This project is in tight collaboration with [Omar Rota-Stabelli](https://scholar.google.com/citations?user=of14yMwAAAAJ) (University of Trento) and [Andrea Luchetti](https://scholar.google.com/citations?hl=en&user=zSmoXaoAAAAJ) (University of Bologna)
@@ -15,8 +14,7 @@
   method: Historical DNA · Comparative genomics
   question: What happened to the wood ants moved from the Alps to the Apennines for pest control?
   blurb: We are sequencing individuals from the native and introduced ranges, plus historical specimens from the translocation experiments, to read the evolution of this species in space and time.
-  credit: With Bologna, Florence, Pavia and Museo Kosmos
-  image: images/pages/formica.png
+  image: images/pages/formica.jpg
   description: The mountain wood ant *Formica paralugubris*, native of the western Alps, is extremely important for the forest ecosystem functioning. Because of the intense predatory activity on other arthropods, this species has been introduced to the Apennines (Italy) and other localities for pest control. We are currently sequencing individuals sampled from the native and introduced ranges, as well as historical specimens from the translocation experiments, to assess the evolution in space and time of this ant species. This project benefits from a collaboration with with [Fabrizio Ghiselli and Andrea Luchetti](https://sites.google.com/view/evo-com-unibo/home) (University of Bologna), [Alberto Masoni and Giacomo Santini]( https://www.ecologyandbiodiversity.unifi.it/vp-6-members.html#) (University of Florence), [Anna Olivieri](https://unipv.unifind.cineca.it/individual?uri=http%3A%2F%2Firises.unipv.it%2Fresource%2Fperson%2F665168) (University of Pavia), and the [Kosmos](https://museokosmos.eu) natural history museum of Pavia. For more information visit the WWA project [official website](https://sites.google.com/view/woodwideants-en/home).
 
 - title: Insect comparative genomics
@@ -25,8 +23,6 @@
   method: Comparative genomics
   question: Which genes underlie the remarkable diversity of Diptera biology?
   blurb: Using the growing pile of public genomic data, we follow chemosensory genes and opsins across fruit flies, true fruit flies and tse-tse flies — several of them pests and disease vectors of global importance.
-  credit: A training ground for students learning comparative methods
-  #image: images/tff.jpg
   image: images/pages/tephritidae.png
   description: We study the genetic basis of the remarkable diversity in Diptera biology. Several students in our lab have used or are using this system to learn the comparative approaches and bioinformatucs tools necessary to study and understand the evolution of, for example, chemosensory genes and opsins. We are taking advantage of the increasing amount of genomic data available in public databases, focusing in particular on Drosophilidae and Tephritidae (true fruit flies, such as *Bactrocera* and *Zeugodacus*), which include several important agricultural pests of global importance, and on *Glossina* (tse-tse flies), which are vectors for trypanosomes. 
 
@@ -36,7 +32,6 @@
   method: Deep sequencing · Experiments
   question: Can a mutation in a single cell be selected across an entire colony?
   blurb: We deep-sequence laboratory-reared colonies of a colonial tunicate to test whether selection or somatic drift raises the frequency of somatic mutations — and whether they reach the next generation.
-  credit: Led by S. Tiozzo (CNRS/Sorbonne), with Cambridge and ULB
   image: images/pages/botryllus.png
   description: In this project, we combine bioinformatic and experimental approaches to characterize the pattern of somatic genetic variation in the colonial tunicate *Botryllus schlosseri* and to test its dynamics with respect to different levels of selection (colonies, modules and cells). In particular, we are using deep-sequencing to identify somatic mutations in laboratory-reared colonies. This will allow us to test whether selection or somatic drift can increase their frequency in the colony and whether they can eventually be passed on to the next generation. This project is leaded by [Stefano Tiozzo](https://www.tiozzolab.org) (CNRS/Sorbonne Université) and sees the collaboration of [Alex Cagan](https://www.alexcagan.com/) (University of Cambridge) and [Jean-François Flot](https://ebe.ulb.ac.be/ebe/Flot.html) (Université Libre de Bruxelles).
   # link: https://github.com/
