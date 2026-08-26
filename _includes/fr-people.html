@@ -1,7 +1,7 @@
 {% comment %}
   people page in the first-run language. cards come from _members/*.md — the
-  +/– disclosure opens the member's own opening paragraph and links, and the
-  full profile page is still one click away. alumni come from _data/alumni.yaml.
+  "+" button links straight to the member's full profile page. alumni come from
+  _data/alumni.yaml.
 {% endcomment %}
 {% assign pi = site.members | where_exp: "m", "m.role == 'principal-investigator'" %}
 {% assign rest = site.members | where_exp: "m", "m.role != 'principal-investigator'" | sort: "name" %}
@@ -42,41 +42,25 @@
     {% for member in team %}
       {% assign type = site.data.types[member.role] %}
       <div class="fr-member">
-        <div class="fr-member-figure">
+        <a class="fr-member-figure" href="{{ member.url | relative_url }}" tabindex="-1" aria-hidden="true">
           <img
             src="{{ member.image | relative_url | uri_escape }}"
             alt="{{ member.name }}"
             loading="lazy"
             {% include fallback.html %}
           >
-        </div>
+        </a>
 
         <div class="fr-member-head">
           <div>
             <h3 class="fr-member-name">{{ member.name }}</h3>
             <span class="fr-member-role">{{ member.description | default: type.description }}</span>
           </div>
-          <button
-            type="button"
+          <a
             class="fr-plus"
-            aria-expanded="false"
-            aria-label="More about {{ member.name }}"
-            data-fr-disclose="member-{{ forloop.index }}"
-          >+</button>
-        </div>
-
-        <div class="fr-more" id="member-{{ forloop.index }}" hidden>
-          {{ member.excerpt | markdownify | strip_html | truncate: 420 }}
-          <div class="fr-more-links">
-            {% for link in member.links %}
-              {% assign key = link[0] %}
-              {% assign kind = site.data.types[key] %}
-              <a href="{{ kind.link | default: "$VALUE" | replace: "$VALUE", link[1] }}">
-                {{ kind.text | default: key }}
-              </a>
-            {% endfor %}
-            <a href="{{ member.url | relative_url }}">Full profile &rarr;</a>
-          </div>
+            href="{{ member.url | relative_url }}"
+            aria-label="Open {{ member.name }}'s full profile"
+          >+</a>
         </div>
       </div>
     {% endfor %}

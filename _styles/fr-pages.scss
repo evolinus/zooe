@@ -111,6 +111,9 @@ $wrap: 900px;
 /* the +/– disclosure */
 .fr-plus {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
   padding: 0;
@@ -122,6 +125,7 @@ $wrap: 900px;
   font-size: 17px;
   line-height: 1;
   color: var(--text);
+  text-decoration: none;
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
   &:hover { background: rgba(32, 30, 29, 0.07); }
@@ -208,10 +212,17 @@ $wrap: 900px;
   &:last-child { border-right: none; }
 }
 .fr-member-figure {
+  display: block;
   overflow: hidden;
   aspect-ratio: 1 / 1;
   background: var(--background-alt);
-  img { width: 100%; height: 100%; object-fit: cover; }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition);
+  }
+  &:hover img { transform: scale(1.03); }
 }
 .fr-member-head {
   display: flex;
