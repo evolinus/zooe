@@ -3,33 +3,33 @@
 
 // colors
 [data-dark="false"] {
-  --primary: #0795d9;
-  --secondary: #7dd3fc;
-  --text: #000000;
-  --background: #ffffff;
-  --background-alt: #fafafa;
-  --light-gray: #e0e0e0;
-  --gray: #808080;
-  --dark-gray: #404040;
+  --primary: #D91D00;      // CHANGED — accent
+  --secondary: #fff0ad;    // CHANGED — selection / highlight (sunflower yellow)
+  --text: #201e1d;         // CHANGED — ink
+  --background: #f3f2f2;   // CHANGED — ground
+  --background-alt: #eae9e9;
+  --light-gray: #d7d3d3;
+  --gray: #9b9797;
+  --dark-gray: #605d5d;
   --overlay: #00000020;
 }
 [data-dark="true"] {
-  --primary: #0795d9;
-  --secondary: #075985;
-  --text: #ffffff;
-  --background: #181818;
-  --background-alt: #1c1c1c;
-  --light-gray: #404040;
-  --gray: #808080;
-  --dark-gray: #b0b0b0;
+  --primary: #ff563c;
+  --secondary: #6e5300;
+  --text: #f3f2f2;
+  --background: #201e1d;
+  --background-alt: #2d2b2b;
+  --light-gray: #444141;
+  --gray: #7d7979;
+  --dark-gray: #bab6b6;
   --overlay: #ffffff10;
 }
 
 :root {
-  // font families
-  --title: "Barlow", sans-serif;
-  --heading: "Barlow", sans-serif;
-  --body: "Barlow", sans-serif;
+  // font families — CHANGED to Archivo (fonts.html reads this file)
+  --title: "Archivo", sans-serif;
+  --heading: "Archivo", sans-serif;
+  --body: "Archivo", sans-serif;
   --code: "Roboto Mono", monospace;
 
   // font sizes
@@ -37,18 +37,19 @@
   --xl: 1.4rem;
   --xxl: 1.6rem;
 
-  // font weights
-  --thin: 200;
+  // font weights — CHANGED: Archivo 800 carries the headings
+  --thin: 400;
   --regular: 400;
-  --semi-bold: 500;
-  --bold: 600;
+  --semi-bold: 600;
+  --bold: 800;
 
   // text line spacing
-  --spacing: 2;
+  --spacing: 1.7;
   --compact: 1.5;
 
-  // effects
-  --rounded: 3px;
-  --shadow: 0 0 10px 0 var(--overlay);
+  // effects — CHANGED: nothing is rounded, dividers do the work
+  --rounded: 0px;
+  --divider: #{rgba(#201e1d, 0.4)};
+  --shadow: 0 1px 2px #{rgba(#2d2b2b, 0.14)};
   --transition: 0.2s ease;
 }
