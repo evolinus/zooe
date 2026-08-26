@@ -1,3 +1,7 @@
+{% comment %} capture the current page before the nav loop shadows `page` {% endcomment %}
+{% assign current_dir = page.dir %}
+{% assign current_url = page.url %}
+
 {% assign image = page.header | default: site.header %}
 {% assign dark = page.header-dark | is_nil: site.header-dark | is_nil: true %}
 
@@ -50,9 +54,15 @@
     %}
     {% for page in pages %}
       {% if page.nav %}
+        {% comment %} current when on this section's dir, or on a page it
+          claims via nav.match (e.g. People owns the /members/ profiles) {% endcomment %}
+        {% assign is_current = false %}
+        {% if page.dir == current_dir %}{% assign is_current = true %}{% endif %}
+        {% if page.nav.match and current_url contains page.nav.match %}{% assign is_current = true %}{% endif %}
         <a
           href="{{ page.dir | relative_url | uri_escape }}"
           data-tooltip="{{ page.nav.tooltip | xml_escape }}"
+          {% if is_current %}aria-current="page"{% endif %}
         >
           {{ page.title }}
         </a>

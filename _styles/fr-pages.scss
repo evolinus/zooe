@@ -204,6 +204,8 @@ $wrap: 900px;
 .fr-team {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  /* inset to the page measure so it lines up with the other sections */
+  padding: 0 var(--pad);
   border-bottom: 2px solid var(--divider);
 }
 .fr-member {
