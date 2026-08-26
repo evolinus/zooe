@@ -97,7 +97,8 @@ nav > a {
   padding: 5px;
 }
 
-nav > a:hover {
+nav > a:hover,
+nav > a[aria-current=page] {
   color: var(--primary);
 }
 
@@ -156,7 +157,8 @@ header.background .title-text {
   color: var(--bar-ink);
 }
 
-header.background a:hover {
+header.background a:hover,
+header.background a[aria-current=page] {
   color: var(--primary);
 }
 
