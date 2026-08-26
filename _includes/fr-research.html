@@ -1,6 +1,6 @@
 {% comment %}
   research page in the first-run language. rows come from _data/projects.yaml:
-  featured entries carry organism / method / question / credit (+ fit), and the
+  featured entries carry organism / method / question (+ fit), and the
   full description — links and all — is what the +/– disclosure reveals.
 {% endcomment %}
 {% assign featured = site.data.projects | where_exp: "p", "p.group == 'featured'" %}
@@ -50,7 +50,6 @@
 
         <div class="fr-proj-meta">
           {% if p.method %}<span class="fr-label">{{ p.method }}</span>{% endif %}
-          {% if p.credit %}<span class="fr-proj-credit">{{ p.credit }}</span>{% endif %}
         </div>
 
         <div class="fr-more" id="project-{{ forloop.index }}" hidden>
