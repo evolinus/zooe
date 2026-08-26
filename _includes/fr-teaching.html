@@ -10,7 +10,7 @@
     <h1 class="fr-title">Courses, simulations, and evolution in schools.</h1>
   </div>
 
-  <div class="fr-cols fr-cols-2">
+  <div class="fr-cols fr-cols-2-1">
     <div>
       <h2 class="fr-h6">University courses</h2>
       {% for course in fr.courses %}
@@ -40,17 +40,40 @@
     </div>
   </div>
 
-  <div class="fr-strip" style="padding-bottom: 0">
-    <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
-    <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
-      Partecipiamo regolarmente alla
-      <a href="https://www.sharper-night.it/sharper-pavia/">Notte dei Ricercatori</a>
-      (Researchers' Night). Inoltre teniamo seminari e laboratori didattici riguardo
-      l'evoluzione e la biodiversità, per esempio all'interno degli eventi
-      <a href="https://www.sharper-night.it/researchers-at-schools/pavia-scuole/">researchers@school</a>.
-      Per informazioni contattate
-      <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
-    </p>
+  <div class="fr-schools">
+  <div class="fr-strip">
+    <div class="fr-with-media">
+      {% comment %}
+        silent and short, so it runs like a moving illustration. muted is what
+        makes autoplay allowed at all; controls stay so it can be stopped, and
+        fr-pages.js holds it still for anyone who asks for reduced motion.
+      {% endcomment %}
+      <video
+        class="fr-film"
+        autoplay
+        muted
+        loop
+        playsinline
+        controls
+        preload="auto"
+        poster="{{ "images/pages/disegnolo.poster.jpg" | relative_url }}"
+      >
+        <source src="{{ "images/pages/disegnolo.mp4" | relative_url }}" type="video/mp4">
+      </video>
+
+      <div>
+        <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
+        <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
+          Partecipiamo regolarmente alla
+          <a href="https://www.sharper-night.it/sharper-pavia/">Notte dei Ricercatori</a>
+          (Researchers' Night). Inoltre teniamo seminari e laboratori didattici riguardo
+          l'evoluzione e la biodiversità, per esempio all'interno degli eventi
+          <a href="https://www.sharper-night.it/researchers-at-schools/pavia-scuole/">researchers@school</a>.
+          Per informazioni contattate
+          <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
+        </p>
+      </div>
+    </div>
   </div>
 
   <div class="fr-cols fr-cols-3">
@@ -62,11 +85,16 @@
       </div>
     {% endfor %}
   </div>
+  </div>
 
   <div class="fr-figure-split">
-    <div class="fr-figure" data-fit="contain" style="align-self: start">
-      <img src="{{ "images/pages/evoSSI.png" | relative_url }}" alt="Evolution at school" loading="lazy">
-    </div>
+    {% comment %} a book cover, so it keeps its own proportions rather than a 4:3 crop {% endcomment %}
+    <img
+      class="fr-cover"
+      src="{{ "images/pages/SSI.jpg" | relative_url }}"
+      alt="Cover of the e-book “Apprendere l'evoluzione attraverso le questioni socio-scientifiche”"
+      loading="lazy"
+    >
     <div>
       <h2 class="fr-h6" style="margin-bottom: 10px">Evolution at school</h2>
       <div class="fr-prose">

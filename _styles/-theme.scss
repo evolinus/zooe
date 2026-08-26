@@ -3,25 +3,35 @@
 
 // colors
 [data-dark="false"] {
-  --primary: #D91D00;      // CHANGED — accent
-  --secondary: #fff0ad;    // CHANGED — selection / highlight (sunflower yellow)
-  --text: #201e1d;         // CHANGED — ink
-  --background: #f3f2f2;   // CHANGED — ground
-  --background-alt: #eae9e9;
-  --light-gray: #d7d3d3;
-  --gray: #9b9797;
-  --dark-gray: #605d5d;
+  --primary: #D83C2D;      // accent
+  --primary-deep: #A82A1E; // accent, one step down: small text and hovers
+  --primary-hover: #B32E21;
+  --secondary: #B3CFCD;    // selection / highlight
+  --highlight: #{rgba(#B3CFCD, 0.55)};
+  --panel: #E9A431;        // the block colour: header, rail, ink panels
+  --panel-ink: #2A1B06;    // text on the panel colour
+  --text: #201e1d;         // ink
+  --background: #FFFAF0;   // ground
+  --background-alt: #F6EEDE;
+  --light-gray: #E0D2B8;
+  --gray: #A2947C;
+  --dark-gray: #6B6154;
   --overlay: #00000020;
 }
 [data-dark="true"] {
-  --primary: #ff563c;
-  --secondary: #6e5300;
-  --text: #f3f2f2;
-  --background: #201e1d;
-  --background-alt: #2d2b2b;
-  --light-gray: #444141;
-  --gray: #7d7979;
-  --dark-gray: #bab6b6;
+  --primary: #FF6A58;
+  --primary-deep: #FF8B7C;
+  --primary-hover: #FF8B7C;
+  --secondary: #3E5654;
+  --highlight: #{rgba(#B3CFCD, 0.22)};
+  --panel: #E9A431;        // the block colour holds in both themes
+  --panel-ink: #2A1B06;
+  --text: #FFF5E3;
+  --background: #241E14;
+  --background-alt: #322A1D;
+  --light-gray: #4A4132;
+  --gray: #8A7E6B;
+  --dark-gray: #C6BAA5;
   --overlay: #ffffff10;
 }
 
@@ -46,6 +56,10 @@
   // text line spacing
   --spacing: 1.7;
   --compact: 1.5;
+
+  // the top bar: black in both themes
+  --bar: #201e1d;
+  --bar-ink: #FFFAF0;
 
   // effects — CHANGED: nothing is rounded, dividers do the work
   --rounded: 0px;

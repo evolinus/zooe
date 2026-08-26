@@ -2,7 +2,7 @@
 <div class="fr fr-band">
   {% for plate in site.data.first_run.band %}
     <figure class="fr-plate">
-      <div class="fr-figure">
+      <div class="fr-figure" data-fit="{{ plate.fit | default: "cover" }}">
         <img src="{{ plate.image | relative_url | uri_escape }}" alt="{{ plate.caption }}" loading="lazy">
       </div>
       <figcaption class="fr-label">{{ plate.caption }}</figcaption>

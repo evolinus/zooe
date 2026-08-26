@@ -23,8 +23,9 @@ band:
     caption: Fieldwork · Lepidoptera
   - image: images/pages/formica.png
     caption: Formica paralugubris · western Alps
-  - image: images/pages/unipv.png
+  - image: images/pages/UniPV_logo.png
     caption: Via Ferrata 9 · Pavia
+    fit: contain
 
 # university courses, listed on the teaching page
 courses:

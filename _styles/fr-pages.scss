@@ -64,16 +64,16 @@ $wrap: 900px;
   align-items: end;
 }
 
-/* ink panel — the black block used for calls to action */
+/* the block panel used for calls to action */
 .fr-ink {
   display: flex;
   flex-direction: column;
   padding: 22px 24px;
-  background: var(--text);
-  color: var(--background);
-  a:not(.fr-btn) { color: var(--background); }
-  .fr-eyebrow { color: var(--background); }
-  h3 { color: var(--background); }
+  background: var(--panel);
+  color: var(--panel-ink);
+  a:not(.fr-btn) { color: var(--panel-ink); }
+  .fr-eyebrow { color: var(--panel-ink); }
+  h3 { color: var(--panel-ink); }
 }
 .fr-ink-text { margin: 8px 0 14px; font-size: 13px; line-height: 1.6; text-align: left; }
 
@@ -153,6 +153,13 @@ $wrap: 900px;
   > * { padding: 28px var(--pad); }
 }
 .fr-cols-2 { grid-template-columns: 1fr 1fr; > *:first-child { border-right: 2px solid var(--divider); } }
+.fr-cols-2-1 {
+  grid-template-columns: 2fr 1fr;
+  > *:first-child {
+    padding-right: 40px;
+    border-right: 2px solid var(--divider);
+  }
+}
 .fr-cols-3 {
   grid-template-columns: repeat(3, 1fr);
   > * { padding: 26px 28px; border-right: 2px solid var(--divider); }
@@ -206,7 +213,7 @@ $wrap: 900px;
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 .fr-member-note { margin: 8px 0 0; font-size: 13px; line-height: 1.55; text-align: left; color: var(--dark-gray); }
 
@@ -276,7 +283,7 @@ $wrap: 900px;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 .fr-pub-year {
   margin-top: 4px;
@@ -296,6 +303,33 @@ $wrap: 900px;
 }
 
 /* — teaching — */
+.fr-with-media {
+  display: grid;
+  /* film first, at 60% of the third it used to take; the text fills the rest */
+  grid-template-columns: 1fr 4fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* the schools block sits on the highlight colour, end to end */
+.fr-schools {
+  background: var(--secondary);
+  color: var(--text);
+  a { color: var(--primary-deep); }
+  .fr-h6,
+  .fr-intro,
+  .fr-member-name,
+  p { color: var(--text); }
+  .fr-member-role { color: var(--primary-deep); }
+  .fr-cols { border-bottom: none; }
+}
+.fr-film {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--background-alt);
+  border: 1px solid var(--divider);
+}
 .fr-course {
   display: grid;
   grid-template-columns: 1fr 160px;
@@ -317,7 +351,7 @@ $wrap: 900px;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-figure-split {
@@ -325,6 +359,13 @@ $wrap: 900px;
   grid-template-columns: 420px 1fr;
   gap: 40px;
   padding: 32px var(--pad) 40px;
+}
+/* a cover shows whole, at its own aspect ratio, at 70% of the column height */
+.fr-cover {
+  align-self: start;
+  width: 70%;
+  height: auto;
+  border: 1px solid var(--divider);
 }
 .fr-prose {
   font-size: 15px;
@@ -340,7 +381,7 @@ $wrap: 900px;
 /* — contact — */
 .fr-contact {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   border-bottom: 2px solid var(--divider);
 }
 .fr-contact-main { padding: 40px var(--pad) 40px; border-right: 2px solid var(--divider); }
@@ -348,8 +389,10 @@ $wrap: 900px;
 .fr-contact-figure {
   flex: 1;
   min-height: 240px;
+  padding: 40px;
   overflow: hidden;
-  img { width: 100%; height: 100%; object-fit: cover; }
+  /* a logo, not a photograph: show it whole rather than cropping to fill */
+  img { width: 100%; height: 100%; object-fit: contain; }
 }
 .fr-contact-stack { display: flex; flex-direction: column; gap: 10px; max-width: 340px; }
 .fr-address { font-size: 15px; line-height: 1.8; }
@@ -361,7 +404,10 @@ $wrap: 900px;
   .fr-figure-split,
   .fr-contact { grid-template-columns: 1fr; gap: 24px; }
   .fr-cols-2,
+  .fr-cols-2-1,
   .fr-cols-3 { grid-template-columns: 1fr; }
+  .fr-with-media { grid-template-columns: 1fr; }
+  .fr-cover { width: 100%; }
   .fr-cols > * { border-right: none !important; border-bottom: 2px solid var(--divider); padding: 24px var(--pad) !important; }
   .fr-cols > *:last-child { border-bottom: none; }
   .fr-team { grid-template-columns: repeat(2, 1fr); }
