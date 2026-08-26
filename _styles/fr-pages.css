@@ -130,6 +130,9 @@
 /* the +/– disclosure */
 .fr-plus {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
   padding: 0;
@@ -141,6 +144,7 @@
   font-size: 17px;
   line-height: 1;
   color: var(--text);
+  text-decoration: none;
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
 }
@@ -267,6 +271,7 @@
 }
 
 .fr-member-figure {
+  display: block;
   overflow: hidden;
   aspect-ratio: 1/1;
   background: var(--background-alt);
@@ -275,6 +280,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--transition);
+}
+.fr-member-figure:hover img {
+  transform: scale(1.03);
 }
 
 .fr-member-head {
