@@ -194,6 +194,14 @@
   border-right: 2px solid var(--divider);
 }
 
+.fr-cols-2-1 {
+  grid-template-columns: 2fr 1fr;
+}
+.fr-cols-2-1 > *:first-child {
+  padding-right: 40px;
+  border-right: 2px solid var(--divider);
+}
+
 .fr-cols-3 {
   grid-template-columns: repeat(3, 1fr);
 }
@@ -410,6 +418,21 @@
 }
 
 /* — teaching — */
+.fr-with-media {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.fr-film {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--background-alt);
+  border: 1px solid var(--divider);
+}
+
 .fr-course {
   display: grid;
   grid-template-columns: 1fr 160px;
@@ -450,10 +473,10 @@
   padding: 32px var(--pad) 40px;
 }
 
-/* a cover shows whole, at its own aspect ratio */
+/* a cover shows whole, at its own aspect ratio, at 70% of the column height */
 .fr-cover {
   align-self: start;
-  width: 100%;
+  width: 70%;
   height: auto;
   border: 1px solid var(--divider);
 }
@@ -524,8 +547,15 @@
     gap: 24px;
   }
   .fr-cols-2,
+  .fr-cols-2-1,
   .fr-cols-3 {
     grid-template-columns: 1fr;
+  }
+  .fr-with-media {
+    grid-template-columns: 1fr;
+  }
+  .fr-cover {
+    width: 100%;
   }
   .fr-cols > * {
     border-right: none !important;
