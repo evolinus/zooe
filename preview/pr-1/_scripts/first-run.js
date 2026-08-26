@@ -29,15 +29,6 @@ const frFirstRun = () => {
   // three-set index
   const switcher = document.querySelector("[data-fr-switch]");
   if (switcher) {
-    const count = switcher.querySelector("[data-fr-count]");
-
-    const showCount = (key) => {
-      if (!count) return;
-      const set = switcher.querySelector('[data-fr-set="' + key + '"]');
-      const rows = set ? set.querySelectorAll(".fr-index-row").length : 0;
-      count.textContent = rows + " entries";
-    };
-
     switcher.addEventListener("click", (event) => {
       const tab = event.target.closest("[data-fr-tab]");
       if (!tab) return;
@@ -46,10 +37,7 @@ const frFirstRun = () => {
       switcher.querySelectorAll("[data-fr-set]").forEach((set) => {
         set.hidden = set.getAttribute("data-fr-set") !== key;
       });
-      showCount(key);
     });
-
-    showCount("people");
   }
 };
 
