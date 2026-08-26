@@ -1,5 +1,8 @@
 @charset "UTF-8";
 /* interior pages in the first-run language — Modernist: flush left, 2px rules, 0 radius */
+/* a coloured panel drawn as a rounded polygon: the fill sits on a ::before
+   layer clipped to one of the fr-poly-N silhouettes (see _includes/fr-shapes.html),
+   so the panel's own text and images stay rectangular and fully inside the shape */
 .fr-page {
   --pad: max(40px, calc((100% - 1200px) / 2));
   text-align: left;
@@ -70,11 +73,24 @@
 
 /* the block panel used for calls to action */
 .fr-ink {
+  position: relative;
+  background: none;
   display: flex;
   flex-direction: column;
-  padding: 22px 24px;
-  background: var(--panel);
+  padding: 30px 30px 34px;
   color: var(--panel-ink);
+}
+.fr-ink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--panel);
+  clip-path: url(#fr-poly-2);
+}
+.fr-ink > * {
+  position: relative;
+  z-index: 1;
 }
 .fr-ink a:not(.fr-btn) {
   color: var(--panel-ink);
@@ -444,6 +460,9 @@
 /* the schools block sits on the highlight colour, end to end */
 .fr-schools {
   background: var(--secondary);
+  /* full-width band: a large even radius reads as a rounded polygon without the
+     corner distortion an objectBoundingBox clip would suffer at this width */
+  border-radius: 40px;
   color: var(--text);
 }
 .fr-schools a {
@@ -550,10 +569,23 @@
   align-self: start;
 }
 
-/* the photo sits matted on the red panel, with a heavier bottom band */
+/* the photo sits matted on the red polygon, with a heavier bottom band */
 .fr-profile-photo {
-  padding: 14px 14px 34px;
+  position: relative;
+  background: none;
+  padding: 18px 18px 30px;
+}
+.fr-profile-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background: var(--primary);
+  clip-path: url(#fr-poly-5);
+}
+.fr-profile-photo > * {
+  position: relative;
+  z-index: 1;
 }
 .fr-profile-photo img {
   display: block;
@@ -563,11 +595,26 @@
   background: var(--background-alt);
 }
 
-/* links ride the light-blue panel, like the teaching schools block */
+/* links ride the light-blue polygon, tucked slightly under the photo above */
 .fr-profile-links {
-  padding: 18px 20px;
-  background: var(--secondary);
+  position: relative;
+  background: none;
+  z-index: 1;
+  margin-top: -20px;
+  padding: 30px 26px 26px;
   color: var(--text);
+}
+.fr-profile-links::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--secondary);
+  clip-path: url(#fr-poly-3);
+}
+.fr-profile-links > * {
+  position: relative;
+  z-index: 1;
 }
 .fr-profile-links .fr-eyebrow {
   color: var(--text);
