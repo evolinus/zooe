@@ -94,7 +94,7 @@
 <!-- automatically get url from fonts used in theme file -->
 
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?display=swap&&family=Barlow:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600&amp;family=Roboto+Mono:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?display=swap&&family=Archivo:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&amp;family=Roboto+Mono:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800" rel="stylesheet">
 
 <!-- Font Awesome icons (load asynchronously due to size) -->
 
@@ -179,6 +179,10 @@
   
 
   
+    <link href="/zooe/_styles/first-run.css" rel="stylesheet">
+  
+
+  
     <link href="/zooe/_styles/float.css" rel="stylesheet">
   
 
@@ -192,6 +196,10 @@
 
   
     <link href="/zooe/_styles/form.css" rel="stylesheet">
+  
+
+  
+    <link href="/zooe/_styles/fr-pages.css" rel="stylesheet">
   
 
   
@@ -344,6 +352,10 @@
 
   
 
+  
+
+  
+
 
 <!-- include all css in styles folder -->
 
@@ -366,6 +378,10 @@
 
   <script src="/zooe/_scripts/fetch-tags.js"></script>
 
+  <script src="/zooe/_scripts/first-run.js"></script>
+
+  <script src="/zooe/_scripts/fr-pages.js"></script>
+
   <script src="/zooe/_scripts/search.js"></script>
 
   <script src="/zooe/_scripts/site-search.js"></script>
@@ -386,7 +402,7 @@
 
 
 
-<header class="background" style="--image: url('/zooe/images/backgrounds/nuvola.png')" data-dark="true">
+<header class="background" data-dark="true">
   <a href="/zooe/" class="home">
     
       <span class="logo">
@@ -460,225 +476,548 @@
   
   
 
-  <section class="background" data-size="page">
-    <h1 id="people">
-<i class="icon fa-solid fa-users"></i>People</h1>
-
-<p>The <strong>zoo</strong><span style="color:#e30022"><strong>_</strong></span><span style="color:#ffbf00"><strong>e</strong></span> lab enjoys the collaboration of enthusiastic researchers. We value personal initiative, skills, competencies, passion and curiosity, which we share to explore and find new clues about the mechanisms and processes behind animal evolution.</p>
-  </section>
-
-  
-  
-  
-
-  <section class="background" data-size="page">
+  <section class="background" data-size="full">
     <!--
   <background></background>
   <dark></dark>
-  <size></size>
+  <size>full</size>
 -->
 
-<div class="portrait-wrapper">
-  <a href="/zooe/members/alberto-prim.html" class="portrait" data-style="" aria-label="Alberto Prim">
-    
-      <i class="icon fa-solid fa-user-graduate"></i>
-    
+<div class="fr-page">
+  <div class="fr-strip">
+    <div class="fr-head-split">
+      <div>
+        <p class="fr-eyebrow">People</p>
+        <h1 class="fr-title">The people behind the quest.</h1>
+        <p class="fr-intro">
+          We value personal initiative, skills, passion and curiosity, which we share
+          to explore the mechanisms behind animal evolution.
+        </p>
+      </div>
 
-    <img src="/zooe/images/team/riso.png" class="portrait-image" alt="member portrait" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
+      <div class="fr-ink">
+        <p class="fr-eyebrow">Join the lab</p>
+        <p class="fr-ink-text">
+          Se ti piace lavorare in un ambiente interdisciplinare che unisce zoologia,
+          evoluzione e genomica comparativa, scrivici. We are looking for people who
+          enjoy working in an interdisciplinary environment that combines zoology,
+          evolution and comparative genomics — BSc and MSc projects open every year.
+        </p>
+        <a class="fr-btn fr-btn-primary fr-btn-block" href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>
+      </div>
+    </div>
+  </div>
 
-    
-      <span class="portrait-name">
-        Alberto Prim
-      </span>
-    
+  <div class="fr-strip" style="padding-bottom: 12px; border-bottom: none">
+    <h2 class="fr-h6">The team</h2>
+  </div>
 
+  <div class="fr-team">
     
-      <span class="portrait-description">
-        BSc Student
-      </span>
-    
+      
+      <div class="fr-member">
+        <div class="fr-member-figure">
+          <img src="/zooe/images/team/Lino-Ometto.jpg" alt="Lino Ometto" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
+        </div>
 
+        <div class="fr-member-head">
+          <div>
+            <h3 class="fr-member-name">Lino Ometto</h3>
+            <span class="fr-member-role">Principal Investigator</span>
+          </div>
+          <button type="button" class="fr-plus" aria-expanded="false" aria-label="More about Lino Ometto" data-fr-disclose="member-1">+</button>
+        </div>
+
+        <div class="fr-more" id="member-1" hidden="">
+          I hold the position of Associate Professor of Zoology at the Department of Biology and Biotechnology of the University of Pavia. I grew up with a keen interest in animals and I like to think of myself as a zoologist with a sweep net in one hand and a genome in the other. My research interests are aimed at better understanding the origin of adaptive traits in insects (&amp; friends) using population genetics and mo...
+          <div class="fr-more-links">
+            
+              
+              
+              <a href="https://unipv.unifind.cineca.it/get/person/047052">
+                Home Page
+              </a>
+            
+              
+              
+              <a href="mailto:lino.ometto@unipv.it">
+                Email
+              </a>
+            
+              
+              
+              <a href="https://orcid.org/0000-0002-2679-625X">
+                ORCID
+              </a>
+            
+              
+              
+              <a href="https://scholar.google.com/citations?user=RVjMHWgAAAAJ">
+                Google Scholar
+              </a>
+            
+              
+              
+              <a href="https://github.com/evolinus">
+                GitHub
+              </a>
+            
+            <a href="/zooe/members/lino-ometto.html">Full profile →</a>
+          </div>
+        </div>
+      </div>
     
-  </a>
+      
+      <div class="fr-member">
+        <div class="fr-member-figure">
+          <img src="/zooe/images/team/riso.jpg" alt="Alberto Prim" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
+        </div>
+
+        <div class="fr-member-head">
+          <div>
+            <h3 class="fr-member-name">Alberto Prim</h3>
+            <span class="fr-member-role">BSc Student</span>
+          </div>
+          <button type="button" class="fr-plus" aria-expanded="false" aria-label="More about Alberto Prim" data-fr-disclose="member-2">+</button>
+        </div>
+
+        <div class="fr-more" id="member-2" hidden="">
+          
+
+          <div class="fr-more-links">
+            
+              
+              
+              <a href="mailto:alberto.prim01@universitadipavia.it">
+                Email
+              </a>
+            
+            <a href="/zooe/members/alberto-prim.html">Full profile →</a>
+          </div>
+        </div>
+      </div>
+    
+      
+      <div class="fr-member">
+        <div class="fr-member-figure">
+          <img src="/zooe/images/team/sassi.jpg" alt="Benedetta Zeme" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
+        </div>
+
+        <div class="fr-member-head">
+          <div>
+            <h3 class="fr-member-name">Benedetta Zeme</h3>
+            <span class="fr-member-role">BSc Student</span>
+          </div>
+          <button type="button" class="fr-plus" aria-expanded="false" aria-label="More about Benedetta Zeme" data-fr-disclose="member-3">+</button>
+        </div>
+
+        <div class="fr-more" id="member-3" hidden="">
+          
+
+          <div class="fr-more-links">
+            
+              
+              
+              <a href="mailto:benedetta.zeme01@universitadipavia.it">
+                Email
+              </a>
+            
+            <a href="/zooe/members/benedetta-zeme.html">Full profile →</a>
+          </div>
+        </div>
+      </div>
+    
+      
+      <div class="fr-member">
+        <div class="fr-member-figure">
+          <img src="/zooe/images/team/Chiara-Albertini.jpg" alt="Chiara Albertini" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
+        </div>
+
+        <div class="fr-member-head">
+          <div>
+            <h3 class="fr-member-name">Chiara Albertini</h3>
+            <span class="fr-member-role">PhD Student</span>
+          </div>
+          <button type="button" class="fr-plus" aria-expanded="false" aria-label="More about Chiara Albertini" data-fr-disclose="member-4">+</button>
+        </div>
+
+        <div class="fr-more" id="member-4" hidden="">
+          Hi everyone, I’m Chiara! Ever since I was young, I’d always be in awe at the little critters that would quickly hide in the shallow water of a pond if I would get too close to it. It was mesmerizing to me (and it still is, to be fair!) how extraordinarily interesting such small creatures could be. After a BSc in Biology (where I could get a glimpse of the wonders and mysteries of life) at the University of Pavia I...
+          <div class="fr-more-links">
+            
+              
+              
+              <a href="mailto:chiara.albertini01@universitadipavia.it">
+                Email
+              </a>
+            
+              
+              
+              <a href="https://orcid.org/0009-0002-9909-0175">
+                ORCID
+              </a>
+            
+              
+              
+              <a href="https://github.com/albechia">
+                GitHub
+              </a>
+            
+            <a href="/zooe/members/chiara-albertini.html">Full profile →</a>
+          </div>
+        </div>
+      </div>
+    
+      
+      <div class="fr-member">
+        <div class="fr-member-figure">
+          <img src="/zooe/images/team/rosasirfide.jpg" alt="Tina Kaveh Haghighi" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
+        </div>
+
+        <div class="fr-member-head">
+          <div>
+            <h3 class="fr-member-name">Tina Kaveh Haghighi</h3>
+            <span class="fr-member-role">MSc Student</span>
+          </div>
+          <button type="button" class="fr-plus" aria-expanded="false" aria-label="More about Tina Kaveh Haghighi" data-fr-disclose="member-5">+</button>
+        </div>
+
+        <div class="fr-more" id="member-5" hidden="">
+          
+
+          <div class="fr-more-links">
+            
+              
+              
+              <a href="mailto:tina.kavehhaghighi01@universitadipavia.it">
+                Email
+              </a>
+            
+            <a href="/zooe/members/tina-kaveh.html">Full profile →</a>
+          </div>
+        </div>
+      </div>
+    
+  </div>
+
+  <div class="fr-strip fr-strip-last">
+    <div class="fr-pub-head" data-fr-filter="alumni-list">
+      <h2 class="fr-h6" style="margin-right: auto">Alumni</h2>
+      <div class="fr-seg">
+        <button type="button" class="fr-seg-opt" data-fr-option="all" aria-selected="true">All</button>
+        
+          <button type="button" class="fr-seg-opt" data-fr-option="postdocs" aria-selected="false">Postdocs</button>
+        
+          <button type="button" class="fr-seg-opt" data-fr-option="phd" aria-selected="false">PhD</button>
+        
+          <button type="button" class="fr-seg-opt" data-fr-option="msc" aria-selected="false">MSc</button>
+        
+          <button type="button" class="fr-seg-opt" data-fr-option="bsc" aria-selected="false">BSc</button>
+        
+      </div>
+    </div>
+
+    <div class="fr-alumni" id="alumni-list">
+      
+        
+          <div class="fr-alumni-row" data-fr-key="postdocs">
+            <span class="fr-alumni-name">
+              
+                Alba Marino
+              
+            </span>
+            <span class="fr-alumni-note">Postdocs</span>
+          </div>
+        
+      
+        
+          <div class="fr-alumni-row" data-fr-key="phd">
+            <span class="fr-alumni-name">
+              
+                Federica Valerio
+              
+            </span>
+            <span class="fr-alumni-note">PhD</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="phd">
+            <span class="fr-alumni-name">
+              
+                Nihel Oueslati
+              
+            </span>
+            <span class="fr-alumni-note">Co-supervision · visiting from University of Monastir, Tunisia</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="phd">
+            <span class="fr-alumni-name">
+              
+                Asma Ghedir
+              
+            </span>
+            <span class="fr-alumni-note">Co-supervision · visiting from University of Monastir, Tunisia</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="phd">
+            <span class="fr-alumni-name">
+              
+                Burcu Köse
+              
+            </span>
+            <span class="fr-alumni-note">Visiting · Niğde Ömer Halisdemir University, Turkey</span>
+          </div>
+        
+      
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Vani Jain
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Gabriele Bambini
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Giulia Mercati
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Dibyojyoti Chattopadhyay
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Aromita Mallik
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Corinne Castellano
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Verdiana Fazio
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Alessandro Macchia
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Lucia Foresto
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Saja Boulad
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="msc">
+            <span class="fr-alumni-name">
+              
+                Paola Staffiere
+              
+            </span>
+            <span class="fr-alumni-note">MSc</span>
+          </div>
+        
+      
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Simone Raggi
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Giorgia Ruggenenti
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                <a href="https://www.cleliasportfolio.xyz">Astra Clelia Bertelli</a>
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Gaia Ruga
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Lorenzo Vecchio
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Mattia Vignoli
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Margherita Toppi
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Anita Raccanello
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Giulia Mercati
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Samuele Tarozzo
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Mariam Mahmoud
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Emma Pesenti
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Elisa Miragliotta
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Erica Melchionda
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Morea Tomasi
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+          <div class="fr-alumni-row" data-fr-key="bsc">
+            <span class="fr-alumni-name">
+              
+                Daria Marzanati
+              
+            </span>
+            <span class="fr-alumni-note">BSc</span>
+          </div>
+        
+      
+    </div>
+  </div>
 </div>
-
-<div class="portrait-wrapper">
-  <a href="/zooe/members/benedetta-zeme.html" class="portrait" data-style="" aria-label="Benedetta Zeme">
-    
-      <i class="icon fa-solid fa-user-graduate"></i>
-    
-
-    <img src="/zooe/images/team/sassi.png" class="portrait-image" alt="member portrait" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-
-    
-      <span class="portrait-name">
-        Benedetta Zeme
-      </span>
-    
-
-    
-      <span class="portrait-description">
-        BSc Student
-      </span>
-    
-
-    
-  </a>
-</div>
-
-<div class="portrait-wrapper">
-  <a href="/zooe/members/chiara-albertini.html" class="portrait" data-style="" aria-label="Chiara Albertini">
-    
-      <i class="icon fa-solid fa-graduation-cap"></i>
-    
-
-    <img src="/zooe/images/team/Chiara-Albertini.jpg" class="portrait-image" alt="member portrait" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-
-    
-      <span class="portrait-name">
-        Chiara Albertini
-      </span>
-    
-
-    
-      <span class="portrait-description">
-        PhD Student
-      </span>
-    
-
-    
-  </a>
-</div>
-
-<div class="portrait-wrapper">
-  <a href="/zooe/members/lino-ometto.html" class="portrait" data-style="" aria-label="Lino Ometto">
-    
-      <i class="icon fa-solid fa-microscope"></i>
-    
-
-    <img src="/zooe/images/team/Lino-Ometto.png" class="portrait-image" alt="member portrait" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-
-    
-      <span class="portrait-name">
-        Lino Ometto
-      </span>
-    
-
-    
-      <span class="portrait-description">
-        Principal Investigator
-      </span>
-    
-
-    
-  </a>
-</div>
-
-<div class="portrait-wrapper">
-  <a href="/zooe/members/tina-kaveh.html" class="portrait" data-style="" aria-label="Tina Kaveh Haghighi">
-    
-      <i class="icon fa-solid fa-user-graduate"></i>
-    
-
-    <img src="/zooe/images/team/rosasirfide.jpg" class="portrait-image" alt="member portrait" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-
-    
-      <span class="portrait-name">
-        Tina Kaveh Haghighi
-      </span>
-    
-
-    
-      <span class="portrait-description">
-        MSc Student
-      </span>
-    
-
-    
-  </a>
-</div>
-
-<h4 id="alumni">Alumni</h4>
-<p><em>Postdocs</em><br>
-Alba Marino.</p>
-
-<p><em>PhD students</em><br>
-Federica Valerio; Nihel Oueslati and Asma Ghedir (co-supervision; visiting from University of Monastir, Tunisia); Burcu Köse (visiting; Niğde Ömer Halisdemir University, Turkey).</p>
-
-<p><em>MSc students</em><br>
-Vani Jain; Gabriele Bambini; Giulia Mercati; Dibyojyoti Chattopadhyay; Aromita Mallik; Corinne Castellano; Verdiana Fazio; Alessandro Macchia; Lucia Foresto; Saja Boulad; Paola Staffiere.</p>
-
-<p><em>BSc students</em><br>
-Simone Raggi; Giorgia Ruggenenti; <a href="https://www.cleliasportfolio.xyz">Astra Clelia Bertelli</a>; Gaia Ruga; Lorenzo Vecchio; Mattia Vignoli; Margherita Toppi; Anita Raccanello; Giulia Mercati; Samuele Tarozzo; Mariam Mahmoud; Emma Pesenti; Elisa Miragliotta; Erica Melchionda; Morea Tomasi; Daria Marzanati.</p>
-  </section>
-
-  
-  
-  
-
-  <section class="background" data-size="1" style="--image: url('/zooe/images/backgrounds/background.blu.png')">
-    <!--
-  <background>images/backgrounds/background.blu.png</background>
-  <dark></dark>
-  <size>1</size>
--->
-
-<h4 id="join-us">Join us</h4>
-<p>Se ti piace lavorare in un ambiente interdisciplinare che unisce zoologia, evoluzione e genomica comparativa, <a href="https://evolinus.github.io/zooe/contact/">contattaci</a>.</p>
-
-<p>Would you like to join us? We are looking for people who enjoy working in an interdisciplinary environment that combiones zoology, evolution and comparative genomics. Feel free to <a href="https://evolinus.github.io/zooe/contact/">contact us</a> for more information.</p>
-  </section>
-
-  
-  
-  
-
-  <section class="background" data-size="page">
-    <!--
-  <background></background>
-  <dark></dark>
-  <size></size>
--->
-
-<!--
-
-
-<div class="grid" data-style="square">
-  
-<figure class="figure">
-  <a class="figure-image" aria-label="figure link">
-    <img src="/zooe/images/photo.jpg" style="
-        width: auto;
-        max-height: unset;
-      " alt="figure image" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;" />
-  </a>
-  
-</figure>
-
-<figure class="figure">
-  <a class="figure-image" aria-label="figure link">
-    <img src="/zooe/images/photo.jpg" style="
-        width: auto;
-        max-height: unset;
-      " alt="figure image" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;" />
-  </a>
-  
-</figure>
-
-<figure class="figure">
-  <a class="figure-image" aria-label="figure link">
-    <img src="/zooe/images/photo.jpg" style="
-        width: auto;
-        max-height: unset;
-      " alt="figure image" loading="lazy" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;" />
-  </a>
-  
-</figure>
-
-
-</div>
-
--->
   </section>
 
 

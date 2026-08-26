@@ -94,7 +94,7 @@
 <!-- automatically get url from fonts used in theme file -->
 
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?display=swap&&family=Barlow:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600&amp;family=Roboto+Mono:ital,wght@0,200;0,400;0,500;0,600;1,200;1,400;1,500;1,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?display=swap&&family=Archivo:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800&amp;family=Roboto+Mono:ital,wght@0,400;0,600;0,800;1,400;1,600;1,800" rel="stylesheet">
 
 <!-- Font Awesome icons (load asynchronously due to size) -->
 
@@ -179,6 +179,10 @@
   
 
   
+    <link href="/zooe/_styles/first-run.css" rel="stylesheet">
+  
+
+  
     <link href="/zooe/_styles/float.css" rel="stylesheet">
   
 
@@ -192,6 +196,10 @@
 
   
     <link href="/zooe/_styles/form.css" rel="stylesheet">
+  
+
+  
+    <link href="/zooe/_styles/fr-pages.css" rel="stylesheet">
   
 
   
@@ -344,6 +352,10 @@
 
   
 
+  
+
+  
+
 
 <!-- include all css in styles folder -->
 
@@ -366,6 +378,10 @@
 
   <script src="/zooe/_scripts/fetch-tags.js"></script>
 
+  <script src="/zooe/_scripts/first-run.js"></script>
+
+  <script src="/zooe/_scripts/fr-pages.js"></script>
+
   <script src="/zooe/_scripts/search.js"></script>
 
   <script src="/zooe/_scripts/site-search.js"></script>
@@ -386,7 +402,7 @@
 
 
 
-<header class="background" style="--image: url('/zooe/images/backgrounds/nuvola.png')" data-dark="true" data-big>
+<header class="background" data-dark="true">
   <a href="/zooe/" class="home">
     
       <span class="logo">
@@ -460,11 +476,56 @@
   
   
 
-  <section class="background" data-size="page">
-    <h1 id="zoology-and-evolution">Zoology and Evolution</h1>
+  <section class="background" data-size="full">
+    <!--
+  <background></background>
+  <dark></dark>
+  <size>full</size>
+-->
 
-<p>The <strong>zoo</strong><span style="color:#e30022"><strong>_</strong></span><span style="color:#ffbf00"><strong>e</strong></span> lab (<em>laboratorio di Zoologia ed Evoluzione</em>) is headed by <a href="https://evolinus.github.io/zooe/members/lino-ometto.html">Lino Ometto</a>, at the <a href="https://dbb.dip.unipv.it/en">Department of Biological Sciences</a> of the <a href="https://portale.unipv.it/it">University of Pavia</a>.<br>
-We study the genetic basis of biodiversity with a combination of computational and experimental approaches. We use molecular evolution and population genetics to characterize the neutral and selective processes that underly phenotypic and adaptive traits in natural insect populations (and other animals).</p>
+<div class="fr fr-hero">
+  <div class="fr-hero-main">
+    <div class="fr-hero-top">
+      <p class="fr-kicker">Zoology &amp; Evolution · University of Pavia</p>
+      
+      <img class="fr-hero-mark" src="/zooe/images/backgrounds/logo.png" alt="the zoo_e lab">
+    </div>
+    <h1 class="fr-display">We study the genetic basis of biodiversity.</h1>
+    <p class="fr-lede">
+      Molecular evolution and population genetics, applied to natural insect
+      populations and other animals, to work out which processes — neutral
+      and selective — build adaptive traits.
+    </p>
+  </div>
+
+  <aside class="fr-rail">
+    <div class="fr-rail-row">
+      <span class="fr-label">Head of lab</span>
+      <span class="fr-value">
+        <a href="/zooe/members/lino-ometto.html">Lino Ometto</a>,
+        Associate Professor of Zoology
+      </span>
+    </div>
+    <div class="fr-rail-row">
+      <span class="fr-label">Department</span>
+      <span class="fr-value">
+        zoo_e lab · <a href="https://dbb.dip.unipv.it/en">Department of Biology and Biotechnology</a>, University of Pavia
+      </span>
+    </div>
+
+    <div class="fr-highlight">
+      <p class="fr-label fr-label-accent">Outreach</p>
+      <p class="fr-highlight-title">Evolutionary Laboratories</p>
+      <p class="fr-highlight-text">
+        Browser simulations of drift, selection and adaptation, used in schools
+      </p>
+      <a class="fr-btn fr-btn-ghost" href="/zooe/teaching/evolutionary-laboratories/main.html">
+        Open the simulations →
+      </a>
+    </div>
+
+  </aside>
+</div>
   </section>
 
   
@@ -478,78 +539,279 @@ We study the genetic basis of biodiversity with a combination of computational a
   <size></size>
 -->
 
-<div class="feature" data-flip="">
-  <a href="/zooe/research" class="feature-image" aria-label="Our Research Projects">
-    <img src="/zooe/images/pages/farfalla.png" loading="lazy" alt="Our Research Projects" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-  </a>
-  <div class="feature-text">
-    
-      <p class="feature-title">Our Research Projects</p>
-    
-    
-<p>Can transposable elements provide adaptive variation in invading mosquitoes?<br>
-How have the populations of introduced ants evolved in the newly established areas?<br>
-And other stories.</p>
+<div class="fr fr-work" id="current-work" data-fr-index="">
+  <div class="fr-work-list">
+    <div class="fr-section-head">
+      <h2 class="fr-h6">Current work</h2>
+    </div>
 
-<div class="button-wrapper">
-    <a class="button" href="/zooe/research" data-style="bare" data-flip="" aria-label="fa-solid fa-arrow-right">
-      <i class="icon fa-solid fa-arrow-right"></i>
-      
-        <span>Browse our research projects</span>
-      
-    </a>
+    
+      <button type="button" class="fr-row" data-fr-row="0" aria-selected="false">
+        <span class="fr-row-body">
+          <span class="fr-row-title">Mosquitos &amp; TEs</span>
+          <em class="fr-row-organism">Aedes albopictus</em>
+        </span>
+        <span class="fr-label">Population genomics · Lab experiments</span>
+      </button>
+    
+      <button type="button" class="fr-row" data-fr-row="1" aria-selected="true">
+        <span class="fr-row-body">
+          <span class="fr-row-title">Formica ants</span>
+          <em class="fr-row-organism">Formica paralugubris</em>
+        </span>
+        <span class="fr-label">Historical DNA · Comparative genomics</span>
+      </button>
+    
+      <button type="button" class="fr-row" data-fr-row="2" aria-selected="false">
+        <span class="fr-row-body">
+          <span class="fr-row-title">Insect comparative genomics</span>
+          <em class="fr-row-organism">Drosophilidae · Tephritidae · Glossina</em>
+        </span>
+        <span class="fr-label">Comparative genomics</span>
+      </button>
+    
+      <button type="button" class="fr-row" data-fr-row="3" aria-selected="false">
+        <span class="fr-row-body">
+          <span class="fr-row-title">Somatic mutations</span>
+          <em class="fr-row-organism">Botryllus schlosseri</em>
+        </span>
+        <span class="fr-label">Deep sequencing · Experiments</span>
+      </button>
+    
+
+    <a class="fr-btn fr-btn-ghost" href="/zooe/research">All research projects →</a>
   </div>
 
+  <div class="fr-work-detail">
+    
+      <div class="fr-panel" data-fr-panel="0" hidden="">
+        
+        <div class="fr-figure" data-fit="contain">
+          <img src="/zooe/images/pages/zanzaTE.png" alt="Mosquitos &amp; TEs" loading="lazy">
+        </div>
+        <p class="fr-label">Aedes albopictus</p>
+        <p class="fr-panel-question">Can transposable elements supply the mutations that let an invading mosquito adapt this fast?</p>
+        <p class="fr-panel-text">
+          More than half of the tiger mosquito genome is transposable elements. We are mapping the TE landscape across the Culicidae and in natural populations, and testing in the lab whether thermal stress mobilises them.
 
+        </p>
+        <p class="fr-panel-credit">With O. Rota-Stabelli (Trento) and A. Luchetti (Bologna)</p>
+        <a class="fr-btn fr-btn-ghost" href="/zooe/research">Read the full project →</a>
+      </div>
+    
+      <div class="fr-panel" data-fr-panel="1">
+        
+        <div class="fr-figure" data-fit="cover">
+          <img src="/zooe/images/pages/formica.png" alt="Formica ants" loading="lazy">
+        </div>
+        <p class="fr-label">Formica paralugubris</p>
+        <p class="fr-panel-question">What happened to the wood ants moved from the Alps to the Apennines for pest control?</p>
+        <p class="fr-panel-text">
+          We are sequencing individuals from the native and introduced ranges, plus historical specimens from the translocation experiments, to read the evolution of this species in space and time.
+
+        </p>
+        <p class="fr-panel-credit">With Bologna, Florence, Pavia and Museo Kosmos</p>
+        <a class="fr-btn fr-btn-ghost" href="/zooe/research">Read the full project →</a>
+      </div>
+    
+      <div class="fr-panel" data-fr-panel="2" hidden="">
+        
+        <div class="fr-figure" data-fit="cover">
+          <img src="/zooe/images/pages/tephritidae.png" alt="Insect comparative genomics" loading="lazy">
+        </div>
+        <p class="fr-label">Drosophilidae · Tephritidae · Glossina</p>
+        <p class="fr-panel-question">Which genes underlie the remarkable diversity of Diptera biology?</p>
+        <p class="fr-panel-text">
+          Using the growing pile of public genomic data, we follow chemosensory genes and opsins across fruit flies, true fruit flies and tse-tse flies — several of them pests and disease vectors of global importance.
+
+        </p>
+        <p class="fr-panel-credit">A training ground for students learning comparative methods</p>
+        <a class="fr-btn fr-btn-ghost" href="/zooe/research">Read the full project →</a>
+      </div>
+    
+      <div class="fr-panel" data-fr-panel="3" hidden="">
+        
+        <div class="fr-figure" data-fit="cover">
+          <img src="/zooe/images/pages/botryllus.png" alt="Somatic mutations" loading="lazy">
+        </div>
+        <p class="fr-label">Botryllus schlosseri</p>
+        <p class="fr-panel-question">Can a mutation in a single cell be selected across an entire colony?</p>
+        <p class="fr-panel-text">
+          We deep-sequence laboratory-reared colonies of a colonial tunicate to test whether selection or somatic drift raises the frequency of somatic mutations — and whether they reach the next generation.
+
+        </p>
+        <p class="fr-panel-credit">Led by S. Tiozzo (CNRS/Sorbonne), with Cambridge and ULB</p>
+        <a class="fr-btn fr-btn-ghost" href="/zooe/research">Read the full project →</a>
+      </div>
+    
   </div>
 </div>
+  </section>
 
-<div class="feature">
-  <a href="/zooe/publications" class="feature-image" aria-label="Results">
-    <img src="/zooe/images/pages/asciifly.png" loading="lazy" alt="Results" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-  </a>
-  <div class="feature-text">
-    
-      <p class="feature-title">Results</p>
-    
-    
-<p>Our research, also in collaboration with colleagues in Italy and abroad, has led to the discovery of new insights into the evolutionary history of insects and other organisms.</p>
+  
+  
+  
 
-<div class="button-wrapper">
-    <a class="button" href="/zooe/publications" data-style="bare" data-flip="" aria-label="fa-solid fa-arrow-right">
-      <i class="icon fa-solid fa-arrow-right"></i>
+  <section class="background" data-size="page">
+    <!--
+  <background></background>
+  <dark></dark>
+  <size></size>
+-->
+
+<div class="fr fr-switch" data-fr-switch="">
+  <div class="fr-switch-head">
+    <div class="fr-seg">
+      <button type="button" class="fr-seg-opt" data-fr-tab="people" aria-selected="true">People</button>
       
-        <span>See our publications</span>
+        <button type="button" class="fr-seg-opt" data-fr-tab="teaching" aria-selected="false">Teaching</button>
       
-    </a>
+      <button type="button" class="fr-seg-opt" data-fr-tab="recent-publications" aria-selected="false">Recent publications</button>
+    </div>
   </div>
 
+  <div class="fr-set" data-fr-set="people">
+    
+      
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="/zooe/members/tina-kaveh.html">Tina Kaveh Haghighi</a>
+        <span class="fr-index-role">MSc Student</span>
+        <span class="fr-index-note"></span>
+      </div>
+    
+      
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="/zooe/members/chiara-albertini.html">Chiara Albertini</a>
+        <span class="fr-index-role">PhD Student</span>
+        <span class="fr-index-note"></span>
+      </div>
+    
+      
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="/zooe/members/lino-ometto.html">Lino Ometto</a>
+        <span class="fr-index-role">Principal Investigator</span>
+        <span class="fr-index-note"></span>
+      </div>
+    
+      
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="/zooe/members/alberto-prim.html">Alberto Prim</a>
+        <span class="fr-index-role">BSc Student</span>
+        <span class="fr-index-note"></span>
+      </div>
+    
+      
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="/zooe/members/benedetta-zeme.html">Benedetta Zeme</a>
+        <span class="fr-index-role">BSc Student</span>
+        <span class="fr-index-note"></span>
+      </div>
+    
+  </div>
 
+  
+    <div class="fr-set" data-fr-set="teaching" hidden="">
+      
+        <div class="fr-index-row">
+          
+            <span class="fr-index-name">Zoologia</span>
+          
+          <span class="fr-index-role">BSc Scienze Biologiche</span>
+          <span class="fr-index-note">9 CFU · 1° anno, 2° semestre</span>
+        </div>
+      
+        <div class="fr-index-row">
+          
+            <span class="fr-index-name">Biologia delle Popolazioni e Comunità</span>
+          
+          <span class="fr-index-role">MSc Biologia Sperimentale ed Applicata</span>
+          <span class="fr-index-note">6 CFU · 1st year</span>
+        </div>
+      
+        <div class="fr-index-row">
+          
+            <span class="fr-index-name">Genomics and Evolution in Emerging Infectious Diseases</span>
+          
+          <span class="fr-index-role">MSc Molecular Biology and Genetics</span>
+          <span class="fr-index-note">6 CFU · 2nd year</span>
+        </div>
+      
+        <div class="fr-index-row">
+          
+            <a class="fr-index-name" href="/zooe/teaching/evolutionary-laboratories/main.html">Evolutionary Laboratories</a>
+          
+          <span class="fr-index-role">Outreach</span>
+          <span class="fr-index-note">Browser simulations of drift, selection and adaptation</span>
+        </div>
+      
+    </div>
+  
+
+  <div class="fr-set" data-fr-set="recent-publications" hidden="">
+    
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="https://doi.org/hcbp25">Engaging European local communities in biodiversity genomics research: A five-step framework for scientists</a>
+        <span class="fr-index-role">Biological Conservation</span>
+        <span class="fr-index-note">2026 · 10.1016/j.biocon.2026.111991</span>
+      </div>
+    
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="https://doi.org/hcbp26">Endogenous viral elements and PIWI gene evolution in <i>Spodoptera</i>: diversity, conservation, and piRNA production</a>
+        <span class="fr-index-role">Insect Biochemistry and Molecular Biology</span>
+        <span class="fr-index-note">2026 · 10.1016/j.ibmb.2026.104609</span>
+      </div>
+    
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="https://doi.org/hcbp27">Evolutionary genomics and divergence of <i>Cacopsylla</i> species with a special focus on the apple proliferation vectors <i>Cacopsylla melanoneura</i> and <i>Cacopsylla picta</i></a>
+        <span class="fr-index-role">BMC Genomics</span>
+        <span class="fr-index-note">2026 · 10.1186/s12864-026-12622-0</span>
+      </div>
+    
+      <div class="fr-index-row">
+        <a class="fr-index-name" href="https://doi.org/hcbp24">Insect Genomics: Methods and Protocols</a>
+        <span class="fr-index-role">Humana - Springer Nature</span>
+        <span class="fr-index-note">2025 · 10.1007/978-1-0716-4583-3</span>
+      </div>
+    
+    <a class="fr-btn fr-btn-ghost" href="/zooe/publications">All publications, newest first →</a>
   </div>
 </div>
+  </section>
 
-<div class="feature" data-flip="">
-  <a href="/zooe/team" class="feature-image" aria-label="Our Team">
-    <img src="/zooe/images/pages/bai.png" loading="lazy" alt="Our Team" onerror="this.src = '/zooe/images/fallback.svg'; this.onerror = null;">
-  </a>
-  <div class="feature-text">
-    
-      <p class="feature-title">Our Team</p>
-    
-    
-<p>The people behind the quest (want to join?)</p>
+  
+  
+  
 
-<div class="button-wrapper">
-    <a class="button" href="/zooe/team" data-style="bare" data-flip="" aria-label="fa-solid fa-arrow-right">
-      <i class="icon fa-solid fa-arrow-right"></i>
-      
-        <span>Meet our team</span>
-      
-    </a>
-  </div>
+  <section class="background" data-size="full">
+    <!--
+  <background></background>
+  <dark></dark>
+  <size>full</size>
+-->
 
-
-  </div>
+<div class="fr fr-band">
+  
+    <figure class="fr-plate">
+      <div class="fr-figure">
+        <img src="/zooe/images/pages/farfalla.png" alt="Fieldwork · Lepidoptera" loading="lazy">
+      </div>
+      <figcaption class="fr-label">Fieldwork · Lepidoptera</figcaption>
+    </figure>
+  
+    <figure class="fr-plate">
+      <div class="fr-figure">
+        <img src="/zooe/images/pages/formica.png" alt="Formica paralugubris · western Alps" loading="lazy">
+      </div>
+      <figcaption class="fr-label">Formica paralugubris · western Alps</figcaption>
+    </figure>
+  
+    <figure class="fr-plate">
+      <div class="fr-figure">
+        <img src="/zooe/images/pages/unipv.png" alt="Via Ferrata 9 · Pavia" loading="lazy">
+      </div>
+      <figcaption class="fr-label">Via Ferrata 9 · Pavia</figcaption>
+    </figure>
+  
 </div>
   </section>
 
