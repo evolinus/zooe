@@ -11,8 +11,8 @@
   --panel: #E9A431;        // the block colour: header, rail, ink panels
   --panel-ink: #2A1B06;    // text on the panel colour
   --text: #201e1d;         // ink
-  --background: #FFF5E3;   // ground
-  --background-alt: #F7EAD1;
+  --background: #FFFAF0;   // ground
+  --background-alt: #F6EEDE;
   --light-gray: #E0D2B8;
   --gray: #A2947C;
   --dark-gray: #6B6154;
@@ -56,6 +56,10 @@
   // text line spacing
   --spacing: 1.7;
   --compact: 1.5;
+
+  // the top bar: black in both themes
+  --bar: #201e1d;
+  --bar-ink: #FFFAF0;
 
   // effects — CHANGED: nothing is rounded, dividers do the work
   --rounded: 0px;

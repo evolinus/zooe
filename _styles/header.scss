@@ -167,17 +167,17 @@ header[data-big] {
   }
 }
 
-/* the bar takes the block colour rather than ink — see -theme.scss */
+/* the bar stays black in both themes — see -theme.scss */
 header.background {
-  background: var(--panel);
-  color: var(--panel-ink);
+  background: var(--bar);
+  color: var(--bar-ink);
 }
 
 header.background a,
 header.background .title-text {
-  color: var(--panel-ink);
+  color: var(--bar-ink);
 }
 
 header.background a:hover {
-  color: var(--primary-deep);
+  color: var(--primary);
 }

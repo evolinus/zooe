@@ -311,15 +311,15 @@ $wrap: 900px;
   align-items: center;
 }
 
-/* the schools block sits on the panel colour, end to end */
+/* the schools block sits on the highlight colour, end to end */
 .fr-schools {
-  background: var(--panel);
-  color: var(--panel-ink);
+  background: var(--secondary);
+  color: var(--text);
   a { color: var(--primary-deep); }
   .fr-h6,
   .fr-intro,
   .fr-member-name,
-  p { color: var(--panel-ink); }
+  p { color: var(--text); }
   .fr-member-role { color: var(--primary-deep); }
   .fr-cols { border-bottom: none; }
 }
