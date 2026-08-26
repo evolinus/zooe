@@ -153,6 +153,13 @@ $wrap: 900px;
   > * { padding: 28px var(--pad); }
 }
 .fr-cols-2 { grid-template-columns: 1fr 1fr; > *:first-child { border-right: 2px solid var(--divider); } }
+.fr-cols-2-1 {
+  grid-template-columns: 2fr 1fr;
+  > *:first-child {
+    padding-right: 40px;
+    border-right: 2px solid var(--divider);
+  }
+}
 .fr-cols-3 {
   grid-template-columns: repeat(3, 1fr);
   > * { padding: 26px 28px; border-right: 2px solid var(--divider); }
@@ -296,6 +303,19 @@ $wrap: 900px;
 }
 
 /* — teaching — */
+.fr-with-media {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.fr-film {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--background-alt);
+  border: 1px solid var(--divider);
+}
 .fr-course {
   display: grid;
   grid-template-columns: 1fr 160px;
@@ -326,10 +346,10 @@ $wrap: 900px;
   gap: 40px;
   padding: 32px var(--pad) 40px;
 }
-/* a cover shows whole, at its own aspect ratio */
+/* a cover shows whole, at its own aspect ratio, at 70% of the column height */
 .fr-cover {
   align-self: start;
-  width: 100%;
+  width: 70%;
   height: auto;
   border: 1px solid var(--divider);
 }
@@ -368,7 +388,10 @@ $wrap: 900px;
   .fr-figure-split,
   .fr-contact { grid-template-columns: 1fr; gap: 24px; }
   .fr-cols-2,
+  .fr-cols-2-1,
   .fr-cols-3 { grid-template-columns: 1fr; }
+  .fr-with-media { grid-template-columns: 1fr; }
+  .fr-cover { width: 100%; }
   .fr-cols > * { border-right: none !important; border-bottom: 2px solid var(--divider); padding: 24px var(--pad) !important; }
   .fr-cols > *:last-child { border-bottom: none; }
   .fr-team { grid-template-columns: repeat(2, 1fr); }

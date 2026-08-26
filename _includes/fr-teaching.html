@@ -10,7 +10,7 @@
     <h1 class="fr-title">Courses, simulations, and evolution in schools.</h1>
   </div>
 
-  <div class="fr-cols fr-cols-2">
+  <div class="fr-cols fr-cols-2-1">
     <div>
       <h2 class="fr-h6">University courses</h2>
       {% for course in fr.courses %}
@@ -41,16 +41,31 @@
   </div>
 
   <div class="fr-strip" style="padding-bottom: 0">
-    <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
-    <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
-      Partecipiamo regolarmente alla
-      <a href="https://www.sharper-night.it/sharper-pavia/">Notte dei Ricercatori</a>
-      (Researchers' Night). Inoltre teniamo seminari e laboratori didattici riguardo
-      l'evoluzione e la biodiversità, per esempio all'interno degli eventi
-      <a href="https://www.sharper-night.it/researchers-at-schools/pavia-scuole/">researchers@school</a>.
-      Per informazioni contattate
-      <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
-    </p>
+    <div class="fr-with-media">
+      <div>
+        <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
+        <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
+          Partecipiamo regolarmente alla
+          <a href="https://www.sharper-night.it/sharper-pavia/">Notte dei Ricercatori</a>
+          (Researchers' Night). Inoltre teniamo seminari e laboratori didattici riguardo
+          l'evoluzione e la biodiversità, per esempio all'interno degli eventi
+          <a href="https://www.sharper-night.it/researchers-at-schools/pavia-scuole/">researchers@school</a>.
+          Per informazioni contattate
+          <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
+        </p>
+      </div>
+
+      {% comment %} silent, so it stays behind controls rather than autoplaying {% endcomment %}
+      <video
+        class="fr-film"
+        controls
+        playsinline
+        preload="none"
+        poster="{{ "images/pages/disegnolo.poster.jpg" | relative_url }}"
+      >
+        <source src="{{ "images/pages/disegnolo.mp4" | relative_url }}" type="video/mp4">
+      </video>
+    </div>
   </div>
 
   <div class="fr-cols fr-cols-3">
