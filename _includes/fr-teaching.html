@@ -42,12 +42,19 @@
 
   <div class="fr-strip" style="padding-bottom: 0">
     <div class="fr-with-media">
-      {% comment %} silent, so it stays behind controls rather than autoplaying {% endcomment %}
+      {% comment %}
+        silent and short, so it runs like a moving illustration. muted is what
+        makes autoplay allowed at all; controls stay so it can be stopped, and
+        fr-pages.js holds it still for anyone who asks for reduced motion.
+      {% endcomment %}
       <video
         class="fr-film"
-        controls
+        autoplay
+        muted
+        loop
         playsinline
-        preload="none"
+        controls
+        preload="auto"
         poster="{{ "images/pages/disegnolo.poster.jpg" | relative_url }}"
       >
         <source src="{{ "images/pages/disegnolo.mp4" | relative_url }}" type="video/mp4">
