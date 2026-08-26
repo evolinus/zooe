@@ -2,50 +2,76 @@
 layout: default
 ---
 
-{% capture floatcontent %}
+{% comment %}
+  member profile in the first-run language: a 1/3 rail (photo on the red
+  panel, links on the light-blue panel) beside a 2/3 text column that mirrors
+  the paragraph structure of the other interior pages.
+{% endcomment %}
 
-{% include portrait.html lookup=page.slug %}
+{% include section.html size="full" %}
 
-<div>
-  {% for link in page.links %}
-    {% assign key = link[0] %}
-    {% assign value = link[1] %}
-    {% include button.html type=key link=value style="bare" %}<br>
-  {% endfor %}
+{% assign type = site.data.types[page.role] %}
+
+<div class="fr-page">
+  <div class="fr-profile fr-strip fr-strip-last">
+    <aside class="fr-profile-aside">
+      <div class="fr-profile-photo">
+        <img
+          src="{{ page.image | relative_url | uri_escape }}"
+          alt="{{ page.name | default: page.title }}"
+          loading="lazy"
+          {% include fallback.html %}
+        >
+      </div>
+
+      {% if page.links %}
+        <div class="fr-profile-links">
+          <p class="fr-eyebrow">Elsewhere</p>
+          <ul>
+            {% for link in page.links %}
+              {% assign key = link[0] %}
+              {% assign kind = site.data.types[key] %}
+              <li>
+                <a href="{{ kind.link | default: "$VALUE" | replace: "$VALUE", link[1] }}">
+                  {% include icon.html icon=kind.icon %}
+                  <span>{{ kind.text | default: key }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </aside>
+
+    <div class="fr-profile-body">
+      <p class="fr-eyebrow">People</p>
+      <h1 class="fr-title fr-profile-name">{{ page.name | default: page.title }}</h1>
+      {% if page.description or type %}
+        <p class="fr-profile-role">{{ page.description | default: type.description }}</p>
+      {% endif %}
+
+      {% assign bodytext = content | strip_html | strip %}
+      {% if bodytext != "" %}
+        <div class="fr-prose">
+          {{ content }}
+        </div>
+      {% endif %}
+
+      {% assign aliases = page.aliases
+        | default: page.name
+        | default: page.title
+        | join: ","
+        | split: ","
+        | array_filter
+      %}
+      {% capture search -%}
+        publications/?search={% for alias in aliases %}"{{ alias }}" {% endfor %}
+      {%- endcapture %}
+      <p class="fr-profile-papers">
+        <a class="fr-btn fr-btn-ghost" href="{{ search | relative_url | uri_escape }}">
+          Search {{ page.name | default: page.title }}'s papers &rarr;
+        </a>
+      </p>
+    </div>
+  </div>
 </div>
-
-{% endcapture %}
-
-{% include float.html content=floatcontent %}
-
-{{ content }}
-
-{% assign aliases = page.aliases
-  | default: page.name
-  | default: page.title
-  | join: ","
-  | split: ","
-  | array_filter
-%}
-
-{% capture search -%}
-  publications/?search={% for alias in aliases %}"{{ alias }}" {% endfor %}
-{%- endcapture %}
-
-<p class="center">
-  <a href="{{ search | relative_url | uri_escape }}">
-    Search for {{ page.name | default: page.title }}'s papers on the Publications page
-  </a>
-</p>
-
-{% capture search -%}
-  blog/?search={{ page.name }}
-{%- endcapture %}
-
-<!--
-<p class="center">
-  <a href="{{ search | relative_url | uri_escape }}">
-    See {{ page.name | default: page.title }}'s posts on the Blog page
-  </a>
-</p>
--->
