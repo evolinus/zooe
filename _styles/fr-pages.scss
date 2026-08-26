@@ -381,7 +381,7 @@ $wrap: 900px;
 /* — contact — */
 .fr-contact {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   border-bottom: 2px solid var(--divider);
 }
 .fr-contact-main { padding: 40px var(--pad) 40px; border-right: 2px solid var(--divider); }
