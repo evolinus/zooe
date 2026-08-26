@@ -64,16 +64,16 @@ $wrap: 900px;
   align-items: end;
 }
 
-/* ink panel — the black block used for calls to action */
+/* the block panel used for calls to action */
 .fr-ink {
   display: flex;
   flex-direction: column;
   padding: 22px 24px;
-  background: var(--text);
-  color: var(--background);
-  a:not(.fr-btn) { color: var(--background); }
-  .fr-eyebrow { color: var(--background); }
-  h3 { color: var(--background); }
+  background: var(--panel);
+  color: var(--panel-ink);
+  a:not(.fr-btn) { color: var(--panel-ink); }
+  .fr-eyebrow { color: var(--panel-ink); }
+  h3 { color: var(--panel-ink); }
 }
 .fr-ink-text { margin: 8px 0 14px; font-size: 13px; line-height: 1.6; text-align: left; }
 
@@ -213,7 +213,7 @@ $wrap: 900px;
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 .fr-member-note { margin: 8px 0 0; font-size: 13px; line-height: 1.55; text-align: left; color: var(--dark-gray); }
 
@@ -283,7 +283,7 @@ $wrap: 900px;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 .fr-pub-year {
   margin-top: 4px;
@@ -308,7 +308,20 @@ $wrap: 900px;
   /* film first, at 60% of the third it used to take; the text fills the rest */
   grid-template-columns: 1fr 4fr;
   gap: 40px;
-  align-items: start;
+  align-items: center;
+}
+
+/* the schools block sits on the panel colour, end to end */
+.fr-schools {
+  background: var(--panel);
+  color: var(--panel-ink);
+  a { color: var(--primary-deep); }
+  .fr-h6,
+  .fr-intro,
+  .fr-member-name,
+  p { color: var(--panel-ink); }
+  .fr-member-role { color: var(--primary-deep); }
+  .fr-cols { border-bottom: none; }
 }
 .fr-film {
   width: 100%;
@@ -338,7 +351,7 @@ $wrap: 900px;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-figure-split {

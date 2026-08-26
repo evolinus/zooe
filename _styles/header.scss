@@ -166,3 +166,18 @@ header[data-big] {
     font-size: var(--large);
   }
 }
+
+/* the bar takes the block colour rather than ink — see -theme.scss */
+header.background {
+  background: var(--panel);
+  color: var(--panel-ink);
+}
+
+header.background a,
+header.background .title-text {
+  color: var(--panel-ink);
+}
+
+header.background a:hover {
+  color: var(--primary-deep);
+}
