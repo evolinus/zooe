@@ -26,7 +26,7 @@ layout: default
 
       {% if page.links %}
         <div class="fr-profile-links">
-          <p class="fr-eyebrow">Elsewhere</p>
+          <p class="fr-eyebrow">Find me elsewhere</p>
           <ul>
             {% for link in page.links %}
               {% assign key = link[0] %}
@@ -56,22 +56,6 @@ layout: default
           {{ content }}
         </div>
       {% endif %}
-
-      {% assign aliases = page.aliases
-        | default: page.name
-        | default: page.title
-        | join: ","
-        | split: ","
-        | array_filter
-      %}
-      {% capture search -%}
-        publications/?search={% for alias in aliases %}"{{ alias }}" {% endfor %}
-      {%- endcapture %}
-      <p class="fr-profile-papers">
-        <a class="fr-btn fr-btn-ghost" href="{{ search | relative_url | uri_escape }}">
-          Search {{ page.name | default: page.title }}'s papers &rarr;
-        </a>
-      </p>
     </div>
   </div>
 </div>

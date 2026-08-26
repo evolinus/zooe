@@ -417,12 +417,13 @@ $wrap: 900px;
 .fr-profile-aside {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  /* panels butt together, like the colour blocks elsewhere on the site */
+  gap: 0;
   align-self: start;
 }
-/* the photo sits matted on the red panel */
+/* the photo sits matted on the red panel, with a heavier bottom band */
 .fr-profile-photo {
-  padding: 14px;
+  padding: 14px 14px 34px;
   background: var(--primary);
   img {
     display: block;
@@ -470,11 +471,6 @@ $wrap: 900px;
   color: var(--primary-deep);
 }
 .fr-profile-body .fr-prose p { max-width: 68ch; }
-.fr-profile-papers {
-  margin: 22px 0 0;
-  padding-top: 18px;
-  border-top: 1px solid var(--divider);
-}
 
 /* — contact — */
 .fr-contact {
