@@ -211,6 +211,16 @@
   font-size: 15px;
 }
 
+/* the composite strip that closes the rail. regenerate it by re-running the
+   montage over images/team/* and images/pages/* — 6x2 tiles, greyscale, blended
+   55% into the rail colour, 900x256 for a 449x128 slot. */
+.fr-mosaic {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: auto;
+}
+
 .fr-highlight {
   margin-top: auto;
   padding: 14px 16px;
