@@ -1,3 +1,4 @@
+@charset "UTF-8";
 header {
   display: flex;
   justify-content: space-between;
@@ -142,6 +143,21 @@ header[data-big] .title {
 }
 header[data-big] .subtitle {
   font-size: var(--large);
+}
+
+/* the bar stays black in both themes — see -theme.scss */
+header.background {
+  background: var(--bar);
+  color: var(--bar-ink);
+}
+
+header.background a,
+header.background .title-text {
+  color: var(--bar-ink);
+}
+
+header.background a:hover {
+  color: var(--primary);
 }
 
 /*# sourceMappingURL=header.css.map */

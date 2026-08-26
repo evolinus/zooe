@@ -22,6 +22,15 @@ const frPages = () => {
     });
   });
 
+  // a looping film is motion: honour a reduced-motion preference
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll("video[autoplay]").forEach((video) => {
+      video.autoplay = false;
+      video.loop = false;
+      video.pause();
+    });
+  }
+
   // segmented filters
   document.querySelectorAll("[data-fr-filter]").forEach((group) => {
     const listId = group.getAttribute("data-fr-filter");

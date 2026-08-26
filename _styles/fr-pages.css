@@ -68,22 +68,22 @@
   align-items: end;
 }
 
-/* ink panel — the black block used for calls to action */
+/* the block panel used for calls to action */
 .fr-ink {
   display: flex;
   flex-direction: column;
   padding: 22px 24px;
-  background: var(--text);
-  color: var(--background);
+  background: var(--panel);
+  color: var(--panel-ink);
 }
 .fr-ink a:not(.fr-btn) {
-  color: var(--background);
+  color: var(--panel-ink);
 }
 .fr-ink .fr-eyebrow {
-  color: var(--background);
+  color: var(--panel-ink);
 }
 .fr-ink h3 {
-  color: var(--background);
+  color: var(--panel-ink);
 }
 
 .fr-ink-text {
@@ -194,6 +194,14 @@
   border-right: 2px solid var(--divider);
 }
 
+.fr-cols-2-1 {
+  grid-template-columns: 2fr 1fr;
+}
+.fr-cols-2-1 > *:first-child {
+  padding-right: 40px;
+  border-right: 2px solid var(--divider);
+}
+
 .fr-cols-3 {
   grid-template-columns: repeat(3, 1fr);
 }
@@ -278,7 +286,7 @@
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-member-note {
@@ -388,7 +396,7 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-pub-year {
@@ -410,6 +418,43 @@
 }
 
 /* — teaching — */
+.fr-with-media {
+  display: grid;
+  /* film first, at 60% of the third it used to take; the text fills the rest */
+  grid-template-columns: 1fr 4fr;
+  gap: 40px;
+  align-items: center;
+}
+
+/* the schools block sits on the highlight colour, end to end */
+.fr-schools {
+  background: var(--secondary);
+  color: var(--text);
+}
+.fr-schools a {
+  color: var(--primary-deep);
+}
+.fr-schools .fr-h6,
+.fr-schools .fr-intro,
+.fr-schools .fr-member-name,
+.fr-schools p {
+  color: var(--text);
+}
+.fr-schools .fr-member-role {
+  color: var(--primary-deep);
+}
+.fr-schools .fr-cols {
+  border-bottom: none;
+}
+
+.fr-film {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: var(--background-alt);
+  border: 1px solid var(--divider);
+}
+
 .fr-course {
   display: grid;
   grid-template-columns: 1fr 160px;
@@ -440,7 +485,7 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: #a81600;
+  color: var(--primary-deep);
 }
 
 .fr-figure-split {
@@ -448,6 +493,14 @@
   grid-template-columns: 420px 1fr;
   gap: 40px;
   padding: 32px var(--pad) 40px;
+}
+
+/* a cover shows whole, at its own aspect ratio, at 70% of the column height */
+.fr-cover {
+  align-self: start;
+  width: 70%;
+  height: auto;
+  border: 1px solid var(--divider);
 }
 
 .fr-prose {
@@ -469,7 +522,7 @@
 /* — contact — */
 .fr-contact {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   border-bottom: 2px solid var(--divider);
 }
 
@@ -486,12 +539,14 @@
 .fr-contact-figure {
   flex: 1;
   min-height: 240px;
+  padding: 40px;
   overflow: hidden;
+  /* a logo, not a photograph: show it whole rather than cropping to fill */
 }
 .fr-contact-figure img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .fr-contact-stack {
@@ -516,8 +571,15 @@
     gap: 24px;
   }
   .fr-cols-2,
+  .fr-cols-2-1,
   .fr-cols-3 {
     grid-template-columns: 1fr;
+  }
+  .fr-with-media {
+    grid-template-columns: 1fr;
+  }
+  .fr-cover {
+    width: 100%;
   }
   .fr-cols > * {
     border-right: none !important;
