@@ -106,8 +106,14 @@ $wrap: 900px;
   display: grid;
   /* an empty first column carries the page indent, so the hero text lands on the
      same measure as every section below. a padding on the panel itself cannot do
-     this: its percentage would resolve against the 1fr column, not the page. */
-  grid-template-columns: max(40px, calc((100% - #{$page}) / 2)) minmax(0, 1fr) 360px;
+     this: its percentage would resolve against the 1fr column, not the page.
+     the red panel then takes two thirds of the measure — the same width as the
+     Current work list below it — and the rail runs out to the right edge. */
+  --edge: max(40px, calc((100% - #{$page}) / 2));
+  grid-template-columns:
+    var(--edge)
+    minmax(0, calc((100% - (2 * var(--edge))) * 2 / 3))
+    minmax(0, 1fr);
   background: var(--primary);
   color: var(--background);
 }
@@ -183,7 +189,8 @@ $wrap: 900px;
 /* — project index — */
 .fr-work {
   display: grid;
-  grid-template-columns: 1fr 440px;
+  /* two thirds of the measure, so the list ends where the hero's red panel does */
+  grid-template-columns: 66.6667% minmax(0, 1fr);
   gap: 48px;
 }
 .fr-section-head {
