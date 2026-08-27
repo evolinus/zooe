@@ -3,7 +3,10 @@
 
 band:
   - image: images/pages/farfalla.jpg
-  - image: images/pages/formica.jpg
+  - image: images/pages/SIBE_logo.png
+    alt: Società Italiana di Biologia Evoluzionistica
+    link: https://www.sibe-iseb.it
+    fit: contain
   - image: images/pages/bai.jpg
 
 # university courses, listed on the teaching page
