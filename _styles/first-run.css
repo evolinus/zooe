@@ -397,7 +397,7 @@
 /* — closing band — */
 .fr-band {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   border-top: 2px solid var(--divider);
 }
 
@@ -440,7 +440,7 @@
     grid-column: 2;
   }
   .fr-band {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   .fr-plate {
     border-right: none;

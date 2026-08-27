@@ -657,6 +657,14 @@
   max-width: 340px;
 }
 
+/* the river, under the way to find us */
+.fr-contact-view {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 32px;
+}
+
 .fr-address {
   font-size: 15px;
   line-height: 1.8;
