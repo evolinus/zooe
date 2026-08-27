@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolutionary Laboratories</title>
+<style>
+  :root{
+    --paper: #EDE6D6;
+    --paper-dim: #E2D9C4;
+    --ink: #262220;
+    --ink-soft: #6b6258;
+    --rule: #cabfa8;
+    --lineage-a: #3D6E6E;
+    --lineage-b: #A8442A;
+    --lineage-c: #7A5C99;
+    --stamp: #C08A2E;
+    --card-shadow: 0 1px 0 rgba(38,34,32,0.06), 0 8px 20px -12px rgba(38,34,32,0.35);
+    /* Branching specific leaf colors */
+    --leaf-c: #3D6E6E;
+    --leaf-d: #A8442A;
+    --leaf-g: #B8862E;
+    --leaf-h: #7A5C99;
+    --leaf-i: #388047;
+    /* Adaptation Room habitat colors — same muted palette as the Branching Room */
+    --habitat-stream: #2E5C8A;
+    --habitat-pond: #A8442A;
+    --habitat-river: #B8862E;
+    --help-red: #B3141F;
+  }
+  
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; padding:0;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(38,34,32,0.05) 1px, transparent 0) 0 0/22px 22px,
+      var(--paper);
+    color:var(--ink);
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  }
+  .mono{ font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+  /* Tab Navigation Styling */
+  .tab-nav {
+    display: flex;
+    gap: 8px;
+    max-width: 1180px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    border-bottom: 2px solid var(--ink);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 10px 20px;
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .tab-btn:hover {
+    background: #dbd1b9;
+    color: var(--ink);
+  }
+  .tab-btn.active {
+    background: var(--paper);
+    color: var(--ink);
+    font-weight: bold;
+    border: 2px solid var(--ink);
+    border-bottom: 2px solid var(--paper);
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+
+  .page{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  header.masthead{
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  header.masthead .sub .sub-label{
+    color: var(--stamp);
+    font-weight: 700;
+  }
+  header.masthead h1{
+    margin:0;
+    font-size: clamp(26px, 4vw, 38px);
+    letter-spacing: 0.2px;
+    font-weight: 700;
+  }
+  header.masthead .eyebrow{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--stamp);
+    margin: 0 0 4px;
+  }
+  header.masthead .sub{
+    max-width: 85ch;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0;
+  }
+  /* control deck */
+  .deck{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 26px;
+    display: grid;
+    /* 200px min keeps a label plus its help button on a single line. */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px 22px;
+    align-items: end;
+  }
+
+  .readme-content{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 28px 32px;
+    max-width: 94ch;
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+  .readme-content p{ margin: 0 0 16px; }
+  .readme-content p:last-child{ margin-bottom: 0; }
+  .readme-content a{ color: var(--stamp); }
+  .readme-content h2{
+    font-size: 21px;
+    margin: 30px 0 4px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+  }
+  .readme-content h2:first-of-type{ margin-top: 22px; }
+  .readme-content h2 .room-num{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--stamp);
+    margin-right: 8px;
+  }
+  .readme-content h3{
+    font-size: 15px;
+    margin: 24px 0 8px;
+    letter-spacing: 0.2px;
+  }
+  .readme-content .room-kicker{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--stamp);
+    margin: 0 0 12px;
+  }
+  .readme-content .lead{ font-size: 16px; }
+  .readme-content ul{ margin: 0 0 16px; padding-left: 22px; }
+  .readme-content li{ margin-bottom: 7px; }
+  .readme-content .room-open{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 14px;
+  }
+
+  /* zoo_e lab brand block (logo + wordmark) */
+  .brand-link{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-decoration:none;
+  }
+  .brand-logo{
+    width:90px;
+    height:auto;
+    object-fit:contain;
+    display:block;
+  }
+  .brand-text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight:800;
+    font-size:12px;
+    letter-spacing:0.2px;
+    white-space:nowrap;
+  }
+  .brand-text .c-black{ color:#111111; }
+  .brand-text .c-red{ color:#B3141F; }
+  .brand-text .c-yellow{ color:#C9971A; }
+
+  .masthead-brand{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-left: 1px solid var(--rule);
+    padding-left: 14px;
+  }
+
+  .readme-row{
+    display:flex;
+    align-items:stretch;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .readme-brand{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding: 8px 8px 0;
+  }
+  .readme-brand .brand-logo{ width:150px; height:auto; }
+  .readme-brand .brand-text{ font-size:15px; }
+
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .field label .sym{ text-transform: none; }
+  .field .value{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  input[type=range]{
+    -webkit-appearance:none;
+    width:100%;
+    height: 3px;
+    background: var(--rule);
+    border-radius: 2px;
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:14px; height:14px;
+    border-radius:50%;
+    background: var(--ink);
+    cursor:pointer;
+    border: 2px solid var(--paper-dim);
+    box-shadow: 0 0 0 1px var(--ink);
+  }
+  input[type=range]:disabled::-webkit-slider-thumb{
+    background: var(--ink-soft);
+    box-shadow: 0 0 0 1px var(--ink-soft);
+    cursor: not-allowed;
+  }
+  .segmented{
+    display:flex;
+    border: 1px solid var(--ink);
+    border-radius: 4px;
+    overflow:hidden;
+  }
+  .segmented button{
+    flex:1;
+    padding: 7px 6px;
+    background: var(--paper);
+    border:none;
+    border-right: 1px solid var(--ink);
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    cursor:pointer;
+    color: var(--ink);
+  }
+  .segmented button:last-child{ border-right:none; }
+  .segmented button.active{
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Habitat choice buttons (Adaptation Room) — color-coded like the
+     Branching Room's leaf palette: font colored when unselected, button
+     fill colored when selected. */
+  .segmented.segmented-habitat button[data-habitat="stream"]{ color: var(--habitat-stream); }
+  .segmented.segmented-habitat button[data-habitat="pond"]{ color: var(--habitat-pond); }
+  .segmented.segmented-habitat button[data-habitat="river"]{ color: var(--habitat-river); }
+  .segmented.segmented-habitat button[data-habitat="stream"].active{ background: var(--habitat-stream); color: var(--paper); }
+  .segmented.segmented-habitat button[data-habitat="pond"].active{ background: var(--habitat-pond); color: var(--paper); }
+  .segmented.segmented-habitat button[data-habitat="river"].active{ background: var(--habitat-river); color: var(--paper); }
+
+  /* Help system — a small red "?" beside a control or panel opens a modal
+     explaining it. The glyph comes from CSS so buttons rendered by a room's
+     JS need only the markup <button class="help-btn" data-help="topicId">. */
+  .help-btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    margin-left: 6px;
+    border: none;
+    border-radius: 50%;
+    background: var(--help-red);
+    color: #fff;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+    flex: none;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .help-btn::before{ content: '?'; }
+  .help-btn:hover{ background: #8f0f18; }
+  .help-btn:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .help-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(38, 34, 32, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .help-overlay.open{ display: flex; }
+  .help-dialog{
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 0 18px 50px -12px rgba(38,34,32,0.5);
+    width: 100%;
+    max-width: 560px;
+    max-height: 82vh;
+    overflow-y: auto;
+    padding: 18px 22px 22px;
+  }
+  .help-dialog-head{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .help-dialog-head h2{
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.25;
+  }
+  .help-close{
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 26px;
+    line-height: 1;
+    padding: 0 2px;
+    cursor: pointer;
+    flex: none;
+  }
+  .help-close:hover{ color: var(--ink); }
+  .help-dialog-body p{
+    font-size: 14.5px;
+    line-height: 1.65;
+    margin: 0 0 12px;
+  }
+  .help-dialog-body p:last-child{ margin-bottom: 0; }
+  .help-dialog-body ul{
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin: 0 0 12px;
+    padding-left: 20px;
+  }
+  .help-dialog-body li{ margin-bottom: 5px; }
+  .help-dialog-body code{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    background: var(--paper-dim);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  .help-inline-note{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+  .lineage-head .name-group{ display: flex; align-items: center; min-width: 0; }
+
+  .infer-toggle{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+  .infer-toggle .infer-toggle-label{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--stamp);
+  }
+  .infer-toggle .segmented{ width: auto; }
+  .infer-toggle .segmented button{ padding: 6px 14px; }
+
+  .transport{
+    display:flex;
+    gap:8px;
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+    align-items:center;
+    border-top: 1px dashed var(--rule);
+    padding-top: 14px;
+    margin-top: 2px;
+  }
+  
+  .time-machine-container {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: var(--paper);
+    padding: 12px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--stamp);
+    margin-top: 4px;
+  }
+
+  button.btn{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.4px;
+    padding: 9px 16px;
+    border-radius: 4px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    transition: transform 0.06s ease, opacity 0.15s ease;
+  }
+  button.btn:active{ transform: translateY(1px); }
+  button.btn.secondary{
+    background: transparent;
+    color: var(--ink);
+  }
+  button.btn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .transport .status{
+    margin-left: auto;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .stage-area{
+    display:grid;
+    gap: 20px;
+    grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr));
+  }
+  .lineage-card{
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-top: 5px solid var(--accent, var(--ink));
+    border-radius: 6px;
+    box-shadow: var(--card-shadow);
+    padding: 14px 14px 10px;
+    min-width: 0;
+  }
+  .lineage-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:8px;
+  }
+  .lineage-head .name{
+    font-weight:700;
+    font-size: 15px;
+  }
+  .lineage-head .stat{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align:right;
+    line-height:1.5;
+  }
+  .stage-canvas{
+    width:100%;
+    aspect-ratio: 1 / 1;
+    display:block;
+    background:
+      linear-gradient(var(--paper-dim) 1px, transparent 1px) 0 0/100% 25%,
+      linear-gradient(90deg, var(--paper-dim) 1px, transparent 1px) 0 0/25% 100%,
+      var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  /* Room 2 (Branching) Specific Tree Graphics */
+  .tree-wrap{
+    position:relative;
+    overflow-x:auto; overflow-y:visible;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background:
+      linear-gradient(var(--paper-dim) 1px, transparent 1px) 0 0/100% 40px,
+      var(--paper);
+    margin-bottom: 8px;
+  }
+  .tree-canvas{ position:relative; }
+  svg.lines{ position:absolute; top:0; left:0; pointer-events:none; }
+  
+  .node-card{
+    position:absolute;
+    width:128px; height:128px; 
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: var(--card-shadow);
+    display:none;
+    z-index: 2;
+  }
+  .node-card canvas{ width:100%; height:100%; display:block; }
+  .node-card .tag{
+    position:absolute; top: 100%; left:50%; transform:translateX(-50%);
+    margin-top:4px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; color: var(--ink-soft); white-space:nowrap;
+    background: var(--paper); padding: 0 4px; border-radius:3px;
+  }
+  .node-card.frozen{ box-shadow: var(--card-shadow), 0 0 0 3px var(--paper), 0 0 0 5px currentColor; }
+
+  .legend{ display:flex; gap:16px; flex-wrap:wrap; margin: 10px 0 4px; font-size:12px; }
+  .legend .item{ display:flex; align-items:center; gap:6px; }
+  .legend .swatch{ width:11px; height:11px; border-radius:2px; display:inline-block; }
+
+  table.divtable{ border-collapse:collapse; margin-top:10px; font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; font-size:12px; }
+  table.divtable th, table.divtable td{ border:1px solid var(--rule); padding:4px 9px; text-align:center; }
+  table.divtable th{ background:var(--paper-dim); }
+
+  /* Room 3 (Drift) Specific Styles */
+  .canvas-wrap {
+    width: 100%;
+    height: 180px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .canvas-wrap.tall { height: 200px; }
+  .canvas-wrap.multi-run { height: 360px; }
+  .canvas-wrap canvas { width: 100%; height: 100%; display: block; }
+  
+  .drift-stats {
+    display: flex; gap: 12px; margin-top: 12px; justify-content: center; flex-wrap: wrap;
+  }
+  .drift-chip {
+    background: var(--paper-dim); border: 1px solid var(--rule); border-radius: 4px;
+    padding: 6px 12px; text-align: center; font-family: ui-monospace, 'SF Mono', monospace; font-size: 10px; color: var(--ink-soft);
+  }
+  .drift-chip span { display: block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 2px; }
+
+  .needle {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 14px solid var(--ink);
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); z-index: 10;
+  }
+
+  /* Shared Reading and Footer Panels */
+  .reading{
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 2px solid var(--ink);
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .reading p{
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    margin: 0;
+    max-width: 78ch;
+  }
+  .reading .divergence-line{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--stamp);
+  }
+
+  footer.note{
+    margin-top: 30px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+  }
+
+  /* Room 5 (Adaptation) Specific Styles */
+  /* Each founder gets its own row, a 5-column grid:
+     Neutral trait table | Neutral "Now" fish | shared Gen-0 fish |
+     Habitat "Now" fish | Habitat trait table. The three fish columns are
+     equal width so the Gen-0 card lines up exactly with its two neighbors,
+     which are joined to it by SVG connector lines (drawn in JS from the
+     cards' real positions — see .adapt-connector-svg). A habitat caption
+     sits below each side. */
+  .adapt-founder-row{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 16px;
+    /* Overridden per-founder in JS to the selected habitat's color; used by
+       both the habitat fish card's border and its Gen-0 connector line. */
+    --habitat-color: var(--ink);
+  }
+  .adapt-founder-row:last-child{ margin-bottom: 0; }
+  .adapt-founder-name{
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+  .adapt-row-grid{
+    display: grid;
+    grid-template-columns: 0.75fr 1.3fr 1.3fr 1.3fr 0.75fr;
+    gap: 14px;
+    align-items: start;
+    position: relative;
+    z-index: 0; /* keeps the connector SVG's negative z-index contained locally */
+  }
+  .adapt-row-grid > *{ min-width: 0; }
+  /* Connector lines from the Gen-0 card to its Neutral (black) and Habitat
+     (colored) neighbors, drawn as real SVG lines (coordinates computed in JS
+     from the actual card positions) rather than a fixed-size CSS trick — this
+     keeps them correctly anchored regardless of card size or viewport width. */
+  .adapt-connector-svg{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: -1;
+  }
+  .adapt-fish-slot{
+    text-align: center;
+  }
+  .adapt-fish-card{
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+    aspect-ratio: 1 / 1;
+  }
+  .adapt-fish-card canvas{
+    width: 100%; height: 100%;
+    display: block;
+    background: var(--paper);
+    border: 6px solid var(--ink);
+    border-radius: 10px;
+  }
+  .adapt-habitat-fish-card canvas{ border-color: var(--habitat-color); }
+  /* Each card's caption sits directly beneath it and states that lineage's
+     selective regime in full, color-coded to match the card's own border:
+     black for the shared ancestor, muted ink for the unselected Neutral
+     lineage, and the habitat's color for the selected one. */
+  .adapt-fish-slot .adapt-fish-label{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin-top: 8px;
+  }
+  .adapt-fish-slot .adapt-label-ancestor{ color: var(--ink); font-weight: 600; }
+  .adapt-fish-slot .adapt-label-neutral{ color: var(--ink-soft); }
+  .adapt-fish-slot .adapt-label-habitat{ color: var(--habitat-color); font-weight: 600; }
+  table.adapt-trait-table{
+    border-collapse: collapse;
+    width: 100%;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    color: var(--ink-soft);
+  }
+  table.adapt-trait-table th, table.adapt-trait-table td{
+    border: 1px solid var(--rule);
+    padding: 3px 4px;
+    text-align: left;
+  }
+  table.adapt-trait-table th{ background: var(--paper); color: var(--ink); font-weight: normal; }
+  table.adapt-trait-table td:first-child{ white-space: nowrap; }
+  table.adapt-trait-table td.adapt-num, table.adapt-trait-table th:not(:first-child){ text-align: right; }
+  table.adapt-trait-table tr.adapt-total td{ color: var(--ink); font-weight: bold; background: var(--paper); }
+  table.adapt-trait-table tr.adapt-row-neutralsum{ background: rgba(168, 52, 42, 0.15); }
+  table.adapt-trait-table tr.adapt-row-selected{ background: rgba(46, 90, 140, 0.15); }
+  table.adapt-trait-table tr.adapt-row-other{ background: var(--paper-dim); }
+  .adapt-n-row{
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 90px repeat(3, 1fr);
+    gap: 16px 22px;
+    align-items: end;
+  }
+  .adapt-n-row .adapt-n-row-label{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    padding-bottom: 8px;
+  }
+  .adapt-section-label{
+    grid-column: 1 / -1;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--stamp);
+    margin: 18px 0 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+  }
+  .adapt-section-label:first-child{ margin-top: 0; padding-top: 0; border-top: none; }
+  .deck details.adapt-advanced{
+    grid-column: 1 / -1;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 2px 16px;
+  }
+  .deck details.adapt-advanced[open]{
+    padding-bottom: 16px;
+  }
+  .deck details.adapt-advanced summary{
+    grid-column: 1 / -1;
+    cursor: pointer;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--stamp);
+    padding: 10px 0;
+    list-style: none;
+  }
+  .deck details.adapt-advanced summary::-webkit-details-marker{ display: none; }
+  .deck details.adapt-advanced summary::before{
+    content: '▸';
+    display: inline-block;
+    font-size: 16px;
+    line-height: 1;
+    margin-right: 8px;
+    transform: translateY(1px);
+  }
+  .deck details.adapt-advanced[open] summary::before{ content: '▾'; }
+  .adapt-advanced-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px 22px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    margin-top: 2px;
+  }
+  table.divtable.adapt-divmatrix th, table.divtable.adapt-divmatrix td{ font-size: 11px; padding: 3px 7px; }
+
+  @media (max-width: 900px){
+    .stage-area{ grid-template-columns: 1fr !important; }
+    header.masthead .masthead-brand{ display:none; }
+    .adapt-row-grid{ grid-template-columns: 1fr !important; }
+    .adapt-connector-svg{ display: none !important; }
+    .adapt-n-row{ grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Master Navigation Tab Bar -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('readme', event)">README</button>
+    <button class="tab-btn" onclick="switchTab('copying', event)">The Copying Room</button>
+    <button class="tab-btn" onclick="switchTab('branching', event)">The Branching Room</button>
+    <button class="tab-btn" onclick="switchTab('drifting', event)">The Drift Room</button>
+    <button class="tab-btn" onclick="switchTab('selection', event)">The Selection Room</button>
+    <button class="tab-btn" onclick="switchTab('adaptation', event)">The Adaptation Room</button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 0: README                               -->
+  <!-- ========================================== -->
+  <div id="tab-readme" class="tab-content page active">
+    <header class="masthead">
+      <div>
+        <h1>Evolutionary Laboratories</h1>
+        <p class="sub">Welcome — start here.</p>
+      </div>
+    </header>
+
+    <div class="readme-row">
+      <div class="readme-content">
+        <p class="lead">Welcome to the Evolutionary Laboratories. On these pages you can use interactive simulations to explore evolutionary mechanisms and processes in an intuitive, hands-on way.</p>
+
+        <h3>How to use the rooms</h3>
+        <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong> (or Start), and <strong>read the panels</strong> that fill in below. Nothing is precomputed — each run is a fresh simulation, so running the same settings twice will not give the same result: these are random processes, and the parameters set tendencies, never outcomes.</p>
+        <p>Two features are worth knowing about before you start:</p>
+        <ul>
+          <li>The <strong>History Scrubber</strong> at the bottom of each room lets you drag back through a finished run and replay any generation. Nothing is lost when a run ends.</li>
+          <li>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</li>
+        </ul>
+        <p>The five rooms build on each other. The first two use <em>shapes</em> to make the idea of accumulated change visible; the middle two introduce the actual population-genetics machinery with <em>alleles</em>; the last one puts both together. Working through them in order is recommended, but each room stands on its own.</p>
+
+        <h2><span class="room-num">01</span>The Copying Room</h2>
+        <p class="room-kicker">Mutation &amp; accumulated change</p>
+        <p><strong>What it shows.</strong> A single starting figure is copied over and over. Every copy introduces a small random error — no error is large, and none of them is aimed at anything. You can run up to 100 lineages side by side, all starting from the identical same figure.</p>
+        <p><strong>Try this.</strong> Set 2 lineages and press <em>Start copying</em>. Watch the two shapes, which began identical, slowly stop resembling each other. Then set the mutation size to its smallest value and run it again for many generations. Finally, switch to 100 lineages to see the whole cloud of possibilities at once.</p>
+        <p><strong>What to notice.</strong> There is no selection here and no goal — yet the shapes still change, and they change in <em>different directions</em>. The divergence readout (Δ) climbs steadily. This is the base fact all the other rooms build on: copying is imperfect, it introduces mutations, which are not bad or good <em>per se</em>.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('copying'); window.scrollTo(0,0); return false;">→ Open the Copying Room</a></p>
+
+        <h2><span class="room-num">02</span>The Branching Room</h2>
+        <p class="room-kicker">Divergence &amp; speciation</p>
+        <p><strong>What it shows.</strong> The same copying process, but now lineages <em>split</em>. One ancestor becomes two independent lineages, each of which keeps drifting on its own and may split again. You choose when the splits happen by dragging the marks on the little tree diagram.</p>
+        <p><strong>Try this.</strong> Run it once with the default splits. When it finishes, scroll to the <em>Tanglegram</em> at the bottom: on the left is the true history you just watched, on the right is the family tree an algorithm reconstructs using <em>only</em> the final shapes. Compare them. Then drag the splits so they all happen close together and run it again.</p>
+        <p><strong>What to notice.</strong> The reconstructed tree often disagrees with the real one. Lineages that happened to drift very little can look like close relatives even when they separated long ago, and a fast-changing lineage can look like an outsider. This is the central problem of real phylogenetics: <em>similarity is not the same thing as ancestry</em>.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('branching'); window.scrollTo(0,0); return false;">→ Open the Branching Room</a></p>
+
+        <h2><span class="room-num">03</span>The Drift Room</h2>
+        <p class="room-kicker">The Wright–Fisher model</p>
+        <p><strong>What it shows.</strong> This is where the real population genetics starts. A population of N individuals carries two alleles, A and B. Each generation is built by <em>randomly sampling</em> the previous one — the spinning wheel makes a single draw, and a full generation means one draw per gene copy. Nobody has any advantage; the only force at work is chance.</p>
+        <p><strong>Try this.</strong> Run the default settings and watch the first three generations sample one individual at a time. Then set N = 10 and run, and afterwards set N = 200 and run again with everything else unchanged. Finally press <em>Run 10 Simulations</em> to see ten independent populations at once.</p>
+        <p><strong>What to notice.</strong> Small populations lurch around and quickly end up with only one allele left; large populations barely move, but will eventually also fix an allele, although after more generations. In fact, one important point to note is that in evolution time is measured in generations, not years. Once an allele reaches 0 or 1 it can never come back — drift permanently destroys variation. And across ten identical runs the outcomes differ wildly, which is why a single run can never tell you what a random process "does".</p>
+        <p class="room-open"><a href="#" onclick="switchTab('drifting'); window.scrollTo(0,0); return false;">→ Open the Drift Room</a></p>
+
+        <h2><span class="room-num">04</span>The Selection Room</h2>
+        <p class="room-kicker">Wright–Fisher + selection</p>
+        <p><strong>What it shows.</strong> Exactly the same sampling machinery as the Drift Room, with one addition: allele A now carries a fitness advantage <em>s</em>. Before each generation is drawn, the frequency is reweighted by fitness — so selection <em>tilts the odds</em>, and then ordinary random sampling does the drawing. Under diploid settings you can also set dominance <em>h</em>.</p>
+        <p><strong>Try this.</strong> Run with s = 0.1 at N = 200, and notice how closely the real trajectory tracks the dashed line (which is what selection would do with no randomness at all). Then run the same s = 0.1 at N = 10. Finally switch to Diploid, set s = 0.2, and compare h = 1 against h = 0.</p>
+        <p><strong>What to notice.</strong> What matters is not <em>s</em> by itself but <strong>N·s</strong> — the product of population size and advantage. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (h = 0) is nearly invisible to selection while it is rare, because it is hiding inside heterozygotes, so it too can be lost like a neutral allele.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('selection'); window.scrollTo(0,0); return false;">→ Open the Selection Room</a></p>
+
+        <h2><span class="room-num">05</span>The Adaptation Room</h2>
+        <p class="room-kicker">Multi-trait selection vs. drift</p>
+        <p><strong>What it shows.</strong> Everything so far, combined. Three founder fish — Gigi, Mario and Nani — each split into two lineages: a <strong>Neutral</strong> one where nothing is selected, and a <strong>Habitat</strong> one assigned to a Stream, Pond or River. Five traits (shape, colour, eye size, fin size, tail size) each behave as an independent gene, mutating and then running a full Wright–Fisher trajectory exactly as in the Selection Room. Each habitat favours a different combination of traits.</p>
+        <p><strong>Try this.</strong> Press Run and watch the two lineages of each founder evolve side by side from the same ancestor. When it finishes, compare the <em>Average divergence from own founder</em> for Neutral versus Habitat. Then assign the same habitat to two different founders and run again. As a control, open <em>More parameters</em> and set every selection coefficient to 0.</p>
+        <p><strong>What to notice.</strong> The Habitat lineages travel much further from their ancestor than the Neutral ones — that gap is what selection contributes on top of drift. Two unrelated founders placed in the <em>same</em> habitat tend to converge on a similar look, which is convergent evolution. And in the trait tables, both lineages accumulate a similar number of <em>mutations</em>; selection's real effect is on how many of them become <em>substitutions</em>.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('adaptation'); window.scrollTo(0,0); return false;">→ Open the Adaptation Room</a></p>
+
+        <h2>A note on this beta</h2>
+        <p>This is a beta version and may still contain bugs — we're continually working to improve each room. If you run into problems, have questions, or have suggestions, please get in touch with Lino Ometto at <a href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>.</p>
+
+        <h2>Acknowledgements</h2>
+        <p>These laboratories were conceived and directed by Lino Ometto, who set the scientific content, the pedagogical design, and the choices behind every model. The simulation code, interface, and explanatory texts were written collaboratively with <a href="https://www.anthropic.com/claude" target="_blank" rel="noopener">Claude</a>, Anthropic's AI assistant, working through <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>.</p>
+      </div>
+      <div class="readme-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 1: THE COPYING ROOM                    -->
+  <!-- ========================================== -->
+  <div id="tab-copying" class="tab-content page">
+    <header class="masthead">
+      <div>
+        <h1>The Copying Room</h1>
+        <p class="sub"><span class="sub-label">Descent with modification</span> – One shape is copied by hand, again and again. Each copy is drawn from the last one, with a small, honest mistake. Nothing is steered toward a goal — the changes simply pile up.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="deck">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Starting shape</label>
+        <div class="segmented" id="shapeSeg_copy">
+          <button data-shape="polygon" class="active">Polygon</button>
+          <button data-shape="fish">Fish</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Lineages running in parallel</label>
+        <div class="segmented" id="lineageCountSeg_copy">
+          <button data-n="1">1</button>
+          <button data-n="2" class="active">2</button>
+          <button data-n="3">3</button>
+          <button data-n="100">100</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Mutation size <span class="value" id="mutVal_copy">5</span><button class="help-btn" data-help="mutSize"></button></label>
+        <input type="range" id="mutRate_copy" min="1" max="10" value="5">
+      </div>
+
+      <div class="field">
+        <label>Copying speed <span class="value" id="speedVal_copy">50 ms/gen</span></label>
+        <input type="range" id="speed_copy" min="10" max="200" value="50">
+      </div>
+
+      <div class="field">
+        <label>Stop after N copies <span class="value" id="maxGenVal_copy">100</span></label>
+        <input type="range" id="maxGen_copy" min="2" max="400" value="100">
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_copy">▶ Start copying</button>
+        <button class="btn secondary" id="stepBtn_copy">Step once</button>
+        <button class="btn secondary" id="resetBtn_copy">↺ New starting shape</button>
+        <span class="status mono" id="statusLine_copy">gen 0 / 100 — idle</span>
+      </div>
+    </div>
+
+    <div class="stage-area" id="stageArea_copy"></div>
+
+    <div class="time-machine-container" style="margin-top: 20px;">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: You are at generation <span class="value" id="scrubVal_copy">0</span></label>
+        <input type="range" id="timeScrubber_copy" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+    
+   <div class="reading">
+      <p id="readingText_copy">Press <strong>Start copying</strong> to watch generation 0 begin its journey. Each lineage starts from the exact same figure — any difference you see later came from nowhere but accumulated copying error.</p>
+      <div class="divergence-line mono" id="divergenceLine_copy"></div>
+      <div class="help-inline-note">Pairwise divergence <button class="help-btn" data-help="divergence"></button></div>
+    </div>
+
+    <footer class="note">A FIGURE COPY MACHINE — Fish features are independently locked inside evolutionary bounds (e.g. eye must stay in the head). Distance figures are a normalized Euclidean measure across all traits, 0.00 (identical) to ~1.00+ (unrecognizable).</footer>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TAB 2: THE BRANCHING ROOM                  -->
+  <!-- ========================================== -->
+  <div id="tab-branching" class="tab-content page">
+    <header class="masthead">
+      <div>
+        <h1>The Branching Room</h1>
+        <p class="sub"><span class="sub-label">Divergence &amp; speciation</span> – One ancestor, copied and mutated generation after generation, occasionally splits into two independent lineages. Neither split is steered toward any goal — each new branch just keeps drifting on its own.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="deck">
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Starting shape</label>
+        <div class="segmented" id="shapeSeg_branch">
+          <button data-shape="polygon" class="active">Polygon</button>
+          <button data-shape="fish">Fish</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Mutation size <span class="value" id="mutVal_branch">5</span><button class="help-btn" data-help="mutSize"></button></label>
+        <input type="range" id="mutRate_branch" min="1" max="10" value="5">
+      </div>
+
+      <div class="field">
+        <label>Copying speed <span class="value" id="speedVal_branch">50 ms/gen</span></label>
+        <input type="range" id="speed_branch" min="10" max="200" value="50">
+      </div>
+
+      <div class="field">
+        <label>Total generations <span class="value" id="maxGenVal_branch">500</span></label>
+        <input type="range" id="maxGen_branch" min="100" max="2000" step="10" value="500">
+      </div>
+
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Split generations (drag each mark)<button class="help-btn" data-help="splitGens"></button> <span class="value" id="splitVals_branch">B→D,E: 200 · E→F,G: 350 · F→H,I: 450</span></label>
+        <div id="treeSelector_branch" style="width: 100%; height: 80px; position: relative; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; touch-action: none; margin-top: 6px;">
+          <svg id="selSvg_branch" width="100%" height="100%" style="overflow: visible; display: block;"></svg>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_branch">▶ Start copying</button>
+        <button class="btn secondary" id="stepBtn_branch">Step once</button>
+        <button class="btn secondary" id="resetBtn_branch">↺ New starting shape</button>
+        <span class="status mono" id="statusLine_branch">gen 0 / 500 — idle</span>
+      </div>
+    </div>
+
+    <div class="legend" id="legend_branch"></div>
+    <div class="help-inline-note">Lineage colours <button class="help-btn" data-help="legend"></button> &nbsp;·&nbsp; Cards &amp; split snapshots <button class="help-btn" data-help="frozenCard"></button></div>
+
+    <div class="tree-wrap">
+      <div class="tree-canvas" id="treeCanvas_branch">
+        <svg class="lines" id="linesSvg_branch"></svg>
+      </div>
+    </div>
+
+    <div class="reading">
+      <div id="finalStats_branch"></div>
+    </div>
+
+    <div class="time-machine-container" style="margin-top: 20px;">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: You are at generation <span class="value" id="scrubVal_branch">0</span></label>
+        <input type="range" id="timeScrubber_branch" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+    
+    <footer class="note">A BRANCHING COPY MACHINE — Ancestor A splits into B and C at Generation 0 (fixed). The three remaining split generations — B→D,E · E→F,G · F→H,I — are set by the sliders above and must stay in order, each at least 5 generations apart. The final lineages (C, D, G, H, I) each keep mutating independently until generation N. Every split point remains visible afterward as a frozen snapshot of the ancestor.</footer>
+
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TAB 3: THE DRIFT ROOM                      -->
+  <!-- ========================================== -->
+  <div id="tab-drifting" class="tab-content page">
+    <header class="masthead">
+      <div>
+        <h1>The Drift Room</h1>
+        <p class="sub"><span class="sub-label">Wright–Fisher model</span> – Simulating allele frequencies in a finite population over generations. Each generation is a random sample drawn from the previous one. Over time, random variance causes alleles to drift toward fixation or loss.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="deck">
+      <div class="field">
+        <label>Population size N <span class="value" id="nVal_drift">50</span><button class="help-btn" data-help="popN"></button></label>
+        <input type="range" id="sliderN_drift" min="10" max="200" step="1" value="50">
+      </div>
+      <div class="field">
+        <label>Initial freq. <span class="sym">f</span> <span class="value" id="fVal_drift">0.50</span><button class="help-btn" data-help="freqF"></button></label>
+        <input type="range" id="sliderF_drift" min="0.01" max="0.99" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Generations G <span class="value" id="gVal_drift">100</span><button class="help-btn" data-help="genG"></button></label>
+        <input type="range" id="sliderG_drift" min="5" max="900" step="1" value="100">
+      </div>
+      <div class="field">
+        <label>Ploidy<button class="help-btn" data-help="ploidy"></button></label>
+        <div class="segmented" id="ploidySeg_drift">
+          <button data-ploidy="1" class="active">Haploid</button>
+          <button data-ploidy="2">Diploid</button>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="btnRun_drift">▶ Run Simulation</button>
+        <button class="btn secondary" id="btnRun10_drift">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
+        <button class="btn secondary" id="btnPause_drift" style="display:none;">⏸ Pause after gen</button>
+        <button class="btn secondary" id="btnReset_drift">↺ Reset</button>
+        <span class="status mono" id="statusBar_drift">Configure parameters and press Run.</span>
+      </div>
+    </div>
+
+    <!-- Stage Area -->
+    <div class="stage-area" id="singleRunStage_drift" style="--cols: 3; align-items: start;">
+      
+      <!-- Card 1: Wheel & Status -->
+      <div class="lineage-card" style="display:flex; flex-direction:column; align-items:center;">
+        <div class="lineage-head" style="width:100%;">
+          <span class="name">Sampling Wheel<button class="help-btn" data-help="wheel"></button></span>
+        </div>
+        <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
+          <canvas id="wheelCanvas_drift"></canvas>
+          <div class="needle"></div>
+        </div>
+        <div class="drift-stats">
+          <div class="drift-chip">Generation<span id="genDisplay_drift">0</span></div>
+          <div class="drift-chip">Ind. drawn<span id="spinDisplay_drift">—</span></div>
+          <div class="drift-chip">Freq f(A)<span id="freqDisplay_drift">—</span></div>
+        </div>
+      </div>
+
+      <!-- Card 2: Population Display -->
+      <div class="lineage-card" style="grid-column: span 2;">
+        <div class="lineage-head">
+          <span class="name-group"><span class="name" id="popTitle_drift">Current Population</span><button class="help-btn" data-help="popGrid"></button></span>
+          <span class="stat mono" style="color:var(--ink);"><span style="color:#3D6E6E;">●</span> Allele A &nbsp;&nbsp; <span id="legendAB_drift" style="display:none;"><span style="color:#A8442A;">◐</span> Heterozygote &nbsp;&nbsp; </span><span style="color:#A8442A;">●</span> Allele B</span>
+        </div>
+        <div class="canvas-wrap tall">
+          <canvas id="popCanvas_drift"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Area -->
+    <div class="stage-area" style="--cols: 2; margin-top: 20px;">
+      
+      <!-- Chart 1: Allele frequency -->
+      <div class="lineage-card" style="grid-column: 1 / -1;">
+        <div class="lineage-head"><span class="name">Allele Frequency (f) over Generations<button class="help-btn" data-help="freqChart"></button></span><span class="stat mono" id="multiRunSummary_drift"></span></div>
+        <div class="canvas-wrap" id="chartWrap_drift"><canvas id="chartCanvas_drift"></canvas></div>
+      </div>
+
+      <!-- Chart 2: Binomial Distribution -->
+      <div class="lineage-card" id="binomCard_drift">
+        <div class="lineage-head"><span class="name">Binomial Distribution P(k | N, f)<button class="help-btn" data-help="binomDist"></button></span><span class="stat mono">E[k] = <span id="kFormula_drift">N·f</span> = <span id="expectedK_drift">—</span> · O[k] = <span id="realizedK_drift">—</span></span></div>
+        <div class="canvas-wrap"><canvas id="binomCanvas_drift"></canvas></div>
+      </div>
+
+      <!-- Chart 3: Binomial Variance -->
+      <div class="lineage-card" id="varCard_drift">
+        <div class="lineage-head"><span class="name">Binomial Variance V = f·(1−f) / <span id="varFormula_drift">N</span><button class="help-btn" data-help="binomVar"></button></span></div>
+        <div class="canvas-wrap"><canvas id="varCanvas_drift"></canvas></div>
+      </div>
+
+    </div>
+
+    <div class="reading" id="readingRow_drift">
+      <div class="divergence-line mono" id="fixBanner_drift"></div>
+      <div class="help-inline-note">Fixation &amp; loss <button class="help-btn" data-help="fixation"></button></div>
+    </div>
+    
+    <div class="time-machine-container" id="scrubberRow_drift" style="margin-top: 20px;">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: You are at generation <span class="value" id="scrubVal_drift">0</span></label>
+        <input type="range" id="timeScrubber_drift" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+    
+    <footer class="note">THE WRIGHT-FISHER MODEL — The first 3 generations are animated in real-time, sampling individuals one by one with replacement using a roulette wheel proportional to the current allele frequency. Subsequent generations are still calculated instantly, but stepped through at about 5 generations per second so you can follow the drift. Observe how smaller population sizes (N) cause the frequency to drift more erratically, leading to faster fixation or loss. Switching to Diploid treats N as the number of diploid individuals (2N gene copies total) rather than N haploid gene copies — the same drift process, just with twice as many genes buffering it, so frequencies wander more slowly and fixation takes longer on average.</footer>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 4: THE SELECTION ROOM                  -->
+  <!-- ========================================== -->
+  <div id="tab-selection" class="tab-content page">
+    <header class="masthead">
+      <div>
+        <h1>The Selection Room</h1>
+        <p class="sub"><span class="sub-label">Wright–Fisher model + selection</span> – The same finite-population sampling as the Drift Room, but allele A now carries a fitness advantage: individuals carrying it are more likely to be copied into the next generation. Watch how selection strength (s) and population size (N) compete with random drift.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="deck">
+      <div class="field">
+        <label>Population size N <span class="value" id="nVal_selection">50</span><button class="help-btn" data-help="popN"></button></label>
+        <input type="range" id="sliderN_selection" min="10" max="200" step="1" value="50">
+      </div>
+      <div class="field">
+        <label>Initial freq. <span class="sym">f</span> <span class="value" id="fVal_selection">0.50</span><button class="help-btn" data-help="freqF"></button></label>
+        <input type="range" id="sliderF_selection" min="0.01" max="0.99" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Generations G <span class="value" id="gVal_selection">100</span><button class="help-btn" data-help="genG"></button></label>
+        <input type="range" id="sliderG_selection" min="5" max="900" step="1" value="100">
+      </div>
+      <div class="field">
+        <label>Selection coeff. <span class="sym">s</span> <span class="value" id="sVal_selection">0.10</span><button class="help-btn" data-help="selS"></button></label>
+        <input type="range" id="sliderS_selection" min="0" max="1" step="0.01" value="0.10">
+      </div>
+      <div class="field">
+        <label>Ploidy<button class="help-btn" data-help="ploidy"></button></label>
+        <div class="segmented" id="ploidySeg_selection">
+          <button data-ploidy="1" class="active">Haploid</button>
+          <button data-ploidy="2">Diploid</button>
+        </div>
+      </div>
+      <div class="field" id="dominanceField_selection" style="display:none;">
+        <label>Dominance <span class="sym">h</span> <span class="value" id="hVal_selection">0.50</span><button class="help-btn" data-help="domH"></button></label>
+        <input type="range" id="sliderH_selection" min="0" max="1" step="0.01" value="0.50">
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="btnRun_selection">▶ Run Simulation</button>
+        <button class="btn secondary" id="btnRun10_selection">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
+        <button class="btn secondary" id="btnPause_selection" style="display:none;">⏸ Pause after gen</button>
+        <button class="btn secondary" id="btnReset_selection">↺ Reset</button>
+        <span class="status mono" id="statusBar_selection">Configure parameters and press Run.</span>
+      </div>
+    </div>
+
+    <!-- Stage Area -->
+    <div class="stage-area" id="singleRunStage_selection" style="--cols: 3; align-items: start;">
+      
+      <!-- Card 1: Wheel & Status -->
+      <div class="lineage-card" style="display:flex; flex-direction:column; align-items:center;">
+        <div class="lineage-head" style="width:100%;">
+          <span class="name">Sampling Wheel<button class="help-btn" data-help="wheelSelection"></button></span>
+        </div>
+        <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
+          <canvas id="wheelCanvas_selection"></canvas>
+          <div class="needle"></div>
+        </div>
+        <div class="drift-stats">
+          <div class="drift-chip">Generation<span id="genDisplay_selection">0</span></div>
+          <div class="drift-chip">Ind. drawn<span id="spinDisplay_selection">—</span></div>
+          <div class="drift-chip">Freq f(A)<span id="freqDisplay_selection">—</span></div>
+          <div class="drift-chip">Δf (selection shift)<span id="deltaFDisplay_selection">—</span></div>
+        </div>
+      </div>
+
+      <!-- Card 2: Population Display -->
+      <div class="lineage-card" style="grid-column: span 2;">
+        <div class="lineage-head">
+          <span class="name-group"><span class="name" id="popTitle_selection">Current Population</span><button class="help-btn" data-help="popGrid"></button></span>
+          <span class="stat mono" style="color:var(--ink);"><span style="color:#3D6E6E;">●</span> Allele A &nbsp;&nbsp; <span id="legendAB_selection" style="display:none;"><span style="color:#A8442A;">◐</span> Heterozygote &nbsp;&nbsp; </span><span style="color:#A8442A;">●</span> Allele B</span>
+        </div>
+        <div class="canvas-wrap tall">
+          <canvas id="popCanvas_selection"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Area -->
+    <div class="stage-area" style="--cols: 2; margin-top: 20px;">
+      
+      <!-- Chart 1: Allele frequency -->
+      <div class="lineage-card" style="grid-column: 1 / -1;">
+        <div class="lineage-head"><span class="name">Allele Frequency (f) over Generations<button class="help-btn" data-help="freqChart"></button><button class="help-btn" data-help="deterministic"></button></span><span class="stat mono" id="multiRunSummary_selection"></span></div>
+        <div class="canvas-wrap" id="chartWrap_selection"><canvas id="chartCanvas_selection"></canvas></div>
+      </div>
+
+      <!-- Chart 2: Binomial Distribution -->
+      <div class="lineage-card" id="binomCard_selection">
+        <div class="lineage-head"><span class="name">Binomial Distribution P(k | N, f′)<button class="help-btn" data-help="binomDist"></button></span><span class="stat mono">E[k] = <span id="kFormula_selection">N·f′</span> = <span id="expectedK_selection">—</span> · O[k] = <span id="realizedK_selection">—</span></span></div>
+        <div class="canvas-wrap"><canvas id="binomCanvas_selection"></canvas></div>
+      </div>
+
+      <!-- Chart 3: Binomial Variance -->
+      <div class="lineage-card" id="varCard_selection">
+        <div class="lineage-head"><span class="name">Binomial Variance V = f·(1−f) / <span id="varFormula_selection">N</span><button class="help-btn" data-help="binomVar"></button></span></div>
+        <div class="canvas-wrap"><canvas id="varCanvas_selection"></canvas></div>
+      </div>
+
+    </div>
+
+    <div class="reading" id="readingRow_selection">
+      <div class="divergence-line mono" id="fixBanner_selection"></div>
+      <div class="help-inline-note">Fixation &amp; loss <button class="help-btn" data-help="fixation"></button></div>
+    </div>
+    
+    <div class="time-machine-container" id="scrubberRow_selection" style="margin-top: 20px;">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: You are at generation <span class="value" id="scrubVal_selection">0</span></label>
+        <input type="range" id="timeScrubber_selection" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+    
+    <footer class="note">SELECTION + DRIFT — Allele A has relative fitness (1+s) against B's fitness of 1. Each generation, the raw frequency f is reweighted to f′ = f(1+s) / (f(1+s) + (1−f)) <em>before</em> the usual binomial sampling — so f′, not f, is what the wheel spins on and what the binomial panel draws from. The dashed line on the frequency chart is the deterministic path selection alone would take with no sampling noise; the actual jagged line shows how much drift pulls it off course. Larger N·s means selection dominates and A reliably fixes; smaller N·s means drift can still overpower a real fitness advantage, occasionally fixing B instead. Switching to Diploid changes the biology, not just the bookkeeping: fitness now belongs to genotypes (AA, AB, BB) rather than lone alleles, weighted by dominance h — h=0.5 is additive, h=1 makes A fully dominant, h=0 makes it fully recessive. A recessive advantageous allele hides inside heterozygotes while rare, so selection barely "sees" it — it can still be lost to drift almost as easily as a neutral allele, even with a real fitness edge.</footer>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 5: THE ADAPTATION ROOM                 -->
+  <!-- ========================================== -->
+  <div id="tab-adaptation" class="tab-content page">
+    <header class="masthead">
+      <div>
+        <h1>The Adaptation Room</h1>
+        <p class="sub"><span class="sub-label">Multi-trait selection vs. drift</span> – Three founder fish — Gigi, Mario, and Nani — each split into a neutral lineage and a habitat-assigned lineage. Five traits (shape, colour, eye size, fin size, tail size) each mutate and fix independently under selection + drift, exactly as in the Selection Room, one trait "locus" at a time. Watch whether habitat-driven selection reaches a characteristic look faster, and more reliably, than drift alone.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="deck">
+      <div class="field">
+        <label>Generations G <span class="value" id="gVal_adapt">5000</span><button class="help-btn" data-help="genG"></button></label>
+        <input type="range" id="sliderG_adapt" min="1000" max="10000" step="100" value="5000">
+      </div>
+
+      <details class="adapt-advanced">
+        <summary>More parameters (mutation size, selection &amp; mutation rate per trait, population size)</summary>
+        <div class="adapt-advanced-grid">
+          <div class="field">
+            <label>Mutation size <span class="value" id="mutSizeVal_adapt">0.30</span><button class="help-btn" data-help="mutSizeAdapt"></button></label>
+            <input type="range" id="sliderMutSize_adapt" min="0.1" max="1" step="0.05" value="0.30">
+          </div>
+
+          <div class="adapt-section-label" style="margin-top:0; padding-top:0; border-top:none;">Selection coefficient per trait (magnitude; habitat sets direction)<button class="help-btn" data-help="traitS"></button></div>
+          <div class="field">
+            <label>Shape <span class="sym">s</span> <span class="value" id="sShapeVal_adapt">0.20</span></label>
+            <input type="range" id="sliderSShape_adapt" min="0" max="1" step="0.01" value="0.20">
+          </div>
+          <div class="field">
+            <label>Colour <span class="sym">s</span> <span class="value" id="sColourVal_adapt">0.20</span></label>
+            <input type="range" id="sliderSColour_adapt" min="0" max="1" step="0.01" value="0.20">
+          </div>
+          <div class="field">
+            <label>Eye size <span class="sym">s</span> <span class="value" id="sEyeVal_adapt">0.20</span></label>
+            <input type="range" id="sliderSEye_adapt" min="0" max="1" step="0.01" value="0.20">
+          </div>
+          <div class="field">
+            <label>Fin size <span class="sym">s</span> <span class="value" id="sFinVal_adapt">0.20</span></label>
+            <input type="range" id="sliderSFin_adapt" min="0" max="1" step="0.01" value="0.20">
+          </div>
+          <div class="field">
+            <label>Tail size <span class="sym">s</span> <span class="value" id="sTailVal_adapt">0.20</span></label>
+            <input type="range" id="sliderSTail_adapt" min="0" max="1" step="0.01" value="0.20">
+          </div>
+
+          <div class="adapt-section-label">Mutation rate per trait (chance/generation a new variant arises)<button class="help-btn" data-help="traitMu"></button></div>
+          <div class="field">
+            <label>Shape <span class="sym">μ</span> <span class="value" id="muShapeVal_adapt">0.010</span></label>
+            <input type="range" id="sliderMuShape_adapt" min="0" max="0.05" step="0.001" value="0.010">
+          </div>
+          <div class="field">
+            <label>Colour <span class="sym">μ</span> <span class="value" id="muColourVal_adapt">0.010</span></label>
+            <input type="range" id="sliderMuColour_adapt" min="0" max="0.05" step="0.001" value="0.010">
+          </div>
+          <div class="field">
+            <label>Eye size <span class="sym">μ</span> <span class="value" id="muEyeVal_adapt">0.010</span></label>
+            <input type="range" id="sliderMuEye_adapt" min="0" max="0.05" step="0.001" value="0.010">
+          </div>
+          <div class="field">
+            <label>Fin size <span class="sym">μ</span> <span class="value" id="muFinVal_adapt">0.010</span></label>
+            <input type="range" id="sliderMuFin_adapt" min="0" max="0.05" step="0.001" value="0.010">
+          </div>
+          <div class="field">
+            <label>Tail size <span class="sym">μ</span> <span class="value" id="muTailVal_adapt">0.010</span></label>
+            <input type="range" id="sliderMuTail_adapt" min="0" max="0.05" step="0.001" value="0.010">
+          </div>
+
+          <div class="adapt-section-label">Population size (diploid individuals per lineage; shared by its Neutral &amp; Habitat pair)<button class="help-btn" data-help="popN"></button></div>
+          <div class="adapt-n-row">
+            <div class="adapt-n-row-label">N</div>
+            <div class="field">
+              <label>Gigi <span class="value" id="nVal_gigi_adapt">50</span></label>
+              <input type="range" id="sliderN_gigi_adapt" min="10" max="200" step="1" value="50">
+            </div>
+            <div class="field">
+              <label>Mario <span class="value" id="nVal_mario_adapt">50</span></label>
+              <input type="range" id="sliderN_mario_adapt" min="10" max="200" step="1" value="50">
+            </div>
+            <div class="field">
+              <label>Nani <span class="value" id="nVal_nani_adapt">50</span></label>
+              <input type="range" id="sliderN_nani_adapt" min="10" max="200" step="1" value="50">
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <div class="adapt-section-label">Habitats (freely assignable — try giving two founders the same one)</div>
+      <div class="field">
+        <label>Gigi's habitat lineage</label>
+        <div class="segmented segmented-habitat" id="habitatSeg_gigi_adapt">
+          <button data-habitat="stream" class="active">Stream</button>
+          <button data-habitat="pond">Pond</button>
+          <button data-habitat="river">River</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Mario's habitat lineage</label>
+        <div class="segmented segmented-habitat" id="habitatSeg_mario_adapt">
+          <button data-habitat="stream">Stream</button>
+          <button data-habitat="pond" class="active">Pond</button>
+          <button data-habitat="river">River</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nani's habitat lineage</label>
+        <div class="segmented segmented-habitat" id="habitatSeg_nani_adapt">
+          <button data-habitat="stream">Stream</button>
+          <button data-habitat="pond">Pond</button>
+          <button data-habitat="river" class="active">River</button>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="btnRun_adapt">▶ Run Simulation</button>
+        <button class="btn secondary" id="btnReset_adapt">↺ New Founders</button>
+        <span class="status mono" id="statusBar_adapt">Configure parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="time-machine-container" id="scrubberRow_adapt" style="margin-bottom: 20px;">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: You are at generation <span class="value" id="scrubVal_adapt">0</span> / <span id="scrubMaxLabel_adapt">0</span></label>
+        <input type="range" id="timeScrubber_adapt" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+
+    <div class="help-inline-note" style="margin-bottom:10px;">Each row compares one founder's Neutral and Habitat lineage, both starting from the same ancestor. The fish shown is that lineage's consensus — its typical individual <button class="help-btn" data-help="consensusFish"></button></div>
+    <div class="adapt-founder-row" id="founderRow_gigi_adapt">
+      <div class="adapt-founder-name">Gigi</div>
+      <div class="adapt-row-grid">
+        <svg class="adapt-connector-svg" id="connectorSvg_gigi_adapt" aria-hidden="true"></svg>
+        <div id="traitTableWrap_gigi_neutral_adapt"></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card"><canvas id="consensusCanvas_gigi_neutral_adapt" role="img" aria-label="Gigi's neutral lineage — current consensus fish"></canvas></div><div class="adapt-fish-label adapt-label-neutral" id="habitatCaption_gigi_neutral_adapt"></div></div>
+        <div class="adapt-fish-slot adapt-g0-slot"><div class="adapt-fish-card"><canvas id="g0Canvas_gigi_adapt" role="img" aria-label="Gigi's founder fish at generation 0"></canvas></div><div class="adapt-fish-label adapt-label-ancestor">Ancestor - G0</div></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card adapt-habitat-fish-card"><canvas id="consensusCanvas_gigi_habitat_adapt" role="img" aria-label="Gigi's habitat lineage — current consensus fish"></canvas></div><div class="adapt-fish-label adapt-label-habitat" id="habitatCaption_gigi_habitat_adapt"></div></div>
+        <div id="traitTableWrap_gigi_habitat_adapt"></div>
+      </div>
+    </div>
+
+    <div class="adapt-founder-row" id="founderRow_mario_adapt">
+      <div class="adapt-founder-name">Mario</div>
+      <div class="adapt-row-grid">
+        <svg class="adapt-connector-svg" id="connectorSvg_mario_adapt" aria-hidden="true"></svg>
+        <div id="traitTableWrap_mario_neutral_adapt"></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card"><canvas id="consensusCanvas_mario_neutral_adapt" role="img" aria-label="Mario's neutral lineage — current consensus fish"></canvas></div><div class="adapt-fish-label adapt-label-neutral" id="habitatCaption_mario_neutral_adapt"></div></div>
+        <div class="adapt-fish-slot adapt-g0-slot"><div class="adapt-fish-card"><canvas id="g0Canvas_mario_adapt" role="img" aria-label="Mario's founder fish at generation 0"></canvas></div><div class="adapt-fish-label adapt-label-ancestor">Ancestor - G0</div></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card adapt-habitat-fish-card"><canvas id="consensusCanvas_mario_habitat_adapt" role="img" aria-label="Mario's habitat lineage — current consensus fish"></canvas></div><div class="adapt-fish-label adapt-label-habitat" id="habitatCaption_mario_habitat_adapt"></div></div>
+        <div id="traitTableWrap_mario_habitat_adapt"></div>
+      </div>
+    </div>
+
+    <div class="adapt-founder-row" id="founderRow_nani_adapt">
+      <div class="adapt-founder-name">Nani</div>
+      <div class="adapt-row-grid">
+        <svg class="adapt-connector-svg" id="connectorSvg_nani_adapt" aria-hidden="true"></svg>
+        <div id="traitTableWrap_nani_neutral_adapt"></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card"><canvas id="consensusCanvas_nani_neutral_adapt" role="img" aria-label="Nani's neutral lineage — current consensus fish"></canvas></div><div class="adapt-fish-label adapt-label-neutral" id="habitatCaption_nani_neutral_adapt"></div></div>
+        <div class="adapt-fish-slot adapt-g0-slot"><div class="adapt-fish-card"><canvas id="g0Canvas_nani_adapt" role="img" aria-label="Nani's founder fish at generation 0"></canvas></div><div class="adapt-fish-label adapt-label-ancestor">Ancestor - G0</div></div>
+        <div class="adapt-fish-slot"><div class="adapt-fish-card adapt-habitat-fish-card"><canvas id="consensusCanvas_nani_habitat_adapt" role="img" aria-label="Nani's habitat lineage — current consensus fish"></canvas></div><div class="adapt-fish-label adapt-label-habitat" id="habitatCaption_nani_habitat_adapt"></div></div>
+        <div id="traitTableWrap_nani_habitat_adapt"></div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong><button class="help-btn" data-help="adaptDivMatrix"></button> generation-0 founder (rows) vs. each lineage's final consensus fish (columns).</p>
+      <div id="divMatrixWrap_adapt"></div>
+      <p><strong>Average divergence from own founder:</strong> <span id="avgDeltaSummary_adapt" class="mono"></span></p>
+      <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>Tanglegram Comparison:</strong><button class="help-btn" data-help="tanglegram"></button><br>
+      <span style="font-size: 13px; color: var(--ink-soft);">Left: the actual lineage history — Gigi, Mario, and Nani arise independently (a root polytomy, not a nested split), each then dividing into a Neutral and a Habitat lineage. Right: the phylogenetic tree inferred by UPGMA clustering using only the six lineages' final observable shapes. Notice any discrepancies?</span></p>
+      <div id="tanglegramWrap_adapt" style="overflow-x: auto; margin-top: 14px;"></div>
+    </div>
+
+    <footer class="note">HABITAT-DRIVEN ADAPTATION — Each of the 5 traits is its own independent locus: while ancestral, it has a chance each generation (its mutation rate μ) of producing a new variant, which then runs a real diploid Wright-Fisher trajectory (selection + drift, full dominance) until it fixes or is lost. A mutation is only ever selected for or against relative to what its habitat wants — Stream favors slender, bluish, long-tailed, short-finned fish; Pond favors round, reddish fish with long, less-forked tails and long fins; River favors greenish fish with dark fins and big eyes, with no shape preference. Neutral lineages run the identical genetic machinery with every selection coefficient at zero — any difference you see between a founder's Neutral and Habitat lineage is what selection alone contributes on top of drift.</footer>
+
+  </div>
+
+  
+  <!-- ========================================== -->
+  <!-- SCRIPTS                                    -->
+  <!-- Load order matters: nav has no dependencies; shapes-engine and    -->
+  <!-- canvas-utils are shared and must load before the three room       -->
+  <!-- scripts that consume them. To add a new room: drop a new file in  -->
+  <!-- js/, add a <script src> line for it below, and add its markup     -->
+  <!-- and tab button above.                                             -->
+  <!-- ========================================== -->
+  <script src="js/nav.js?v=1784491290"></script>
+  <script src="js/help.js?v=1784491290"></script>
+  <script src="js/shapes-engine.js?v=1784491290"></script>
+  <script src="js/canvas-utils.js?v=1784491290"></script>
+  <script src="js/phylo.js?v=1784491290"></script>
+  <script src="js/copying-room.js?v=1784491290"></script>
+  <script src="js/branching-room.js?v=1784491290"></script>
+  <script src="js/wright-fisher-core.js?v=1784491290"></script>
+  <script src="js/drift-room.js?v=1784491290"></script>
+  <script src="js/selection-room.js?v=1784491290"></script>
+  <script src="js/adaptation-room.js?v=1784491290"></script>
+</body>
+</html>
