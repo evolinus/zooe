@@ -1,0 +1,11 @@
+# Local preview:  docker compose up   →  http://localhost:4000
+# Edits to content/styles rebuild automatically and the browser live-reloads.
+# Stop with Ctrl-C (or `docker compose down`).
+services:
+  site:
+    build: .
+    ports:
+      - "4000:4000"    # the site
+      - "35729:35729"  # livereload channel
+    volumes:
+      - .:/site        # live-edit the working tree from inside the container
