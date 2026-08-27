@@ -163,6 +163,26 @@ $wrap: 900px;
   /* two thirds of the measure, so the list ends where the hero's red panel does */
   grid-template-columns: 66.6667% minmax(0, 1fr);
   gap: 48px;
+  /* held at a tenth more than the tallest project panel (Mosquitos & TEs, 529px),
+     so the section stops resizing as projects are selected. min-height rather
+     than height: narrow windows reflow the text and must still be free to grow. */
+  min-height: 582px;
+}
+.fr-work-list {
+  display: flex;
+  flex-direction: column;
+}
+/* the list sits at the bottom; the simulation takes the room above it */
+.fr-work-body { margin-top: auto; }
+.fr-sim {
+  display: block;
+  width: 100%;
+  /* a fixed band, not flex: 1. the script sets the canvas's width/height
+     attributes from its measured box, and a canvas's attributes are also its
+     intrinsic size — so letting flex derive the height from that box makes the
+     two chase each other and the panel settles wherever the loop stops. */
+  flex: 0 0 auto;
+  height: 210px;
 }
 .fr-section-head {
   display: flex;
@@ -302,6 +322,7 @@ $wrap: 900px;
   .fr-work { grid-template-columns: 1fr; gap: 0; }
   .fr-work { gap: 32px; }
   .fr-hero-main { grid-column: auto; padding: 44px 40px; }
+  .fr-sim { height: 150px; }
   .fr-rail { grid-column: auto; }
   .fr-recent-row { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
   .fr-recent-row > *:nth-child(n + 3) { grid-column: 2; }
