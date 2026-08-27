@@ -306,7 +306,7 @@ $wrap: 900px;
 /* — closing band — */
 .fr-band {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   border-top: 2px solid var(--divider);
 }
 .fr-plate {
@@ -326,6 +326,6 @@ $wrap: 900px;
   .fr-rail { grid-column: auto; }
   .fr-recent-row { grid-template-columns: 64px minmax(0, 1fr); gap: 12px; }
   .fr-recent-row > *:nth-child(n + 3) { grid-column: 2; }
-  .fr-band { grid-template-columns: 1fr; }
+  .fr-band { grid-template-columns: repeat(2, 1fr); }
   .fr-plate { border-right: none; border-bottom: 2px solid var(--divider); }
 }

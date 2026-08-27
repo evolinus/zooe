@@ -2,12 +2,20 @@
 # (recent publications come straight from _data/citations.yaml)
 
 band:
+  - image: images/pages/fish.png
+    alt: Pen drawing of a fish with wings and legs
+    fit: contain
   - image: images/pages/farfalla.jpg
+    alt: Fieldwork, Lepidoptera
   - image: images/pages/SIBE_logo.png
     alt: Società Italiana di Biologia Evoluzionistica
     link: https://www.sibe-iseb.it
     fit: contain
   - image: images/pages/bai.jpg
+    alt: Insects on umbellifer flowers
+  - image: images/pages/inAweB.png
+    alt: In arthropoda we blast
+    fit: contain
 
 # university courses, listed on the teaching page
 courses:
