@@ -1,4 +1,4 @@
-[data-dark=false] {
+:root {
   --primary: #D83C2D;
   --primary-deep: #A82A1E;
   --primary-hover: #B32E21;
@@ -23,7 +23,7 @@
   --highlight: rgba(179, 207, 205, 0.22);
   --panel: #E9A431;
   --panel-ink: #2A1B06;
-  --text: #FFF5E3;
+  --text: #FFFAF0;
   --background: #241E14;
   --background-alt: #322A1D;
   --light-gray: #4A4132;
