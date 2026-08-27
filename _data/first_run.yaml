@@ -4,8 +4,7 @@
 band:
   - image: images/pages/farfalla.jpg
   - image: images/pages/formica.jpg
-  - image: images/pages/UniPV_logo.png
-    fit: contain
+  - image: images/pages/bai.jpg
 
 # university courses, listed on the teaching page
 courses:
