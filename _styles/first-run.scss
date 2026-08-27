@@ -111,12 +111,8 @@ $wrap: 900px;
     minmax(0, calc((100% - (2 * var(--edge))) * 2 / 3))
     minmax(0, 1fr);
   background: var(--primary);
-  /* rounded-polygon band; overflow clips the gold rail to the same corners.
-     the .fr.fr-hero rule below outweighs section[data-size=full] > * radius:0 */
-  overflow: hidden;
   color: var(--background);
 }
-.fr.fr-hero { border-radius: 40px; }
 .fr-hero-main {
   grid-column: 2;
   padding: 40px 40px 36px 0;
