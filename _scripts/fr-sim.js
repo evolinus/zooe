@@ -73,8 +73,10 @@ const frSim = () => {
 
   // geometry: generations across, lineages down. the lanes use only the middle
   // band of the canvas — the tree stays a quiet texture rather than a diagram
-  const padX = 18, SPREAD = 0.66;
-  const x = (gen) => padX + (gen / N) * (W - padX * 2);
+  // the right inset is wider: the last generation's shape is drawn there and
+  // would otherwise hang over the edge
+  const padX = 18, padRight = 44, SPREAD = 0.9;
+  const x = (gen) => padX + (gen / N) * (W - padX - padRight);
   const yLane = (lane) => {
     const band = (H * SPREAD);
     return (H - band) / 2 + (lane / LANES) * band;
@@ -129,7 +131,7 @@ const frSim = () => {
       ctx.stroke();
     }
 
-    const glyph = Math.min(34, Math.max(18, (H * SPREAD) / 8));
+    const glyph = Math.min(51, Math.max(30, (H * SPREAD) / 3.4));
 
     // a fainter shape where each lineage split away from its parent, so the
     // tree carries its history rather than only its leading edge
