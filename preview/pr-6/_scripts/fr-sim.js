@@ -77,9 +77,13 @@ const frSim = () => {
   // would otherwise hang over the edge
   const padX = 18, padRight = 44, SPREAD = 0.9;
   const x = (gen) => padX + (gen / N) * (W - padX - padRight);
+
+  // the shape is drawn centred on its lane, so the first and last lanes have to
+  // sit at least half a shape inside the canvas or their tops get cut off
+  const glyphFor = () => Math.min(51, Math.max(30, (H * SPREAD) / 3.4));
   const yLane = (lane) => {
-    const band = (H * SPREAD);
-    return (H - band) / 2 + (lane / LANES) * band;
+    const inset = glyphFor() / 2 + 4;
+    return inset + (lane / LANES) * (H - inset * 2);
   };
   const ease = (t) => t * t * (3 - 2 * t);
 
@@ -122,16 +126,25 @@ const frSim = () => {
     ctx.lineWidth = 1.25;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
+    // a branch stops short of the shapes at either end, so the line meets the
+    // shape rather than running through it
+    const glyph = glyphFor();
+    const perGen = (W - padX - padRight) / N;
+    const gapBirth = Math.ceil((glyph * 0.7 * 0.6) / perGen);
+    const gapTip = Math.ceil((glyph * 0.6) / perGen);
+
     for (const d of DEFS) {
       if (d.parent === null || g < d.start) continue;
-      const last = Math.min(g, d.end);
+      const reached = Math.min(g, d.end);
+      const first = d.start + gapBirth;
+      // living lineages end at their own shape; ended ones at their children's
+      const last = reached - (g <= d.end ? gapTip : gapBirth);
+      if (last <= first) continue;
       ctx.beginPath();
-      ctx.moveTo(x(d.start), y(d, d.start));
-      for (let gen = d.start + 1; gen <= last; gen++) ctx.lineTo(x(gen), y(d, gen));
+      ctx.moveTo(x(first), y(d, first));
+      for (let gen = first + 1; gen <= last; gen++) ctx.lineTo(x(gen), y(d, gen));
       ctx.stroke();
     }
-
-    const glyph = Math.min(51, Math.max(30, (H * SPREAD) / 3.4));
 
     // a fainter shape where each lineage split away from its parent, so the
     // tree carries its history rather than only its leading edge
