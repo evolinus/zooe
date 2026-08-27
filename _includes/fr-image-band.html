@@ -2,10 +2,16 @@
 <div class="fr fr-band">
   {% for plate in site.data.first_run.band %}
     <figure class="fr-plate">
-      <div class="fr-figure" data-fit="{{ plate.fit | default: "cover" }}">
-        <img src="{{ plate.image | relative_url | uri_escape }}" alt="{{ plate.caption }}" loading="lazy">
-      </div>
-      <figcaption class="fr-label">{{ plate.caption }}</figcaption>
+      {% if plate.link %}<a href="{{ plate.link }}" aria-label="{{ plate.alt | default: plate.caption }}">{% endif %}
+        <div class="fr-figure" data-fit="{{ plate.fit | default: "cover" }}">
+          <img
+            src="{{ plate.image | relative_url | uri_escape }}"
+            alt="{{ plate.alt | default: plate.caption }}"
+            loading="lazy"
+          >
+        </div>
+      {% if plate.link %}</a>{% endif %}
+      {% if plate.caption %}<figcaption class="fr-label">{{ plate.caption }}</figcaption>{% endif %}
     </figure>
   {% endfor %}
 </div>
