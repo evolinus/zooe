@@ -7,6 +7,15 @@
 
 <div class="fr fr-work" id="current-work" data-fr-index>
   <div class="fr-work-list">
+    {% comment %}
+      the room left above the list runs the branching simulation — background
+      only, never interactive. _scripts/fr-sim.js drives it with the branching
+      room's own shapes engine.
+    {% endcomment %}
+    <canvas class="fr-sim" data-fr-sim aria-hidden="true"></canvas>
+    <script src="{{ "teaching/evolutionary-laboratories/js/shapes-engine.js" | relative_url }}" defer></script>
+
+    <div class="fr-work-body">
     <div class="fr-section-head">
       <h2 class="fr-h6">Current work</h2>
     </div>
@@ -27,6 +36,7 @@
     {% endfor %}
 
     <a class="fr-btn fr-btn-ghost" href="{{ "research" | relative_url }}">All research projects &rarr;</a>
+    </div>
   </div>
 
   <div class="fr-work-detail">

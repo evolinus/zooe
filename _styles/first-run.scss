@@ -163,6 +163,22 @@ $wrap: 900px;
   /* two thirds of the measure, so the list ends where the hero's red panel does */
   grid-template-columns: 66.6667% minmax(0, 1fr);
   gap: 48px;
+  /* held at a tenth more than the tallest project panel (Mosquitos & TEs), so
+     the section stops resizing as projects are selected. min-height rather than
+     height: narrow windows reflow the text and must still be allowed to grow. */
+  min-height: 1230px;
+}
+.fr-work-list {
+  display: flex;
+  flex-direction: column;
+}
+/* the list sits at the bottom; the simulation takes the room above it */
+.fr-work-body { margin-top: auto; }
+.fr-sim {
+  display: block;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 140px;
 }
 .fr-section-head {
   display: flex;
