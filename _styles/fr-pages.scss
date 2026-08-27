@@ -491,6 +491,13 @@ $wrap: 900px;
   img { width: 100%; height: 100%; object-fit: contain; }
 }
 .fr-contact-stack { display: flex; flex-direction: column; gap: 10px; max-width: 340px; }
+/* the river, under the way to find us */
+.fr-contact-view {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 32px;
+}
 .fr-address { font-size: 15px; line-height: 1.8; }
 
 /* — responsive — */
