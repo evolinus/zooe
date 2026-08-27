@@ -130,7 +130,7 @@ const frSim = () => {
     // shape rather than running through it
     const glyph = glyphFor();
     const perGen = (W - padX - padRight) / N;
-    const gapBirth = Math.ceil((glyph * 0.7 * 0.6) / perGen);
+    const gapBirth = Math.ceil((glyph * 0.6) / perGen);
     const gapTip = Math.ceil((glyph * 0.6) / perGen);
 
     for (const d of DEFS) {
@@ -147,14 +147,15 @@ const frSim = () => {
     }
 
     // a fainter shape where each lineage split away from its parent, so the
-    // tree carries its history rather than only its leading edge
+    // tree carries its history rather than only its leading edge. same size as
+    // the living ones — only the opacity sets them back
     ctx.globalAlpha = 0.28;
     for (const d of DEFS) {
       const born = birth[d.id];
       if (!born || g < d.start) continue;
       ctx.save();
       ctx.translate(x(d.start), y(d, d.start));
-      const s = (glyph * 0.7) / (SHAPES[SHAPE].extent || 210);
+      const s = glyph / (SHAPES[SHAPE].extent || 210);
       ctx.scale(s, s);
       SHAPES[SHAPE].draw(ctx, born);
       ctx.restore();
