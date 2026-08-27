@@ -1,3 +1,13 @@
+// Shapes engine: the genomes, mutation and drawing shared by the simulation
+// rooms (Copying, Drift, Selection, Adaptation, Branching).
+//
+// NOTE: the site's homepage also loads this file, by this exact path, from
+// _includes/fr-project-index.html — the background branching simulation in
+// _scripts/fr-sim.js uses SHAPES, freshAncestor and mutate from here rather
+// than keeping a second copy. If this file moves or is renamed, update that
+// script tag: the homepage guards on SHAPES being defined, so it will not
+// error, it will simply stop drawing.
+
     function gauss(){
       let u = 1 - Math.random(), v = Math.random();
       return Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
