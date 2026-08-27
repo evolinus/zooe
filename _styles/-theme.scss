@@ -2,7 +2,10 @@
 ---
 
 // colors
-[data-dark="false"] {
+// the site is light. the [data-dark="true"] block below is not a theme any more:
+// it is what the header, the footer and any section with a dark background image
+// switch to locally.
+:root {
   --primary: #D83C2D;      // accent
   --primary-deep: #A82A1E; // accent, one step down: small text and hovers
   --primary-hover: #B32E21;
@@ -26,7 +29,7 @@
   --highlight: #{rgba(#B3CFCD, 0.22)};
   --panel: #E9A431;        // the block colour holds in both themes
   --panel-ink: #2A1B06;
-  --text: #FFF5E3;
+  --text: #FFFAF0;         // matches the ground the site actually uses
   --background: #241E14;
   --background-alt: #322A1D;
   --light-gray: #4A4132;
