@@ -110,7 +110,7 @@ $wrap: 900px;
     var(--edge)
     minmax(0, calc((100% - (2 * var(--edge))) * 2 / 3))
     minmax(0, 1fr);
-  background: var(--primary);
+  background: #126066;
   color: var(--background);
 }
 .fr-hero-main {
