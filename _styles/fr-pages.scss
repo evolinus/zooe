@@ -426,7 +426,8 @@ $wrap: 900px;
 /* the photo sits matted on the red panel, with a heavier bottom band */
 .fr-profile-photo {
   padding: 14px 14px 34px;
-  background: var(--primary);
+  /* teal frame, matching the homepage hero */
+  background: #126066;
   img {
     display: block;
     width: 100%;
