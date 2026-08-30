@@ -27,7 +27,10 @@ const frSim = () => {
   const MUT = 2;                                  // the room's mutation size
   const SIGMA = 0.005 + (MUT / 50) * 0.12;        // as the room maps that dial
   const SPLIT = { s2: Math.round(N * 0.4), s3: Math.round(N * 0.7), s4: Math.round(N * 0.9) };
-  const TRANS = Math.round(N * 0.16);             // generations a split takes to fan out
+  // generations a split takes to fan out — capped so the last split (s4) still
+  // completes before the run ends; otherwise its two leaves (H, I) stop partway
+  // to their lanes and end up closer together than the rest
+  const TRANS = Math.min(Math.round(N * 0.16), N - SPLIT.s4);
   const HOLD_MS = 1600;                           // pause on the finished tree before restarting
 
   // the room's topology: five leaves (C, D, G, H, I) off four internal branches
