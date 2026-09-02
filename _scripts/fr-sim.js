@@ -31,7 +31,7 @@ const frSim = () => {
   // completes before the run ends; otherwise its two leaves (H, I) stop partway
   // to their lanes and end up closer together than the rest
   const TRANS = Math.min(Math.round(N * 0.16), N - SPLIT.s4);
-  const HOLD_MS = 1600;                           // pause on the finished tree before restarting
+  const HOLD_MS = 3000;                           // pause on the finished tree before restarting
 
   // the room's topology: five leaves (C, D, G, H, I) off four internal branches
   const laneD = 0, laneH = 1, laneI = 2, laneG = 3, laneC = 4;
