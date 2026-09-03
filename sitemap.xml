@@ -1,27 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://evolinus.github.io/zooe/</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/research/</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/publications/</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/team/</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/teaching/</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/contact/</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/members/lino-ometto.html</loc>
-  </url>
-  <url>
-    <loc>https://evolinus.github.io/zooe/teaching/evolutionary-laboratories/main.html</loc>
-  </url>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://evolinus.github.io/zooe/members/alberto-prim.html</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/members/benedetta-zeme.html</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/members/chiara-albertini.html</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/members/lino-ometto.html</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/members/tina-kaveh.html</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/contact/</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/research/</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/teaching/</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/team/</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/publications/</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/</loc>
+<lastmod>2026-09-03T11:29:25+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/pdfs/LinoOmetto.CV.pdf</loc>
+<lastmod>2026-09-03T11:33:10+00:00</lastmod>
+</url>
+<url>
+<loc>https://evolinus.github.io/zooe/teaching/evolutionary-laboratories/main.html</loc>
+<lastmod>2026-09-03T11:33:10+00:00</lastmod>
+</url>
 </urlset>
