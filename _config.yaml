@@ -34,6 +34,11 @@ defaults:
       type: "posts"
     values:
       layout: post
+  # keep the search console verification file out of the generated sitemap
+  - scope:
+      path: "google5268eb9fa20642e4.html"
+    values:
+      sitemap: false
 
 collections:
   # generate page for each member
