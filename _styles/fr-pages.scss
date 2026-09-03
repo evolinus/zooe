@@ -488,9 +488,37 @@ $wrap: 900px;
   min-height: 240px;
   padding: 40px;
   overflow: hidden;
-  /* a logo, not a photograph: show it whole rather than cropping to fill */
-  img { width: 100%; height: 100%; object-fit: contain; }
+  /* the two marks, stacked and given equal room */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
 }
+.fr-contact-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  /* a logo, not a photograph: show it whole rather than cropping to fill */
+  img { width: 100%; max-width: 200px; height: auto; object-fit: contain; }
+}
+/* the mark carries its own white polygon: a shadow lifts it off the ground.
+   drop-shadow follows the PNG's alpha, so it traces the polygon, not a box. */
+.fr-contact-logo-zooe img { filter: drop-shadow(0 3px 8px rgba(32, 30, 29, 0.22)); }
+
+/* the wordmark under the zoo_e mark, in the mark's own colours */
+.fr-contact-wordmark {
+  margin: 0;
+  font-family: var(--title);
+  font-weight: var(--bold);
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.fr-wm-zoo,
+.fr-wm-lab { color: #000000; }
+.fr-wm-us { color: #C00000; }
+.fr-wm-e { color: #FFC000; }
 .fr-contact-stack { display: flex; flex-direction: column; gap: 10px; max-width: 340px; }
 /* the river, under the way to find us */
 .fr-contact-view {
