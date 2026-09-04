@@ -1,0 +1,2467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- unlisted copy: linked from nowhere on the site and kept out of sitemap.xml
+     (see the sitemap: false defaults in _config.yaml). this tag is a local
+     addition, not upstream - re-add it whenever this file is re-copied. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Population Laboratories</title>
+<style>
+  :root{
+    --paper: #EDE6D6;
+    --paper-dim: #E2D9C4;
+    --ink: #262220;
+    --ink-soft: #6b6258;
+    --rule: #cabfa8;
+    --stamp: #C08A2E;
+    --card-shadow: 0 1px 0 rgba(38,34,32,0.06), 0 8px 20px -12px rgba(38,34,32,0.35);
+    /* Population palette — one colour per role, used by both CSS and the
+       canvas drawing code (which reads these variables at load time). */
+    --sp-a: #3D6E6E;   /* species A / the focal consumer / the prey */
+    --sp-b: #A8442A;   /* species B / the competitor */
+    --pred: #8C3F5D;   /* the predator, wherever one eats another species */
+    --res-1: #2E5C8A;  /* resource 1 */
+    --res-2: #388047;  /* resource 2 */
+    --cap: #7A5C99;    /* carrying capacity, equilibria, reference lines */
+    --help-red: #B3141F;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; padding:0;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(38,34,32,0.05) 1px, transparent 0) 0 0/22px 22px,
+      var(--paper);
+    color:var(--ink);
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  }
+  .mono{ font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+  /* Tab Navigation */
+  .tab-nav {
+    display: flex;
+    gap: 6px;
+    max-width: 1180px;
+    margin: 20px auto 0;
+    padding: 0 20px;
+    border-bottom: 2px solid var(--ink);
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.3px;
+    padding: 9px 14px;
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--tab, var(--rule));
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    color: var(--ink-soft);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .tab-btn:hover { background: #dbd1b9; color: var(--ink); }
+  .tab-btn.active {
+    background: var(--paper);
+    color: var(--tab, var(--ink));
+    font-weight: bold;
+    border: 2px solid var(--ink);
+    border-top: 3px solid var(--tab, var(--ink));
+    border-bottom: 2px solid var(--paper);
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .tab-content{ display: none; }
+  .tab-content.active{ display: block; }
+
+  .page{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  header.masthead{
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:stretch;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  header.masthead h1{
+    margin:0;
+    font-size: clamp(26px, 4vw, 38px);
+    letter-spacing: 0.2px;
+    font-weight: 700;
+  }
+  header.masthead .sub{
+    max-width: 85ch;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 6px 0 0;
+  }
+  header.masthead .sub .sub-label{ color: var(--stamp); font-weight: 700; }
+
+  /* zoo_e lab brand block */
+  .brand-link{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; text-decoration:none;
+  }
+  .brand-logo{ width:90px; height:auto; object-fit:contain; display:block; }
+  .brand-text{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight:800; font-size:12px; letter-spacing:0.2px; white-space:nowrap;
+  }
+  .brand-text .c-black{ color:#111111; }
+  .brand-text .c-red{ color:#B3141F; }
+  .brand-text .c-yellow{ color:#C9971A; }
+  .masthead-brand{
+    display:flex; align-items:center; justify-content:center;
+    border-left: 1px solid var(--rule);
+    padding-left: 14px;
+  }
+
+  /* Control deck */
+  .deck{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin-bottom: 26px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px 22px;
+    align-items: end;
+  }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .field label .sym{ text-transform: none; font-style: italic; }
+  .field .value{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .field.wide{ grid-column: 1 / -1; }
+
+  input[type=range]{
+    -webkit-appearance:none; appearance:none;
+    width:100%; height: 3px;
+    background: var(--rule);
+    border-radius: 2px;
+    outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:14px; height:14px; border-radius:50%;
+    background: var(--ink);
+    cursor:pointer;
+    border: 2px solid var(--paper-dim);
+    box-shadow: 0 0 0 1px var(--ink);
+  }
+  input[type=range]:disabled::-webkit-slider-thumb{
+    background: var(--ink-soft);
+    box-shadow: 0 0 0 1px var(--ink-soft);
+    cursor: not-allowed;
+  }
+  /* Species-tinted sliders make it obvious at a glance which set of controls
+     belongs to which competitor. */
+  input[type=range].sp-a::-webkit-slider-thumb{ background: var(--sp-a); box-shadow: 0 0 0 1px var(--sp-a); }
+  input[type=range].sp-b::-webkit-slider-thumb{ background: var(--sp-b); box-shadow: 0 0 0 1px var(--sp-b); }
+  input[type=range].pred::-webkit-slider-thumb{ background: var(--pred); box-shadow: 0 0 0 1px var(--pred); }
+
+  .segmented{ display:flex; border: 1px solid var(--ink); border-radius: 4px; overflow:hidden; }
+  .segmented button{
+    flex:1; padding: 7px 6px;
+    background: var(--paper);
+    border:none; border-right: 1px solid var(--ink);
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px; cursor:pointer; color: var(--ink);
+  }
+  .segmented button:last-child{ border-right:none; }
+  .segmented button.active{ background: var(--ink); color: var(--paper); }
+  .segmented.compact button{ padding: 5px 8px; font-size: 11.5px; }
+
+  .transport{
+    display:flex; gap:8px; grid-column: 1 / -1; flex-wrap: wrap; align-items:center;
+    border-top: 1px dashed var(--rule);
+    padding-top: 14px; margin-top: 2px;
+  }
+  button.btn{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px; letter-spacing: 0.4px;
+    padding: 9px 16px; border-radius: 4px;
+    border: 1px solid var(--ink);
+    background: var(--ink); color: var(--paper);
+    cursor: pointer;
+    transition: transform 0.06s ease, opacity 0.15s ease;
+  }
+  button.btn:active{ transform: translateY(1px); }
+  button.btn.secondary{ background: transparent; color: var(--ink); }
+  button.btn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .transport .status{
+    margin-left: auto;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px; color: var(--ink-soft);
+  }
+
+  .time-machine-container{
+    grid-column: 1 / -1;
+    display: flex; flex-direction: column; gap: 8px;
+    background: var(--paper);
+    padding: 12px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--stamp);
+    margin-top: 20px;
+  }
+  /* Scrubbers that can be walked one step at a time put a button either side of
+     the slider. Only the Overshoot Room uses this — stepping matters there
+     because the cobweb redraws its staircase one generation per frame. */
+  .scrub-row{ display: flex; align-items: center; gap: 10px; }
+  .scrub-row input[type=range]{ flex: 1; }
+  .scrub-row button.btn.step{
+    padding: 4px 11px;
+    font-size: 13px;
+    line-height: 1.1;
+    flex: none;
+  }
+
+  /* Advanced parameter drawers */
+  .deck details.advanced{
+    grid-column: 1 / -1;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 2px 16px;
+  }
+  .deck details.advanced[open]{ padding-bottom: 16px; }
+  .deck details.advanced summary{
+    cursor: pointer;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 1px; color: var(--stamp);
+    padding: 10px 0; list-style: none;
+  }
+  .deck details.advanced summary::-webkit-details-marker{ display: none; }
+  .deck details.advanced summary::before{
+    content: '▸'; display:inline-block; font-size:16px; line-height:1;
+    margin-right:8px; transform: translateY(1px);
+  }
+  .deck details.advanced[open] summary::before{ content: '▾'; }
+  .advanced-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px 22px;
+    padding-top: 8px;
+    border-top: 1px solid var(--rule);
+    margin-top: 2px;
+  }
+  .deck .section-label{
+    grid-column: 1 / -1;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--stamp);
+    margin: 6px 0 -4px;
+    padding-top: 10px;
+    border-top: 1px solid var(--rule);
+  }
+  .deck .section-label:first-child{ margin-top:0; padding-top:0; border-top:none; }
+  .deck .section-label.sp-a{ color: var(--sp-a); }
+  .deck .section-label.sp-b{ color: var(--sp-b); }
+  .deck .section-label.pred{ color: var(--pred); }
+  .deck .section-label.res-2{ color: var(--res-2); }
+
+  /* Two populations at once. The Growth and Crowding rooms can run a second
+     population with its own parameters; one class on the tab root reveals its
+     controls, its chips and the compare-only wording, and hides the sentences
+     that only make sense with a single population. Nothing is shown or hidden
+     element by element from JavaScript. */
+  .cmp-only{ display: none; }
+  .compare-on .field.cmp-only{ display: flex; }
+  .compare-on .section-label.cmp-only{ display: block; }
+  .compare-on .chip.cmp-only{ display: block; }
+  .compare-on span.cmp-only{ display: inline; }
+  .chip span.cmp-only{ display: none; }
+  .compare-on .chip span.cmp-only{ display: inline; }
+  .compare-on .cmp-off-only{ display: none; }
+  /* The dot field carries one population per band, so it needs the room when a
+     second one is on the panel. */
+  .canvas-wrap.pop-wrap{ height: 210px; }
+  .compare-on .canvas-wrap.pop-wrap{ height: 300px; }
+
+  /* Cards & stage */
+  .stage-area{
+    display:grid;
+    gap: 20px;
+    grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr));
+    align-items: start;
+    margin-bottom: 20px;
+  }
+  .panel{
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-top: 5px solid var(--accent, var(--ink));
+    border-radius: 6px;
+    box-shadow: var(--card-shadow);
+    padding: 14px 14px 10px;
+    min-width: 0;
+  }
+  .panel.span2{ grid-column: span 2; }
+  .panel.span3{ grid-column: span 3; }
+  .panel-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap: 10px; margin-bottom:8px; flex-wrap: wrap;
+  }
+  .panel-head .name{ font-weight:700; font-size: 15px; }
+  .panel-head .name-group{ display:flex; align-items:center; min-width:0; }
+  .panel-head .stat{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; color: var(--ink-soft); text-align:right; line-height:1.5;
+  }
+  .panel-note{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px; color: var(--ink-soft);
+    margin-top: 8px; line-height: 1.5;
+  }
+
+  .canvas-wrap{
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .canvas-wrap canvas{ width: 100%; display: block; }
+
+  /* Numeric readout chips */
+  .chips{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .chips.center{ justify-content:center; }
+  .chip{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 6px 12px;
+    text-align: center;
+    font-family: ui-monospace, 'SF Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-soft);
+    flex: 1 1 auto;
+    min-width: 92px;
+  }
+  .chip span{ display:block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 3px; }
+  .chip.sp-a span{ color: var(--sp-a); }
+  .chip.sp-b span{ color: var(--sp-b); }
+  .chip.pred span{ color: var(--pred); }
+  .chip.res-1 span{ color: var(--res-1); }
+  .chip.res-2 span{ color: var(--res-2); }
+  .chip.cap span{ color: var(--cap); }
+
+  /* Verdict / outcome panels */
+  .verdict{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--stamp);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .verdict h4{
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-family: Georgia, serif;
+  }
+  .verdict p{ margin: 0 0 8px; font-size: 14px; line-height: 1.6; }
+  .verdict p:last-child{ margin-bottom: 0; }
+  .verdict .cond{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    display: flex; justify-content: space-between; gap: 10px;
+    padding: 4px 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .verdict .cond:last-of-type{ border-bottom: none; }
+  .verdict .cond .yes{ color: var(--res-2); font-weight: 700; }
+  .verdict .cond .no{ color: var(--help-red); font-weight: 700; }
+  .verdict.is-a{ border-left-color: var(--sp-a); }
+  .verdict.is-b{ border-left-color: var(--sp-b); }
+  .verdict.is-both{ border-left-color: var(--res-2); }
+  .verdict.is-either{ border-left-color: var(--cap); }
+
+  table.datatable{
+    border-collapse: collapse;
+    width: 100%;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11.5px;
+  }
+  table.datatable th, table.datatable td{
+    border: 1px solid var(--rule);
+    padding: 4px 8px;
+    text-align: right;
+  }
+  table.datatable th{ background: var(--paper-dim); color: var(--ink); font-weight: normal; }
+  table.datatable td:first-child, table.datatable th:first-child{ text-align: left; white-space: nowrap; }
+  table.datatable tr.win td{ background: rgba(56,128,71,0.14); font-weight: bold; }
+
+  .legend-inline{
+    display:flex; gap:16px; flex-wrap:wrap;
+    margin: 10px 0 0;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; color: var(--ink-soft);
+  }
+  .legend-inline .item{ display:flex; align-items:center; gap:6px; }
+  .legend-inline .swatch{ width:11px; height:11px; border-radius:2px; display:inline-block; }
+
+  /* Reading + methods panel */
+  .reading{
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 2px solid var(--ink);
+    display:grid; grid-template-columns: 1fr; gap: 10px;
+  }
+  .reading p{
+    font-size: 14.5px; line-height: 1.65; color: var(--ink);
+    margin: 0; max-width: 82ch;
+  }
+  .reading .note-line{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px; color: var(--stamp);
+  }
+  /* "Exactly what this room simulates" — the exact model, the integration
+     scheme and the citations, which used to sit in a bare footer note where a
+     reader had to already suspect it was worth reading. Boxed like the brief
+     and the payoff so it reads as one of the room's panels, but in a cooler,
+     greyer wash than their warm paper-dim, because this is the appendix and
+     not the teaching. A <details>, closed: most readers never open it, and
+     the ones who do should find it where the other panels are. Matches the
+     Evolutionary Laboratories. */
+  details.room-methods{
+    background: rgba(107, 98, 88, 0.07);
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--ink-soft);
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-top: 26px;
+    max-width: 100ch;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.2px;
+    line-height: 1.55;
+  }
+  /* Set as a panel heading, matching the brief's and the payoff's h3 — the box
+     is only half of being findable. */
+  details.room-methods > summary{
+    cursor: pointer;
+    list-style: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  details.room-methods > summary::-webkit-details-marker{ display: none; }
+  /* A caret to aim at, since the summary carries no other affordance. */
+  details.room-methods > summary::before{
+    content: '▸ ';
+    display: inline-block;
+  }
+  details.room-methods[open] > summary::before{ content: '▾ '; }
+  details.room-methods > summary:hover{ color: var(--ink); }
+  details.room-methods > summary:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+  details.room-methods p{ margin: 10px 0 0; }
+
+  /* Model equation strip shown at the top of each room */
+  .equation{
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--stamp);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 22px;
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  }
+  .equation .eq{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 15px; color: var(--ink); white-space: nowrap;
+    /* The equations must not wrap — a broken line of algebra is worse than a
+       scrollbar — so on a screen too narrow for one (the Keystone Room's is the
+       longest) let it scroll rather than be silently cut off at the edge. */
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .equation .eq .var{ color: var(--stamp); font-weight: 700; }
+  .equation .eq-gloss{
+    font-size: 13.5px; color: var(--ink-soft); line-height: 1.5; flex: 1 1 320px;
+  }
+
+  /* A collapsible key naming every symbol in the equation above. Closed by
+     default, so a reader who already knows the notation is not made to scroll
+     past it, and one who does not has every letter defined in one place instead
+     of hunting through the prose. Native <details>, so it needs no JS and
+     answers to the keyboard on its own. It takes a whole flex row of the
+     equation panel, under a rule that separates it from the gloss. */
+  .eq-key{
+    flex: 1 1 100%;
+    border-top: 1px solid var(--rule);
+    padding-top: 9px;
+  }
+  .eq-key summary{
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase;
+    color: var(--stamp);
+    cursor: pointer;
+    list-style: none;
+  }
+  .eq-key summary::-webkit-details-marker{ display: none; }
+  .eq-key summary::before{
+    content: '\25B8';
+    font-size: 10px;
+    transition: transform 0.15s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .eq-key summary::before{ transition: none; }
+  }
+  .eq-key[open] summary::before{ transform: rotate(90deg); }
+  .eq-key summary:hover{ color: var(--ink); }
+  .eq-key summary:focus-visible{
+    outline: 2px solid var(--stamp); outline-offset: 3px; border-radius: 3px;
+  }
+  .eq-key dl{
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 7px 16px;
+    margin: 11px 0 2px;
+    font-size: 13.5px; line-height: 1.5;
+  }
+  .eq-key dt{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    color: var(--stamp); font-weight: 700; white-space: nowrap;
+  }
+  .eq-key dd{ margin: 0; color: var(--ink-soft); }
+  .eq-key dd em{ font-style: italic; }
+
+  /* ---- In-room teaching panels -------------------------------------------
+     Each room opens with "What it shows" and "Try this" above its controls,
+     and closes with "What to notice" after the run. The two share a look so a
+     student learns to expect them: a tinted panel with a coloured spine, the
+     opening one in ink and the closing one in stamp gold so it reads as the
+     pay-off rather than the setup. Matches the Evolutionary Laboratories. */
+  .room-brief, .room-payoff{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--ink);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+    max-width: 100ch;
+  }
+  .room-payoff{
+    border-left-color: var(--stamp);
+    margin-top: 26px;
+    margin-bottom: 10px;
+  }
+  .room-brief p, .room-payoff p{
+    font-size: 15px;
+    line-height: 1.65;
+    margin: 0 0 10px;
+  }
+  .room-brief p:last-child, .room-payoff p:last-child{ margin-bottom: 0; }
+  .room-brief h3, .room-payoff h3{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--stamp);
+    margin: 0 0 8px;
+  }
+  .room-brief .try-label{ font-weight: 700; }
+  /* Pointers to other rooms, so a student can follow a thread across the set. */
+  .room-link{
+    background: none; border: none; padding: 0;
+    font: inherit; color: var(--stamp);
+    text-decoration: underline; text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .room-link:hover{ color: var(--ink); }
+
+  /* Inline glossary term: a dotted underline that opens the same modal as a
+     help button. Used for the handful of words a first-time reader needs. */
+  .gloss{
+    border-bottom: 1px dotted var(--help-red);
+    cursor: help;
+    color: inherit;
+  }
+  .gloss:hover{ background: rgba(179, 20, 31, 0.08); }
+  .gloss:focus-visible{ outline: 2px solid var(--stamp); outline-offset: 2px; }
+
+  /* README */
+  .readme-content{
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 28px 32px;
+    font-size: 15px; line-height: 1.75; color: var(--ink);
+  }
+  .readme-content p{ margin: 0 0 16px; }
+  .readme-content p:last-child{ margin-bottom: 0; }
+  .readme-content a{ color: var(--stamp); }
+  .readme-content h2{
+    font-size: 21px; margin: 30px 0 4px; padding-top: 18px;
+    border-top: 1px solid var(--rule);
+  }
+  .readme-content h2:first-of-type{ margin-top: 22px; }
+  .readme-content h2 .room-num{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px; color: var(--stamp); margin-right: 8px;
+  }
+  /* The four part headings in the room list. Heavier than a room heading and
+     without its rule, so the list reads as four groups rather than eight items. */
+  .readme-content h2.part-head{
+    font-size: 15px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--paper-dim);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    border-top: 3px solid var(--stamp);
+    padding: 12px 14px 10px;
+    margin: 38px 0 0;
+  }
+  .readme-content .part-blurb{
+    margin: 0 0 4px;
+    padding: 8px 14px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  /* A room heading that opens a part sits directly under its blurb, so it drops
+     the rule that separates one room from the next. */
+  .readme-content .part-blurb + h2{ border-top: none; padding-top: 6px; margin-top: 0; }
+  .readme-content h3{ font-size: 15px; margin: 24px 0 8px; letter-spacing: 0.2px; }
+  .readme-content .room-kicker{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--stamp); margin: 0 0 12px;
+  }
+  .readme-content .lead{ font-size: 16px; }
+  .readme-content ul{ margin: 0 0 16px; padding-left: 22px; }
+  .readme-content li{ margin-bottom: 7px; }
+  .readme-content .room-open{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 14px;
+  }
+
+  /* Help system — a small red "?" beside a control or panel opens a modal
+     explaining it. The glyph comes from CSS, so panels rendered later by a
+     room's JS need only the markup <button class="help-btn" data-help="id">. */
+  .help-btn{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; padding: 0; margin-left: 6px;
+    border: none; border-radius: 50%;
+    background: var(--help-red); color: #fff;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10px; font-weight: 700; line-height: 1;
+    cursor: pointer; vertical-align: middle; flex: none;
+    text-transform: none; letter-spacing: 0;
+  }
+  .help-btn::before{ content: '?'; }
+  .help-btn:hover{ background: #8f0f18; }
+  .help-btn:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .help-overlay{
+    position: fixed; inset: 0;
+    background: rgba(38, 34, 32, 0.55);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px; z-index: 1000;
+  }
+  .help-overlay.open{ display: flex; }
+  .help-dialog{
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    box-shadow: 0 18px 50px -12px rgba(38,34,32,0.5);
+    width: 100%; max-width: 560px; max-height: 82vh;
+    overflow-y: auto; padding: 18px 22px 22px;
+  }
+  .help-dialog-head{
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 12px; border-bottom: 1px solid var(--rule);
+    padding-bottom: 10px; margin-bottom: 12px;
+  }
+  .help-dialog-head h2{ margin: 0; font-size: 19px; line-height: 1.25; }
+  .help-close{
+    border: none; background: transparent; color: var(--ink-soft);
+    font-size: 26px; line-height: 1; padding: 0 2px; cursor: pointer; flex: none;
+  }
+  .help-close:hover{ color: var(--ink); }
+  .help-dialog-body p{ font-size: 14.5px; line-height: 1.65; margin: 0 0 12px; }
+  .help-dialog-body p:last-child{ margin-bottom: 0; }
+  .help-dialog-body ul{ font-size: 14.5px; line-height: 1.6; margin: 0 0 12px; padding-left: 20px; }
+  .help-dialog-body li{ margin-bottom: 5px; }
+  .help-dialog-body code{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px; background: var(--paper-dim); padding: 1px 4px; border-radius: 3px;
+  }
+  .help-inline-note{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px; color: var(--ink-soft); margin-top: 6px;
+  }
+
+  @media (max-width: 900px){
+    .stage-area{ grid-template-columns: 1fr !important; }
+    .panel.span2, .panel.span3{ grid-column: span 1 !important; }
+    header.masthead .masthead-brand{ display:none; }
+    .readme-content{ padding: 20px 18px; }
+  }
+  @media (max-width: 560px){
+    /* A segmented group cannot shrink past its longest label, so on a narrow
+       screen let the buttons wrap onto a second row instead of being clipped by
+       the group's own overflow:hidden. */
+    .segmented{ flex-wrap: wrap; }
+    .segmented button{ flex: 1 0 45%; }
+    /* Term above definition rather than beside it: two columns leave the
+       definition about a dozen characters of width. */
+    .eq-key dl{ grid-template-columns: 1fr; gap: 2px; }
+    .eq-key dd{ margin-bottom: 9px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Master Navigation Tab Bar -->
+  <div class="tab-nav" role="tablist" aria-label="Laboratory rooms">
+    <button class="tab-btn active" role="tab" id="tabbtn-readme" aria-controls="tab-readme" aria-selected="true" tabindex="0" style="--tab: #6b6258" onclick="switchTab('readme', event)">README</button>
+    <button class="tab-btn" role="tab" id="tabbtn-growth" aria-controls="tab-growth" aria-selected="false" tabindex="-1" style="--tab: #388047" onclick="switchTab('growth', event)">Growth</button>
+    <button class="tab-btn" role="tab" id="tabbtn-crowding" aria-controls="tab-crowding" aria-selected="false" tabindex="-1" style="--tab: #3D6E6E" onclick="switchTab('crowding', event)">Crowding</button>
+    <button class="tab-btn" role="tab" id="tabbtn-resource" aria-controls="tab-resource" aria-selected="false" tabindex="-1" style="--tab: #B8862E" onclick="switchTab('resource', event)">Resource</button>
+    <button class="tab-btn" role="tab" id="tabbtn-overshoot" aria-controls="tab-overshoot" aria-selected="false" tabindex="-1" style="--tab: #A8442A" onclick="switchTab('overshoot', event)">Overshoot</button>
+    <button class="tab-btn" role="tab" id="tabbtn-neighbours" aria-controls="tab-neighbours" aria-selected="false" tabindex="-1" style="--tab: #2E5C8A" onclick="switchTab('neighbours', event)">Neighbours</button>
+    <button class="tab-btn" role="tab" id="tabbtn-coexistence" aria-controls="tab-coexistence" aria-selected="false" tabindex="-1" style="--tab: #7A5C99" onclick="switchTab('coexistence', event)">Coexistence</button>
+    <button class="tab-btn" role="tab" id="tabbtn-predator" aria-controls="tab-predator" aria-selected="false" tabindex="-1" style="--tab: #8C3F5D" onclick="switchTab('predator', event)">Predator</button>
+    <button class="tab-btn" role="tab" id="tabbtn-keystone" aria-controls="tab-keystone" aria-selected="false" tabindex="-1" style="--tab: #5E6B21" onclick="switchTab('keystone', event)">Keystone</button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 0: README                              -->
+  <!-- ========================================== -->
+  <div id="tab-readme" class="tab-content page active" role="tabpanel" aria-labelledby="tabbtn-readme" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>Population Laboratories</h1>
+        <p class="sub">Welcome — start here.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="readme-content">
+      <p class="lead">Welcome to the Population Laboratories. Eight rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The last four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious.</p>
+
+      <h3>How to use the rooms</h3>
+      <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong>, and <strong>read the panels</strong> that fill in below. The whole trajectory is computed the moment you press Run and then played back to you, so you can pause anywhere, drag the <strong>History Scrubber</strong> at the bottom of most rooms back and forth, and replay any moment you like. In the Overshoot Room it is worth using deliberately: stepping one generation at a time is what turns the cobweb diagram from a tangle into an explanation.</p>
+      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. Follow those pointers and the eight rooms read as one argument rather than eight separate toys.</p>
+      <p>Between the two sits the equation the room is running. Underneath it is a collapsible <strong>What each symbol means</strong> key: open it and every letter in the equation above is named, said plainly, and placed against what the earlier rooms called it. Nothing in a room requires reading the algebra — but nothing in the algebra is left unexplained either.</p>
+      <p>Some rooms are deterministic: the same settings always give exactly the same curve, because the equations contain no chance. Others draw births and deaths at random, so running twice will not give the same answer twice — the parameters set tendencies, never outcomes. Each room says which kind it is.</p>
+      <p>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</p>
+
+        <h3>Words worth pinning down</h3>
+        <p>These seventeen come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
+        <ul>
+          <li><span class="gloss" data-help="glosPopulation">Population</span> — a group of the same species, in one place, that could interbreed — the unit everything here is measured in.</li>
+          <li><span class="gloss" data-help="glosPerCapita">Per-capita rate</span> — per individual, per unit of time. Ask of every rate whether it is this or a population total.</li>
+          <li><span class="gloss" data-help="glosDensityDependence">Density dependence</span> — a birth or death rate that changes with crowding. Only this can regulate a population.</li>
+          <li><span class="gloss" data-help="rIntrinsic">Intrinsic rate of increase (<em>r</em>)</span> — the per-capita growth rate of a population that nothing is holding back.</li>
+          <li><span class="gloss" data-help="carryingK">Carrying capacity (<em>K</em>)</span> — the size at which births balance deaths, so the population stops changing.</li>
+          <li><span class="gloss" data-help="glosEquilibrium">Equilibrium</span> — a state in which nothing is changing — and the real question is whether it attracts.</li>
+          <li><span class="gloss" data-help="glosCompetitionKinds">Intraspecific vs. interspecific competition</span> — competition within a species versus between species. The balance between them decides every coexistence result in the lab.</li>
+          <li><span class="gloss" data-help="noise">Demographic stochasticity</span> — the coin-flip nature of individual births and deaths, which matters most when numbers are small.</li>
+          <li><span class="gloss" data-help="glosPhasePlane">Phase plane</span> — a graph of one species against another, with time nowhere on it.</li>
+          <li><span class="gloss" data-help="glosNullcline">Isocline (nullcline)</span> — the line on a phase plane along which one species stops changing.</li>
+          <li><span class="gloss" data-help="invasion">Invasion criterion</span> — can this species increase when it is rare? Ask it of both species and you have the outcome.</li>
+          <li><span class="gloss" data-help="exclusion">Competitive exclusion</span> — two species making a living in exactly the same way cannot persist together.</li>
+          <li><span class="gloss" data-help="rStarRule">R*</span> — the resource level at which a consumer breaks even; the lower one wins.</li>
+          <li><span class="gloss" data-help="functionalResponse">Functional response</span> — how many prey one predator eats, as a function of how many there are.</li>
+          <li><span class="gloss" data-help="glosLimitCycle">Limit cycle</span> — a permanent oscillation whose size belongs to the parameters, not to where the run started.</li>
+          <li><span class="gloss" data-help="glosTrophicCascade">Trophic cascade</span> — an effect that travels down a food chain and changes a level the predator never touches.</li>
+          <li><span class="gloss" data-help="glosNiche">Niche</span> — the conditions and resources a population needs to persist. Two species with identical niches cannot coexist.</li>
+        </ul>
+
+      <h3>The through-line</h3>
+      <p>The eight rooms fall into <strong>four parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable.</p>
+      <p>By the last room the honest answer to "what stops this population from growing?" is that you cannot tell by looking at the population, or even at the pair. You have to look at the whole community.</p>
+      <p>Working through the rooms in order is recommended, but each one stands on its own.</p>
+      <p>One word to watch: in Parts I and II, <em>competition</em> means competition among members of a single species — the crowding that regulates it from within. From Part III on it usually means competition <em>between</em> species. The rooms keep the two apart, and which one dominates decides every coexistence result in the lab.</p>
+
+      <h2 class="part-head">Part I — A population on its own</h2>
+      <p class="part-blurb">Nothing outside the species. Growth with nothing in its way, and then with the neighbours in it.</p>
+
+      <h2><span class="room-num">01</span>The Growth Room</h2>
+      <p class="room-kicker">Unlimited growth &amp; its impossibility</p>
+      <p>A population in which nothing pushes back: every individual does equally well however crowded the world becomes. It is the population that cannot exist, and the baseline every other room is measured against.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('growth'); window.scrollTo(0,0); return false;">→ Open the Growth Room</a></p>
+
+      <h2><span class="room-num">02</span>The Crowding Room</h2>
+      <p class="room-kicker">Intraspecific competition &amp; the logistic curve</p>
+      <p>Individuals start to get in each other’s way. Births fall, deaths rise, and where the two lines cross the population stops growing — that crossing point is the carrying capacity.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('crowding'); window.scrollTo(0,0); return false;">→ Open the Crowding Room</a></p>
+
+      <h2 class="part-head">Part II — Where the ceiling comes from</h2>
+      <p class="part-blurb">The carrying capacity stops being a given number — and then it stops holding still.</p>
+
+      <h2><span class="room-num">03</span>The Resource Room</h2>
+      <p class="room-kicker">Where carrying capacity actually comes from</p>
+      <p>K was a given number in the previous room. Here it is not: food is supplied, eaten and runs short, and the ceiling emerges from the arithmetic. What the consumers leave behind turns out to matter more than how many of them there are.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('resource'); window.scrollTo(0,0); return false;">→ Open the Resource Room</a></p>
+
+      <h2><span class="room-num">04</span>The Overshoot Room</h2>
+      <p class="room-kicker">Delayed density dependence: cycles &amp; chaos</p>
+      <p>Breed once a year and this year’s crowding sets next year’s numbers. That single generation of delay is enough to turn a well-behaved population into one that cycles forever — or one that becomes genuinely unpredictable while obeying a perfectly deterministic rule.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('overshoot'); window.scrollTo(0,0); return false;">→ Open the Overshoot Room</a></p>
+
+      <h2 class="part-head">Part III — A second species at the same table</h2>
+      <p class="part-blurb">Competition, first as a bare coefficient and then as a shared dinner.</p>
+
+      <h2><span class="room-num">05</span>The Neighbours Room</h2>
+      <p class="room-kicker">Interspecific competition: the Lotka–Volterra model</p>
+      <p>A second species that wants the same things. Four outcomes are possible, only one of them is coexistence, and which one you get has nothing to do with who grows faster.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('neighbours'); window.scrollTo(0,0); return false;">→ Open the Neighbours Room</a></p>
+
+      <h2><span class="room-num">06</span>The Coexistence Room</h2>
+      <p class="room-kicker">Competitive exclusion, R*, and niche partitioning</p>
+      <p>The same competition, but now the two species share explicit, tracked food, so competition happens for a reason. With one resource, whoever survives on less of it wins; with two, they can divide the world between them.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('coexistence'); window.scrollTo(0,0); return false;">→ Open the Coexistence Room</a></p>
+
+      <h2 class="part-head">Part IV — Being eaten</h2>
+      <p class="part-blurb">A species that wants you rather than your food — and then a whole community, where competition and predation happen at once. This is also where the lab turns on itself, repairing a century-old model one assumption at a time.</p>
+
+      <h2><span class="room-num">07</span>The Predator Room</h2>
+      <p class="room-kicker">Predator–prey cycles, and a famous model’s fragility</p>
+      <p>A second species that eats the first. Neither population can settle, because each is the other’s reason for changing — and the century-old model describing it turns out to be too fragile to believe until you repair it, one assumption at a time.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('predator'); window.scrollTo(0,0); return false;">→ Open the Predator Room</a></p>
+
+      <h2><span class="room-num">08</span>The Keystone Room</h2>
+      <p class="room-kicker">Keystone predation &amp; apparent competition</p>
+      <p>Competition and predation in one community. A predator can be the reason a competitor survives rather than the reason it dies, and two species that compete for nothing at all can still drive each other out.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('keystone'); window.scrollTo(0,0); return false;">→ Open the Keystone Room</a></p>
+
+      <h2>A note on this beta</h2>
+      <p>This is a beta version and may still contain bugs — we're continually working to improve each room. If you run into problems, have questions, or have suggestions, please get in touch with Lino Ometto at <a href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>.</p>
+
+      <h2>Acknowledgements</h2>
+      <p>These laboratories were conceived and directed by Lino Ometto, who set the scientific content, the pedagogical design, and the choices behind every model. The simulation code, interface, and explanatory texts were written collaboratively with <a href="https://www.anthropic.com/claude" target="_blank" rel="noopener">Claude</a>, Anthropic's AI assistant, working through <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>.</p>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 1: THE GROWTH ROOM                     -->
+  <!-- ========================================== -->
+  <div id="tab-growth" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-growth" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Growth Room</h1>
+        <p class="sub"><span class="sub-label">Unlimited growth</span> – Nothing pushes back, so growth never stops. The population that cannot exist.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> A <span class="gloss" data-help="glosPopulation">population</span> in which nothing interferes: every individual has the same chance of giving birth and the same chance of dying, however crowded the world becomes. Births and deaths are drawn at random for each individual, so you see both the smooth exponential prediction and the noisy reality around it.</p>
+      <p><span class="try-label">Try this.</span> Run the defaults and switch the vertical axis from linear to logarithmic — the curve becomes a straight line, which is the signature of exponential growth. Then set the birth rate just barely above the death rate and run 20 replicate populations starting from 5 individuals. Finally, switch <em>Compare two populations</em> on and give population 2 a slightly higher death rate: two runs, identical in every other respect, on the same chart.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dN/dt = (<span class="var">b</span> − <span class="var">d</span>)·N = <span class="var">r</span>·N</div>
+      <div class="eq-gloss">The population changes by a fixed amount <em>per individual per unit time</em>. Because the increment is proportional to how many individuals there already are, growth accelerates without limit. <em>r</em> is the intrinsic rate of increase.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>N</dt>
+          <dd>The number of individuals alive at that moment — the only thing this model keeps track of.</dd>
+          <dt>dN/dt</dt>
+          <dd>How fast <em>N</em> is changing: individuals gained or lost per unit of time. Above zero the population is growing, below zero it is shrinking.</dd>
+          <dt>b</dt>
+          <dd>Birth rate, <span class="gloss" data-help="glosPerCapita">per capita</span>: one individual's chance of reproducing in a unit of time. Here it is the same for everybody, however crowded the world becomes.</dd>
+          <dt>d</dt>
+          <dd>Death rate, per capita: one individual's chance of dying in a unit of time. Also unaffected by crowding — which is exactly what makes this population impossible.</dd>
+          <dt>r</dt>
+          <dd>The <span class="gloss" data-help="rIntrinsic">intrinsic rate of increase</span>, <em>r</em> = <em>b</em> − <em>d</em>. One number standing in for the two: above zero the population grows without limit, below zero it dwindles to nothing.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field">
+        <label>Compare two populations<button class="help-btn" data-help="compare"></button></label>
+        <div class="segmented" id="cmpSeg_growth">
+          <button data-cmp="off" class="active">Off</button>
+          <button data-cmp="on">On</button>
+        </div>
+      </div>
+
+      <div class="section-label res-2 cmp-only">Population 1</div>
+      <div class="field">
+        <label>Starting population <span class="sym">N₀</span> <span class="value" id="n0Val_growth">10</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" id="n0_growth" min="2" max="60" step="1" value="10">
+      </div>
+      <div class="field">
+        <label>Birth rate <span class="sym">b</span> <span class="value" id="bVal_growth">0.50</span><button class="help-btn" data-help="birthDeath"></button></label>
+        <input type="range" id="b_growth" min="0" max="1.2" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Death rate <span class="sym">d</span> <span class="value" id="dVal_growth">0.30</span><button class="help-btn" data-help="birthDeath"></button></label>
+        <input type="range" id="d_growth" min="0" max="1.2" step="0.01" value="0.30">
+      </div>
+
+      <div class="section-label pred cmp-only">Population 2</div>
+      <div class="field cmp-only">
+        <label>Starting population <span class="sym">N₀</span> <span class="value" id="n0Val2_growth">10</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" id="n02_growth" min="2" max="60" step="1" value="10">
+      </div>
+      <div class="field cmp-only">
+        <label>Birth rate <span class="sym">b</span> <span class="value" id="bVal2_growth">0.50</span><button class="help-btn" data-help="birthDeath"></button></label>
+        <input type="range" id="b2_growth" min="0" max="1.2" step="0.01" value="0.50">
+      </div>
+      <div class="field cmp-only">
+        <label>Death rate <span class="sym">d</span> <span class="value" id="dVal2_growth">0.40</span><button class="help-btn" data-help="birthDeath"></button></label>
+        <input type="range" id="d2_growth" min="0" max="1.2" step="0.01" value="0.40">
+      </div>
+
+      <div class="section-label cmp-only">Both populations</div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_growth">40</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_growth" min="5" max="120" step="1" value="40">
+      </div>
+      <div class="field">
+        <label>Replicate populations<button class="help-btn" data-help="replicates"></button></label>
+        <div class="segmented" id="repSeg_growth">
+          <button data-reps="1" class="active">1</button>
+          <button data-reps="5">5</button>
+          <button data-reps="20">20</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Vertical axis<button class="help-btn" data-help="logAxis"></button></label>
+        <div class="segmented" id="scaleSeg_growth">
+          <button data-scale="linear" class="active">Linear</button>
+          <button data-scale="log">Logarithmic</button>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_growth">▶ Run</button>
+        <button class="btn secondary" id="endBtn_growth">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_growth">↺ Reset</button>
+        <span class="status mono" id="status_growth">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel" style="--accent: #388047;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The population</span><button class="help-btn" data-help="popField"></button></span>
+        </div>
+        <div class="canvas-wrap pop-wrap"><canvas id="popCanvas_growth" role="img" aria-label="The population — chart"></canvas></div>
+        <div class="chips">
+          <div class="chip">Time<span id="tDisp_growth">0</span></div>
+          <div class="chip res-2"><span class="cmp-off-only">Individuals N</span><span class="cmp-only">Individuals N₁</span><span id="nDisp_growth">10</span></div>
+          <div class="chip pred cmp-only">Individuals N₂<span id="nDisp2_growth">10</span></div>
+        </div>
+        <div class="chips">
+          <div class="chip cap"><span class="cmp-off-only">r = b − d</span><span class="cmp-only">r₁</span><span id="rDisp_growth">0.20</span></div>
+          <div class="chip cap cmp-only">r₂<span id="rDisp2_growth">0.10</span></div>
+          <div class="chip cap"><span class="cmp-off-only">Doubling time</span><span class="cmp-only">Doubling time ₁</span><span id="dblDisp_growth">3.5</span></div>
+          <div class="chip cap cmp-only">Doubling time ₂<span id="dblDisp2_growth">6.9</span></div>
+        </div>
+      </div>
+
+      <div class="panel span2" style="--accent: #388047;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Population size over time</span><button class="help-btn" data-help="growthChart"></button></span>
+          <span class="stat" id="chartStat_growth">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 300px;"><canvas id="chartCanvas_growth" role="img" aria-label="Population size over time — chart"></canvas></div>
+        <div class="panel-note">Solid lines are simulated populations, in which each birth and each death is an independent random event. The dashed line is the textbook prediction <em>N₀e<sup>rt</sup></em>, which assumes no chance at all.<span class="cmp-only"> With two populations on the chart each keeps its own colour, and each gets its own dashed prediction in that colour: the gap between the two solid lines is the whole effect of the parameters you changed.</span></div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 2;">
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Per-capita growth rate vs. density</span><button class="help-btn" data-help="perCapita"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 180px;"><canvas id="pcCanvas_growth" role="img" aria-label="Per-capita growth rate vs. density — chart"></canvas></div>
+        <div class="panel-note">Flat. An individual in a crowd of ten thousand does exactly as well as one in a crowd of ten — the defining assumption of this room.<span class="cmp-only"> With two populations there are two flat lines, one per <em>r</em>, and the gap between them never changes with density.</span></div>
+      </div>
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Total growth rate vs. density</span><button class="help-btn" data-help="totalGrowth"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 180px;"><canvas id="dndtCanvas_growth" role="img" aria-label="Total growth rate vs. density — chart"></canvas></div>
+        <div class="panel-note">A straight line through the origin: the bigger the population, the faster it adds individuals, forever.<span class="cmp-only"> Two populations give two lines of different slope — <em>r</em> is the slope, and nothing about density changes it.</span></div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_growth">Press <strong>Run</strong>. Each individual independently gives birth at rate <em>b</em> and dies at rate <em>d</em>, so the population grows by a factor of <em>e<sup>r</sup></em> per unit time on average — but only on average.</p>
+      <div class="note-line" id="note_growth"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>The <span class="gloss" data-help="glosPerCapita">per-capita</span> growth rate is a flat line: an individual in a crowd of ten thousand does exactly as well as one in a crowd of ten. That is the assumption this room rests on, and it is the assumption every later room breaks. Notice too that with a small starting population some replicates go extinct even though the average is growing — a positive growth rate is not a guarantee, because <span class="gloss" data-help="noise">chance</span> acts on individuals rather than on averages.</p>
+      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('crowding'); window.scrollTo(0,0);">Crowding</button> room makes individuals get in each other's way, which is the smallest possible repair to this model. Every other room in the lab is a different answer to the question this one leaves open: what actually stops the curve?</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Births and deaths are drawn independently for every individual in every time step (a Poisson birth–death process), so replicate populations with identical parameters follow different paths. On the linear axis the chart is drawn up to 200 000 individuals: a population that outgrows it leaves through the top of the panel as a dotted line and keeps climbing, since nothing in the model ever stops it. The logarithmic axis has no such ceiling — it stretches to whatever the run reached, however many powers of ten that takes. The dot field shows one dot per individual up to 1 500, and one dot per several after that; with two populations on the panel each gets its own band and its own dot scale.</p>
+    </details>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TAB 2: THE CROWDING ROOM                   -->
+  <!-- ========================================== -->
+  <div id="tab-crowding" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-crowding" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Crowding Room</h1>
+        <p class="sub"><span class="sub-label">Intraspecific competition</span> – Every individual added makes life slightly worse for the rest, until growth stops on its own.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> The same population, but now individuals get in each other's way — <span class="gloss" data-help="glosCompetitionKinds">intraspecific competition</span>. The birth rate falls and the death rate rises as the population grows; where the two lines cross, births exactly balance deaths and the population stops changing. That crossing point is the <span class="gloss" data-help="carryingK">carrying capacity</span>, <em>K</em>.</p>
+      <p><span class="try-label">Try this.</span> Run the defaults and watch the S-shaped curve level off at K. Then start the population <em>above</em> K and run again. Finally, open <em>More parameters</em>, switch on the Allee effect, and start with a very small population. To see one parameter's effect on its own, switch <em>Compare two populations</em> on and change nothing but K between them.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dN/dt = <span class="var">r</span>·N·(1 − N/<span class="var">K</span>)</div>
+      <div class="eq-gloss">The logistic equation. The bracket is the <em>fraction of the environment still unused</em>: it equals 1 in an empty world and 0 when the population reaches <em>K</em>. Growth is exponential when rare and vanishes at the carrying capacity.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>N</dt>
+          <dd>The number of individuals alive at that moment.</dd>
+          <dt>dN/dt</dt>
+          <dd>How fast <em>N</em> is changing: individuals gained or lost per unit of time.</dd>
+          <dt>r</dt>
+          <dd>The <span class="gloss" data-help="rIntrinsic">intrinsic rate of increase</span> — the per-capita growth rate of a population so rare that nothing is holding it back. It sets how fast the curve climbs, never how high.</dd>
+          <dt>K</dt>
+          <dd>The <span class="gloss" data-help="carryingK">carrying capacity</span> — the size at which the falling birth rate meets the rising death rate, so growth stops. It sets how high, never how fast.</dd>
+          <dt>(1 − N/K)</dt>
+          <dd>The brake, and the whole difference from the Growth Room. It is the fraction of the environment still unused: 1 in an empty world, 0 at <em>K</em>, and negative above it, which is what pulls an overshooting population back down.</dd>
+          <dt>A</dt>
+          <dd>The Allee threshold, present only when the Allee effect is switched on — the switch is in the <em>More parameters</em> drawer at the foot of the controls, and it is off by default, which is why <em>A</em> does not appear in the equation above. The growth term then becomes <em>r</em>(<em>N</em>/<em>A</em> − 1)(1 − <em>N</em>/<em>K</em>): below <em>A</em> the first bracket is negative, so being rare is itself a cause of decline.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field">
+        <label>Compare two populations<button class="help-btn" data-help="compare"></button></label>
+        <div class="segmented" id="cmpSeg_crowd">
+          <button data-cmp="off" class="active">Off</button>
+          <button data-cmp="on">On</button>
+        </div>
+      </div>
+
+      <div class="section-label sp-a cmp-only">Population 1</div>
+      <div class="field">
+        <label>Starting population <span class="sym">N₀</span> <span class="value" id="n0Val_crowd">10</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" id="n0_crowd" min="1" max="900" step="1" value="10">
+      </div>
+      <div class="field">
+        <label>Intrinsic rate <span class="sym">r</span> <span class="value" id="rVal_crowd">0.40</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" id="r_crowd" min="0.02" max="1.2" step="0.01" value="0.40">
+      </div>
+      <div class="field">
+        <label>Carrying capacity <span class="sym">K</span> <span class="value" id="KVal_crowd">400</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" id="K_crowd" min="20" max="800" step="10" value="400">
+      </div>
+
+      <div class="section-label pred cmp-only">Population 2</div>
+      <div class="field cmp-only">
+        <label>Starting population <span class="sym">N₀</span> <span class="value" id="n0Val2_crowd">10</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" id="n02_crowd" min="1" max="900" step="1" value="10">
+      </div>
+      <div class="field cmp-only">
+        <label>Intrinsic rate <span class="sym">r</span> <span class="value" id="rVal2_crowd">0.40</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" id="r2_crowd" min="0.02" max="1.2" step="0.01" value="0.40">
+      </div>
+      <div class="field cmp-only">
+        <label>Carrying capacity <span class="sym">K</span> <span class="value" id="KVal2_crowd">600</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" id="K2_crowd" min="20" max="800" step="10" value="600">
+      </div>
+
+      <div class="section-label cmp-only">Both populations</div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_crowd">60</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_crowd" min="10" max="200" step="1" value="60">
+      </div>
+      <div class="field">
+        <label>Demographic noise<button class="help-btn" data-help="noise"></button></label>
+        <div class="segmented" id="noiseSeg_crowd">
+          <button data-noise="off" class="active">Off</button>
+          <button data-noise="on">On</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Replicate populations<button class="help-btn" data-help="replicates"></button></label>
+        <div class="segmented" id="repSeg_crowd">
+          <button data-reps="1" class="active">1</button>
+          <button data-reps="5">5</button>
+          <button data-reps="20">20</button>
+        </div>
+      </div>
+
+      <details class="advanced">
+        <summary>More parameters — the Allee effect</summary>
+        <div class="advanced-grid">
+          <div class="section-label sp-a cmp-only">Population 1</div>
+          <div class="field">
+            <label>Allee effect<button class="help-btn" data-help="allee"></button></label>
+            <div class="segmented" id="alleeSeg_crowd">
+              <button data-allee="off" class="active">Off</button>
+              <button data-allee="on">On</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Allee threshold <span class="sym">A</span> <span class="value" id="AVal_crowd">40</span></label>
+            <input type="range" id="A_crowd" min="5" max="200" step="5" value="40">
+          </div>
+          <div class="section-label pred cmp-only">Population 2</div>
+          <div class="field cmp-only">
+            <label>Allee effect<button class="help-btn" data-help="allee"></button></label>
+            <div class="segmented" id="alleeSeg2_crowd">
+              <button data-allee="off" class="active">Off</button>
+              <button data-allee="on">On</button>
+            </div>
+          </div>
+          <div class="field cmp-only">
+            <label>Allee threshold <span class="sym">A</span> <span class="value" id="AVal2_crowd">40</span></label>
+            <input type="range" id="A2_crowd" min="5" max="200" step="5" value="40">
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="panel-note" style="margin-top:0;">With the Allee effect on, the model becomes dN/dt = r·N·(N/A − 1)·(1 − N/K). Below the threshold A the growth rate is <em>negative</em>: too sparse to find mates, too few to defend the group. A is a second equilibrium — but an unstable one.<span class="cmp-only"> Each population carries its own switch, so the cleanest demonstration in the room is two populations identical in <em>r</em>, <em>K</em> and <em>N₀</em>, one of them with the effect on.</span></div>
+          </div>
+        </div>
+      </details>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_crowd">▶ Run</button>
+        <button class="btn secondary" id="endBtn_crowd">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_crowd">↺ Reset</button>
+        <span class="status mono" id="status_crowd">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel" style="--accent: #3D6E6E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The population</span><button class="help-btn" data-help="popField"></button></span>
+        </div>
+        <div class="canvas-wrap pop-wrap"><canvas id="popCanvas_crowd" role="img" aria-label="The population — chart"></canvas></div>
+        <div class="chips">
+          <div class="chip">Time<span id="tDisp_crowd">0</span></div>
+          <div class="chip sp-a"><span class="cmp-off-only">Individuals N</span><span class="cmp-only">Individuals N₁</span><span id="nDisp_crowd">10</span></div>
+          <div class="chip pred cmp-only">Individuals N₂<span id="nDisp2_crowd">10</span></div>
+        </div>
+        <div class="chips">
+          <div class="chip cap"><span class="cmp-off-only">N / K</span><span class="cmp-only">N₁ / K₁</span><span id="nkDisp_crowd">0.03</span></div>
+          <div class="chip cap cmp-only">N₂ / K₂<span id="nkDisp2_crowd">0.02</span></div>
+          <div class="chip"><span class="cmp-off-only">Per-capita rate</span><span class="cmp-only">Per-capita rate ₁</span><span id="pcDisp_crowd">0.39</span></div>
+          <div class="chip cmp-only">Per-capita rate ₂<span id="pcDisp2_crowd">0.39</span></div>
+        </div>
+      </div>
+
+      <div class="panel span2" style="--accent: #3D6E6E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Population size over time</span><button class="help-btn" data-help="logisticChart"></button></span>
+          <span class="stat" id="chartStat_crowd">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 300px;"><canvas id="chartCanvas_crowd" role="img" aria-label="Population size over time — chart"></canvas></div>
+        <div class="panel-note"><span class="cmp-off-only">The purple line is K. The pale grey curve is what the <em>same</em> population would have done with no crowding at all — the Growth Room's exponential, drawn for comparison. It leaves through the top of the panel within a few time units and carries on as a dotted line; the figure beside the panel says how far.</span><span class="cmp-only">Each population has its own colour and its own purple K line. The pale &ldquo;no crowding&rdquo; control curve is left off while two populations share the panel: the comparison here is between them, not with the Growth Room.</span></div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Per-capita growth rate vs. density</span><button class="help-btn" data-help="perCapita"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 190px;"><canvas id="pcCanvas_crowd" role="img" aria-label="Per-capita growth rate vs. density — chart"></canvas></div>
+        <div class="panel-note">Falls in a straight line from <em>r</em> at zero density to exactly zero at K. This single line <em>is</em> intraspecific competition.<span class="cmp-only"> Two populations give two lines: <em>r</em> sets where each one starts, K sets where it reaches zero.</span></div>
+      </div>
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Total growth rate vs. density</span><button class="help-btn" data-help="totalGrowth"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 190px;"><canvas id="dndtCanvas_crowd" role="img" aria-label="Total growth rate vs. density — chart"></canvas></div>
+        <div class="panel-note">A hump peaking at K/2. Both a nearly empty world and a completely full one add individuals slowly, for opposite reasons.<span class="cmp-only"> With two populations each hump peaks at its own K/2, marked by a dot in that population's colour.</span></div>
+      </div>
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Births and deaths vs. density</span><button class="help-btn" data-help="birthDeathLines"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 190px;"><canvas id="bdCanvas_crowd" role="img" aria-label="Births and deaths vs. density — chart"></canvas></div>
+        <div class="panel-note">The mechanism underneath: birth rate falls with crowding, death rate rises. K is simply where they cross.<span class="cmp-only"> Here colour keeps its usual meaning — green is births, terracotta deaths — and population 2 is drawn dashed, so each population's own crossing point is its own K.</span></div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at time <span class="value" id="scrubVal_crowd">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_crowd" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_crowd" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_crowd" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Step through the run to park exactly on a moment worth looking at — a peak, a crossing, a turning point. The slider also responds to the ← and → keys once you click it.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_crowd">Press <strong>Run</strong>. Watch the gap between the logistic curve and the pale exponential open up: that gap is everything the population <em>failed</em> to add because of its own numbers.</p>
+      <div class="note-line" id="note_crowd"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>Growth is fastest not when the population is small and not when it is large, but exactly halfway, at K/2 — that hump in the <em>dN/dt</em> panel is why fisheries aim to hold stocks near half of carrying capacity. Notice also that K is an attractor: the population converges on it from above as readily as from below. And with an Allee effect, a population that falls below the threshold does not merely grow slowly — it goes extinct.</p>
+      <p><strong>Where this goes next.</strong> This room treats K as a given number belonging to the species. The <button type="button" class="room-link" onclick="switchTab('resource'); window.scrollTo(0,0);">Resource</button> room takes that apart and shows where K actually comes from; the <button type="button" class="room-link" onclick="switchTab('overshoot'); window.scrollTo(0,0);">Overshoot</button> room keeps the same <span class="gloss" data-help="glosDensityDependence">density dependence</span> but delays it by one generation; and the <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room adds a second species that also counts against K.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>The deterministic logistic is integrated with a fourth-order Runge–Kutta scheme. With demographic noise on, births and deaths are instead drawn as independent random events with density-dependent rates b(N) = b₀ − (r/2K)·N and d(N) = d₀ + (r/2K)·N, which have the logistic as their mean. K is an emergent balance point, not a wall: nothing prevents the population from exceeding it, it simply shrinks when it does. With two populations running, each is an entirely separate model — they share only the clock, the noise setting and the number of replicates, and never interact. (Two populations that <em>do</em> feel each other are the Neighbours Room.)</p>
+    </details>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TAB 3: THE RESOURCE ROOM                   -->
+  <!-- ========================================== -->
+  <div id="tab-resource" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-resource" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Resource Room</h1>
+        <p class="sub"><span class="sub-label">Where K comes from</span> – Food is supplied, eaten and runs short, and the ceiling is whatever falls out of the bookkeeping.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('crowding'); window.scrollTo(0,0);">Crowding</button> room treated K as a given. Here it is not: the environment supplies a resource at a fixed rate, consumers eat it, and their births depend on how much they ate. Both the resource and the consumer are tracked over time, and the population's ceiling emerges from the arithmetic rather than being imposed.</p>
+      <p><span class="try-label">Try this.</span> Run the defaults and watch the resource crash as the consumers build up, then settle. Read off <em>R*</em> — the resource level the consumers grind the environment down to. Now double the supply rate and run again. Finally, switch on <em>Environment shift</em> to cut the supply halfway through a run.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dR/dt = <span class="var">S</span> − <span class="var">l</span>·R − <span class="var">a</span>·R·N<br>dN/dt = N·(<span class="var">e</span>·<span class="var">a</span>·R − <span class="var">m</span>)</div>
+      <div class="eq-gloss">The resource is supplied at rate <em>S</em>, decays at rate <em>l</em>, and is consumed in proportion to how much of it there is and how many consumers there are. Consumers convert what they eat into offspring with efficiency <em>e</em> and die at rate <em>m</em>. Nothing here is a carrying capacity — and yet one appears.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>R</dt>
+          <dd>How much resource is standing there at that moment — food, nutrient, prey biomass. Unlike the last room, it is tracked explicitly.</dd>
+          <dt>N</dt>
+          <dd>The number of consumers eating it.</dd>
+          <dt>S</dt>
+          <dd>Supply: resource added per unit of time, from outside and regardless of anything else in the model.</dd>
+          <dt>l</dt>
+          <dd>Loss rate: the fraction of the standing resource that decays, washes away or is otherwise lost per unit of time, with nobody eating it.</dd>
+          <dt>a</dt>
+          <dd>Attack rate: how much resource one consumer takes per unit of time, per unit of resource present. It is the meeting rate between a consumer and its food.</dd>
+          <dt>e</dt>
+          <dd>Conversion efficiency: new consumers made per unit of resource eaten. Eating is not the same as breeding, and <em>e</em> is the exchange rate between them.</dd>
+          <dt>m</dt>
+          <dd>The consumers' per-capita death rate, constant and independent of how well they are eating.</dd>
+          <dt>R*</dt>
+          <dd>Not in the equations, but what falls out of them: <span class="gloss" data-help="rStarRule">R*</span> = <em>m</em>/(<em>e</em>·<em>a</em>), the resource level at which a consumer exactly breaks even. It is what the population draws the resource down to, and it depends on nothing about the supply.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="section-label">The environment</div>
+      <div class="field">
+        <label>Resource supply <span class="sym">S</span> <span class="value" id="SVal_res">15.0</span><button class="help-btn" data-help="supply"></button></label>
+        <input type="range" id="S_res" min="0.5" max="40" step="0.5" value="15">
+      </div>
+      <div class="field">
+        <label>Resource loss <span class="sym">l</span> <span class="value" id="lVal_res">0.02</span><button class="help-btn" data-help="resLoss"></button></label>
+        <input type="range" id="l_res" min="0" max="1" step="0.01" value="0.02">
+      </div>
+      <div class="field">
+        <label>Starting resource <span class="sym">R₀</span> <span class="value" id="R0Val_res">70</span></label>
+        <input type="range" id="R0_res" min="1" max="100" step="1" value="70">
+      </div>
+
+      <div class="section-label">The consumer</div>
+      <div class="field">
+        <label>Attack rate <span class="sym">a</span> <span class="value" id="aVal_res">0.008</span><button class="help-btn" data-help="attack"></button></label>
+        <input type="range" id="a_res" min="0.002" max="0.08" step="0.001" value="0.008">
+      </div>
+      <div class="field">
+        <label>Conversion efficiency <span class="sym">e</span> <span class="value" id="eVal_res">0.80</span><button class="help-btn" data-help="efficiency"></button></label>
+        <input type="range" id="e_res" min="0.05" max="1" step="0.01" value="0.80">
+      </div>
+      <div class="field">
+        <label>Mortality <span class="sym">m</span> <span class="value" id="mVal_res">0.32</span><button class="help-btn" data-help="mortality"></button></label>
+        <input type="range" id="m_res" min="0.01" max="0.6" step="0.01" value="0.32">
+      </div>
+      <div class="field">
+        <label>Starting consumers <span class="sym">N₀</span> <span class="value" id="N0Val_res">5</span></label>
+        <input type="range" id="N0_res" min="1" max="200" step="1" value="5">
+      </div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_res">120</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_res" min="50" max="800" step="10" value="120">
+      </div>
+
+      <details class="advanced">
+        <summary>More parameters — change the environment mid-run</summary>
+        <div class="advanced-grid">
+          <div class="field">
+            <label>Environment shift<button class="help-btn" data-help="envShift"></button></label>
+            <div class="segmented" id="shiftSeg_res">
+              <button data-shift="off" class="active">Off</button>
+              <button data-shift="on">On</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Supply multiplier after the shift <span class="value" id="shiftFVal_res">0.50</span></label>
+            <input type="range" id="shiftF_res" min="0.1" max="3" step="0.1" value="0.5">
+          </div>
+          <div class="field" style="grid-column: 1 / -1;">
+            <div class="panel-note" style="margin-top:0;">At the halfway point of the run, the supply rate S is multiplied by this factor and the simulation carries on. The consumers are given no warning and no new traits — only the environment changes.</div>
+          </div>
+        </div>
+      </details>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_res">▶ Run</button>
+        <button class="btn secondary" id="endBtn_res">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_res">↺ Reset</button>
+        <span class="status mono" id="status_res">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 2;">
+      <div class="panel" style="--accent: #2E5C8A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Resource over time</span><button class="help-btn" data-help="resourceChart"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 240px;"><canvas id="chartR_res" role="img" aria-label="Resource over time — chart"></canvas></div>
+        <div class="panel-note">The dashed purple line is <em>R*</em>, the resource level at which a consumer exactly breaks even. The population can only grow while the resource is above it.</div>
+      </div>
+      <div class="panel" style="--accent: #B8862E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Consumers over time</span><button class="help-btn" data-help="consumerChart"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 240px;"><canvas id="chartN_res" role="img" aria-label="Consumers over time — chart"></canvas></div>
+        <div class="panel-note">The dashed purple line is the equilibrium abundance <em>N*</em> — the carrying capacity nobody typed in.</div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Resource–consumer phase plane</span><button class="help-btn" data-help="phaseRN"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 300px;"><canvas id="phase_res" role="img" aria-label="Resource–consumer phase plane — chart"></canvas></div>
+        <div class="panel-note">Each point is one moment of the run, plotting how much resource there was against how many consumers. The vertical line is where consumers stop changing (R = R*); the curve is where the resource stops changing. They cross at the equilibrium the system spirals into.</div>
+      </div>
+      <div class="panel" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The emergent ceiling</span><button class="help-btn" data-help="rStar"></button></span>
+        </div>
+        <div class="chips" style="margin-top:4px;">
+          <div class="chip res-1">R* (break-even)<span id="rStarDisp_res">—</span></div>
+          <div class="chip cap">N* (= K)<span id="nStarDisp_res">—</span></div>
+        </div>
+        <div class="chips">
+          <div class="chip res-1">Resource now<span id="rNowDisp_res">—</span></div>
+          <div class="chip sp-a">Consumers now<span id="nNowDisp_res">—</span></div>
+        </div>
+        <div class="chips">
+          <div class="chip">Time<span id="tDisp_res">0</span></div>
+          <div class="chip">Resource per capita<span id="perCapDisp_res">—</span></div>
+        </div>
+        <div class="panel-note" id="rStarNote_res">R* = m / (e·a) — notice that the supply rate S is nowhere in it. Enriching the environment raises how many consumers it holds, never the resource level they leave behind.</div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at time <span class="value" id="scrubVal_res">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_res" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_res" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_res" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Step through the run to park exactly on a moment worth looking at — a peak, a crossing, a turning point. The slider also responds to the ← and → keys once you click it.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_res">Press <strong>Run</strong>. Watch the two panels side by side: every time the consumer curve turns over, the resource is crossing its R* line at that same instant. That is not a coincidence — it is the second equation with dN/dt set to zero.</p>
+      <div class="note-line" id="note_res"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>Doubling the supply roughly doubles the number of consumers but leaves <em>R*</em> exactly where it was: R* depends only on the consumer's own mortality and efficiency, not on how rich the environment is. This is the single most useful fact in the whole lab. Notice too that "carrying capacity" is not a property of a species at all — the same consumer has a different K in every environment.</p>
+      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('coexistence'); window.scrollTo(0,0);">Coexistence</button> room turns <span class="gloss" data-help="rStarRule">R*</span> into a rule for predicting who wins a competition. If you have not yet met that competition in its simpler, phenomenological form, visit the <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room first.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>A MacArthur-style consumer–resource model with an abiotic, chemostat-like resource: supplied at a constant rate S, lost at rate l, and eaten with a linear (type I) functional response. Equilibrium: R* = m/(e·a) and N* = (S − l·R*)/(a·R*). The consumer persists only if it can drive the resource down to R*, that is if S/l &gt; R*. Whether it arrives there in a damped oscillation or slides in without ever overshooting depends on the parameters: linearising about the equilibrium gives complex eigenvalues, and so a spiral, only when S² &lt; 4·m·R*·(S − l·R*), which requires the consumer to die faster than the resource decays (m &gt; l).</p>
+    </details>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 4: THE OVERSHOOT ROOM                  -->
+  <!-- ========================================== -->
+  <div id="tab-overshoot" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-overshoot" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Overshoot Room</h1>
+        <p class="sub"><span class="sub-label">Delayed density dependence</span> – This year's crowding fixes next year's numbers, and one generation of delay is enough to break the calm.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> Many organisms breed once a year: this year's crowding sets next year's numbers, and nothing can respond in between. That one-generation lag is enough to break the tidy approach to K. Three classic discrete-time models are offered — scramble competition (Ricker), contest competition (Beverton–Holt) and the discrete logistic — along with a cobweb diagram and a live bifurcation diagram.</p>
+      <p><span class="try-label">Try this.</span> Start with Ricker at a low growth rate and watch it glide into K. Raise the rate slowly and watch the approach start to wobble, then split into a two-year cycle, then four, then dissolve. Switch to Beverton–Holt at the same high rate. Then turn on <em>Sensitivity test</em>, which runs a second population differing by one thousandth of an individual.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq" id="eqText_over">N<sub>t+1</sub> = N<sub>t</sub>·e<sup><span class="var">r</span>(1 − N<sub>t</sub>/<span class="var">K</span>)</sup></div>
+      <div class="eq-gloss" id="eqGloss_over">Ricker — <em>scramble</em> competition. Everyone shares the resource equally, so a crowd that exceeds K leaves nearly nothing for anyone and the population crashes far below K rather than easing down to it.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl id="eqKey_over"></dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field wide">
+        <label>Competition model<button class="help-btn" data-help="discreteModels"></button></label>
+        <div class="segmented" id="modelSeg_over">
+          <button data-model="ricker" class="active">Ricker (scramble)</button>
+          <button data-model="bh">Beverton–Holt (contest)</button>
+          <button data-model="logistic">Discrete logistic</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Growth parameter <span class="sym">r</span> <span class="value" id="rVal_over">1.80</span><button class="help-btn" data-help="rDiscrete"></button></label>
+        <input type="range" id="r_over" min="0.1" max="3.6" step="0.01" value="1.80">
+      </div>
+      <div class="field">
+        <label>Carrying capacity <span class="sym">K</span> <span class="value" id="KVal_over">500</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" id="K_over" min="50" max="1000" step="10" value="500">
+      </div>
+      <div class="field">
+        <label>Starting population <span class="sym">N₀</span> <span class="value" id="n0Val_over">30</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" id="n0_over" min="1" max="900" step="1" value="30">
+      </div>
+      <div class="field">
+        <label>Generations <span class="value" id="gensVal_over">80</span></label>
+        <input type="range" id="gens_over" min="20" max="300" step="5" value="80">
+      </div>
+      <div class="field">
+        <label>Sensitivity test<button class="help-btn" data-help="sensitivity"></button></label>
+        <div class="segmented" id="sensSeg_over">
+          <button data-sens="off" class="active">Off</button>
+          <button data-sens="on">On</button>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_over">▶ Run</button>
+        <button class="btn secondary" id="endBtn_over">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_over">↺ Reset</button>
+        <span class="status mono" id="status_over">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #A8442A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Population size, generation by generation</span><button class="help-btn" data-help="discreteSeries"></button></span>
+          <span class="stat" id="chartStat_over">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 290px;"><canvas id="chart_over" role="img" aria-label="Population size, generation by generation — chart"></canvas></div>
+        <div class="panel-note">Dots are generations — there is nothing in between, because nothing happens in between. The purple line is K.</div>
+      </div>
+      <div class="panel" style="--accent: #A8442A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Cobweb</span><button class="help-btn" data-help="cobweb"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 290px;"><canvas id="cobweb_over" role="img" aria-label="Cobweb — chart"></canvas></div>
+        <div class="panel-note">The curve maps this year's population to next year's; the diagonal is "no change". The staircase is the same run you see on the left, walked out geometrically.</div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Bifurcation diagram</span><button class="help-btn" data-help="bifurcation"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 260px;"><canvas id="bifur_over" role="img" aria-label="Bifurcation diagram — chart"></canvas></div>
+        <div class="panel-note">For every growth rate along the bottom, the population's eventual behaviour is plotted: one dot means it settles at a single value, two dots a two-year cycle, a smear means chaos. The gold line marks your current setting.</div>
+      </div>
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Long-run behaviour</span><button class="help-btn" data-help="regime"></button></span>
+        </div>
+        <div id="verdict_over" class="verdict">
+          <h4>Not yet run</h4>
+          <p>Press Run and the population's eventual behaviour will be diagnosed here from the last third of the series.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at generation <span class="value" id="scrubVal_over">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_over" type="button" aria-label="Back one generation">◀</button>
+          <input type="range" id="scrub_over" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_over" type="button" aria-label="Forward one generation">▶</button>
+        </div>
+        <div class="help-inline-note">Step one generation at a time and watch the cobweb draw itself — up to the curve, across to the diagonal, up again. The slider also responds to the ← and → keys once you click it.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_over">Press <strong>Run</strong>, then raise the growth parameter a little at a time and run again after each change. Nothing random is ever added: every wobble you see is produced by the density dependence itself.</p>
+      <div class="note-line" id="note_over"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>Nothing random has been added anywhere: these equations are perfectly deterministic, and the wild fluctuations at high growth rates are generated by the <span class="gloss" data-help="glosDensityDependence">density dependence</span> itself. Yet under chaos the two nearly identical populations diverge completely within a few dozen generations — so a population can be both entirely rule-governed and entirely unpredictable. Contest competition never does this, because no amount of crowding can make it overshoot.</p>
+      <p><strong>Where this goes next.</strong> This is the lab's first source of permanent cycles, and it is an internal one: a single species arguing with its own past. The <button type="button" class="room-link" onclick="switchTab('predator'); window.scrollTo(0,0);">Predator</button> room produces cycles a second way, out of two species arguing with each other — comparing the two is worth the trip.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Three discrete-time maps of intraspecific competition, each a different shape of density dependence. Ricker: N′ = N·exp(r(1 − N/K)), overcompensating. Beverton–Holt: N′ = R₀N / (1 + (R₀−1)N/K) with R₀ = e^r, exactly compensating and monotone for every parameter value. Discrete logistic: N′ = N + rN(1 − N/K), which is the May map and can send N below zero at high r — the run stops if it does. The bifurcation diagram is recomputed live: 400 growth-rate values, 300 generations discarded as transient, the next 120 plotted.</p>
+    </details>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TAB 5: THE NEIGHBOURS ROOM                 -->
+  <!-- ========================================== -->
+  <div id="tab-neighbours" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-neighbours" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Neighbours Room</h1>
+        <p class="sub"><span class="sub-label">Interspecific competition</span> – Two self-limiting species in one place. Four outcomes are possible, and only one is coexistence.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> Two species, each self-limiting exactly as in the <button type="button" class="room-link" onclick="switchTab('crowding'); window.scrollTo(0,0);">Crowding</button> room, now also feel each other — <span class="gloss" data-help="glosCompetitionKinds">interspecific competition</span>. One coefficient per species says how much a competitor counts in the currency of one's own crowding: <em>α</em> = 2 means one individual of the other species is as suppressive as two of your own.</p>
+      <p><span class="try-label">Try this.</span> Step through the four presets — <em>A wins</em>, <em>B wins</em>, <em>Coexistence</em>, <em>Founder control</em> — and after each one look at the <span class="gloss" data-help="glosPhasePlane">phase plane</span> rather than the time series. Then, in the founder-control preset, click at different points in the phase plane to start the run from a different pair of abundances and see the outcome flip.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dN<sub>A</sub>/dt = r<sub>A</sub>N<sub>A</sub>(1 − (N<sub>A</sub> + <span class="var">α</span><sub>AB</sub>N<sub>B</sub>)/K<sub>A</sub>)<br>dN<sub>B</sub>/dt = r<sub>B</sub>N<sub>B</sub>(1 − (N<sub>B</sub> + <span class="var">α</span><sub>BA</sub>N<sub>A</sub>)/K<sub>B</sub>)</div>
+      <div class="eq-gloss">Two logistic equations, joined by two numbers. <em>α</em><sub>AB</sub> is how much one individual of B crowds A, measured in units of A's own individuals: α = 1 means the two species are interchangeable, α &lt; 1 that a competitor matters less than a fellow member of your own species, α &gt; 1 that it matters more.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>N<sub>A</sub>, N<sub>B</sub></dt>
+          <dd>The sizes of the two competing species. Each has its own equation, and each equation is the logistic of the Crowding Room with one extra term inside the bracket.</dd>
+          <dt>r<sub>A</sub>, r<sub>B</sub></dt>
+          <dd>Each species' own <span class="gloss" data-help="rIntrinsic">intrinsic rate of increase</span>. They govern how fast the outcome arrives, and — this is the room's first surprise — not which outcome it is.</dd>
+          <dt>K<sub>A</sub>, K<sub>B</sub></dt>
+          <dd>Each species' own <span class="gloss" data-help="carryingK">carrying capacity</span>: the size it would settle at with the other species absent.</dd>
+          <dt>α<sub>AB</sub></dt>
+          <dd>The effect of B on A: how many of A's own individuals one individual of B is worth as a crowder. α = 1 means the two are interchangeable, α &lt; 1 that a competitor gets in your way less than a member of your own species, α &gt; 1 that it gets in your way more.</dd>
+          <dt>α<sub>BA</sub></dt>
+          <dd>The same number in the other direction. The two are independent — a species can be badly hurt by one that it barely troubles in return.</dd>
+          <dt>N<sub>A</sub> + α<sub>AB</sub>N<sub>B</sub></dt>
+          <dd>A's crowding, with B's individuals converted into A's currency. Everything the model does comes from comparing this total with <em>K</em><sub>A</sub>.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field wide">
+        <label>Presets<button class="help-btn" data-help="presets"></button></label>
+        <div class="segmented compact" id="presetSeg_nb">
+          <button data-preset="a">A excludes B</button>
+          <button data-preset="b">B excludes A</button>
+          <button data-preset="co" class="active">Stable coexistence</button>
+          <button data-preset="founder">Founder control</button>
+        </div>
+      </div>
+
+      <div class="section-label sp-a">Species A</div>
+      <div class="field">
+        <label>Growth rate <span class="sym">r<sub>A</sub></span> <span class="value" id="rAVal_nb">0.50</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" class="sp-a" id="rA_nb" min="0.05" max="1.5" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Carrying capacity <span class="sym">K<sub>A</sub></span> <span class="value" id="KAVal_nb">500</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" class="sp-a" id="KA_nb" min="50" max="1000" step="10" value="500">
+      </div>
+      <div class="field">
+        <label>Effect of B on A <span class="sym">α<sub>AB</sub></span> <span class="value" id="aABVal_nb">0.60</span><button class="help-btn" data-help="alpha"></button></label>
+        <input type="range" class="sp-a" id="aAB_nb" min="0" max="2.5" step="0.01" value="0.60">
+      </div>
+      <div class="field">
+        <label>Starting size <span class="sym">N<sub>A</sub>(0)</span> <span class="value" id="NA0Val_nb">50</span></label>
+        <input type="range" class="sp-a" id="NA0_nb" min="1" max="900" step="1" value="50">
+      </div>
+
+      <div class="section-label sp-b">Species B</div>
+      <div class="field">
+        <label>Growth rate <span class="sym">r<sub>B</sub></span> <span class="value" id="rBVal_nb">0.50</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" class="sp-b" id="rB_nb" min="0.05" max="1.5" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Carrying capacity <span class="sym">K<sub>B</sub></span> <span class="value" id="KBVal_nb">500</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" class="sp-b" id="KB_nb" min="50" max="1000" step="10" value="500">
+      </div>
+      <div class="field">
+        <label>Effect of A on B <span class="sym">α<sub>BA</sub></span> <span class="value" id="aBAVal_nb">0.60</span><button class="help-btn" data-help="alpha"></button></label>
+        <input type="range" class="sp-b" id="aBA_nb" min="0" max="2.5" step="0.01" value="0.60">
+      </div>
+      <div class="field">
+        <label>Starting size <span class="sym">N<sub>B</sub>(0)</span> <span class="value" id="NB0Val_nb">50</span></label>
+        <input type="range" class="sp-b" id="NB0_nb" min="1" max="900" step="1" value="50">
+      </div>
+
+      <div class="section-label">Run</div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_nb">150</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_nb" min="20" max="600" step="10" value="150">
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_nb">▶ Run</button>
+        <button class="btn secondary" id="endBtn_nb">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_nb">↺ Reset</button>
+        <span class="status mono" id="status_nb">Pick a preset or set the sliders, then press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #2E5C8A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Both populations over time</span><button class="help-btn" data-help="twoSpeciesChart"></button></span>
+          <span class="stat" id="chartStat_nb">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 290px;"><canvas id="chart_nb" role="img" aria-label="Both populations over time — chart"></canvas></div>
+        <div class="panel-note">Dashed lines mark each species' own carrying capacity — where it would have settled if it were alone. The gap between a species' curve and its own dashed line is the cost of having a neighbour.</div>
+      </div>
+      <div class="panel" style="--accent: #2E5C8A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Outcome</span><button class="help-btn" data-help="fourOutcomes"></button></span>
+        </div>
+        <div id="verdict_nb" class="verdict">
+          <h4>Not yet run</h4>
+          <p>The outcome of Lotka–Volterra competition is fixed by the parameters alone — it can be read off before the simulation is run, and this panel does exactly that.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Phase plane &amp; isoclines</span><button class="help-btn" data-help="isoclines"></button></span>
+          <span class="stat">click anywhere to restart from that pair of abundances</span>
+        </div>
+        <div class="canvas-wrap" style="height: 400px;"><canvas id="phase_nb" role="img" aria-label="Phase plane and isoclines — chart"></canvas></div>
+        <div class="legend-inline">
+          <span class="item"><span class="swatch" style="background: var(--sp-a);"></span> A's isocline (A stops changing)</span>
+          <span class="item"><span class="swatch" style="background: var(--sp-b);"></span> B's isocline (B stops changing)</span>
+          <span class="item"><span class="swatch" style="background: var(--ink);"></span> the trajectory</span>
+          <span class="item"><span class="swatch" style="background: var(--cap);"></span> equilibrium point</span>
+        </div>
+      </div>
+      <div class="panel" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Invasion criteria</span><button class="help-btn" data-help="invasion"></button></span>
+        </div>
+        <div id="invasion_nb" class="verdict">
+          <p>Ask of each species: if it were vanishingly rare while its competitor sat at its own carrying capacity, could it increase? Both answers yes means coexistence; both no means founder control; one of each means exclusion.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at time <span class="value" id="scrubVal_nb">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_nb" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_nb" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_nb" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Step through the run to park exactly on a moment worth looking at — a peak, a crossing, a turning point. The slider also responds to the ← and → keys once you click it.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_nb">Press <strong>Run</strong>. Then change only the growth rates and run again: the winner will not change, only how long it takes to win.</p>
+      <div class="note-line" id="note_nb"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>Which species wins does not depend on who grows faster: the <em>r</em> sliders change how quickly the outcome arrives but never what it is. What matters is the balance between each species' effect on itself and its effect on the other. Coexistence requires each species to limit itself more than it limits its rival — an α below 1 is this model's way of saying the two occupy a different <span class="gloss" data-help="glosNiche">niche</span>. When the reverse is true, both are stable alone and neither can invade, so whoever arrives first keeps the site.</p>
+      <p><strong>Where this goes next.</strong> The α values here are descriptive — they say <em>that</em> a species suppresses another, not <em>how</em>. The <button type="button" class="room-link" onclick="switchTab('coexistence'); window.scrollTo(0,0);">Coexistence</button> room replaces them with an explicit shared food supply and derives the same outcomes from a mechanism. The <button type="button" class="room-link" onclick="switchTab('keystone'); window.scrollTo(0,0);">Keystone</button> room keeps these equations exactly as they are and adds a predator that eats both competitors, which can reverse every answer this room gives.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Lotka–Volterra competition, integrated with fourth-order Runge–Kutta; a species is declared extinct and pinned to zero when it drops below 0.5 individuals. The isoclines are the straight lines along which each species' growth is exactly zero: N_A = K_A − α_AB·N_B and N_B = K_B − α_BA·N_A. Their arrangement, not the growth rates, decides the outcome.</p>
+    </details>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- TAB 6: THE COEXISTENCE ROOM                -->
+  <!-- ========================================== -->
+  <div id="tab-coexistence" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-coexistence" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Coexistence Room</h1>
+        <p class="sub"><span class="sub-label">Competitive exclusion &amp; niche partitioning</span> – Both species eat the same tracked food, so competition is a shared dinner rather than a coefficient.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room's competition coefficients are descriptive: they say <em>that</em> a species suppresses another, not <em>how</em>. Here both species eat explicit, tracked resources, so competition happens for a reason. In <em>one resource</em> mode there is a single food supply; in <em>two resources</em> mode there are two, and each species can specialise.</p>
+      <p><span class="try-label">Try this.</span> In one-resource mode, run two species with different mortality rates and read the R* table — then start the eventual loser at ten times the winner's abundance and run again. Switch to two resources and give each species the higher attack rate on a different one. Then make both species prefer the <em>same</em> resource and watch coexistence collapse.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dR<sub>j</sub>/dt = S<sub>j</sub> − l·R<sub>j</sub> − Σ<sub>i</sub> a<sub>ij</sub>·R<sub>j</sub>·N<sub>i</sub><br>dN<sub>i</sub>/dt = N<sub>i</sub>·(e·Σ<sub>j</sub> a<sub>ij</sub>·R<sub>j</sub> − m<sub>i</sub>)</div>
+      <div class="eq-gloss">The Resource Room's model with a second consumer added, and optionally a second resource. Neither species knows the other exists: they interact only by eating the same food, which is what competition actually is.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>i</dt>
+          <dd>Which consumer: <em>i</em> = A or B. The subscript is there because the two species differ only in these numbers, not in the equations they obey.</dd>
+          <dt>j</dt>
+          <dd>Which resource: <em>j</em> = 1 alone, or 1 and 2 in the two-resource mode.</dd>
+          <dt>R<sub>j</sub></dt>
+          <dd>The standing amount of resource <em>j</em>.</dd>
+          <dt>N<sub>i</sub></dt>
+          <dd>The number of individuals of consumer <em>i</em>.</dd>
+          <dt>S<sub>j</sub></dt>
+          <dd>Supply rate of resource <em>j</em> — how fast it is renewed from outside.</dd>
+          <dt>l</dt>
+          <dd>Loss rate of the resources when nobody is eating them; the same for both.</dd>
+          <dt>a<sub>ij</sub></dt>
+          <dd>Attack rate of consumer <em>i</em> on resource <em>j</em>. These are the numbers that make the two species different, and in the two-resource mode they are what lets each specialise.</dd>
+          <dt>e</dt>
+          <dd>Conversion efficiency: consumers made per unit of resource eaten.</dd>
+          <dt>m<sub>i</sub></dt>
+          <dd>Per-capita death rate of consumer <em>i</em>.</dd>
+          <dt>Σ</dt>
+          <dd>A sum. Σ<sub>i</sub> adds up every consumer eating that resource; Σ<sub>j</sub> adds up every resource that consumer eats. With one species and one resource both sums have a single term, and the equations become the Resource Room's exactly.</dd>
+          <dt>R*<sub>i</sub></dt>
+          <dd>Again not written above, but the point of the room: <span class="gloss" data-help="rStarRule">R*</span> = <em>m</em><sub>i</sub>/(<em>e</em>·<em>a</em><sub>i</sub>), the resource level at which consumer <em>i</em> breaks even. On a single resource the lower R* wins, whatever else is true of either species.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field wide">
+        <label>How many resources are there?<button class="help-btn" data-help="modeResources"></button></label>
+        <div class="segmented" id="modeSeg_cx">
+          <button data-mode="one" class="active">One resource</button>
+          <button data-mode="two">Two resources</button>
+        </div>
+      </div>
+
+      <div class="section-label sp-a">Species A</div>
+      <div class="field">
+        <label>Attack rate on R₁ <span class="sym">a<sub>A1</sub></span> <span class="value" id="aA1Val_cx">0.020</span><button class="help-btn" data-help="attack"></button></label>
+        <input type="range" class="sp-a" id="aA1_cx" min="0.002" max="0.06" step="0.001" value="0.020">
+      </div>
+      <div class="field res2only">
+        <label>Attack rate on R₂ <span class="sym">a<sub>A2</sub></span> <span class="value" id="aA2Val_cx">0.005</span></label>
+        <input type="range" class="sp-a" id="aA2_cx" min="0.000" max="0.06" step="0.001" value="0.005">
+      </div>
+      <div class="field">
+        <label>Mortality <span class="sym">m<sub>A</sub></span> <span class="value" id="mAVal_cx">0.08</span><button class="help-btn" data-help="mortality"></button></label>
+        <input type="range" class="sp-a" id="mA_cx" min="0.02" max="0.5" step="0.01" value="0.08">
+      </div>
+      <div class="field">
+        <label>Starting size <span class="sym">N<sub>A</sub>(0)</span> <span class="value" id="NA0Val_cx">10</span></label>
+        <input type="range" class="sp-a" id="NA0_cx" min="1" max="300" step="1" value="10">
+      </div>
+
+      <div class="section-label sp-b">Species B</div>
+      <div class="field">
+        <label>Attack rate on R₁ <span class="sym">a<sub>B1</sub></span> <span class="value" id="aB1Val_cx">0.030</span><button class="help-btn" data-help="attack"></button></label>
+        <input type="range" class="sp-b" id="aB1_cx" min="0.002" max="0.06" step="0.001" value="0.030">
+      </div>
+      <div class="field res2only">
+        <label>Attack rate on R₂ <span class="sym">a<sub>B2</sub></span> <span class="value" id="aB2Val_cx">0.050</span></label>
+        <input type="range" class="sp-b" id="aB2_cx" min="0.000" max="0.06" step="0.001" value="0.050">
+      </div>
+      <div class="field">
+        <label>Mortality <span class="sym">m<sub>B</sub></span> <span class="value" id="mBVal_cx">0.30</span><button class="help-btn" data-help="mortality"></button></label>
+        <input type="range" class="sp-b" id="mB_cx" min="0.02" max="0.5" step="0.01" value="0.30">
+      </div>
+      <div class="field">
+        <label>Starting size <span class="sym">N<sub>B</sub>(0)</span> <span class="value" id="NB0Val_cx">10</span></label>
+        <input type="range" class="sp-b" id="NB0_cx" min="1" max="300" step="1" value="10">
+      </div>
+
+      <div class="section-label">The environment</div>
+      <div class="field">
+        <label>Supply of R₁ <span class="sym">S₁</span> <span class="value" id="S1Val_cx">12.0</span><button class="help-btn" data-help="supply"></button></label>
+        <input type="range" id="S1_cx" min="1" max="40" step="0.5" value="12">
+      </div>
+      <div class="field res2only">
+        <label>Supply of R₂ <span class="sym">S₂</span> <span class="value" id="S2Val_cx">12.0</span></label>
+        <input type="range" id="S2_cx" min="1" max="40" step="0.5" value="12">
+      </div>
+      <div class="field">
+        <label>Resource loss <span class="sym">l</span> <span class="value" id="lVal_cx">0.10</span><button class="help-btn" data-help="resLoss"></button></label>
+        <input type="range" id="l_cx" min="0.01" max="0.6" step="0.01" value="0.10">
+      </div>
+      <div class="field">
+        <label>Conversion efficiency <span class="sym">e</span> <span class="value" id="eVal_cx">0.40</span><button class="help-btn" data-help="efficiency"></button></label>
+        <input type="range" id="e_cx" min="0.05" max="1" step="0.01" value="0.40">
+      </div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_cx">600</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_cx" min="100" max="2000" step="20" value="600">
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_cx">▶ Run</button>
+        <button class="btn secondary" id="endBtn_cx">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_cx">↺ Reset</button>
+        <span class="status mono" id="status_cx">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The two competitors over time</span><button class="help-btn" data-help="twoSpeciesChart"></button></span>
+          <span class="stat" id="chartStat_cx">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 280px;"><canvas id="chartN_cx" role="img" aria-label="The two competitors over time — chart"></canvas></div>
+        <div class="panel-note">Nothing in these equations lets one species attack, avoid or notice the other. Everything that happens between them happens through the resource.</div>
+      </div>
+      <div class="panel" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Outcome</span><button class="help-btn" data-help="exclusion"></button></span>
+        </div>
+        <div id="verdict_cx" class="verdict">
+          <h4>Not yet run</h4>
+          <p>Press Run. With a single resource the outcome can be predicted from the R* table alone, without simulating anything.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel" style="--accent: #2E5C8A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Resources over time</span><button class="help-btn" data-help="resourceChart"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 250px;"><canvas id="chartR_cx" role="img" aria-label="Resources over time — chart"></canvas></div>
+        <div class="panel-note">Dashed lines are each species' break-even level R* on that resource. A species can only increase while the resource sits above its own line.</div>
+      </div>
+      <div class="panel" style="--accent: #B8862E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Break-even table (R*)</span><button class="help-btn" data-help="rStarRule"></button></span>
+        </div>
+        <div id="rstarTable_cx"></div>
+        <div class="panel-note" id="rstarNote_cx">R*<sub>ij</sub> = m<sub>i</sub> / (e·a<sub>ij</sub>) is the resource concentration at which species <em>i</em> exactly breaks even on resource <em>j</em> — its births balance its deaths and it neither grows nor shrinks.</div>
+      </div>
+      <div class="panel" style="--accent: #388047;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name" id="lastPanelTitle_cx">Who is limited by what</span><button class="help-btn" data-help="zngi"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 250px;"><canvas id="zngi_cx" role="img" aria-label="Who is limited by what — chart"></canvas></div>
+        <div class="panel-note" id="zngiNote_cx">With two resources, each species' break-even condition becomes a line in resource space, and the two lines can cross. Coexistence needs each species to consume relatively more of whichever resource limits it more.</div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at time <span class="value" id="scrubVal_cx">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_cx" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_cx" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_cx" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Step through the run to park exactly on a moment worth looking at — a peak, a crossing, a turning point. The slider also responds to the ← and → keys once you click it.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_cx">Press <strong>Run</strong>. In one-resource mode, try giving the losing species ten times the starting abundance of the winner — and watch it lose anyway.</p>
+      <div class="note-line" id="note_cx"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>With one resource the species with the lower <span class="gloss" data-help="rStarRule">R*</span> always wins, no matter how abundant the other starts, how fast it grows, or how hungrily it eats: it simply drives the resource below the level its rival needs to break even. This is the <span class="gloss" data-help="exclusion">competitive exclusion</span> principle, and R* explains it. With two resources, coexistence appears the moment each species is held back mainly by the resource it is <em>better</em> at using — which is what ecologists mean by partitioning a <span class="gloss" data-help="glosNiche">niche</span>.</p>
+      <p><strong>Where this goes next.</strong> This room and the <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room both reach coexistence through what the competitors do to <em>each other</em>. The <button type="button" class="room-link" onclick="switchTab('keystone'); window.scrollTo(0,0);">Keystone</button> room reaches it a third way — through something that eats them both.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Mechanistic resource competition: two consumers on one or two abiotic resources, integrated with fourth-order Runge–Kutta; a species is declared extinct and pinned to zero below 0.5 individuals. On a single resource the species with the lower R* = m/(e·a) always excludes the other, regardless of starting abundance, attack rate or growth rate — this is Tilman's R* rule, the mechanistic form of Gause's competitive exclusion principle. With two resources, coexistence requires each species to be limited by the resource it consumes relatively more of.</p>
+    </details>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 7: THE PREDATOR ROOM                   -->
+  <!-- ========================================== -->
+  <div id="tab-predator" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-predator" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Predator Room</h1>
+        <p class="sub"><span class="sub-label">Predator and prey</span> – A species that wants <em>you</em>, not your food. Neither population can ever settle.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> Two species, one of which eats the other. Three versions of the same pair of equations are offered, and each repairs an assumption in the one before it: the classic Lotka–Volterra model, then a version in which the prey have a <span class="gloss" data-help="carryingK">carrying capacity</span> of their own, then one in which the predator takes time to handle each prey it catches and so cannot eat without limit.</p>
+      <p><span class="try-label">Try this.</span> Step through the four presets. Under <em>Neutral cycles</em>, click at several different points on the <span class="gloss" data-help="glosPhasePlane">phase plane</span> and watch the cycle change size while the parameters stay put. Then switch to <em>Prey with a ceiling</em> and click the same points — every one of them now ends at the same place. Finally load <em>Paradox of enrichment</em> and drag the prey's carrying capacity K downwards until the cycling stops.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dN/dt = N·g(N) − <span class="var">f</span>(N)·P<br>dP/dt = <span class="var">e</span>·<span class="var">f</span>(N)·P − <span class="var">m</span>·P</div>
+      <div class="eq-gloss">Prey grow and are eaten; predators are born from what they eat and die at a constant rate. <em>g</em>(N) = r or r(1 − N/K) is the prey's own growth; <em>f</em>(N) = aN or aN/(1 + a·h·N) is how many prey one predator takes per unit time. Choosing those two shapes is choosing the model.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>N</dt>
+          <dd>The prey population.</dd>
+          <dt>P</dt>
+          <dd>The predator population.</dd>
+          <dt>g(N)</dt>
+          <dd>The prey's own per-capita growth with no predators about. It is <em>r</em> in the classic model — prey that would grow forever — and <em>r</em>(1 − <em>N</em>/<em>K</em>) once you give them a ceiling.</dd>
+          <dt>f(N)</dt>
+          <dd>The <span class="gloss" data-help="functionalResponse">functional response</span>: prey taken by <em>one</em> predator per unit of time. It is <em>a</em>·<em>N</em> for a predator that never fills up, and <em>a</em><em>N</em>/(1 + <em>a</em>·<em>h</em>·<em>N</em>) for one that does. Choosing <em>g</em> and <em>f</em> is choosing the model.</dd>
+          <dt>r</dt>
+          <dd>The prey's <span class="gloss" data-help="rIntrinsic">intrinsic rate of increase</span>.</dd>
+          <dt>K</dt>
+          <dd>The prey's <span class="gloss" data-help="carryingK">carrying capacity</span> — used only when the prey have a ceiling of their own.</dd>
+          <dt>a</dt>
+          <dd>Attack rate: how efficiently one predator encounters and catches prey.</dd>
+          <dt>h</dt>
+          <dd>Handling time: how long a predator spends subduing and digesting one prey item, during which it is hunting nothing. Set <em>h</em> = 0 and the curved response straightens back into <em>a</em>·<em>N</em>.</dd>
+          <dt>e</dt>
+          <dd>Conversion efficiency: predators made per prey eaten.</dd>
+          <dt>m</dt>
+          <dd>The predators' per-capita death rate. With no prey at all, this alone empties the second equation.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field wide">
+        <label>Presets<button class="help-btn" data-help="predPresets"></button></label>
+        <div class="segmented compact" id="presetSeg_pd">
+          <button data-preset="neutral">Neutral cycles</button>
+          <button data-preset="damped">Damped to equilibrium</button>
+          <button data-preset="enrich">Paradox of enrichment</button>
+          <button data-preset="crash">Cycles that crash</button>
+        </div>
+      </div>
+
+      <div class="field wide">
+        <label>The model<button class="help-btn" data-help="predModels"></button><button class="help-btn" data-help="paradoxEnrichment"></button></label>
+        <div class="segmented" id="modeSeg_pd">
+          <button data-mode="classic" class="active">Classic Lotka–Volterra</button>
+          <button data-mode="ceiling">Prey with a ceiling</button>
+          <button data-mode="satiation">Predator that gets full</button>
+        </div>
+      </div>
+
+      <div class="section-label sp-a">The prey</div>
+      <div class="field">
+        <label>Growth rate <span class="sym">r</span> <span class="value" id="rVal_pd">0.60</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" class="sp-a" id="r_pd" min="0.05" max="2" step="0.01" value="0.60">
+      </div>
+      <div class="field kOnly">
+        <label>Carrying capacity <span class="sym">K</span> <span class="value" id="KVal_pd">400</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" class="sp-a" id="K_pd" min="50" max="1500" step="10" value="400">
+      </div>
+      <div class="field">
+        <label>Starting prey <span class="sym">N(0)</span> <span class="value" id="N0Val_pd">60</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" class="sp-a" id="N0_pd" min="1" max="600" step="1" value="60">
+      </div>
+
+      <div class="section-label pred">The predator</div>
+      <div class="field">
+        <label>Attack rate <span class="sym">a</span> <span class="value" id="aVal_pd">0.020</span><button class="help-btn" data-help="functionalResponse"></button></label>
+        <input type="range" class="pred" id="a_pd" min="0.002" max="0.06" step="0.001" value="0.020">
+      </div>
+      <div class="field hOnly">
+        <label>Handling time <span class="sym">h</span> <span class="value" id="hVal_pd">0.20</span><button class="help-btn" data-help="handlingTime"></button></label>
+        <input type="range" class="pred" id="h_pd" min="0" max="0.5" step="0.01" value="0.20">
+      </div>
+      <div class="field">
+        <label>Conversion efficiency <span class="sym">e</span> <span class="value" id="eVal_pd">0.40</span><button class="help-btn" data-help="efficiency"></button></label>
+        <input type="range" class="pred" id="e_pd" min="0.05" max="1" step="0.01" value="0.40">
+      </div>
+      <div class="field">
+        <label>Mortality <span class="sym">m</span> <span class="value" id="mVal_pd">0.30</span><button class="help-btn" data-help="mortality"></button></label>
+        <input type="range" class="pred" id="m_pd" min="0.05" max="1" step="0.01" value="0.30">
+      </div>
+      <div class="field">
+        <label>Starting predators <span class="sym">P(0)</span> <span class="value" id="P0Val_pd">20</span><button class="help-btn" data-help="n0"></button></label>
+        <input type="range" class="pred" id="P0_pd" min="1" max="300" step="1" value="20">
+      </div>
+
+      <div class="section-label">Run</div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_pd">150</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_pd" min="20" max="1000" step="10" value="150">
+      </div>
+      <div class="field">
+        <label>Vertical axis<button class="help-btn" data-help="logAxis"></button></label>
+        <div class="segmented" id="scaleSeg_pd">
+          <button data-scale="linear" class="active">Linear</button>
+          <button data-scale="log">Logarithmic</button>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_pd">▶ Run</button>
+        <button class="btn secondary" id="endBtn_pd">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_pd">↺ Reset</button>
+        <span class="status mono" id="status_pd">Pick a model, set the sliders, then press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #8C3F5D;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Prey and predators over time</span><button class="help-btn" data-help="predSeries"></button></span>
+          <span class="stat" id="chartStat_pd">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 300px;"><canvas id="chart_pd" role="img" aria-label="Prey and predators over time — chart"></canvas></div>
+        <div class="chips">
+          <div class="chip">Time<span id="tDisp_pd">0</span></div>
+          <div class="chip sp-a">Prey N<span id="nDisp_pd">60</span></div>
+          <div class="chip pred">Predators P<span id="pDisp_pd">20</span></div>
+        </div>
+        <div class="chips">
+          <div class="chip cap">Prey equilibrium N*<span id="nStarDisp_pd">—</span></div>
+          <div class="chip cap">Predator equilibrium P*<span id="pStarDisp_pd">—</span></div>
+        </div>
+        <div class="panel-note">Small dots mark the peaks. The predator's peaks always sit to the <em>right</em> of the prey's, by about a quarter of a cycle — predators can only become numerous after their food already has.</div>
+      </div>
+      <div class="panel" style="--accent: #8C3F5D;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Outcome</span><button class="help-btn" data-help="predOutcomes"></button></span>
+        </div>
+        <div id="verdict_pd" class="verdict">
+          <h4>Not yet run</h4>
+          <p>Whether this pair of species cycles forever, settles down, or breaks apart is fixed by the parameters — and can be read off before anything is simulated.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Phase plane &amp; nullclines</span><button class="help-btn" data-help="predPhase"></button></span>
+          <span class="stat">click anywhere to restart from that pair of abundances</span>
+        </div>
+        <div class="canvas-wrap" style="height: 400px;"><canvas id="phase_pd" role="img" aria-label="Phase plane and nullclines — chart"></canvas></div>
+        <div class="legend-inline">
+          <span class="item"><span class="swatch" style="background: var(--sp-a);"></span> prey nullcline (prey stop changing)</span>
+          <span class="item"><span class="swatch" style="background: var(--pred);"></span> predator nullcline (predators stop changing)</span>
+          <span class="item"><span class="swatch" style="background: var(--ink);"></span> the trajectory</span>
+          <span class="item"><span class="swatch" style="background: var(--ink-soft); opacity: 0.45;"></span> orbits from other starting points<button class="help-btn" data-help="predNeutral"></button></span>
+          <span class="item"><span class="swatch" style="background: var(--cap);"></span> equilibrium</span>
+        </div>
+      </div>
+      <div class="panel" style="--accent: #B8862E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Predicted vs. measured</span><button class="help-btn" data-help="predEquilibria"></button></span>
+        </div>
+        <div id="numbers_pd"></div>
+        <div class="panel-note">N* = m/(a(e − m·h)) contains no prey parameters whatsoever, and P* contains no predator ones. Each species' abundance is set by the <em>other</em> species' biology.</div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 2;">
+      <div class="panel" style="--accent: #A8442A;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The functional response</span><button class="help-btn" data-help="functionalResponse"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 210px;"><canvas id="fresp_pd" role="img" aria-label="The functional response — chart"></canvas></div>
+        <div class="panel-note" id="frespNote_pd">How many prey one predator takes per unit time, as a function of how many prey there are.</div>
+      </div>
+      <div class="panel" style="--accent: #388047;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Prey growth vs. predation risk</span><button class="help-btn" data-help="preyRisk"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 210px;"><canvas id="risk_pd" role="img" aria-label="Prey growth vs. predation risk — chart"></canvas></div>
+        <div class="panel-note" id="riskNote_pd">The same predation seen from the prey's side: a per-capita death rate, drawn against the prey's own per-capita growth rate at the current number of predators.</div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at time <span class="value" id="scrubVal_pd">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_pd" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_pd" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_pd" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Step through the run to park exactly on a moment worth looking at — a peak, a crossing, a turning point. The slider also responds to the ← and → keys once you click it.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_pd">Press <strong>Run</strong>. Then press it again from a different starting point: in the classic model the cycle you get is the cycle you started with.</p>
+      <div class="note-line" id="note_pd"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>The predator's peaks trail the prey's by a quarter of a cycle, always and for a reason: predators can only build up after their food has, and prey can only recover after the predators have starved. Look hard at the <span class="gloss" data-help="glosEquilibrium">equilibrium</span> too — the prey's equilibrium abundance N* = m/(a(e − m·h)) contains no prey parameters whatsoever. Feeding the prey population better cannot make it commoner; it makes predators commoner instead, and past a threshold it destabilises the pair entirely. Enrichment passing straight through one level to the one above it is the arithmetic behind a <span class="gloss" data-help="glosTrophicCascade">trophic cascade</span>.</p>
+      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('overshoot'); window.scrollTo(0,0);">Overshoot</button> room made cycles out of one species and a time lag; this room makes them out of two species and a feedback, and the <span class="gloss" data-help="glosLimitCycle">limit cycle</span> you get from an enriched environment is a third kind again. The <button type="button" class="room-link" onclick="switchTab('keystone'); window.scrollTo(0,0);">Keystone</button> room drops this predator into the <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room's competition, where its effect on who survives is the opposite of what you would guess.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Lotka–Volterra predation, integrated with fourth-order Runge–Kutta at sixteen sub-steps per frame, which holds the classic model's conserved quantity to about one part in 10¹⁰ over a run: the closed orbits on screen are closed in the mathematics, not by accident of the integrator. A population is declared extinct and pinned to zero below 0.5 individuals — the equations themselves permit a prey population of a hundredth of an individual to recover, and that floor is the room's one concession to reality. Prey released by their predator's extinction grow without limit: the time series stays scaled to the cycles and lets them leave through the top of the panel as a dotted line. The equilibrium is N* = m/(a(e − m·h)), P* = N·g(N*)/f(N*); its stability is decided by the sign of g(N*) + N*·g′(N*) − f′(N*)·P*, which is negative (stable) whenever the prey nullcline is falling where the predator nullcline crosses it.</p>
+    </details>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 8: THE KEYSTONE ROOM                   -->
+  <!-- ========================================== -->
+  <div id="tab-keystone" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-keystone" tabindex="0">
+    <header class="masthead">
+      <div>
+        <h1>The Keystone Room</h1>
+        <p class="sub"><span class="sub-label">Predation meets competition</span> – Two competitors and one predator that eats them both. Its preference decides who survives.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h3>Start here</h3>
+      <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room's two competitors and the <button type="button" class="room-link" onclick="switchTab('predator'); window.scrollTo(0,0);">Predator</button> room's predator in a single community — a predator that eats both rivals. The only genuinely new parameters are the two attack rates, which say how hard the predator presses on each competitor, and nearly everything this room demonstrates follows from which of the two is larger. Every run is simulated twice, once as you set it up and once with the predator deleted, so a removal experiment is always on screen.</p>
+      <p><span class="try-label">Try this.</span> Run <em>Keystone predation</em>, then <em>Remove the keystone</em> — identical parameters, predator switched off — and watch a species that was coexisting disappear. Then load <em>Apparent competition</em>, check that both competition coefficients really are zero, and watch one species eliminate the other anyway. Finally take the keystone settings and drag the two attack rates towards each other until the effect collapses.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dN<sub>A</sub>/dt = r<sub>A</sub>N<sub>A</sub>(1 − (N<sub>A</sub> + α<sub>AB</sub>N<sub>B</sub>)/K<sub>A</sub>) − <span class="var">a</span><sub>A</sub>N<sub>A</sub>P<br>dN<sub>B</sub>/dt = r<sub>B</sub>N<sub>B</sub>(1 − (N<sub>B</sub> + α<sub>BA</sub>N<sub>A</sub>)/K<sub>B</sub>) − <span class="var">a</span><sub>B</sub>N<sub>B</sub>P<br>dP/dt = P·(<span class="var">e</span>(<span class="var">a</span><sub>A</sub>N<sub>A</sub> + <span class="var">a</span><sub>B</sub>N<sub>B</sub>) − <span class="var">m</span>)</div>
+      <div class="eq-gloss">The Neighbours Room's two competitors, with a shared predator added. The only new parameters are the two attack rates: <em>a</em><sub>A</sub> and <em>a</em><sub>B</sub> say how hard the predator presses on each competitor. Everything this room does follows from which of the two is larger.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>N<sub>A</sub>, N<sub>B</sub></dt>
+          <dd>The two competing species — the Neighbours Room's pair, unchanged.</dd>
+          <dt>P</dt>
+          <dd>The predator, which eats both of them. Switch it off and the first two equations are exactly the Neighbours Room's.</dd>
+          <dt>r<sub>A</sub>, r<sub>B</sub> · K<sub>A</sub>, K<sub>B</sub></dt>
+          <dd>Each competitor's own <span class="gloss" data-help="rIntrinsic">intrinsic rate of increase</span> and <span class="gloss" data-help="carryingK">carrying capacity</span>, as before.</dd>
+          <dt>α<sub>AB</sub>, α<sub>BA</sub></dt>
+          <dd>The competition coefficients: how much one individual of each species crowds the other, measured in that other's own individuals.</dd>
+          <dt>a<sub>A</sub>, a<sub>B</sub></dt>
+          <dd>The predator's attack rate on each competitor — the only genuinely new parameters in the room. Which of the two is larger is the predator's preference, and everything that happens here follows from it.</dd>
+          <dt>e</dt>
+          <dd>Conversion efficiency: predators made per prey eaten, whichever species it came from.</dd>
+          <dt>m</dt>
+          <dd>The predator's per-capita death rate.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck">
+      <div class="field wide">
+        <label>Presets<button class="help-btn" data-help="keystonePresets"></button></label>
+        <div class="segmented compact" id="presetSeg_ks">
+          <button data-preset="keystone">Keystone predation</button>
+          <button data-preset="removed">Remove the keystone</button>
+          <button data-preset="apparent">Apparent competition</button>
+          <button data-preset="wrongOne">Eating the wrong one</button>
+        </div>
+      </div>
+
+      <div class="field wide">
+        <label>Is the predator present?<button class="help-btn" data-help="predatorToggle"></button></label>
+        <div class="segmented" id="predSeg_ks">
+          <button data-pred="on" class="active">Predator present</button>
+          <button data-pred="off">Predator absent</button>
+        </div>
+      </div>
+
+      <div class="section-label sp-a">Competitor A</div>
+      <div class="field">
+        <label>Growth rate <span class="sym">r<sub>A</sub></span> <span class="value" id="rAVal_ks">0.50</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" class="sp-a" id="rA_ks" min="0.05" max="1.5" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Carrying capacity <span class="sym">K<sub>A</sub></span> <span class="value" id="KAVal_ks">700</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" class="sp-a" id="KA_ks" min="50" max="1000" step="10" value="700">
+      </div>
+      <div class="field">
+        <label>Effect of B on A <span class="sym">α<sub>AB</sub></span> <span class="value" id="aABVal_ks">0.50</span><button class="help-btn" data-help="alpha"></button></label>
+        <input type="range" class="sp-a" id="aAB_ks" min="0" max="2.5" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Starting size <span class="sym">N<sub>A</sub>(0)</span> <span class="value" id="NA0Val_ks">60</span></label>
+        <input type="range" class="sp-a" id="NA0_ks" min="1" max="900" step="1" value="60">
+      </div>
+
+      <div class="section-label sp-b">Competitor B</div>
+      <div class="field">
+        <label>Growth rate <span class="sym">r<sub>B</sub></span> <span class="value" id="rBVal_ks">0.50</span><button class="help-btn" data-help="rIntrinsic"></button></label>
+        <input type="range" class="sp-b" id="rB_ks" min="0.05" max="1.5" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Carrying capacity <span class="sym">K<sub>B</sub></span> <span class="value" id="KBVal_ks">400</span><button class="help-btn" data-help="carryingK"></button></label>
+        <input type="range" class="sp-b" id="KB_ks" min="50" max="1000" step="10" value="400">
+      </div>
+      <div class="field">
+        <label>Effect of A on B <span class="sym">α<sub>BA</sub></span> <span class="value" id="aBAVal_ks">1.50</span><button class="help-btn" data-help="alpha"></button></label>
+        <input type="range" class="sp-b" id="aBA_ks" min="0" max="2.5" step="0.01" value="1.50">
+      </div>
+      <div class="field">
+        <label>Starting size <span class="sym">N<sub>B</sub>(0)</span> <span class="value" id="NB0Val_ks">60</span></label>
+        <input type="range" class="sp-b" id="NB0_ks" min="1" max="900" step="1" value="60">
+      </div>
+
+      <div class="section-label pred">The shared predator</div>
+      <div class="field">
+        <label>Attack rate on A <span class="sym">a<sub>A</sub></span> <span class="value" id="atkAVal_ks">0.008</span><button class="help-btn" data-help="preference"></button></label>
+        <input type="range" class="pred" id="atkA_ks" min="0" max="0.03" step="0.001" value="0.008">
+      </div>
+      <div class="field">
+        <label>Attack rate on B <span class="sym">a<sub>B</sub></span> <span class="value" id="atkBVal_ks">0.002</span><button class="help-btn" data-help="preference"></button></label>
+        <input type="range" class="pred" id="atkB_ks" min="0" max="0.03" step="0.001" value="0.002">
+      </div>
+      <div class="field">
+        <label>Conversion efficiency <span class="sym">e</span> <span class="value" id="eVal_ks">0.40</span><button class="help-btn" data-help="efficiency"></button></label>
+        <input type="range" class="pred" id="e_ks" min="0.05" max="1" step="0.01" value="0.40">
+      </div>
+      <div class="field">
+        <label>Mortality <span class="sym">m</span> <span class="value" id="mVal_ks">0.60</span><button class="help-btn" data-help="mortality"></button></label>
+        <input type="range" class="pred" id="m_ks" min="0.05" max="1.5" step="0.01" value="0.60">
+      </div>
+      <div class="field">
+        <label>Starting predators <span class="sym">P(0)</span> <span class="value" id="P0Val_ks">10</span></label>
+        <input type="range" class="pred" id="P0_ks" min="1" max="300" step="1" value="10">
+      </div>
+
+      <div class="section-label">Run</div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_ks">250</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_ks" min="20" max="800" step="10" value="250">
+      </div>
+      <div class="field">
+        <label>Vertical axis<button class="help-btn" data-help="logAxis"></button></label>
+        <div class="segmented" id="scaleSeg_ks">
+          <button data-scale="linear" class="active">Linear</button>
+          <button data-scale="log">Logarithmic</button>
+        </div>
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_ks">▶ Run</button>
+        <button class="btn secondary" id="endBtn_ks">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_ks">↺ Reset</button>
+        <span class="status mono" id="status_ks">Pick a preset or set the sliders, then press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #5E6B21;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">All three populations over time</span><button class="help-btn" data-help="counterfactual"></button></span>
+          <span class="stat" id="chartStat_ks">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 300px;"><canvas id="chart_ks" role="img" aria-label="All three populations over time — chart"></canvas></div>
+        <div class="chips">
+          <div class="chip">Time<span id="tDisp_ks">0</span></div>
+          <div class="chip sp-a">Competitor A<span id="aDisp_ks">60</span></div>
+          <div class="chip sp-b">Competitor B<span id="bDisp_ks">60</span></div>
+          <div class="chip pred">Predator P<span id="pDisp_ks">10</span></div>
+        </div>
+        <div class="panel-note">The pale dashed lines are the counterfactual: the same two competitors, from the same starting sizes, simulated with no predator at all. The gap between a solid line and its dashed twin is the predator's entire effect on that species.</div>
+      </div>
+      <div class="panel" style="--accent: #5E6B21;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Outcome</span><button class="help-btn" data-help="keystoneOutcomes"></button></span>
+        </div>
+        <div id="verdict_ks" class="verdict">
+          <h4>Not yet run</h4>
+          <p>This panel names what the predator did — by comparing the outcome of the competition with it against the outcome without it. Both can be read off the parameters before anything is simulated.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #7A5C99;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The competitors' phase plane</span><button class="help-btn" data-help="shiftingIsoclines"></button></span>
+          <span class="stat">click anywhere to restart from that pair of abundances</span>
+        </div>
+        <div class="canvas-wrap" style="height: 400px;"><canvas id="phase_ks" role="img" aria-label="The competitors' phase plane — chart"></canvas></div>
+        <div class="legend-inline">
+          <span class="item"><span class="swatch" style="background: var(--sp-a);"></span> A's isocline — solid at the current predator density, faint with none</span>
+          <span class="item"><span class="swatch" style="background: var(--sp-b);"></span> B's isocline, the same two ways</span>
+          <span class="item"><span class="swatch" style="background: var(--ink);"></span> the trajectory</span>
+          <span class="item"><span class="swatch" style="background: var(--ink-soft); opacity: 0.5;"></span> the predator-free run</span>
+          <span class="item"><span class="swatch" style="background: var(--cap);"></span> three-species equilibrium</span>
+        </div>
+      </div>
+      <div class="panel" style="--accent: #B8862E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Invasion criteria</span><button class="help-btn" data-help="keystoneInvasion"></button></span>
+        </div>
+        <div id="invasion_ks" class="verdict"></div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 2;">
+      <div class="panel" style="--accent: #3D6E6E;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Tolerance of predation</span><button class="help-btn" data-help="tolerance"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 210px;"><canvas id="tol_ks" role="img" aria-label="Tolerance of predation — chart"></canvas></div>
+        <div class="panel-note">Each line is one competitor's per-capita growth rate when it is rare, as a function of how many predators there are. Where a line crosses zero is the most predation that species can withstand, <em>r</em>/<em>a</em>. The vertical marks are the predator densities each competitor supports on its own.</div>
+      </div>
+      <div class="panel" style="--accent: #8C3F5D;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">What the predator is eating</span><button class="help-btn" data-help="dietShare"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 210px;"><canvas id="diet_ks" role="img" aria-label="What the predator is eating — chart"></canvas></div>
+        <div class="panel-note">The share of the predator's intake taken from each competitor, moment by moment. A keystone predator's plate is lopsided — and it is lopsided towards the species that would otherwise take over.</div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp)">History Scrubber: you are at time <span class="value" id="scrubVal_ks">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_ks" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_ks" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_ks" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Drag slowly through the first part of a keystone run and watch the phase plane: as the predator builds up, the competitors' isoclines slide inwards at different speeds until they cross. That crossing is the coexistence appearing.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_ks">Press <strong>Run</strong>. Then switch the predator off and run again, changing nothing else — the question this room asks is what difference the predator makes.</p>
+      <div class="note-line" id="note_ks"></div>
+    </div>
+
+    <div class="room-payoff">
+      <h3>What to notice</h3>
+      <p>A predator is neither automatically destructive nor automatically a keystone: it restructures a community only when it presses hardest on the species that was <em>winning</em>. Drag the History Scrubber slowly through the start of a keystone run and watch the phase plane — the competitors' <span class="gloss" data-help="glosNullcline">isoclines</span> slide inward at different speeds, cross, and a coexistence appears where none existed. Notice too what apparent competition does to fieldwork: two species whose abundances move in opposite directions look exactly like competitors, and need not be competing for anything at all. Both results here are <em>indirect</em> effects — one species changing another's fate along a path it never walks directly, which is what a <span class="gloss" data-help="glosTrophicCascade">trophic cascade</span> does between trophic levels and apparent competition does within one.</p>
+      <p><strong>Where this comes from.</strong> This room only makes sense against the <button type="button" class="room-link" onclick="switchTab('neighbours'); window.scrollTo(0,0);">Neighbours</button> room, whose outcome it overturns, and the <button type="button" class="room-link" onclick="switchTab('predator'); window.scrollTo(0,0);">Predator</button> room, whose predator it borrows. It is also the lab's last word on the opening question: by this point, "what stops this population from growing?" cannot be answered by looking at the population, or even at the pair — only at the whole community.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Two Lotka–Volterra competitors and one shared predator with a linear functional response, integrated with fourth-order Runge–Kutta; any population below 0.5 individuals is pinned to zero. Competitor <em>i</em> invades a world holding competitor <em>j</em> and the predator when r<sub>i</sub>(1 − α<sub>ij</sub>N<sub>j</sub>*/K<sub>i</sub>) − a<sub>i</sub>P<sub>j</sub>* &gt; 0, where (N<sub>j</sub>*, P<sub>j</sub>*) = (m/(e·a<sub>j</sub>), (r<sub>j</sub>/a<sub>j</sub>)(1 − N<sub>j</sub>*/K<sub>j</sub>)) is the state of a world containing only <em>j</em> and the predator. Both invasion criteria satisfied means coexistence of all three. The three-species equilibrium solves a<sub>A</sub>N<sub>A</sub> + a<sub>B</sub>N<sub>B</sub> = m/e simultaneously with the two competitors' zero-growth conditions. Keystone predation is Paine (1966); apparent competition is Holt (1977).</p>
+    </details>
+  </div>
+
+  <script src="js/nav.js?v=12"></script>
+  <script src="js/canvas-utils.js?v=12"></script>
+  <script src="js/lab-core.js?v=14"></script>
+  <script src="js/plot-core.js?v=14"></script>
+  <script src="js/help.js?v=14"></script>
+  <script src="js/growth-room.js?v=14"></script>
+  <script src="js/crowding-room.js?v=14"></script>
+  <script src="js/resource-room.js?v=12"></script>
+  <script src="js/overshoot-room.js?v=13"></script>
+  <script src="js/neighbours-room.js?v=12"></script>
+  <script src="js/coexistence-room.js?v=12"></script>
+  <script src="js/predator-room.js?v=12"></script>
+  <script src="js/keystone-room.js?v=12"></script>
+</body>
+</html>
