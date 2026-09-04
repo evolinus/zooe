@@ -118,6 +118,41 @@ loaded by `_includes/fr-project-index.html`, so that the homepage shapes mutate
 by exactly the same rules as the room they came from. Moving or pruning that
 folder breaks the homepage.
 
+## The two unlisted apps
+
+Two more hand-copied apps sit under `teaching/`, and neither is linked from
+anywhere on the site:
+
+- `teaching/population-dynamics/` — a copy of the `population_dynamics` repo.
+- `teaching/evolutionary-laboratories-next/` — the *current* upstream
+  `evolutionary_laboratories`, kept apart from the older public snapshot above
+  rather than replacing it.
+
+They are **unlisted, not private.** The repo is public, so the files are public
+artifacts; what they get is no inbound link, no nav entry and no crawler. Three
+things hold that, and all three have to survive a re-copy:
+
+1. No `nav:` front matter anywhere, and no link from any `fr-*` include —
+   `_includes/header.html` builds the tab bar only from pages that declare
+   `nav`, so absence is enough.
+2. `sitemap: false` under their paths in the `defaults` block of
+   `_config.yaml`. This is load-bearing: `jekyll-sitemap` lists static `.html`
+   files as well as pages (`lib/sitemap.xml` filters them on `sitemap != false`),
+   which is why the public `evolutionary-laboratories/main.html` *is* in the
+   deployed sitemap.
+3. A `<meta name="robots" content="noindex, nofollow">` in each `index.html`.
+   These files are standalone HTML with their own `<head>` — they never reach
+   `_includes/meta.html` — so the tag lives in the copied file itself and is a
+   local addition upstream knows nothing about. **Re-copying the app drops it.**
+
+Deliberately *not* done: no `Disallow` in `robots.txt`. That file is public and
+would advertise the paths, and blocking the crawl would stop Google ever seeing
+the `noindex` that actually does the work.
+
+They are copied as `index.html` rather than upstream's `main.html`, so the bare
+folder URL works and is easy to paste into an email. Everything else is copied
+verbatim; both apps reference only their own `js/` and `img/`.
+
 ## Conventions that are easy to break
 
 **Colours and type are tokens.** Everything is defined once in

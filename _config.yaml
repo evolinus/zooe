@@ -39,6 +39,17 @@ defaults:
       path: "google5268eb9fa20642e4.html"
     values:
       sitemap: false
+  # unlisted apps: reachable only by their address. jekyll-sitemap lists static
+  # .html files too, so these have to be excluded by hand or they would be
+  # advertised to crawlers. each index.html also carries its own robots noindex.
+  - scope:
+      path: "teaching/population-dynamics"
+    values:
+      sitemap: false
+  - scope:
+      path: "teaching/evolutionary-laboratories-next"
+    values:
+      sitemap: false
 
 collections:
   # generate page for each member
