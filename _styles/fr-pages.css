@@ -621,6 +621,39 @@
   max-width: 68ch;
 }
 
+/* the service roles: each statement paired across with its own mark.
+   named -service, not -role: .fr-profile-role above is the job-title label.
+   no rules between rows - the blank line before the block does the parting */
+/* text + mark together match the 68ch the prose above is set to, so the
+   right edge of the marks lines up with the right edge of the paragraphs */
+.fr-profile-services {
+  max-width: 68ch;
+  margin-top: 22px;
+}
+
+.fr-profile-service {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 0;
+}
+.fr-profile-service p {
+  margin: 0;
+}
+
+.fr-profile-service-mark {
+  display: block;
+}
+.fr-profile-service-mark img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.fr-profile-service-mark:hover img {
+  opacity: 0.82;
+}
+
 /* — contact — */
 .fr-contact {
   display: grid;
@@ -728,6 +761,10 @@
   }
   .fr-profile-aside {
     max-width: 360px;
+  }
+  .fr-profile-service {
+    grid-template-columns: 1fr 80px;
+    gap: 18px;
   }
   .fr-cols-2,
   .fr-cols-2-1,
