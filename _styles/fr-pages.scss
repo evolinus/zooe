@@ -501,13 +501,14 @@ $wrap: 900px;
 /* — contact — */
 .fr-contact {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  /* the rail is sized to the marks it holds, not to a share of the page.
+     two rows: the way to find us over the closing band of river + address */
+  grid-template-columns: 1fr 300px;
+  grid-template-rows: 1fr auto;
   border-bottom: 2px solid var(--divider);
 }
 .fr-contact-main { padding: 40px var(--pad) 40px; border-right: 2px solid var(--divider); }
-.fr-contact-side { display: flex; flex-direction: column; }
 .fr-contact-figure {
-  flex: 1;
   min-height: 240px;
   padding: 40px;
   overflow: hidden;
@@ -543,12 +544,23 @@ $wrap: 900px;
 .fr-wm-us { color: #C00000; }
 .fr-wm-e { color: #FFC000; }
 .fr-contact-stack { display: flex; flex-direction: column; gap: 10px; max-width: 340px; }
-/* the river, under the way to find us */
+/* the river fills its half of the closing band. the address opposite sets the
+   band's height, so the photograph is laid in absolutely and crops to it
+   rather than dictating it */
+.fr-contact-river {
+  position: relative;
+  margin: 0;
+  min-height: 200px;
+  overflow: hidden;
+  border-right: 2px solid var(--divider);
+}
 .fr-contact-view {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
-  margin-top: 32px;
+  height: 100%;
+  object-fit: cover;
 }
 .fr-address { font-size: 15px; line-height: 1.8; }
 
@@ -572,7 +584,19 @@ $wrap: 900px;
   .fr-alumni { grid-template-columns: 1fr; }
   .citation.fr-pub { grid-template-columns: 100px 1fr; }
   .citation.fr-pub > *:last-child { grid-column: 2; }
-  .fr-contact-main { border-right: none; border-bottom: 2px solid var(--divider); }
+  /* stacked, nothing sits opposite the river to set its height, so it goes
+     back to its own proportions - and follows the text it belongs with */
+  .fr-contact-main { order: 1; border-right: none; border-bottom: 2px solid var(--divider); }
+  .fr-contact-river {
+    order: 2;
+    position: static;
+    min-height: 0;
+    border-right: none;
+    border-bottom: 2px solid var(--divider);
+  }
+  .fr-contact-figure { order: 3; }
+  .fr-contact-address { order: 4; }
+  .fr-contact-view { position: static; height: auto; }
 }
 @media (max-width: 560px) {
   .fr-team { grid-template-columns: 1fr; }
