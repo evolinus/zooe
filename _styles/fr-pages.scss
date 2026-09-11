@@ -474,6 +474,29 @@ $wrap: 900px;
   color: var(--primary-deep);
 }
 .fr-profile-body .fr-prose p { max-width: 68ch; }
+/* the service roles: each statement paired across with its own mark.
+   named -service, not -role: .fr-profile-role above is the job-title label.
+   no rules between rows - the blank line before the block does the parting */
+/* text + mark together match the 68ch the prose above is set to, so the
+   right edge of the marks lines up with the right edge of the paragraphs */
+.fr-profile-services { max-width: 68ch; margin-top: 22px; }
+.fr-profile-service {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 0;
+  p { margin: 0; }
+}
+.fr-profile-service-mark {
+  display: block;
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  &:hover img { opacity: 0.82; }
+}
 
 /* — contact — */
 .fr-contact {
@@ -537,6 +560,7 @@ $wrap: 900px;
   .fr-contact { grid-template-columns: 1fr; gap: 24px; }
   .fr-profile { grid-template-columns: 1fr; gap: 28px; }
   .fr-profile-aside { max-width: 360px; }
+  .fr-profile-service { grid-template-columns: 1fr 80px; gap: 18px; }
   .fr-cols-2,
   .fr-cols-2-1,
   .fr-cols-3 { grid-template-columns: 1fr; }

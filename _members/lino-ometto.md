@@ -23,7 +23,31 @@ You can find my full CV [here](https://evolinus.github.io/zooe/pdfs/LinoOmetto.C
 
 I have always enjoyed sharing my passion and interests with students and people in general, and I am regularly involved in [outreach initiatives](https://evolinus.github.io/zooe/teaching/).
 
-I am president of the [Italian Society for Evolutionary Biology](https://www.sibe-iseb.it/). 
+<!--
+  the three society roles: each statement in a wide column with its own mark in
+  a narrow rail on the right, so a row reads across as one thing. Raw HTML
+  rather than markdown because kramdown would break the grid across paragraphs.
+-->
+<div class="fr-profile-services">
+  <div class="fr-profile-service">
+    <p>I am member and chair of the board of arbitrators of the <a href="https://www.sibe-iseb.it/">Italian Society for Evolutionary Biology</a>.</p>
+    <a class="fr-profile-service-mark" href="https://www.sibe-iseb.it/">
+      <img src="{{ "images/pages/SIBE_logo.png" | relative_url }}" alt="Italian Society for Evolutionary Biology" loading="lazy" {% include fallback.html %}>
+    </a>
+  </div>
+  <div class="fr-profile-service">
+    <p>I am also chair of the <a href="https://www.coimbra-group.eu/working-group/life-sciences/">Life Sciences working group</a> of the <a href="https://www.coimbra-group.eu/">Coimbra Group Network</a>.</p>
+    <a class="fr-profile-service-mark" href="https://www.coimbra-group.eu/">
+      <img src="{{ "images/pages/coimbragroup_logo.png" | relative_url }}" alt="Coimbra Group" loading="lazy" {% include fallback.html %}>
+    </a>
+  </div>
+  <div class="fr-profile-service">
+    <p>I am the university representative on the board of the <a href="https://ec2u.eu/staff/elevate-your-research">Virtual Institute for Life on Land</a> of the <a href="https://ec2u.eu/">European Campus of City-Universities (EC<sup>2</sup>U)</a> alliance.</p>
+    <a class="fr-profile-service-mark" href="https://ec2u.eu/">
+      <img src="{{ "images/pages/EC2U_logo.png" | relative_url }}" alt="EC2U alliance" loading="lazy" {% include fallback.html %}>
+    </a>
+  </div>
+</div>
 
 <!--I currently hold the position of Associate Professor of Zoology at the [Department of Biology and Biotechnology](https://dbb.dip.unipv.it/en) of the [University of Pavia](https://portale.unipv.it/it). My research interests are aimed at better understanding the origin of adaptive traits in insects (& friends). I like to think of myself as a zoologist with a sweep net in one hand and a genome in the other. I grew up with a keen interest in animals and have embraced the power of population genetics and molecular evolution as a means of uncovering the genetic basis of ecologically relevant traits. 
 I have been fortunate to experience a variety of educational and research contexts, both in terms of cultural diversity and of research fields. After receiving a  MSc in Biology from the [University of Padova](https://www.biologia.unipd.it/) (and one year at the [Université Paris-Saclay](https://www.universite-paris-saclay.fr/en/)) I worked as research assistant at the [Max Plank Institute for Biological Intelligence](https://www.bi.mpg.de/en) and at the [School of Biological Sciences at the University of Canterbury](https://www.canterbury.ac.nz/study/academic-study/science/science-schools-and-departments/school-of-biological-sciences). Fascinated with population genetics, I obtained my Ph.D. in Natural Sciences from the [Ludwig-Maximilians University of Munich](https://evol.bio.lmu.de/) under the supervision of [Wolfgang Stephan](https://www.evol.bio.lmu.de/people/professor_emeritus/stephan_w/index.html). I then studied the evolution of gene expression in ants in [Laurent Keller](https://laurentkeller.ch/en/home/)'s lab at the [University of Lausanne](https://www.unil.ch/dee/en/home.html), and finally moved back to Italy to [Fondazione Edmund Mach](https://cri.fmach.it/en/).
