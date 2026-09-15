@@ -544,9 +544,11 @@ $wrap: 900px;
 .fr-wm-us { color: #C00000; }
 .fr-wm-e { color: #FFC000; }
 .fr-contact-stack { display: flex; flex-direction: column; gap: 10px; max-width: 340px; }
-/* the river fills its half of the closing band. the address opposite sets the
-   band's height, so the photograph is laid in absolutely and crops to it
-   rather than dictating it */
+/* the address opposite sets the closing band's height, so the photograph is
+   laid in absolutely and scaled to that height rather than dictating it. it
+   keeps its own proportions and narrows to suit: the panorama is shown whole,
+   never trimmed at the top, and the leftover run of the half is left empty.
+   only a half too narrow to hold it takes anything off, and then off the ends */
 .fr-contact-river {
   position: relative;
   margin: 0;
@@ -556,11 +558,11 @@ $wrap: 900px;
 }
 .fr-contact-view {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
   display: block;
-  width: 100%;
+  width: auto;
   height: 100%;
-  object-fit: cover;
 }
 .fr-address { font-size: 15px; line-height: 1.8; }
 
@@ -596,7 +598,7 @@ $wrap: 900px;
   }
   .fr-contact-figure { order: 3; }
   .fr-contact-address { order: 4; }
-  .fr-contact-view { position: static; height: auto; }
+  .fr-contact-view { position: static; width: 100%; height: auto; }
 }
 @media (max-width: 560px) {
   .fr-team { grid-template-columns: 1fr; }
