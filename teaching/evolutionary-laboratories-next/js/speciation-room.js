@@ -1359,8 +1359,31 @@
     renderVerdict(cp);
     renderSubTable(cp);
     renderDivTable(cp);
-    DOM.chartD.getContext('2d').clearRect(0, 0, DOM.chartD.width, DOM.chartD.height);
-    DOM.chartHue.getContext('2d').clearRect(0, 0, DOM.chartHue.width, DOM.chartHue.height);
+    // Drawn empty, not left blank. Clearing a canvas nobody has sized yet leaves
+    // it at its 300x150 default, and `width: 100%` against that intrinsic ratio
+    // makes each box half as tall again as the 190 a real chart takes — a white
+    // band sitting between the two paragraphs either side, which then jumps
+    // shorter the moment the first run finally sizes it. Drawing the frame also
+    // puts X and Y on screen while the reader is still moving those sliders,
+    // which is where the two thresholds are easiest to read: both re-render on
+    // input, so the dashed red line tracks the slider before anything has run.
+    // The Drift and Selection rooms draw their empty chart at reset for the same
+    // reason. The axis bounds are the ones renderCharts() computes at gen 0, so
+    // pressing Run continues the frame rather than replacing it.
+    drawSeriesChart(DOM.chartD, [], {
+      title: T('sp.chart.d', 'Fixed differences: {d} in all, {p} physiological, {m} morphological',
+        { d: 0, p: 0, m: 0 }),
+      maxG: params.G, yMax: niceCeil(params.X * 1.25, 8),
+      threshold: params.X, thresholdActive: true,
+      thresholdLabel: T('sp.chart.x', 'X = {x}', { x: params.X })
+    });
+    drawSeriesChart(DOM.chartHue, [], {
+      title: T('sp.chart.hue', 'Mating-signal divergence, body hue (now {d}°)', { d: '0' }),
+      maxG: params.G, yMax: Math.min(180, niceCeil(params.Y * 1.25, 60)),
+      threshold: params.Y, thresholdActive: params.mating,
+      thresholdLabel: T('sp.chart.y', 'Y = {y}°', { y: params.Y }),
+      yFormat: (v) => Math.round(v) + '°'
+    });
   }
 
   function renderCurrentView() {
@@ -1382,7 +1405,7 @@
   // founder count and has no bearing on the ancestor, so it only re-renders.
   bindSlider(DOM.sliderN, DOM.nVal, 'N', null, () => { newAncestralPopulation(); });
   bindSlider(DOM.sliderN2, DOM.n2Val, 'N2', null, () => { if (!checkpoints) renderCurrentView(); });
-  bindSlider(DOM.sliderG, DOM.gVal, 'G');
+  bindSlider(DOM.sliderG, DOM.gVal, 'G', null, () => { if (!checkpoints) renderCurrentView(); });
   const rethreshold = () => { recomputeCrossings(); renderCurrentView(); };
   bindSlider(DOM.sliderX, DOM.xVal, 'X', null, rethreshold);
   bindSlider(DOM.sliderY, DOM.yVal, 'Y', (v) => v + '°', rethreshold);
