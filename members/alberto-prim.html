@@ -67,12 +67,15 @@
 
 <title>Alberto Prim | the zoo_e lab</title>
 
-<link rel="icon" type="image/png" href="/images/icon/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/images/icon/favicon.svg">
-<link rel="shortcut icon" href="/images/icon/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/images/icon/apple-touch-icon.png">
+<!-- the site is served from a subpath (/zooe), so every icon href has to go
+through relative_url — a root-absolute /images/... 404s and no browser shows
+a favicon at all -->
+<link rel="icon" type="image/png" href="/zooe/images/icon/favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/svg+xml" href="/zooe/images/icon/favicon.svg">
+<link rel="shortcut icon" href="/zooe/images/icon/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/zooe/images/icon/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-title" content="zoo_eLab">
-<link rel="manifest" href="/images/site.webmanifest">
+<link rel="manifest" href="/zooe/images/site.webmanifest">
 
 <meta name="title" content="Alberto Prim">
 <meta name="description" content="Zoology and Evolution @ unipv.it">
