@@ -86,7 +86,7 @@
     const spinBtn     = document.getElementById('spinBtn_mut');
     const resetBtn    = document.getElementById('resetBtn_mut');
     const rerunBtn    = document.getElementById('rerunBtn_mut');
-    const selBtn      = document.getElementById('selBtn_mut');
+    const scenarioSeg = document.getElementById('scenarioSeg_mut');
     const selPanel    = document.getElementById('selPanel_mut');
     const selSliders  = document.getElementById('selSliders_mut');
     const readingText = document.getElementById('readingText_mut');
@@ -133,6 +133,10 @@
     let animShownGen = 0;   // generations currently drawn (== popG when idle)
     let animating = false;
     let animRAF = null;
+    // The spin finishes on a timer 3.1s after the wheels start turning. Held so
+    // that leaving the room can settle it early instead of letting it land in a
+    // tab nobody is looking at.
+    let spinTimer = null, pendingSpin = null;
 
     // ---- canvas sizing (shared engine) ----
     // Clear any inline size scaleCanvas left behind so the CSS width:100%
@@ -228,12 +232,38 @@
       return chosen.favoured ? sValue : -sValue;
     }
 
-    const CHART = { ink:'#262220', inkSoft:'#6b6258', rule:'#cabfa8' };
+    const CHART = { ink:'#262220', inkSoft: '#5A5249', rule:'#cabfa8' };
+
+    // Rewritten as the chart is redrawn. Read when the reader reaches the panel,
+    // not announced at them: this redraws every frame of the reveal.
+    function describeFreqChart(){
+      if(!hasTrajectories()) return T('mu.aria.freqEmpty',
+        'Frequency of the four derived alleles against generation — nothing spun yet');
+      const parts = WHEELS.map(w => {
+        const st = alleleState[w.key];
+        const f = st.trajectory ? st.trajectory[Math.min(animShownGen, st.trajectory.length - 1)] : 0;
+        const where = f <= 0 ? T('mu.aria.lost', 'lost')
+                    : f >= 1 ? T('mu.aria.fixed', 'fixed')
+                    : f.toFixed(2);
+        return `${w.label}: ${where}`;
+      });
+      return T('mu.aria.freq',
+        'Frequency of the four derived alleles against generation. At generation {g}, {list}.',
+        { g: animShownGen, list: parts.join(', ') });
+    }
 
     function drawFreqChart(){
+      freqCanvas.setAttribute('aria-label', describeFreqChart());
       withSize(freqCanvas, size => {
-        scaleCanvas(freqCanvas, freqCtx, size, size);
-        const ctx = freqCtx, W = size, H = size;
+        // The only panel on the page that is not square: it spans two tracks so
+        // four trajectories have room to be told apart. Its height comes from the
+        // square Mutant canvas next to it, not from its own width, so the row
+        // lines up instead of standing twice as tall as its neighbours. On a
+        // narrow window everything is one column and the two agree anyway.
+        const sibling = Math.round(mutCanvas.getBoundingClientRect().width);
+        const height = sibling > 8 ? sibling : size;
+        scaleCanvas(freqCanvas, freqCtx, size, height);
+        const ctx = freqCtx, W = size, H = height;
         ctx.clearRect(0, 0, W, H);
         const padL = 26, padR = 8, padT = 26, padB = 18;
         const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
@@ -369,6 +399,34 @@
         else { animRAF = null; animShownGen = popG; drawFreqChart(); finalizeRun(); }
       };
       animRAF = requestAnimationFrame(step);
+    }
+
+    // What the spin lands on. Normally called by its own timer with animate
+    // true; called with false when the reader leaves the room mid-spin, which
+    // applies the same outcome without playing it out to an empty tab.
+    function completeSpin(animate){
+      if(spinTimer){ clearTimeout(spinTimer); spinTimer = null; }
+      if(!pendingSpin) return;
+      const chosen = pendingSpin; pendingSpin = null;
+
+      mutant = originalGenome();
+      WHEELS.forEach(wheel => {
+        const sec = chosen[wheel.key];
+        sec.apply(mutant);
+        alleleState[wheel.key].chosen = sec;
+        const st = wheelState[wheel.key];
+        st.resultEl.textContent = secLabel(sec);
+        st.resultEl.classList.add('has-result');
+        renderLegend(wheel);
+      });
+      renderFish(mutCanvas, mutCtx, mutant);
+      updateMutStat();
+      runTrajectories(animate);
+      spinning = false;
+      spinBtn.disabled = false;
+      resetBtn.disabled = false;
+      rerunBtn.disabled = false;   // there are mutations to re-run now
+      updateReadingAfterSpin(chosen);
     }
 
     // ---- wheel geometry ----
@@ -521,26 +579,8 @@
         st.resultEl.textContent = '…';
       });
 
-      setTimeout(() => {
-        mutant = originalGenome();
-        WHEELS.forEach(wheel => {
-          const sec = chosen[wheel.key];
-          sec.apply(mutant);
-          alleleState[wheel.key].chosen = sec;
-          const st = wheelState[wheel.key];
-          st.resultEl.textContent = secLabel(sec);
-          st.resultEl.classList.add('has-result');
-          renderLegend(wheel);
-        });
-        renderFish(mutCanvas, mutCtx, mutant);
-        updateMutStat();
-        runTrajectories(true);
-        spinning = false;
-        spinBtn.disabled = false;
-        resetBtn.disabled = false;
-        rerunBtn.disabled = false;   // there are mutations to re-run now
-        updateReadingAfterSpin(chosen);
-      }, 3100);
+      pendingSpin = chosen;
+      spinTimer = setTimeout(() => completeSpin(true), 3100);
     }
 
     function updateReadingAfterSpin(chosen){
@@ -564,11 +604,16 @@
       selSliders.innerHTML = '';
       const field = document.createElement('div');
       field.className = 'field';
-      // The two wordy parts get their own spans so they can be relabelled
-      // without replacing the whole <label> — doing that would detach the
-      // value readout below and silently stop it updating.
+      // The wordy part gets its own span so it can be relabelled without
+      // replacing the whole <label> — doing that would detach the value readout
+      // below and silently stop it updating.
+      // "Selection coeff." rather than the full word, and to match the Selection
+      // Room's label for the same quantity, which the prompt just above sends
+      // the reader to. "(all four characters)" is gone from here because that
+      // prompt already says it, in a sentence with room for it; inside the
+      // label it ran to 380px against the 220px this column has on a phone.
       field.innerHTML = `
-        <label><span class="mu-sel-label">${T('mu.selLabel', 'Selection coefficient')}</span> <span class="sym"><var>s</var></span> <span class="mu-sel-all">${T('mu.selAll', '(all four characters)')}</span> <span class="value" id="selVal_all">${sValue.toFixed(2)}</span></label>
+        <label for="selInt_all"><span class="mu-sel-label">${T('mu.selLabel', 'Selection coeff.')}</span> <span class="sym"><var>s</var></span> <span class="value" id="selVal_all">${sValue.toFixed(2)}</span></label>
         <input type="range" id="selInt_all" min="0" max="1" step="0.01" value="${sValue}">
       `;
       selSliders.appendChild(field);
@@ -606,19 +651,33 @@
         "Mutation stays random; only an allele's <em>fate</em> now feels fitness.", { s: sValue.toFixed(2) });
     }
 
-    function toggleSelection(){
-      selectionActive = !selectionActive;
+    // Neutral or selected, as a standing choice rather than a panel the reader
+    // has to think to open. The room's whole point is the comparison between the
+    // two, and a disclosure button below the wheels made one of them the room and
+    // the other an extra — a reader could work through the whole thing without
+    // ever noticing there was a second scenario. Neutral is the default because
+    // it is the case the wheels alone already show.
+    function setScenario(active){
+      if (active === selectionActive) return;
+      selectionActive = active;
+      scenarioSeg.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('active', (b.dataset.scenario === 'selection') === active);
+      });
       selPanel.classList.toggle('open', selectionActive);
-      selBtn.textContent = selectionActive ? '▲ Turn off natural selection' : '▼ Simulate natural selection';
       refreshFavouredHighlight();
       updateMutStat(); // show/hide the favoured-allele count on the Mutant panel
       runTrajectories(true); // fate now follows selection (or reverts to pure drift)
+      // Through T() like every other string the rooms produce, and worded for
+      // the two-way choice these became: the reader picks a scenario now, rather
+      // than switching selection on and off.
       readingText.innerHTML = selectionActive
-        ? `Natural selection is <strong>on</strong>. This fish lives in a fast-flowing stream that favours ` +
-          `<strong>a slender body</strong>, <strong>blue colouring</strong>, <strong>a long tail</strong> and <strong>short fins</strong> — now marked ` +
-          `<span class="fav-star">★</span>. The wheels are unchanged (mutation is still blind to fitness), but each derived allele's ` +
-          `trajectory now bends with its fitness: favoured up, the rest down. Raise the shared <span class="sym"><var>s</var></span> and watch.`
-        : `Natural selection is <strong>off</strong> — the four alleles are back to pure drift. Switch it on again to compare.`;
+        ? T('mu.scenarioSelection',
+            'The scenario is <strong>selection</strong>. This fish lives in a fast-flowing stream that favours ' +
+            '<strong>a slender body</strong>, <strong>blue colouring</strong>, <strong>a long tail</strong> and <strong>short fins</strong> — now marked ' +
+            '<span class="fav-star">★</span>. The wheels are unchanged (mutation is still blind to fitness), but each derived allele\'s ' +
+            'trajectory now bends with its fitness: favoured up, the rest down. Raise the shared <span class="sym"><var>s</var></span> and watch.')
+        : T('mu.scenarioNeutral',
+            'The scenario is <strong>neutral</strong> — the four alleles are back to pure drift. Choose <em>Selection</em> again to compare.');
     }
 
     // ---- reset ----
@@ -667,7 +726,25 @@
       runTrajectories(true);
     });
     resetBtn.addEventListener('click', reset);
-    selBtn.addEventListener('click', toggleSelection);
+    // Nothing in this room should still be moving once the reader has gone to
+    // another one: a spin still on its timer is landed at once, and a trajectory
+    // still being revealed jumps to its outcome. They come back to a finished
+    // run rather than to one playing to nobody, or to a half-spun room.
+    document.addEventListener('lab:tabchange', (e) => {
+      if(e.detail.tabId === 'mutation') return;
+      completeSpin(false);
+      if(animating){
+        stopAnimation();
+        animShownGen = popG;
+        drawFreqChart();
+        finalizeRun();
+      }
+    });
+
+    scenarioSeg.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-scenario]');
+      if (btn) setScenario(btn.dataset.scenario === 'selection');
+    });
     // Update the readout live (G is locked at 2.5·N); replay — and re-animate —
     // only when the slider is released.
     nSlider.addEventListener('input', () => { popN = Number(nSlider.value); popG = defaultG(); nVal.textContent = popN; });

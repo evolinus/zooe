@@ -1,6 +1,6 @@
 // The Adaptation Room: three founder fish, each split into a Neutral lineage
 // and a Habitat lineage. Five morphological traits (shape, colour, eye size,
-// fin size, tail size) are each modeled as an independent diploid locus:
+// fin size, tail size) are each modelled as an independent diploid locus:
 // while monomorphic, it has a per-generation chance (its mutation rate) of
 // producing a new variant, which then runs a real diploid Wright-Fisher
 // trajectory — the same selection+drift math as the Selection Room, with
@@ -72,7 +72,7 @@
     return d > 180 ? 360 - d : d;
   }
 
-  // Signed score: positive means the derived values are favored over the
+  // Signed score: positive means the derived values are favoured over the
   // ancestral ones for this trait in this habitat. null = not under selection
   // here (effective s stays 0 regardless of direction). Only the SIGN of the
   // score is used (see stepLocus: sEff = sign(score) · sMag), so a single-
@@ -84,31 +84,31 @@
   // happens to have the bigger natural units.
   const HABITAT_SCORERS = {
     stream: {
-      shape: (a, d) => roundnessOf(a) - roundnessOf(d),          // favors slender (lower roundness)
-      colour: (a, d) => hueDist(a.bodyHue, 210) - hueDist(d.bodyHue, 210), // favors blue
+      shape: (a, d) => roundnessOf(a) - roundnessOf(d),          // favours slender (lower roundness)
+      colour: (a, d) => hueDist(a.bodyHue, 210) - hueDist(d.bodyHue, 210), // favours blue
       eyeSize: null,
-      finSize: (a, d) => finSizeOf(a) - finSizeOf(d),            // favors shorter fins
-      tailSize: (a, d) => tailSizeOf(d) - tailSizeOf(a),         // favors longer tail
+      finSize: (a, d) => finSizeOf(a) - finSizeOf(d),            // favours shorter fins
+      tailSize: (a, d) => tailSizeOf(d) - tailSizeOf(a),         // favours longer tail
     },
     pond: {
-      shape: (a, d) => roundnessOf(d) - roundnessOf(a),          // favors round
-      colour: (a, d) => hueDist(a.bodyHue, 15) - hueDist(d.bodyHue, 15),  // favors red
+      shape: (a, d) => roundnessOf(d) - roundnessOf(a),          // favours round
+      colour: (a, d) => hueDist(a.bodyHue, 15) - hueDist(d.bodyHue, 15),  // favours red
       eyeSize: null,
-      finSize: (a, d) => finSizeOf(d) - finSizeOf(a),            // favors longer fins
-      // favors a shorter AND less-bifurcated (less forked) tail, averaged
+      finSize: (a, d) => finSizeOf(d) - finSizeOf(a),            // favours longer fins
+      // favours a shorter AND less-bifurcated (less forked) tail, averaged
       tailSize: (a, d) => 0.5 * ((tailSizeOf(a) - tailSizeOf(d)) / 32) + 0.5 * (bifurcationOf(a) - bifurcationOf(d)),
     },
     river: {
       shape: null,                                               // no shape preference
-      // favors greenish body AND dark fins, averaged
+      // favours greenish body AND dark fins, averaged
       colour: (a, d) => 0.5 * ((hueDist(a.bodyHue, 120) - hueDist(d.bodyHue, 120)) / 180) + 0.5 * ((a.finLightness - d.finLightness) / 45),
-      eyeSize: (a, d) => d.eyeR - a.eyeR,                        // favors bigger eye
+      eyeSize: (a, d) => d.eyeR - a.eyeR,                        // favours bigger eye
       finSize: null,
       tailSize: null,
     }
   };
 
-  const COLORS = { stamp: '#C08A2E', ink: '#262220', inkSoft: '#6b6258' };
+  const COLORS = { stamp: '#C08A2E', ink: '#262220', inkSoft: '#5A5249' };
 
   function rand() { return Math.random(); }
   function gauss() {
@@ -124,7 +124,7 @@
     statusBar: DOMg('statusBar'),
     timeScrubber: DOMg('timeScrubber'), scrubVal: DOMg('scrubVal'), scrubMaxLabel: DOMg('scrubMaxLabel'),
     divMatrixWrap: DOMg('divMatrixWrap'),
-    avgDeltaSummary: DOMg('avgDeltaSummary'),
+    ownFounderTable: DOMg('ownFounderTable'),
     tanglegramWrap: DOMg('tanglegramWrap'),
     presets: DOMg('presets'),
   };
@@ -267,7 +267,12 @@
   function newLocusState(founderGenome, trait) {
     const fixedValues = {};
     TRAIT_PARAMS[trait].forEach(p => fixedValues[p] = founderGenome[p]);
-    return { fixedValues, segregating: null, fixCount: 0, mutationCount: 0, neutralFixCount: 0, neutralMutationCount: 0 };
+    return { fixedValues, segregating: null, fixCount: 0, mutationCount: 0,
+             neutralFixCount: 0, neutralMutationCount: 0,
+             // Scored against by the habitat: s < 0. Kept apart from the
+             // neutral tally because they are the opposite case, not a
+             // milder one — a change the habitat can see and does not want.
+             badFixCount: 0, badMutationCount: 0 };
   }
 
   function mutateTraitValues(fixedValues, trait, sigmaFrac) {
@@ -310,6 +315,7 @@
         locus.segregating = null;
         locus.fixCount++;
         if (seg.s === 0) locus.neutralFixCount++;
+        if (seg.s < 0) locus.badFixCount++;
       } else {
         seg.freq = nf;
       }
@@ -328,6 +334,7 @@
       locus.segregating = { derivedValues, freq: 1 / (2 * N), s: sEff };
       locus.mutationCount++;
       if (sEff === 0) locus.neutralMutationCount++;
+      if (sEff < 0) locus.badMutationCount++;
     }
   }
 
@@ -338,7 +345,9 @@
       fixCount: locus.fixCount,
       mutationCount: locus.mutationCount,
       neutralFixCount: locus.neutralFixCount,
-      neutralMutationCount: locus.neutralMutationCount
+      neutralMutationCount: locus.neutralMutationCount,
+      badFixCount: locus.badFixCount,
+      badMutationCount: locus.badMutationCount
     };
   }
 
@@ -459,12 +468,23 @@
   // The split the reader is meant to see is Mut. against Subs. within each
   // colour: mutations arrive at much the same rate whether or not a change
   // matters, but only the selected ones are converted into substitutions at
-  // any speed. The two summary rows are therefore counted change by change,
-  // from the per-mutation sEff, rather than by adding up rows — so a scored
-  // mutation that happens to come out at s = 0 lands in Tot. neu. even though
-  // its row is blue. That is why Tot. sel. is Total minus Tot. neu.
+  // any speed. The summary rows are therefore counted change by change, from
+  // the per-mutation sEff, rather than by adding up rows — so a scored mutation
+  // that happens to come out at s = 0 lands in Tot. neu. even though its row is
+  // blue. The three summary rows partition the mutations exactly, which is why
+  // Sel. + is what is left after the other two.
+  //
+  // Sel. − is the row the small-vs-large task turns on, and the reason it is
+  // split out rather than folded into Sel. +: a change the habitat scored
+  // AGAINST and drift fixed anyway. Wrong-way mutations arrive at much the same
+  // rate in every population — mutation cannot see the habitat — and what
+  // population size decides is how many of them get through. Measured on this
+  // model over 200 runs at s = 0.05, G = 5000: a mean of 2.4 of them fix at
+  // N = 10 and 0.01 at N = 50, and nine runs in ten at N = 10 show at least one
+  // while ninety-eight in a hundred at N = 50 show none. That is a difference a
+  // reader can see in a single run, which the divergence figures are not.
   function traitTableHTML(snapLineage, habitat) {
-    let totalMuts = 0, totalSubs = 0, neutralMuts = 0, neutralSubs = 0;
+    let totalMuts = 0, totalSubs = 0, neutralMuts = 0, neutralSubs = 0, badMuts = 0, badSubs = 0;
     let rows = '';
     TRAITS.forEach(t => {
       const locus = snapLineage[t];
@@ -472,24 +492,34 @@
       totalSubs += locus.fixCount;
       neutralMuts += locus.neutralMutationCount;
       neutralSubs += locus.neutralFixCount;
+      badMuts += locus.badMutationCount;
+      badSubs += locus.badFixCount;
       const underSelection = habitat && HABITAT_SCORERS[habitat][t];
       const rowClass = underSelection ? 'adapt-row-selected' : 'adapt-row-neutral';
       rows += `<tr class="${rowClass}"><td>${traitLabel(t)}</td><td class="adapt-num">${locus.mutationCount}</td><td class="adapt-num">${locus.fixCount}</td></tr>`;
     });
-    rows += `<tr class="adapt-tot-sel"><td>${T('ad.tbl.totsel', 'Tot. sel.')}</td><td class="adapt-num">${totalMuts - neutralMuts}</td><td class="adapt-num">${totalSubs - neutralSubs}</td></tr>`;
+    rows += `<tr class="adapt-tot-sel"><td>${T('ad.tbl.selPlus', 'Sel. +')}</td><td class="adapt-num">${totalMuts - neutralMuts - badMuts}</td><td class="adapt-num">${totalSubs - neutralSubs - badSubs}</td></tr>`;
+    rows += `<tr class="adapt-tot-bad"><td>${T('ad.tbl.selMinus', 'Sel. −')}</td><td class="adapt-num">${badMuts}</td><td class="adapt-num">${badSubs}</td></tr>`;
     rows += `<tr class="adapt-tot-neu"><td>${T('ad.tbl.totneu', 'Tot. neu.')}</td><td class="adapt-num">${neutralMuts}</td><td class="adapt-num">${neutralSubs}</td></tr>`;
     rows += `<tr class="adapt-total"><td>${T('ad.tbl.total', 'Total')}</td><td class="adapt-num">${totalMuts}</td><td class="adapt-num">${totalSubs}</td></tr>`;
-    // The abbreviations have to be short enough to fit a narrow column, so the
-    // words they stand for are spelled out once beneath every table.
-    const key = habitat
-      ? T('ad.tbl.key',
-          '<strong>Tot. sel.</strong> = total selected: changes that altered the fit to this habitat (<var>s</var> not 0). ' +
-          '<strong>Tot. neu.</strong> = total neutral: changes that made no difference to it (<var>s</var> = 0).')
-      : T('ad.tbl.keyNeutral',
-          '<strong>Tot. sel.</strong> = total selected, <strong>Tot. neu.</strong> = total neutral. ' +
-          'Nothing is under selection in this lineage, so every change is neutral and Tot. sel. stays at 0.');
-    return `<table class="adapt-trait-table"><tr><th>${T('ad.tbl.trait', 'Trait')}<button class="help-btn" data-help="traitTable"></button></th><th>${T('ad.tbl.mut', 'Mut.')}</th><th>${T('ad.tbl.subs', 'Subs.')}</th></tr>${rows}</table>` +
-      `<p class="adapt-tbl-key">${key}</p>`;
+    return `<table class="adapt-trait-table"><tr><th>${T('ad.tbl.trait', 'Trait')}<button class="help-btn" data-help="traitTable"></button></th><th>${T('ad.tbl.mut', 'Mut.')}</th><th>${T('ad.tbl.subs', 'Subs.')}</th></tr>${rows}</table>`;
+  }
+
+  // The abbreviations have to be short enough to fit a narrow column, so the
+  // words they stand for are spelled out — once for the room, above the rows,
+  // rather than under each of the six tables. Six copies of the same two
+  // sentences cost more than they taught: they were the tallest thing in a
+  // founder's row after the fish, and they were what pushed the third founder
+  // off the screen.
+  function renderTraitTableKey() {
+    const el = DOMg('traitKey');
+    if (!el) return;
+    el.innerHTML = T('ad.tbl.key',
+      '<strong>Sel. +</strong> = changes the habitat scored in its favour · <strong>Sel. −</strong> = changes ' +
+      'it scored against, and fixed anyway · <strong>Tot. neu.</strong> = changes it could not see at all ' +
+      '(<var>s</var> = 0). Nothing is under selection in a Neutral lineage, so there every change is neutral. ' +
+      'Watch Sel. − under <em>Subs.</em>: wrong-way mutations arrive everywhere, and only a small population ' +
+      'lets them through.');
   }
 
   // Consensus: for each trait, majority phenotype (>50% of individuals),
@@ -537,8 +567,9 @@
 
   // Length of the connector's stem: the gap between the bottom of the
   // ancestor's caption and the bar. Long enough to read as a stem — a couple
-  // of pixels would just look like the bar had grown a nub.
-  const BRANCH_STEM = 28;
+  // of pixels would just look like the bar had grown a nub — and no longer,
+  // since every pixel of it is empty space in all three rows at once.
+  const BRANCH_STEM = 16;
 
   // Lays the founder's row out as a branching rather than as three fish in a
   // line: the Gen-0 ancestor keeps the top tier, its Neutral and Habitat
@@ -580,9 +611,16 @@
     // actually changed — this runs on every checkpoint the scrubber draws,
     // and an unconditional style write would invalidate the layout each time
     // just for the next line to force it back.
+    //
+    // It is half of a DESCENDANT card that comes off, not half of the
+    // ancestor's: the bar is drawn at the descendants' mid-height, so that is
+    // the distance from the top of the dropped tier down to the bar. The two
+    // cards used to be the same size and either would have done; now that the
+    // ancestor is the smaller one, measuring it instead leaves a tier gap
+    // 28px too deep in every row.
     const drop = `${Math.round(
       g0Slot.getBoundingClientRect().height
-      - g0Canvas.getBoundingClientRect().height / 2
+      - neutralCanvas.getBoundingClientRect().height / 2
       + BRANCH_STEM
     )}px`;
     if (grid.style.getPropertyValue('--adapt-drop') !== drop) {
@@ -670,7 +708,7 @@
   };
 
   function renderDivergenceMatrix() {
-    if (!checkpoints) { DOM.divMatrixWrap.innerHTML = ''; DOM.avgDeltaSummary.textContent = ''; return; }
+    if (!checkpoints) { DOM.divMatrixWrap.innerHTML = ''; DOM.ownFounderTable.innerHTML = ''; return; }
     const last = checkpoints[checkpoints.length - 1];
 
     // Precompute each lineage's final consensus genome once.
@@ -697,9 +735,57 @@
     DOM.divMatrixWrap.innerHTML = html;
 
     const avg = (arr) => arr.reduce((s, x) => s + x, 0) / arr.length;
-    DOM.avgDeltaSummary.textContent =
-      T('ad.avgDelta', 'Neutral: {n} · Habitat: {h}',
-        { n: avg(ownDelta.neutral).toFixed(3), h: avg(ownDelta.habitat).toFixed(3) });
+    // Founder by founder, and not only pooled. The small-vs-large task makes
+    // population size the one thing that differs between the three rows, so a
+    // mean across the three averages away exactly what it is asking about —
+    // the figures it wants compared were being added together. Each founder's
+    // N rides along in the label, since that is the variable in that task and
+    // is otherwise three rows away on a slider.
+    const founderLabel = (f) => T('ad.delta.founder', '{f} (<var>N</var> = {n})', {
+      f: f.charAt(0).toUpperCase() + f.slice(1),
+      n: params.N[`${f}_neutral`]
+    });
+    // A row per regime, a column per founder, so the comparison runs across the
+    // table the way it runs across the room — and the mean keeps its own column
+    // at the end, because the brief asks the reader to compare Neutral against
+    // Habitat and that is the comparison it is a single number for.
+    const deltaRow = (label, values) =>
+      `<tr><th>${label}</th>` +
+      values.map(v => `<td>${v.toFixed(3)}</td>`).join('') +
+      `<td>${avg(values).toFixed(3)}</td></tr>`;
+
+    // Δ says how FAR a lineage travelled, and nothing at all about which way.
+    // That is why the small-vs-large task looked like it was doing nothing: a
+    // small population under selection moves as far from its founder as a large
+    // one does — it just spends the distance on changes its habitat never asked
+    // for. Measured on this model over 200 runs at s = 0.05, the Habitat figures
+    // come out 0.100, 0.089 and 0.085 for N = 10, 50 and 200, which is no
+    // difference worth reading. Direction needs a line of its own: of the traits
+    // this habitat actually scores, how many ended up moved the way it prefers.
+    // There the same runs give 2.1, 3.3 and 3.5 of 4.
+    //
+    // No mean in this row: two habitats need not score the same number of
+    // traits — the River scores two where the Stream scores four — so an
+    // average of the three would be an average over different denominators.
+    const adaptedRow = () => {
+      const cells = FOUNDERS.map(f => {
+        const hab = params.habitat[f];
+        const scored = TRAITS.filter(t => HABITAT_SCORERS[hab][t]);
+        const improved = scored.filter(t =>
+          HABITAT_SCORERS[hab][t](founders[f], finalGenomes[`${f}_habitat`]) > 0).length;
+        return `<td>${T('ad.own.adaptedCount', '{k} of {m}', { k: improved, m: scored.length })}</td>`;
+      });
+      return `<tr><th>${T('ad.own.adapted', 'Habitat adapted')}</th>${cells.join('')}<td>—</td></tr>`;
+    };
+
+    const head = `<tr><th></th>${FOUNDERS.map(f => `<th>${founderLabel(f)}</th>`).join('')}` +
+      `<th>${T('ad.own.mean', 'mean')}</th></tr>`;
+    DOM.ownFounderTable.innerHTML =
+      `<table class="divtable adapt-ownfounder">${head}` +
+      deltaRow(T('ad.own.neutral', 'Neutral Δ'), ownDelta.neutral) +
+      deltaRow(T('ad.own.habitat', 'Habitat Δ'), ownDelta.habitat) +
+      adaptedRow() +
+      '</table>';
   }
 
   // True history vs. inferred tree, built from the seven lineages' final
@@ -827,7 +913,8 @@
       svgLines += `
         <foreignObject x="${FOUNDER_X - 25}" y="${ty[f] - 25}" width="50" height="50">
           <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%; border-radius:50%; background:var(--paper); border: 2px solid var(--ink); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <canvas id="adapt_true_${f}" width="100" height="100" style="width:50px; height:50px;"></canvas>
+            <canvas id="adapt_true_${f}" width="100" height="100" style="width:50px; height:50px;"
+              role="img" aria-label="${label}, as it really is"></canvas>
           </div>
         </foreignObject>`;
       svgLines += `<text x="${FOUNDER_X}" y="${ty[f] + 40}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="var(--ink-soft)">${label}</text>`;
@@ -839,7 +926,8 @@
       svgLines += `
         <foreignObject x="${iconX}" y="${ty[key] - 40}" width="${ICON_W}" height="80">
           <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%; border-radius:4px; background:var(--paper-dim);">
-            <canvas id="adapt_final_${key}" width="160" height="160" style="width:80px; height:80px;"></canvas>
+            <canvas id="adapt_final_${key}" width="160" height="160" style="width:80px; height:80px;"
+              role="img" aria-label="${key} lineage, its fish at the end of the run"></canvas>
           </div>
         </foreignObject>`;
       svgLines += `<text x="${iconX + ICON_W / 2}" y="${ty[key] + 52}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" font-weight="bold" fill="${LINEAGE_COLOR(key)}">${LINEAGE_COL_LABEL(key)}</text>`;
@@ -872,7 +960,7 @@
     } else {
       // Neighbour-joining: each lineage gets its own branch length, so a
       // lineage that evolved faster sticks out further from the root.
-      const njRoot = neighborJoining(LINEAGE_ORDER, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
+      const njRoot = neighbourJoining(LINEAGE_ORDER, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
       njScale = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN).scale;
       (function genomes(n) {
         if (n.isLeaf) { n.genome = finalGenomes[n.id]; return; }
@@ -888,7 +976,8 @@
       svgLines += `
         <foreignObject x="${node.x - 25}" y="${node.y - 25}" width="50" height="50">
           <div xmlns="http://www.w3.org/1999/xhtml" style="width:100%; height:100%; border-radius:50%; background:var(--paper); border: 2px dashed var(--ink); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-            <canvas id="adapt_upgma_${i}" width="100" height="100" style="width:50px; height:50px;"></canvas>
+            <canvas id="adapt_upgma_${i}" width="100" height="100" style="width:50px; height:50px;"
+              role="img" aria-label="${T('ad.aria.inferredTip', 'Reconstructed tip {n}', { n: i + 1 })}"></canvas>
           </div>
         </foreignObject>`;
     });
@@ -1040,16 +1129,29 @@
     },
     // N·s, made visible. One habitat for all three so that population size is
     // the only thing that differs; 10 against 200 is a twentyfold range.
+    //
+    // And a WEAK selection coefficient, which is the whole reason the task
+    // shows anything. The chance a beneficial mutation fixes is about 2s and
+    // has no N in it; the chance a neutral one does is 1/(2N). What population
+    // size changes is the ratio between those, so the two have to be within
+    // reach of each other for N to matter. At the room's default s = 0.20 they
+    // are not: 2s = 0.4 against 1/20 = 0.05 even at N = 10, so all three
+    // populations end perfectly adapted on every scored trait and the three
+    // Habitat fish come out indistinguishable — measured over 60 runs at
+    // G = 5000, 4.00, 3.97 and 3.98 of 4 traits. At s = 0.05, 4Ns spans 2 to
+    // 40 and the claim below becomes something the reader can see: 1.9, 3.3
+    // and 3.5 of 4, with the small population still fixing the most changes.
     smallVsLarge: {
       config: {
         habitat: { gigi: 'stream', mario: 'stream', nani: 'stream' },
         perFounderN: { gigi: 10, mario: 50, nani: 200 },
+        s: 0.05,
         // The one task that needs the founders to be the same fish: three
         // populations of different sizes, and nothing else different about them.
         founders: 'identical'
       },
       status: () => T('ad.preset.smallVsLarge.status',
-        'Three identical founders, same habitat, N = 10, 50 and 200. The small population fixes mutations fastest but sorts them worst; the large one is slower and truer, because selection is more effective relative to drift in it.')
+        'Three identical founders, same habitat, N = 10, 50 and 200, and a deliberately weak s = 0.05 so that drift and selection are within reach of each other. The small population fixes mutations fastest but sorts them worst; the large one is slower and truer. Read the Sel. − row of the trait tables and the Habitat adapted row of the table below, not the Habitat Δ row: all three travel about the same distance from their founder, and what population size changes is how much of that distance went the way the habitat prefers.')
     },
     defaults: {
       config: {},
@@ -1082,7 +1184,7 @@
     DOM.scrubVal.textContent = 0; DOM.scrubMaxLabel.textContent = 0;
     setStatus(() => T('ad.newFounders', 'New founders generated. Configure parameters and press Run.'));
     DOM.divMatrixWrap.innerHTML = '';
-    DOM.avgDeltaSummary.textContent = '';
+    DOM.ownFounderTable.innerHTML = '';
     DOM.tanglegramWrap.innerHTML = '';
     // Whichever kind of founder is in force stays in force: a reader partway
     // through the small-vs-large task wants three fresh identical founders, not
@@ -1130,6 +1232,7 @@
 
   function init() {
     buildFounders();
+    renderTraitTableKey();
     renderFounderNLabels();
     renderFounderModeNote();
     renderCurrentView();

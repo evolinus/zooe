@@ -23,7 +23,9 @@
     }
 
     let inferMethod = 'upgma'; // which reconstruction the right-hand panel draws
-    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; let speedMs = 50; let N = 500;
+    // Fixed pace, as in the Copying Room: 50 ms/gen is what the slider that used
+    // to set it defaulted to.
+    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; const speedMs = 50; let N = 500;
     let playing = false; let timer = null; let g = 0;
 
     const MIN_SPLIT_GAP = 5;
@@ -39,8 +41,6 @@
     const shapeSeg = document.getElementById('shapeSeg_branch');
     const mutRate = document.getElementById('mutRate_branch');
     const mutVal = document.getElementById('mutVal_branch');
-    const speedInput = document.getElementById('speed_branch');
-    const speedVal = document.getElementById('speedVal_branch');
     const maxGenInput = document.getElementById('maxGen_branch');
     const maxGenVal = document.getElementById('maxGenVal_branch');
     const treeSelector = document.getElementById('treeSelector_branch');
@@ -91,8 +91,18 @@
       splitS4 = Math.max(splitS3 + MIN_SPLIT_GAP, Math.min(splitS4, N - MIN_SPLIT_GAP));
     }
 
+    // "B→D,E: 200 · E→F,G: 350 · F→H,I: 450" named each split by the lineages it
+    // makes, and needed 304px of the 293 this field has on a phone — so the label
+    // it sits in ran to two lines there. The letters are carried by colour
+    // instead: each number takes the colour of the mark you drag to move it, the
+    // same three leaf colours drawNode() uses in the selector below, in the same
+    // left-to-right order. Colour is not the only cue — the order is the other —
+    // and the selector itself is the real control; this is its readout.
     function syncSplitInputs(){
-      splitValsLabel.textContent = `B→D,E: ${splitS2} · E→F,G: ${splitS3} · F→H,I: ${splitS4}`; updateSelector();
+      const at = (gen, leaf) => `<span style="color:var(--leaf-${leaf})">${gen}</span>`;
+      splitValsLabel.innerHTML =
+        `${at(splitS2, 'd')} · ${at(splitS3, 'g')} · ${at(splitS4, 'h')}`;
+      updateSelector();
     }
 
     function updateSelector() {
@@ -210,7 +220,12 @@
     function ensureCard(node){
       if(node.cardEl) return;
       const card = document.createElement('div'); card.className = 'node-card'; card.style.color = node.color; card.style.borderColor = node.color;
-      const canvas = document.createElement('canvas'); canvas.width = 256; canvas.height = 256; card.appendChild(canvas);
+      const canvas = document.createElement('canvas'); canvas.width = 256; canvas.height = 256;
+      // One card per lineage on the tree; the tag below it carries the name, so
+      // the canvas names itself the same way.
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', `Lineage ${node.id}, current shape`);
+      card.appendChild(canvas);
       const tag = document.createElement('div'); tag.className = 'tag mono'; card.appendChild(tag);
       treeCanvas.appendChild(card); node.cardEl = card; node.ctx = canvas.getContext('2d'); node.tagEl = tag;
     }
@@ -422,7 +437,7 @@
       } else {
         // Neighbour-joining: branch lengths differ per lineage, so leaves are
         // NOT aligned — that is the whole point of showing it.
-        const njRoot = neighborJoining(leafOrder, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
+        const njRoot = neighbourJoining(leafOrder, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
         const { scale } = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN);
         (function genomes(n) {
           if (n.isLeaf) { n.genome = nodesById[n.id].genome; return; }
@@ -529,10 +544,6 @@
     });
 
     mutRate.addEventListener('input', ()=>{ mutVal.textContent = mutRate.value; mutSigmaFrac = 0.005 + (mutRate.value/50)*0.12; });
-    speedInput.addEventListener('input', ()=>{
-      speedMs = Number(speedInput.value); speedVal.textContent = `${speedMs} ms/gen`;
-      if(playing){ clearInterval(timer); timer = setInterval(tick, speedMs); }
-    });
     maxGenInput.addEventListener('input', ()=>{ maxGenVal.textContent = maxGenInput.value; });
     maxGenInput.addEventListener('change', ()=>{
       N = Math.max(100, Math.min(2000, Number(maxGenInput.value)||500)); maxGenInput.value = N; maxGenVal.textContent = N; buildStage();

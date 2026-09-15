@@ -151,7 +151,12 @@ the `noindex` that actually does the work.
 
 They are copied as `index.html` rather than upstream's `main.html`, so the bare
 folder URL works and is easy to paste into an email. Everything else is copied
-verbatim; both apps reference only their own `js/` and `img/`.
+verbatim; each app reaches only for sibling folders of its own — `js/` and
+`img/` for both, plus `audio/` for Evolutionary Laboratories, which is the
+1.5 MB music track `js/sound.js` plays while a simulation runs. Leaving the
+track behind is survivable rather than broken — the toggle removes itself from
+the tab bar when the file will not load — so a copy that omits it still works,
+just silently.
 
 ## Conventions that are easy to break
 

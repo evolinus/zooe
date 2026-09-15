@@ -16,8 +16,11 @@
     // Fills {placeholders} in an English template string.
 
     const C = {
-      ink: '#262220', inkSoft: '#6b6258', rule: '#cabfa8', paper: '#EDE6D6',
-      stamp: '#C08A2E', accent: '#6E7B3F',
+      ink: '#262220', inkSoft: '#5A5249', rule: '#cabfa8', paper: '#EDE6D6',
+      // stamp draws the box; stampDeep writes in it. The verdict is bold 15px,
+      // which is under the size WCAG counts as large, so it needs 4.5:1 and the
+      // light gold gives 2.44:1 on this paper. Mirrors --stamp-deep in main.html.
+      stamp: '#C08A2E', stampDeep: '#7A4D00', accent: '#6E7B3F',
       pop: ['#3D6E6E', '#A8442A']   // Population 1, Population 2 — identity, not outcome
     };
 
@@ -43,9 +46,11 @@
     const oddsBox = el('odds');
     const chartCvs = el('chart');
     const readingText = el('readingText');
+    // The name is the card's own heading, carried here so the canvas can say
+    // which population it is drawing when a screen reader reaches it.
     const panels = [
-      { wrap: el('pop0Wrap'), cvs: el('pop0Canvas'), stat: el('pop0Stat') },
-      { wrap: el('pop1Wrap'), cvs: el('pop1Canvas'), stat: el('pop1Stat') }
+      { wrap: el('pop0Wrap'), cvs: el('pop0Canvas'), stat: el('pop0Stat'), name: 'Population 1' },
+      { wrap: el('pop1Wrap'), cvs: el('pop1Canvas'), stat: el('pop1Stat'), name: 'Population 2' }
     ];
 
     // ---------------------------------------------------------------- model
@@ -171,6 +176,12 @@
     // individuals moved around.
     function drawPopulation(panel, freq, outcome) {
       const cvs = panel.cvs;
+      cvs.setAttribute('aria-label', T('fate.aria.pop',
+        '{name}: the mutation is at frequency {f}.',
+        { name: panel.name || 'Population',
+          f: freq <= 0 ? T('fate.aria.lost', '0 — it has been lost')
+           : freq >= 1 ? T('fate.aria.fixed', '1 — it has fixed')
+           : freq.toFixed(3) }));
       const w = Math.round(panel.wrap.getBoundingClientRect().width);
       const h = Math.round(panel.wrap.getBoundingClientRect().height);
       if (w <= 8 || h <= 8) return;
@@ -230,7 +241,7 @@
         ctx.lineWidth = 1.5;
         ctx.strokeRect(w / 2 - tw / 2 - 12, h - 34, tw + 24, 24);
         ctx.globalAlpha = 1;
-        ctx.fillStyle = outcome === 'fixed' ? C.stamp : C.inkSoft;
+        ctx.fillStyle = outcome === 'fixed' ? C.stampDeep : C.inkSoft;
         ctx.fillText(label, w / 2, h - 17);
         ctx.restore();
       }

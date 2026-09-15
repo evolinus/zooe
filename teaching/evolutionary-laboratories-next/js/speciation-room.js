@@ -171,7 +171,7 @@
   const theta = () => params.theta0;
 
   const COLORS = {
-    ink: '#262220', inkSoft: '#6b6258', rule: '#cabfa8',
+    ink: '#262220', inkSoft: '#5A5249', rule: '#cabfa8',
     lake: '#2F6E5E', stream: '#2E5C8A', stamp: '#C08A2E', threshold: '#B3141F'
   };
 

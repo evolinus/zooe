@@ -34,7 +34,7 @@
 
 
   const COLORS = {
-    paper: '#EDE6D6', paperDim: '#E2D9C4', ink: '#262220', inkSoft: '#6b6258',
+    paper: '#EDE6D6', paperDim: '#E2D9C4', ink: '#262220', inkSoft: '#5A5249',
     rule: '#cabfa8',
     A: '#2E5C8A',      // allele A / genotype AA — same blue as the Drift room
     a: '#A8442A',      // allele a / genotype aa
@@ -53,6 +53,9 @@
     g1Partial: null,   // gametes drawn so far while G1 is being assembled
     p0: null, p1: null,
     building: false,
+    // Set when the reader leaves the room mid-build, so the gamete loop stops
+    // spinning to a tab nobody is looking at.
+    buildAbort: false,
     wheelAngle: 0,
     wheelFreq: 0.5
   };
@@ -288,6 +291,9 @@
 
   function settleG1(pop) {
     state.g1 = pop; state.p1 = freqOf(pop); state.g1Partial = null;
+    DOM.g1Canvas.setAttribute('aria-label', T('hw.aria.g1',
+      'The offspring generation: {n} individuals, allele frequency p = {p}.',
+      { n: pop.length, p: state.p1.toFixed(3) }));
     drawPop(DOM.g1Canvas, pop);
     DOM.g1Stat.innerHTML = statLine(pop, state.p0);
     renderSquareAndCurves();
@@ -312,6 +318,7 @@
   async function buildG1() {
     if (state.building || !state.g0) return;
     state.building = true;
+    state.buildAbort = false;
     lockControls(true);
 
     const p0 = state.p0, N = state.N, total = 2 * N;
@@ -320,6 +327,7 @@
     state.g1Partial = gametes;
 
     for (let j = 0; j < total; j++) {
+      if (state.buildAbort) break;
       const { dur, gap } = spinTiming(j);
       setStatus(() => T('hw.drawing', "Drawing gamete {j} / {total} from G0's gene pool…",
         { j: j + 1, total }));
@@ -329,6 +337,12 @@
       drawG1Partial(gametes, j + 1 < total ? j + 1 : -1);
       if (gap > 2) await delay(gap);
     }
+
+    // A build the reader walked out on still produces a whole generation: the
+    // gametes it did not get to are drawn here instead of on the wheel. Same
+    // Bernoulli(p0) draw either way, so leaving early skips the animation
+    // without touching the sample it would have produced.
+    while (gametes.length < total) gametes.push(Math.random() < p0 ? 'A' : 'a');
 
     settleG1(pairGametes(gametes));
     setStatus(() => T('hw.g1Complete', 'G1 complete — {n} individuals from {g} gametes.',
@@ -726,6 +740,12 @@
   });
   DOM.customPanel.addEventListener('toggle', () => setCustom(DOM.customPanel.open));
   DOM.btnMate.addEventListener('click', mateInstantly);
+  // The other rooms stop when the reader walks away; this one used to spin out
+  // its hundred gametes wherever they had gone.
+  document.addEventListener('lab:tabchange', (e) => {
+    if (e.detail.tabId !== 'hardyweinberg') state.buildAbort = true;
+  });
+
   DOM.btnBuild.addEventListener('click', buildG1);
   DOM.btnReset.addEventListener('click', () => {
     if (state.building) return;
