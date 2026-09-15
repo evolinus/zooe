@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The same split that the Branching room draws: one lineage divides at the
+       amber node and the two halves go their own ways. Kept to four shapes and
+       no text, because the tab strip renders this at 16 px. -->
+  <rect width="32" height="32" rx="6" fill="#EDE6D6"/>
+  <path d="M8 23c4-3 6-8 6-12" stroke="#3D6E6E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M14 11c0 4 2 9 6 12" stroke="#A8442A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="14" cy="9" r="2.6" fill="#C08A2E"/>
+</svg>
