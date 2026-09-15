@@ -21,6 +21,12 @@
   color: var(--text);
 }
 
+/* display:flex above beats the browser's own [hidden] rule, so hiding it has
+   to be said here - without this the bar never goes away when answered */
+.fr-consent[hidden] {
+  display: none;
+}
+
 .fr-consent-text {
   margin: 0;
   max-width: 78ch;
