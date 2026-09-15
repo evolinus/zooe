@@ -1667,6 +1667,20 @@
   .mut-derived-card{ grid-column: span 3; }
   .mut-fish-stage .stage-canvas.freq-canvas{
     background: var(--paper);
+    /* .stage-canvas makes every panel square, and this is the one that is not:
+       drawFreqChart takes its height from the Mutant canvas beside it, in JS.
+       That works, but it leaves the stylesheet holding a shape the panel never
+       has — and withSize() clears the inline width and height before measuring,
+       returning with them still cleared on the retry path it takes while the tab
+       is un-hiding. For those few frames the square is the only thing setting
+       the height, and a square three tracks wide stands 543px tall where 148px
+       belongs: the row lurches and then settles. Three tracks and two gaps
+       against the one track its neighbours are is between 3.0 and 3.7 to 1
+       depending on the window, so 3.6 sits at the narrow end — a fallback that
+       comes up a few pixels short is better than one that comes up tall. Inert
+       whenever the canvas has both inline dimensions, which is every frame that
+       is painted normally; the JS stays the source of truth. */
+    aspect-ratio: 3.6 / 1;
   }
   /* Population-size control sits inline in the transport, pushed to the far
      right (away from Spin/Reset) the same way a status readout is elsewhere. */
@@ -2112,6 +2126,9 @@
        left to be wide against. */
     .mut-wheel-row .wheel-grid{ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important; }
     .mut-derived-card{ grid-column: auto !important; }
+    /* and at one column it is as wide as its neighbours, so drawFreqChart's
+       height and its own width agree again — square, like the rest. */
+    .mut-fish-stage .stage-canvas.freq-canvas{ aspect-ratio: 1 / 1; }
   }
 </style>
 </head>
