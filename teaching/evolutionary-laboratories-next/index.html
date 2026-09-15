@@ -2939,7 +2939,7 @@
 
     <div class="room-payoff">
       <h2>What to notice</h2>
-      <p>What matters is not <em>s</em> by itself but <strong><var>N</var>·<var>s</var></strong> — the product of <span class="gloss" data-help="glosPopulation">population</span> size and advantage. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (<var>h</var> = 0) is nearly invisible to selection while it is rare, because it is hiding inside heterozygotes, so it too can be lost like a <span class="gloss" data-help="glosNeutral">neutral</span> allele.</p>
+      <p>What matters is not <em>s</em> by itself but <strong><var>N</var>·<var>s</var></strong> — the product of <span class="gloss" data-help="glosPopulation">population</span> size and advantage. Treat that as a rule of thumb rather than a law: the size that belongs in it is the <em>effective</em> population size, and where exactly the balance tips also depends on ploidy, on dominance and on the details of the life cycle. In this room all of those are pinned down, which is why the plain <var>N</var> on the slider will serve — Wright–Fisher sampling is the very thing effective size is measured against. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (<var>h</var> = 0) is nearly invisible to selection while it is rare, because it is hiding inside heterozygotes, so it too can be lost like a <span class="gloss" data-help="glosNeutral">neutral</span> allele.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> shows the half of the story this room cannot tell: selection decides a <span class="gloss" data-help="glosMutation">mutation</span>'s fate, but has no say in whether it appears. The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> then runs selection and drift on five traits at once.</p>
     </div>
     <details class="room-methods">
@@ -2982,7 +2982,7 @@
     </div>
 
     <div class="mut-rate-note">
-      <p>In nature the <strong>mutation rate</strong> — the chance that a character changes from its ancestral state to a derived one — is <strong>extremely low</strong>, on the order of one error per hundred million sites each time the genome is copied. Here we set that aside and simply <em>assume</em> a mutation occurs in each of four characters, then ask <strong>which</strong> derived state appears.<button class="help-btn" data-help="mutRate"></button></p>
+      <p>In nature the <strong>mutation rate</strong> — the chance that a character changes from its ancestral state to a derived one — is <strong>extremely low</strong>, on the order of one error per hundred million sites per generation in many cellular organisms, ourselves among them — though it is not one figure for all of life, and RNA viruses run orders of magnitude higher. Here we set that aside and simply <em>assume</em> a mutation occurs in each of four characters, then ask <strong>which</strong> derived state appears.<button class="help-btn" data-help="mutRate"></button></p>
     </div>
 
     <div class="deck deck-setup">
@@ -3502,6 +3502,7 @@
       <p><strong>Adaptation is mostly invisible.</strong> Only 13 of the loci under selection here change how the fish looks; the other 40 change how it works, and a photograph would not show one of them. Two populations can look nearly identical and still have rebuilt their physiology in opposite directions — which is why a run to another lake, where the fish stay the same shape, still fixes twenty-odd differences at loci that matter a great deal to the animal.</p>
       <p><strong>Divergence is capped by the variation that was there to start with.</strong> A locus can only become a fixed difference if it was polymorphic in the ancestral population, and at equilibrium most were not. The two populations must then fix <em>opposite</em> alleles, which for a locus at frequency <var>p</var> happens with probability 2<var>p</var>(1−<var>p</var>) — and most standing variants are rare, so most of them are simply lost on both sides. That is why the totals here are a dozen rather than a hundred, and why raising <var>μ</var> raises them: it is the only thing that puts more sortable variation into the ancestor.</p>
       <p><strong>Drift can do it on its own.</strong> Send population B to another lake and run for long enough: fixed differences still accumulate, because in each population every polymorphic locus eventually fixes, and which allele it fixes is decided independently on the two sides. Selection does not make speciation possible.</p>
+      <p><strong>But a count of fixed differences is not, by itself, evidence of two species.</strong> The verdict reads “two species” once the count passes <var>X</var> — and <var>X</var> is a threshold you chose, applied to a number that is pure bookkeeping. Two populations left alone for long enough accumulate fixed differences whether or not anything has gone wrong between their genomes, which is precisely what the paragraph above says: the black line climbs in the second lake too, on drift alone, at loci no habitat ever looked at. Nothing in this room tests a hybrid, because no locus here interacts with any other. Divergence on this scale is a reason to go and look for reproductive isolation; it is never a demonstration of it.</p>
       <p><strong>Same kind of habitat, and selection now works <em>against</em> divergence — but only on the variation the two populations share.</strong> This is the surprise, and it has a second half. With both populations in lakes, the 13 morphological loci are under identical selection, so both sides tend to fix the <em>same</em> ancestral allele — fewer fixed differences at those loci than drift alone would have delivered. Yet the 40 physiological loci still rack up around 22, nearly as many as the stream's 28. The reason is that a mutation is <em>local</em>: when both populations are adapting to the same demand but each is doing it with new alleles of its own, they arrive at the same physiology by different genetic routes, and every one of those routes is a fixed difference. Parallel adaptation does not mean parallel genetics. Selection opposes divergence only where the two populations are sorting the <em>same</em> alleles.</p>
       <p><strong>The two barriers are not the same size.</strong> Post-zygotic isolation is genome-wide bookkeeping: it needs many loci to have sorted, so it is slow, and slowest of all in a large population. Pre-zygotic isolation through a mating signal can be reached by <em>one</em> trait moving far enough — and in the stream, body colour is under selection <em>and</em> is the signal by which mates are chosen. A trait doing both jobs at once is the fast lane, and it is why the fastest speciation in nature so often involves exactly that.</p>
       <p><strong>Two sources, two speeds.</strong> Watch the fixed-difference curve change character. It climbs steeply while the two populations sort the variation they carried away from the home lake, then bends as that is exhausted — a small <var>N</var>₂ reaches that wall in a few dozen generations. What follows is the second regime: new alleles arising in one population and nowhere else, each starting at a single copy. By the end of a default run population B has fixed around twenty of them. Standing variation is fast and finite; mutation is slow and never stops, and only the second one has no ceiling.</p>
@@ -3831,7 +3832,7 @@
 
     <div class="room-payoff">
       <h2>What to notice</h2>
-      <p>Genotype frequencies are completely fixed by the allele frequency, and heterozygotes are most common at <var>p</var> = 0.5. Any starting mix snaps to <var>p</var>²:2<var>pq</var>:<var>q</var>² after a single generation of random mating and stays there. That is exactly why the diploid Drift and Selection rooms can draw 2<var>N</var> alleles and pair them: the genotypes follow automatically, so only the allele frequency has to be tracked.</p>
+      <p>Genotype frequencies are completely fixed by the allele frequency, and heterozygotes are most common at <var>p</var> = 0.5. Any starting mix reaches <em>expected</em> genotype frequencies of <var>p</var>²:2<var>pq</var>:<var>q</var>² after a single generation of random mating, and stays there. Exactly so only in an infinite population: draw a real 2<var>N</var> gametes, as this room does, and the realised counts fluctuate around those expectations — which is the gap between the two rows of bars, and the whole of what drift is. That is exactly why the diploid Drift and Selection rooms can draw 2<var>N</var> alleles and pair them: the genotypes follow automatically, so only the allele frequency has to be tracked.</p>
       <p><strong>Where this connects.</strong> This is the licence the earlier rooms were using: because genotype frequency follows from allele frequency, the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> could track the allele frequency alone and pair gametes as they went — which is what their Diploid setting quietly relies on. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> shows where this convenient one-locus picture breaks down.</p>
     </div>
     <details class="room-methods">
@@ -3990,7 +3991,7 @@
         <li><strong>Two loci, and only two.</strong> A real chromosome puts a locus in the company of thousands, and the interference this room demonstrates is correspondingly stronger there.</li>
         <li><strong>Fitness is multiplicative across the two loci,</strong> so there is <em>no epistasis</em>: the double mutant is worth exactly what its two halves are worth. That is deliberate — it isolates the effect of linkage itself, and any interference you see cannot be blamed on the two alleles interacting.</li>
         <li><strong>A constant recombination rate.</strong> <var>r</var> is fixed, the same in both sexes and unaffected by anything else on the chromosome — no interference between crossovers, no hotspots.</li>
-        <li><strong>Part 2 is haploid,</strong> with the same Wright–Fisher bookkeeping as the earlier rooms: constant <var>N</var>, discrete generations, no migration and no new mutation.</li>
+        <li><strong>Part 2 follows chromosomes rather than individuals.</strong> The population is diploid — <var>N</var> individuals, 2<var>N</var> chromosomes, the same bookkeeping the diploid settings elsewhere use — but fitness here is multiplicative, so there is no dominance to model and each chromosome can be scored on its own. That is why only the four gamete frequencies have to be tracked. Otherwise it is Wright–Fisher as before: constant <var>N</var>, discrete generations, no migration and no new mutation.</li>
       </ul>
     </div>
 
@@ -4001,11 +4002,11 @@
     </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
-      <p>Gamete frequencies are written <var>x</var>(<var>A</var>₁<var>B</var>₁), <var>x</var>(<var>A</var>₁<var>B</var>₂), <var>x</var>(<var>A</var>₂<var>B</var>₁), <var>x</var>(<var>A</var>₂<var>B</var>₂), and the linkage disequilibrium between the two loci is <var>D</var> = <var>x</var>(<var>A</var>₁<var>B</var>₁)·<var>x</var>(<var>A</var>₂<var>B</var>₂) − <var>x</var>(<var>A</var>₁<var>B</var>₂)·<var>x</var>(<var>A</var>₂<var>B</var>₁), zero when the two are inherited independently. Recombination at rate <var>r</var> per generation erodes it geometrically: <var>D</var>(<var>t</var>) = <var>D</var>₀(1 − <var>r</var>)<sup><var>t</var></sup>. Part 2 runs a haploid two-locus Wright–Fisher model with multiplicative fitness: selection reweights the four gamete classes, recombination reshuffles them at rate <var>r</var>, and 2<var>N</var> gametes are then drawn at random. Both beneficial alleles start as single copies on different backgrounds, so the chromosome carrying both can only be made by recombination.</p>
+      <p>Gamete frequencies are written <var>x</var>(<var>A</var>₁<var>B</var>₁), <var>x</var>(<var>A</var>₁<var>B</var>₂), <var>x</var>(<var>A</var>₂<var>B</var>₁), <var>x</var>(<var>A</var>₂<var>B</var>₂), and the linkage disequilibrium between the two loci is <var>D</var> = <var>x</var>(<var>A</var>₁<var>B</var>₁)·<var>x</var>(<var>A</var>₂<var>B</var>₂) − <var>x</var>(<var>A</var>₁<var>B</var>₂)·<var>x</var>(<var>A</var>₂<var>B</var>₁), zero when the two are inherited independently. Recombination at rate <var>r</var> per generation erodes it geometrically: <var>D</var>(<var>t</var>) = <var>D</var>₀(1 − <var>r</var>)<sup><var>t</var></sup>. Part 2 runs a two-locus Wright–Fisher model of a diploid population of <var>N</var>, bookkept as its 2<var>N</var> chromosomes. Fitness is multiplicative across the two loci <em>and</em> across an individual’s two chromosomes, which means there is no dominance and the gamete frequencies on their own are enough: selection reweights the four gamete classes, recombination reshuffles them at rate <var>r</var>, and 2<var>N</var> chromosomes are then drawn at random to make the next generation. Both beneficial alleles start at the frequency <var>f</var>₀ you set, on different backgrounds — at the defaults that is five copies of each in 2<var>N</var> = 100, not one — so the chromosome carrying both can only be made by recombination.</p>
       <p><strong>Two numbers to read off the sliders.</strong> The geometric decay above has a half-life:</p>
       <p class="eq"><var>t</var><sub>½</sub> = ln 2 / [−ln(1 − <var>r</var>)] ≈ 0.69/<var>r</var> generations<span class="eq-note">about 69 generations to lose half the association at <var>r</var> = 0.01, and barely one at <var>r</var> = 0.5, which is what unlinked means</span></p>
       <p>In Part 2 the quantity that decides the run is how fast the missing chromosome gets made. Both mutations start at <var>f</var>₀ on opposite backgrounds, so <var>x</var>(<var>A</var>₁<var>B</var>₁) = 0 and <var>D</var> = −<var>f</var>₀², and recombination moves −<var>r</var><var>D</var> into the coupling classes each generation:</p>
-      <p class="eq">E[copies of <var>A</var>₁<var>B</var>₁ in the next generation] ≈ 2<var>N</var>·<var>r</var>·<var>f</var>₀²<span class="eq-note">0.0025 at the defaults <var>N</var> = 50, <var>r</var> = 0.01, <var>f</var>₀ = 0.05 — some 400 generations of waiting for a single copy</span></p>
+      <p class="eq">E[copies of <var>A</var>₁<var>B</var>₁ in the next generation] ≈ 2<var>N</var>·<var>r</var>·<var>f</var>₀²<span class="eq-note">0.0025 at the defaults <var>N</var> = 50, <var>r</var> = 0.01, <var>f</var>₀ = 0.05 — some 400 generations of waiting for the first copy of it to appear</span></p>
       <p>Meanwhile, by the closed form in the Selection Room, either mutation on its own would climb from 5% to 95% in about 30 generations at <var>s</var> = 0.20. The race is not close, and losing it is exactly what Hill–Robertson interference is: the two alleles settle their contest between them long before recombination can put them on the same chromosome.</p>
     </details>
 
@@ -4023,24 +4024,24 @@
   <!-- js/, add a <script src> line for it below, and add its markup     -->
   <!-- and tab button above.                                             -->
   <!-- ========================================== -->
-  <script src="js/i18n.js?v=1789483867817"></script>
-  <script src="js/nav.js?v=1789483867817"></script>
-  <script src="js/sound.js?v=1789483867817"></script>
-  <script src="js/help.js?v=1789483867817"></script>
-  <script src="js/shapes-engine.js?v=1789483867817"></script>
-  <script src="js/canvas-utils.js?v=1789483867817"></script>
-  <script src="js/phylo.js?v=1789483867817"></script>
-  <script src="js/copying-room.js?v=1789483867817"></script>
-  <script src="js/branching-room.js?v=1789483867817"></script>
-  <script src="js/fate-room.js?v=1789483867817"></script>
-  <script src="js/sex-asex-room.js?v=1789483867817"></script>
-  <script src="js/hardy-weinberg-room.js?v=1789483867817"></script>
-  <script src="js/linkage-room.js?v=1789483867817"></script>
-  <script src="js/wright-fisher-core.js?v=1789483867817"></script>
-  <script src="js/drift-room.js?v=1789483867817"></script>
-  <script src="js/selection-room.js?v=1789483867817"></script>
-  <script src="js/mutation-room.js?v=1789483867817"></script>
-  <script src="js/adaptation-room.js?v=1789483867817"></script>
-  <script src="js/speciation-room.js?v=1789483867817"></script>
+  <script src="js/i18n.js?v=17895051767242"></script>
+  <script src="js/nav.js?v=17895051767242"></script>
+  <script src="js/sound.js?v=17895051767242"></script>
+  <script src="js/help.js?v=17895051767242"></script>
+  <script src="js/shapes-engine.js?v=17895051767242"></script>
+  <script src="js/canvas-utils.js?v=17895051767242"></script>
+  <script src="js/phylo.js?v=17895051767242"></script>
+  <script src="js/copying-room.js?v=17895051767242"></script>
+  <script src="js/branching-room.js?v=17895051767242"></script>
+  <script src="js/fate-room.js?v=17895051767242"></script>
+  <script src="js/sex-asex-room.js?v=17895051767242"></script>
+  <script src="js/hardy-weinberg-room.js?v=17895051767242"></script>
+  <script src="js/linkage-room.js?v=17895051767242"></script>
+  <script src="js/wright-fisher-core.js?v=17895051767242"></script>
+  <script src="js/drift-room.js?v=17895051767242"></script>
+  <script src="js/selection-room.js?v=17895051767242"></script>
+  <script src="js/mutation-room.js?v=17895051767242"></script>
+  <script src="js/adaptation-room.js?v=17895051767242"></script>
+  <script src="js/speciation-room.js?v=17895051767242"></script>
 </body>
 </html>

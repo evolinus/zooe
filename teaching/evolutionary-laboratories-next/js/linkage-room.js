@@ -253,10 +253,13 @@
     ctx.strokeStyle = COLORS.ink; ctx.lineWidth = 1.2; ctx.stroke();
   }
 
-  // ---- Part 2: a haploid two-locus Wright–Fisher model ----------------------
+  // ---- Part 2: a two-locus Wright–Fisher model, N diploids as 2N chromosomes -
   // Fitness is multiplicative: an AB gamete gets (1+s)², a single mutant (1+s).
+  // Multiplicative across the two homologues as well as across the two loci, so
+  // there is no dominance and a chromosome can be scored on its own — which is
+  // why the state here is four gamete frequencies rather than ten genotypes.
   // Each generation: selection reweights the four classes, recombination moves
-  // r·D between coupling and repulsion, then 2N gametes are drawn at random.
+  // r·D between coupling and repulsion, then 2N chromosomes are drawn at random.
   function gauss() {
     let u = 0, v = 0;
     while (u === 0) u = Math.random();

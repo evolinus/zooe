@@ -109,8 +109,9 @@
       title: 'Mutation',
       body: `
         <p>A <strong>copying error</strong> in DNA — the only source of genuinely new
-        <span class="gloss" data-help="glosAllele">alleles</span>. Per site per generation it is rare, on the order of
-        10⁻⁸ in real genomes, but a genome is large and a population is many genomes.</p>
+        <span class="gloss" data-help="glosAllele">alleles</span>. Per site per generation it is rare — on the order of
+        10⁻⁸ in many cellular organisms, ours among them, with RNA viruses orders of magnitude above that — but a
+        genome is large and a population is many genomes.</p>
         <p>Everything the other rooms do is a sorting process. <span class="gloss" data-help="glosSelection">Selection</span>
         and <span class="gloss" data-help="glosDrift">drift</span> decide the fate of variants that already exist; only
         mutation can supply a new one.</p>
@@ -1241,8 +1242,9 @@
       body: `
         <p>A mutation is a copying error: a character changes from its <strong>ancestral</strong>
         state to a new <strong>derived</strong> one. Per site, per generation, this is rare —
-        in real genomes on the order of <code>10⁻⁸</code>, roughly one new error per hundred
-        million bases copied.</p>
+        on the order of <code>10⁻⁸</code> in many cellular organisms, roughly one new error per hundred
+        million bases copied. It is not a single number for all of life, though: rates differ by orders
+        of magnitude between groups, and RNA viruses sit far above this one.</p>
         <p>This room is not about <em>how often</em> a mutation happens. It assumes one has
         already occurred in each of four characters and asks a different question: given that a
         mutation occurs, <strong>which</strong> derived state does it produce, and with what
@@ -1621,7 +1623,8 @@
         <p>A single population tells you what happened once, not what tends to happen — the same warning the Drift
         Room's <em>Run 10 Simulations</em> button makes. Whether both mutations survive is a matter of chance, so the
         question only has an answer as a <strong>proportion over many independent runs</strong>.</p>
-        <p>Each replicate starts from the identical situation — a population of <var>A</var>₂<var>B</var>₂, one new <var>A</var>₁<var>B</var>₂, one new <var>A</var>₂<var>B</var>₁ — and is
+        <p>Each replicate starts from the identical situation — a population of <var>A</var>₂<var>B</var>₂ chromosomes with <var>A</var>₁<var>B</var>₂
+        and <var>A</var>₂<var>B</var>₁ each at the starting frequency you set, and no <var>A</var>₁<var>B</var>₁ at all — and is
         run until both loci have settled. The bars report what fraction ended each way.</p>
         <p>More replicates give a steadier estimate and take longer. Two hundred is enough to see the effect clearly;
         differences of a few percent between two settings are noise, not signal.</p>`
