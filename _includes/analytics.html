@@ -1,3 +1,18 @@
-<!--
-  put your analytics (e.g. Google Analytics) tracking code here
--->
+{% comment %}
+  Google Analytics (GA4), property G-3HJ9BYVMN3.
+
+  production only. the CI build runs with JEKYLL_ENV=production
+  (.github/workflows/build-site.yaml), while the Docker preview runs plain
+  jekyll serve, so a local preview never sends hits to the property.
+{% endcomment %}
+{% if jekyll.environment == "production" %}
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3HJ9BYVMN3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-3HJ9BYVMN3');
+  </script>
+{% endif %}
