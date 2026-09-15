@@ -25,11 +25,15 @@
   const $ = (id) => document.getElementById(id + '_lk');
 
   const COLORS = {
-    paper: '#EDE6D6', paperDim: '#E2D9C4', ink: '#262220', inkSoft: '#6b6258',
+    paper: '#EDE6D6', paperDim: '#E2D9C4', ink: '#262220', inkSoft: '#5A5249',
     rule: '#cabfa8',
     AB: '#C08A2E',   // the double mutant — the gamete that has to be built
     Ab: '#2E5C8A',
     aB: '#388047',
+    // Deliberately still the old #6b6258 rather than inkSoft above, which moved
+    // when the grey was darkened for contrast. This is a series colour, not a
+    // text colour: it has to stay identical to the fourth key in the legend
+    // under the chart in main.html, which names the curve it draws.
     ab: '#6b6258',
     stamp: '#C08A2E'
   };

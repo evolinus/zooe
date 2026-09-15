@@ -330,9 +330,9 @@
       body: `
         <p><strong>Δ measures how different two shapes are</strong>, as a single number.
         Each trait's difference is scaled by that trait's possible range, and the
-        scaled differences are combined into a normalized distance.</p>
+        scaled differences are combined into a normalised distance.</p>
         <p><strong>Δ = 0.00</strong> means identical. Larger values mean more different;
-        because it is normalized, Δ is comparable across traits and across runs.</p>
+        because it is normalised, Δ is comparable across traits and across runs.</p>
         <p>It is a measure of <em>phenotypic</em> distance only — how different two shapes
         <em>look</em>, not how closely related they are. Two lineages can reach a similar Δ
         by entirely different routes, and a lineage that happens to drift very little can
@@ -446,13 +446,23 @@
         <p>Row shading shows the selective regime: <span style="background:rgba(46,90,140,0.15);padding:0 4px;">blue</span>
         traits are under selection in this habitat and
         <span style="background:rgba(168,52,42,0.15);padding:0 4px;">red</span> traits are not
-        (they only drift). The two solid rows underneath are the same two colours at
-        full strength: <strong>Tot. sel.</strong> and <strong>Tot. neu.</strong>.</p>
-        <p>The two totals are counted change by change rather than row by row, so they
+        (they only drift). The solid rows underneath are the same colours at full
+        strength, and between them they account for every change: <strong>Sel. +</strong>
+        went the way the habitat prefers, <strong>Sel. −</strong> went against it, and
+        <strong>Tot. neu.</strong> the habitat could not see at all. The first two share
+        the blue because the colour says whether the habitat could see the change; the
+        sign says which way it went.</p>
+        <p>These totals are counted change by change rather than row by row, so they
         normally match the red and blue rows above but need not do so exactly: a
         mutation at a selected trait can occasionally land on a derived value that
         makes no difference at all to the fit (<var>s</var> = 0), and that one change
         is counted as neutral even though its row is blue.</p>
+        <p><strong>Sel. − under <em>Subs.</em> is worth watching on its own.</strong> It is
+        a change the habitat scored against and drift fixed regardless. Wrong-way
+        mutations turn up in every population at much the same rate, because mutation
+        cannot see the habitat; what population size decides is how many of them get
+        through. It is the clearest single-run sign of how efficiently a population is
+        sorting, and the thing to read in the small-vs-large task.</p>
         <p><strong>What to compare:</strong> new variants arise in a Neutral and a Habitat
         lineage at much the same rate — mutation does not care about habitat. The
         difference shows up in <em>Subs.</em>: selection converts far more of those
@@ -461,9 +471,9 @@
         <em>Mut.</em> columns need not match exactly; it is the <em>Subs.</em> gap that
         tells the story.)</p>
         <p>The same story is inside a single Habitat table: read across
-        <strong>Tot. sel.</strong> and then across <strong>Tot. neu.</strong>. Neutral
+        <strong>Sel. +</strong> and then across <strong>Tot. neu.</strong>. Neutral
         changes lose most of their mutations on the way to <em>Subs.</em>, because only
-        drift is carrying them; selected ones keep a far larger share.</p>`
+        drift is carrying them; favoured ones keep a far larger share.</p>`
     },
 
     // ---------- Tier 2: reading the panels ----------
@@ -477,7 +487,7 @@
         <p>A whole generation means spinning it once per gene copy in the pool, always
         <em>with replacement</em> — the wheel never changes during a generation, so any
         allele can be drawn many times or not at all.</p>
-        <p>The first three generations are spun one at a time so you can watch the
+        <p>The first two generations are spun one at a time so you can watch the
         sampling happen; after that the same draws are computed instantly.</p>`
     },
 
@@ -507,7 +517,7 @@
         <span style="color:#2E5C8A;">blue</span> disc (<var>A</var>₁<var>A</var>₁), two <var>A</var>₂ a solid
         <span style="color:#A8442A;">red</span> disc (<var>A</var>₂<var>A</var>₂), and one of each a blue/red
         split (the heterozygote <var>A</var>₁<var>A</var>₂).</p>
-        <p>During the first three generations the grid fills in one gamete at a time as
+        <p>During the first two generations the grid fills in one gamete at a time as
         the wheel spins — each individual's first half, then its second — so you watch
         whole individuals being assembled from random gametes.</p>`
     },
@@ -673,15 +683,24 @@
     },
 
     adaptDivMatrix: {
-      title: 'Divergence matrix and averages',
+      title: 'Divergence matrix and the lines under it',
       body: `
         <p>Each row is a founder's generation-0 fish; each column is a final lineage.
         The cell is the <strong>Δ divergence</strong> between them — how far that lineage
         travelled from its starting point.</p>
-        <p>The summary underneath averages each founder's distance from its own
-        origin, split by regime. <strong>The Habitat average is normally well above the
-        Neutral one</strong>, and that difference is the contribution of selection on top
-        of drift.</p>
+        <p>The table underneath takes each founder in turn — with its own <var>N</var> in
+        the column heading — and gives the distance its two lineages ended up from it, a
+        row per regime, with the mean of the three founders in the last column.
+        <strong>The Habitat row normally sits well above the Neutral one</strong>, and that
+        difference is the contribution of selection on top of drift.</p>
+        <p><strong>Δ is a distance, and says nothing about direction.</strong> That matters
+        most when comparing population sizes: a small population under selection travels
+        about as far from its founder as a large one, and spends the distance on changes
+        its habitat never asked for. So the last row, <strong>Habitat adapted</strong>,
+        counts what Δ cannot — of the traits this habitat actually scores, how many the
+        lineage ended up moving the way the habitat prefers. It has no mean, because two
+        habitats need not score the same number of traits. It is the row to read in the
+        small-vs-large task, alongside <strong>Sel. −</strong> in the trait tables.</p>
         <p>Also compare the off-diagonal cells: lineages in the <em>same</em> habitat tend
         to converge on a similar look even though they started from different
         founders and are not related — convergent evolution.</p>`
@@ -1194,6 +1213,15 @@
           worst: at <var>N</var> = 10 a good mutation and a bad one have nearly the same fate, so its
           lineage wanders. The large one is slower and truer. This is <var>N</var>·<var>s</var> from the
           Selection Room, seen on a whole animal.
+          <br>It also turns the selection coefficient down, to <var>s</var> = 0.05, and that is not a
+          detail. A beneficial mutation fixes with probability about 2<var>s</var>, which contains no
+          <var>N</var> at all; a neutral one fixes with probability 1/(2<var>N</var>). Population size
+          changes only the <em>ratio</em> between those two, so they have to be within reach of each
+          other before it can change anything you can see. At the room's usual <var>s</var> = 0.20 they
+          are not — 2<var>s</var> = 0.4 against 1/20 = 0.05 even at <var>N</var> = 10 — and all three
+          populations end up equally well adapted, which is a true result about 2<var>s</var> but not
+          the one this task is asking for. At <var>s</var> = 0.05, 4<var>N</var><var>s</var> runs from
+          2 to 40 and the three Habitat fish come out visibly different.
           <br>The exception has a cost worth knowing about: with the founders identical there is no
           branching order among them for the tanglegram to recover, so in this task that panel can only
           be asked whether it pairs each Neutral lineage with its own Habitat twin. Any other preset,

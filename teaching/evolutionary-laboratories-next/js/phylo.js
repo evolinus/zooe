@@ -23,7 +23,7 @@ const phyloT = (key, en, vars) => String(en).replace(/\{(\w+)\}/g, (m, k) => (va
 
 // labels: array of taxon ids. dist(a, b): symmetric distance.
 // Returns a rooted tree: { id, isLeaf, branch, children: [...] }.
-function neighborJoining(labels, dist) {
+function neighbourJoining(labels, dist) {
   const created = [];
   const mk = (id, isLeaf) => { const n = { id, isLeaf, adj: [] }; created.push(n); return n; };
   const link = (a, b, len) => { a.adj.push({ node: b, len }); b.adj.push({ node: a, len }); };

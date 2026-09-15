@@ -3,10 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <!-- unlisted copy: linked from nowhere on the site and kept out of sitemap.xml
      (see the sitemap: false defaults in _config.yaml). this tag is a local
      addition, not upstream - re-add it whenever this file is re-copied. -->
 <meta name="robots" content="noindex, nofollow">
+
+<!-- Don't let a browser serve a stale copy of this file. The scripts have the
+     ?v= token to force a refetch, but nothing was doing that job for the markup
+     itself, so a reader who had the page open before an update could get new
+     scripts against old markup — which is worse than getting neither, because a
+     room whose element has been renamed or removed throws on load and dies. The
+     folder is meant to keep working copied onto a VLE or a stick, where there is
+     no server to set a real Cache-Control header, so the meta is the only lever
+     there is. It only governs this document; the scripts beside it stay on the
+     ?v= token. Pragma and Expires are legacy, and are here because the
+     Cache-Control pragma is honoured unevenly and they cost a line each. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Evolutionary Laboratories</title>
 <meta name="description" content="Eleven interactive laboratories for teaching evolution: mutation, drift, selection and adaptation, each a live simulation you set up and run yourself.">
 <meta name="author" content="Lino Ometto">
@@ -20,12 +35,33 @@
     --paper: #EDE6D6;
     --paper-dim: #E2D9C4;
     --ink: #262220;
-    --ink-soft: #6b6258;
+    /* The quiet grey. Darkened from #6b6258, which was a hair over the line on
+       bare paper (4.81:1) and under it everywhere else — and "everywhere else"
+       is where most of it lives: of some 900 runs of this colour, two thirds sit
+       on a tinted panel rather than on the paper. The deck's wash took it to
+       3.76:1 in the Adaptation Room, the methods panel to 4.42, a README card to
+       4.26, against the 4.5 that text this size needs. One value rather than a
+       second token, because unlike the gold this is a neutral and a shade more
+       ink costs it nothing in character: it now clears 4.5 on all sixteen
+       backgrounds it is used against, worst case 4.82. It is still well clear of
+       --ink, which is what keeps secondary prose reading as secondary. */
+    --ink-soft: #5A5249;
     --rule: #cabfa8;
     --lineage-a: #3D6E6E;
     --lineage-b: #A8442A;
     --lineage-c: #7A5C99;
+    /* The gold, in two strengths, for the same reason the room colours are in
+       two: --stamp is the mark, --stamp-deep is the mark you have to read. At
+       #C08A2E on paper the gold gives 2.44:1, and on the deck's wash 1.97:1,
+       against the 4.5:1 that body-sized text needs — fine for a rule or a band,
+       where nothing has to be legible, and not fine for a room link or a
+       kicker. --stamp-deep holds the same hue (37.8 degrees) at full chroma and
+       lower lightness, so it still reads as the gold rather than as a brown:
+       5.85:1 on paper, 5.18:1 on a README card, 4.71:1 on the deck. Borders and
+       bands keep --stamp; anything that is text, or a focus ring that has to be
+       seen, takes --stamp-deep. */
     --stamp: #C08A2E;
+    --stamp-deep: #7A4D00;
     --card-shadow: 0 1px 0 rgba(38,34,32,0.06), 0 8px 20px -12px rgba(38,34,32,0.35);
     /* Branching specific leaf colors */
     --leaf-c: #3D6E6E;
@@ -35,8 +71,26 @@
     --leaf-i: #388047;
     /* Adaptation Room habitat colors — same muted palette as the Branching Room */
     --habitat-stream: #2E5C8A;
-    --habitat-pond: #A8442A;
-    --habitat-river: #B8862E;
+    /* Darkened from #A8442A for the same reason as the river below it, and
+       found only because fixing that one showed where else these colours are
+       read: besides the chip, each habitat names itself again under every fish
+       once a run finishes, and that label sits on a lineage card rather than on
+       paper. Pond cleared 4.5 on the paper of its chip, at 4.79, and missed it
+       on the card, at 4.24. Now 5.39 and 4.77. Still only the habitat token —
+       --lineage-b and --leaf-d carry the same hex elsewhere and mean other
+       things. */
+    --habitat-pond: #9B3F27;
+    /* Darkened from #B8862E, which the other two habitats never needed. The
+       chip is a button with a word in it, and it is read twice over: unselected
+       it is the habitat's colour on paper, selected it is paper on the habitat's
+       colour — the same pair either way round, so the same 2.6:1 both times,
+       against the 4.5 a label needs. Stream and Pond were already dark enough
+       (5.6 and 4.79); only the gold was not. Hue held at 38 degrees so it stays
+       the river's colour, now at 5.16:1. It no longer matches --leaf-g above,
+       which was the same hex by coincidence rather than by meaning: that one
+       names a branch in the Branching Room's tree and has to keep matching what
+       is drawn there. */
+    --habitat-river: #7A591F;
     --habitat-lake: #2F6E5E;
     --help-red: #B3141F;
     /* Reproduction Room: panel accents, plus the ancestry shades of the two
@@ -67,6 +121,43 @@
   }
   .mono{ font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
 
+  /* The hidden attribute only hides an element because the browser's own sheet
+     says display:none, and any display of ours beats it — so a styled element
+     with hidden stays on screen, which is how the sound toggle came to be
+     visible and clickable on a copy that had no track to play. Settled here
+     once, for everything, rather than per component. */
+  [hidden]{ display: none !important; }
+
+  /* The first thing a keyboard reaches, and normally the only thing it never
+     shows. Twelve tab buttons stand between the top of the page and the room
+     itself, so without this a reader on a keyboard presses Tab twelve times
+     before reaching a single control. It is placed rather than hidden off-list:
+     display:none or visibility:hidden would take it out of the tab order and
+     leave it useless. On focus it drops into the top-left corner of the window,
+     above the sticky bar's z-index so the bar cannot cover it. Fixed rather than
+     absolute: the bar is sticky and a room is several screens tall, so an
+     absolutely positioned link would appear at the top of the document and be
+     nowhere near the window whenever the reader had scrolled — focus would land
+     on something they could not see. */
+  .skip-link{
+    position: fixed;
+    left: 12px;
+    top: -60px;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    border-radius: 0 0 6px 6px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: top 120ms ease-out;
+  }
+  .skip-link:focus{ top: 0; }
+  /* The skip link's destination. It takes focus programmatically, so it needs
+     tabindex="-1" in the markup, and this clears the outline the browser would
+     otherwise draw around the whole room when focus lands there. */
+  main:focus{ outline: none; }
+
   /* Tab Navigation Styling. The bar sticks to the top of the window: rooms run
      several screens tall, and without this the only way to another room is to
      scroll all the way back up. The sticky element is the full-width strip, so
@@ -77,13 +168,49 @@
     z-index: 60;
     background: var(--paper);
     padding-top: 12px;
+    display: flex;
+    align-items: flex-start;
     box-shadow: 0 6px 12px -10px rgba(38,34,32,0.5);
   }
+  /* The sound toggle. Parked at the right-hand end of the sticky bar, quiet
+     enough to ignore and large enough to hit: 32px square clears the 24px
+     minimum for a pointer target with room to spare. It reads as pressed when
+     sound is on, which is what a screen reader announces. */
+  .sound-toggle{
+    /* Laid out beside the tab strip rather than floating above it. On a narrow
+       window that strip scrolls sideways rather than wrapping, so a toggle
+       positioned over it has the tabs slide underneath and sit on top of a room
+       name — Fate at 375px, Adaptation at 768px. Being a flex item of the bar
+       puts it outside the scroller, where nothing can pass under it. */
+    flex: 0 0 auto;
+    margin: 0 20px 0 8px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    font-size: 15px;
+    line-height: 1;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    cursor: pointer;
+    opacity: 0.75;
+  }
+  .sound-toggle:hover{ opacity: 1; }
+  .sound-toggle.is-on{ opacity: 1; border-color: var(--ink); }
+  .sound-toggle:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
+
   .tab-nav {
     display: flex;
     gap: 6px;
     max-width: 1180px;
     margin: 0 auto;
+    /* A flex item that is also a horizontal scroller has to be told it may
+       shrink, or it claims its full scroll width and pushes the toggle off. */
+    flex: 1 1 auto;
+    min-width: 0;
     padding: 0 20px;
     border-bottom: 2px solid var(--ink);
     flex-wrap: wrap;
@@ -167,7 +294,7 @@
     flex-wrap: wrap;
   }
   header.masthead .sub .sub-label{
-    color: var(--stamp);
+    color: var(--stamp-deep);
     font-weight: 700;
   }
   header.masthead h1{
@@ -191,10 +318,111 @@
     padding: 16px 18px;
     margin-bottom: 26px;
     display: grid;
-    /* 200px min keeps a label plus its help button on a single line. */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Wide enough for the longest label — "Selection coeff. s 0.10" in the
+       Selection Room — plus its step disc and its help button, on one line.
+       200px used to be enough and is not any more: the disc adds 22px, which
+       at the full 1180px page tipped that label into a second line, because 200
+       admitted a fifth column of 202px. Anything from 210px up forbids the
+       five-column case and settles on four columns of 258px; 220 is that with
+       room to spare, and still leaves one column at 320px of viewport. */
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 16px 22px;
     align-items: end;
+  }
+
+  /* A deck the reader is meant to set up before pressing Run. Until now it was
+     --paper-dim with a hairline rule — the same box as the brief above it and
+     the payoff below, so nothing said "this is the part you touch". The left
+     band is the idiom the page already uses (.room-brief, .room-payoff,
+     .room-assumes, .spec-verdict); what is new is that the colour is the ROOM's
+     own, taken from --room on the .tab-content, which carries the same value as
+     the tab button the reader just clicked. Tab, band and numbers agree.
+     Two opt-ins, because they do not always travel together. .deck-setup is the
+     band and the wash, and every setup deck takes it — a reader arriving in any
+     room should find the same signal for "this is the part you touch".
+     .deck-numbered adds the step discs, and only decks whose controls are a
+     genuine left-to-right sequence take that. Three rooms are left out, each for
+     its own reason. The Fate Room's two one-control decks are already numbered
+     Step 1 and Step 2 in prose. Adaptation's eighteen fields are grouped under
+     section headings and mostly folded into a "More parameters" drawer, so a
+     flat count would number controls the reader cannot see and imply an order
+     the panel does not have. The Mutation Room's selection coefficient appears
+     only in the Selection scenario, so any number it took would be wrong the
+     moment the reader switched back to Neutral, and the fields below it would
+     renumber under them. Speciation does take the discs, because its seven
+     primary controls are a sequence — its drawer is excluded by the rule below
+     so that opening it cannot renumber them.
+
+     Two accents per room, both set inline on the .tab-content. --room is the
+     tab colour itself and is used only where nothing sits on top of it: the
+     band and the background wash. --room-deep is that colour carried 60% of the
+     way to --ink, and is used wherever paper-coloured text sits ON the accent —
+     the step discs and the kicker. The raw tab colours were picked to read as
+     tabs, not as backgrounds for 9.5px type: six of the twelve (the Mutation
+     gold worst at 2.4:1) fall below 4.5:1 against --paper, and every one of them
+     clears it after the 60% deepening. Written out as hex rather than computed,
+     so the discs do not depend on color-mix; the wash does, and losing the wash
+     costs nothing. */
+  .deck.deck-setup{
+    border-left: 5px solid var(--room, var(--ink));
+    /* A wash of the accent rather than a new flat colour, so the paper shows
+       through. The plain declaration first: browsers without color-mix keep the
+       old --paper-dim and lose only the tint, never the panel. */
+    background: var(--paper-dim);
+    background: color-mix(in srgb, var(--room, var(--ink)) 7%, var(--paper-dim));
+  }
+
+  /* Names the panel. A reader who has just arrived on the tab should not have to
+     infer from the sliders that this is the setup. */
+  .deck-setup .deck-kicker{
+    grid-column: 1 / -1;
+    margin-bottom: -2px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--room-deep, var(--ink));
+  }
+  .deck-setup .deck-kicker .deck-kicker-note{
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--ink-soft);
+    margin-left: 8px;
+  }
+
+  /* Step numbers, from a CSS counter rather than written into the markup: a
+     control added or reordered renumbers itself, and a field that is hidden
+     (the dominance slider until Ploidy is Diploid) generates no box and so is
+     skipped rather than leaving a gap. The disc sits before the label text and
+     deliberately does not take the place of the red ? button. */
+  .deck.deck-numbered{ counter-reset: param; }
+  .deck-numbered .field{ counter-increment: param; }
+  /* A "More parameters" drawer is not part of the count. Numbering what is
+     inside one would hand a step number to a control the reader cannot see, and
+     — worse — renumber everything below it the moment the drawer is opened. The
+     Speciation Room's seven primary controls therefore stay 1 to 7 whether its
+     drawer is open or shut, and the four inside it are simply unnumbered. */
+  .deck-numbered .adapt-advanced .field{ counter-increment: none; }
+  .deck-numbered .adapt-advanced .field > label::before{ content: none; }
+  .deck-numbered .field > label::before{
+    content: counter(param);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    vertical-align: -3px;
+    border-radius: 50%;
+    background: var(--room-deep, var(--ink));
+    color: var(--paper);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0;
   }
 
   .readme-content{
@@ -208,7 +436,7 @@
   }
   .readme-content p{ margin: 0 0 16px; }
   .readme-content p:last-child{ margin-bottom: 0; }
-  .readme-content a{ color: var(--stamp); }
+  .readme-content a{ color: var(--stamp-deep); }
   .readme-content h2{
     font-size: 21px;
     margin: 30px 0 4px;
@@ -219,20 +447,22 @@
   .readme-content h2 .room-num{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 13px;
-    color: var(--stamp);
+    color: var(--stamp-deep);
     margin-right: 8px;
   }
-  .readme-content h3{
+  .readme-content h2.readme-minor{
     font-size: 15px;
     margin: 24px 0 8px;
     letter-spacing: 0.2px;
+    padding-top: 0;
+    border-top: none;
   }
   .readme-content .room-kicker{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--stamp);
+    color: var(--stamp-deep);
     margin: 0 0 12px;
   }
   .readme-content .lead{ font-size: 16px; }
@@ -368,6 +598,24 @@
     color: var(--paper);
   }
 
+  /* The starting-shape buttons show what they draw. Both glyphs are the thing
+     shapes-engine actually starts from rather than a generic icon: the polygon
+     is its quadrilateral of four vertices with the two dots inside, and the fish
+     faces left, nose to tail, the way it is drawn on the canvas. Stroked in
+     currentColor so they invert with the button when it becomes the active one,
+     and aria-hidden, since the word beside them already names the choice. */
+  .segmented .seg-ico{
+    width: 15px;
+    height: 15px;
+    margin-right: 6px;
+    vertical-align: -3px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.3;
+    stroke-linejoin: round;
+  }
+  .segmented .seg-ico .seg-ico-solid{ fill: currentColor; stroke: none; }
+
   /* Habitat choice buttons (Adaptation Room) — color-coded like the
      Branching Room's leaf palette: font colored when unselected, button
      fill colored when selected. */
@@ -415,7 +663,7 @@
     color: inherit;
   }
   .gloss:hover{ background: rgba(179, 20, 31, 0.08); }
-  .gloss:focus-visible{ outline: 2px solid var(--stamp); outline-offset: 2px; }
+  .gloss:focus-visible{ outline: 2px solid var(--stamp-deep); outline-offset: 2px; }
   .help-btn:hover{ background: #8f0f18; }
   .help-btn:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
 
@@ -507,7 +755,7 @@
     font-size: 11px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: var(--stamp);
+    color: var(--stamp-deep);
   }
   .infer-toggle .segmented{ width: auto; }
   .infer-toggle .segmented button{ padding: 6px 14px; }
@@ -579,6 +827,19 @@
     justify-content:space-between;
     align-items:baseline;
     margin-bottom:8px;
+    /* A card head is a title and, opposite it, a readout. On a phone-width card
+       a long title fills the line and the two end up touching — "After G gens"
+       against "all ancestral", "Binomial Distribution P(k | N, p)" against its
+       count. The gap is one they cannot lose, and the wrap lets the readout drop
+       to its own line when even that will not fit, rather than being squeezed
+       against the title or — the diploid allele legend's case — hanging off the
+       card altogether. It only ever moves a head that had nothing left to give:
+       checked at 1024, the five heads it rearranges are the five whose title and
+       readout were already touching at a gap of zero, and every head with slack
+       is left exactly as it was. */
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 4px;
   }
   .lineage-head .name{
     font-weight:700;
@@ -602,7 +863,7 @@
   }
   /* Binomial panel: tint E[<var>k</var>] and O[<var>k</var>] to match the bars they point at. */
   .k-expected{ color:#1F3A52; font-weight:700; }
-  .k-observed{ color: var(--stamp); font-weight:700; }
+  .k-observed{ color: var(--stamp-deep); font-weight:700; }
   .stage-canvas{
     width:100%;
     aspect-ratio: 1 / 1;
@@ -676,10 +937,16 @@
     align-items: baseline;
     justify-content: flex-end;
     gap: 12px;
-    white-space: nowrap;
     color: var(--ink);
-    flex: none;
+    /* It was flex:none with nowrap on the whole thing, so it could neither
+       shrink nor break. It may now do both; nowrap moved onto each entry, which
+       is where it was wanted anyway, so "Allele A₁" never breaks across lines. */
+    flex: 0 1 auto;
+    min-width: 0;
+    flex-wrap: wrap;
+    row-gap: 2px;
   }
+  .lineage-head .allele-legend > span{ white-space: nowrap; }
   /* A card in a row whose items stretch: its canvas grows so the card matches
      the tallest card beside it. Every room sizes its canvas from the wrapper's
      real height, so this needs no JS. */
@@ -802,7 +1069,7 @@
     margin-top: 26px;
     max-width: var(--prose-width, 110ch);
   }
-  .room-assumes h3{
+  .room-assumes h2{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11px;
     letter-spacing: 1.5px;
@@ -819,19 +1086,19 @@
   .room-assumes .lifted .room-link{ color: var(--ink-soft); }
   .room-assumes .lifted .room-link:hover{ color: var(--ink); }
 
-  .room-brief h3, .room-payoff h3{
+  .room-brief h2, .room-payoff h2{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--stamp);
+    color: var(--stamp-deep);
     margin: 0 0 8px;
   }
   .room-brief .try-label{ font-weight: 700; }
   /* Pointers to other rooms, so a student can follow a thread across the set. */
   .room-link{
     background: none; border: none; padding: 0;
-    font: inherit; color: var(--stamp);
+    font: inherit; color: var(--stamp-deep);
     text-decoration: underline; text-underline-offset: 2px;
     cursor: pointer;
   }
@@ -856,7 +1123,7 @@
   .reading .divergence-line{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 12px;
-    color: var(--stamp);
+    color: var(--stamp-deep);
   }
 
   /* The methods note. It used to be an open paragraph at the foot of every room,
@@ -886,8 +1153,10 @@
     letter-spacing: 0.2px;
     line-height: 1.55;
   }
-  /* Set as a panel heading, matching the other panels' h3 rather than the
-     hairline label this used to be — the box is only half of being findable. */
+  /* Set as a panel heading, matching the other panels' section heading rather
+     than the hairline label this used to be — the box is only half of being
+     findable. A <summary> is not a heading element, so it takes the look
+     without joining the room's outline. */
   details.room-methods > summary{
     cursor: pointer;
     list-style: none;
@@ -968,7 +1237,7 @@
     font-size: 13.5px;
     line-height: 1.6;
   }
-  .sa-legend h3{ margin: 0 0 8px; font-size: 14px; }
+  .sa-legend h2{ margin: 0 0 8px; font-size: 14px; }
   .sa-legend ul{ margin: 0; padding-left: 18px; }
   .sa-legend li{ margin-bottom: 3px; }
   .sa-swatch{
@@ -985,9 +1254,9 @@
     box-shadow: var(--card-shadow);
     padding: 16px 18px;
   }
-  .sa-card h3{ margin: 0 0 2px; font-size: 17px; color: var(--accent, var(--ink)); }
+  .sa-card h2{ margin: 0 0 2px; font-size: 17px; color: var(--accent, var(--ink)); }
   .sa-card .lede{ margin: 0 0 12px; font-size: 13px; color: var(--ink-soft); font-style: italic; }
-  .sa-card h4{
+  .sa-card h3{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
     margin: 12px 0 6px; color: var(--ink-soft);
@@ -1005,7 +1274,7 @@
     border-radius: 6px;
     padding: 16px 20px;
   }
-  .sa-note h3{ margin: 0 0 8px; font-size: 15px; }
+  .sa-note h2{ margin: 0 0 8px; font-size: 15px; }
   .sa-note p{ margin: 0 0 10px; }
   .sa-note p:last-child{ margin: 0; }
 
@@ -1073,7 +1342,7 @@
     font-size: 12px;
     letter-spacing: 1.6px;
     text-transform: uppercase;
-    color: var(--stamp);
+    color: var(--stamp-deep);
     margin: 34px 0 14px;
     padding-bottom: 8px;
     border-bottom: 2px solid var(--ink);
@@ -1096,41 +1365,54 @@
   /* Room 5 (Adaptation) Specific Styles */
   /* Each founder gets its own row, a 5-column grid:
      Neutral trait table | Neutral "Now" fish | shared Gen-0 fish |
-     Habitat "Now" fish | Habitat trait table. The three fish columns are
-     equal width so the Gen-0 card lines up exactly with its two neighbors,
-     which are joined to it by SVG connector lines (drawn in JS from the
-     cards' real positions — see .adapt-connector-svg). A habitat caption
-     sits below each side. */
+     Habitat "Now" fish | Habitat trait table. The Gen-0 card is deliberately
+     the small one, centred in a narrow column between its two descendants and
+     joined to them by SVG connector lines (drawn in JS from the cards' real
+     positions — see .adapt-connector-svg). A habitat caption sits below each
+     side. Every size here is chosen against one requirement: three founders
+     have to be readable on one screen, or the comparison the room is built
+     around becomes a scroll. */
   .adapt-founder-row{
     background: var(--paper-dim);
     border: 1px solid var(--rule);
     border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
     /* Overridden per-founder in JS to the selected habitat's color; used by
        both the habitat fish card's border and its Gen-0 connector line. */
     --habitat-color: var(--ink);
   }
   .adapt-founder-row:last-child{ margin-bottom: 0; }
+  /* Name and population size share one line. The three founders are meant to
+     be compared against each other, which means seeing them at once, and every
+     line of chrome above a row is a line of the next founder pushed off the
+     bottom of the screen. */
   .adapt-founder-name{
+    display: inline-block;
     font-weight: 700;
-    font-size: 17px;
-    margin-bottom: 2px;
+    font-size: 16px;
+    margin: 0 10px 6px 0;
   }
   /* The population size belongs beside the name, not only on a slider up in the
      deck: the small-vs-large task is unreadable if you have to scroll back to
      remember which row is which. */
   .adapt-founder-n{
+    display: inline-block;
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11.5px;
     color: var(--ink-soft);
-    margin-bottom: 12px;
+    margin: 0 0 6px;
   }
   .adapt-founder-n .adapt-n-value{ color: var(--ink); font-weight: 700; }
   .adapt-row-grid{
     display: grid;
-    grid-template-columns: 0.75fr 1.3fr 1.3fr 1.3fr 0.75fr;
-    gap: 14px;
+    /* The ancestor's column is sized for the small card it now holds, and what
+       it gives up goes to the two descendant columns — where it buys not a
+       bigger fish (those are capped) but a wider caption, which is the
+       difference between a habitat's list of favoured traits reading over two
+       lines and over three, in six places at once. */
+    grid-template-columns: 0.9fr 1.35fr 0.5fr 1.35fr 0.9fr;
+    gap: 12px;
     align-items: start;
     position: relative;
     z-index: 0; /* keeps the connector SVG's negative z-index contained locally */
@@ -1138,7 +1420,7 @@
        value is measured and set from drawFounderConnectors(), which knows how
        much clearance the ⊥ connector needs under the ancestor's caption; this
        is only the sensible-looking fallback before that first measurement. */
-    --adapt-drop: 78px;
+    --adapt-drop: 52px;
   }
   .adapt-row-grid > *{ min-width: 0; }
   /* Everything except the ancestor sits one tier lower, so the row reads as a
@@ -1167,6 +1449,10 @@
   .adapt-fish-card{
     position: relative;
     width: 80%;
+    /* Capped, not just proportional. On a wide screen a percentage column grows
+       the cards until one founder fills the viewport, which is exactly what
+       stops the three from being read against each other. */
+    max-width: 140px;
     margin: 0 auto;
     aspect-ratio: 1 / 1;
   }
@@ -1174,9 +1460,16 @@
     width: 100%; height: 100%;
     display: block;
     background: var(--paper);
-    border: 6px solid var(--ink);
+    border: 5px solid var(--ink);
     border-radius: 10px;
   }
+  /* The ancestor is drawn small. It is one fish, shared, and already read
+     before the run; the comparison the room is asking for is between the two
+     below it. Its own slot is also what sets the tier gap — the drop clears the
+     whole ancestor card plus caption — so a smaller card here is the single
+     biggest saving in the height of a row. */
+  .adapt-g0-slot .adapt-fish-card{ width: 84px; max-width: 100%; }
+  .adapt-g0-slot .adapt-fish-card canvas{ border-width: 3px; border-radius: 7px; }
   .adapt-habitat-fish-card canvas{ border-color: var(--habitat-color); }
   /* Each card's caption sits directly beneath it and states that lineage's
      selective regime in full, color-coded to match the card's own border:
@@ -1184,11 +1477,12 @@
      lineage, and the habitat's color for the selected one. */
   .adapt-fish-slot .adapt-fish-label{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: 13px;
+    font-size: 11px;
     color: var(--ink-soft);
-    line-height: 1.45;
-    margin-top: 8px;
+    line-height: 1.3;
+    margin-top: 6px;
   }
+  .adapt-g0-slot .adapt-fish-label{ margin-top: 4px; }
   .adapt-fish-slot .adapt-label-ancestor{ color: var(--ink); font-weight: 600; }
   .adapt-fish-slot .adapt-label-neutral{ color: var(--ink-soft); }
   .adapt-fish-slot .adapt-label-habitat{ color: var(--habitat-color); font-weight: 600; }
@@ -1201,7 +1495,7 @@
   }
   table.adapt-trait-table th, table.adapt-trait-table td{
     border: 1px solid var(--rule);
-    padding: 3px 4px;
+    padding: 2px 4px;
     text-align: left;
   }
   table.adapt-trait-table th{ background: var(--paper); color: var(--ink); font-weight: normal; }
@@ -1209,20 +1503,18 @@
   table.adapt-trait-table td.adapt-num, table.adapt-trait-table th:not(:first-child){ text-align: right; }
   /* Two colours, two strengths: blue is under selection, red is neutral, and
      the pale trait rows are the same hues as the solid summary rows beneath
-     them, so the eye can run down a colour to its total. */
+     them, so the eye can run down a colour to its total. Sel. + and Sel. −
+     share the blue on purpose — the colour says whether the habitat could see
+     the change at all, and the sign in the label says which way it went. */
   table.adapt-trait-table tr.adapt-row-selected{ background: rgba(46, 90, 140, 0.09); }
   table.adapt-trait-table tr.adapt-row-neutral{ background: rgba(168, 52, 42, 0.09); }
-  table.adapt-trait-table tr.adapt-tot-sel td{ color: var(--ink); background: rgba(46, 90, 140, 0.28); }
+  table.adapt-trait-table tr.adapt-tot-sel td,
+  table.adapt-trait-table tr.adapt-tot-bad td{ color: var(--ink); background: rgba(46, 90, 140, 0.28); }
   table.adapt-trait-table tr.adapt-tot-neu td{ color: var(--ink); background: rgba(168, 52, 42, 0.28); }
   table.adapt-trait-table tr.adapt-tot-sel td:first-child,
+  table.adapt-trait-table tr.adapt-tot-bad td:first-child,
   table.adapt-trait-table tr.adapt-tot-neu td:first-child{ font-weight: bold; }
   table.adapt-trait-table tr.adapt-total td{ color: var(--ink); font-weight: bold; background: var(--paper); }
-  p.adapt-tbl-key{
-    margin: 4px 0 0;
-    font-size: 9.5px;
-    line-height: 1.35;
-    color: var(--ink-soft);
-  }
   .adapt-n-row{
     grid-column: 1 / -1;
     display: grid;
@@ -1242,7 +1534,7 @@
     font-size: 11px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--stamp);
+    color: var(--stamp-deep);
     margin: 18px 0 8px;
     padding-top: 10px;
     border-top: 1px solid var(--rule);
@@ -1286,7 +1578,7 @@
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11px;
     letter-spacing: 1px;
-    color: var(--stamp);
+    color: var(--stamp-deep);
     padding: 10px 0;
     list-style: none;
   }
@@ -1309,6 +1601,12 @@
     margin-top: 2px;
   }
   table.divtable.adapt-divmatrix th, table.divtable.adapt-divmatrix td{ font-size: 11px; padding: 3px 7px; }
+  /* Each lineage against its own founder: a row per regime, a column per
+     founder. The row headings are labels rather than data, so they sit left
+     and never wrap; the founder columns are the comparison, so they stay
+     centred like the matrix above. */
+  table.divtable.adapt-ownfounder{ font-size: 11.5px; }
+  table.divtable.adapt-ownfounder tr > th:first-child{ text-align: left; white-space: nowrap; }
   /* The mutation/substitution ledger. Row headings are left-aligned because
      they are labels rather than data, and the two summary rows are marked off
      so the eye can find the comparison the table exists for. */
@@ -1336,7 +1634,27 @@
     color: var(--ink);
     max-width: var(--prose-width);
   }
+  /* Row one is the Original fish and the four wheels, five cards across. The
+     wheel grid takes the last four tracks and divides them with the same 20px
+     gap the outer grid uses, so a wheel comes out exactly as wide as the card
+     beside it — spanning four tracks gives 4T + 3 gaps, and four columns with
+     three gaps of their own hands back T. */
+  .mut-wheel-row{ margin: 0 0 20px; align-items: start; }
+  .mut-wheel-row .wheel-grid{
+    grid-column: span 4;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-bottom: 0;
+  }
   .mut-fish-stage{ margin: 0 0 20px; }
+  /* Both rows run on the same five-track grid, so the three fish panels — the
+     Original above, the Mutant and After G below — come out at exactly one
+     track each, and so does every wheel. Only the Derived alleles card is
+     different: it takes the three tracks left in the middle, because four
+     trajectories sharing a square panel are a thicket. Its canvas is the one
+     thing on the page that is not square, and drawFreqChart takes its height
+     from the Mutant canvas beside it rather than from its own width, or the row
+     would stand three times as tall as its neighbours. */
+  .mut-derived-card{ grid-column: span 3; }
   .mut-fish-stage .stage-canvas.freq-canvas{
     background: var(--paper);
   }
@@ -1412,7 +1730,7 @@
     border-bottom: 1px dashed var(--rule);
     margin-bottom: 8px;
   }
-  .wheel-result.has-result{ color: var(--stamp); font-weight: 700; }
+  .wheel-result.has-result{ color: var(--stamp-deep); font-weight: 700; }
   .wheel-legend{
     list-style: none;
     margin: 0;
@@ -1432,7 +1750,7 @@
     color: var(--ink-soft);
   }
   .wheel-legend-item.is-landed{ color: var(--ink); font-weight: 700; }
-  .wheel-legend-item.is-favoured .wheel-lg-label{ color: var(--stamp); }
+  .wheel-legend-item.is-favoured .wheel-lg-label{ color: var(--stamp-deep); }
   .wheel-sw{
     width: 12px; height: 12px;
     border-radius: 3px;
@@ -1442,10 +1760,13 @@
   .wheel-lg-label{ flex: 1; }
   .fav-star{ color: var(--ink); }
 
-  .mut-selection{ margin-top: 24px; }
+  /* The selected scenario's detail, opened by the Fate of the alleles choice in
+     the deck above it. It spans the deck so its two paragraphs keep a readable
+     measure rather than being squeezed into one 258px column. */
   .mut-selection-panel{
     display: none;
-    margin-top: 14px;
+    grid-column: 1 / -1;
+    margin-top: 2px;
     background: var(--paper-dim);
     border: 1px solid var(--rule);
     border-left: 4px solid var(--stamp);
@@ -1497,10 +1818,20 @@
     min-height: 2.6em;
   }
   .spec-habitat-badge{ font-style: normal; font-weight: 700; }
+  /* The mean fish and the six individuals used to stack, which made each card
+     tall enough that the two daughters and the verdict together ran past the
+     bottom of a laptop screen — you could not see a run and its outcome at the
+     same time. Side by side, the card is as tall as its taller half instead of
+     as tall as both. */
+  .spec-pop-body{
+    display: grid;
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
   .spec-mean-wrap{
-    width: 46%;
-    max-width: 160px;
-    margin: 0 auto 4px;
+    width: 100%;
+    margin: 0 0 4px;
   }
   .spec-mean-wrap canvas{
     display: block;
@@ -1509,6 +1840,8 @@
     border: 2px solid var(--accent, var(--ink));
     border-radius: 6px;
   }
+  .spec-mean-label,
+  .spec-individuals-label{ margin-bottom: 0; }
   .spec-mean-label{
     text-align: center;
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -1520,9 +1853,17 @@
      scaleCanvas gives an inline pixel width, and a plain 1fr track refuses to
      shrink below that min-content width — so the row would keep its old
      desktop size and overflow the card after a narrowing resize. */
+  /* Three across and two down rather than six across: the ancestral card is the
+     narrow one, and six in a row would leave its fish about 33px wide. The cap
+     is on the track and not on the canvas — scaleCanvas writes an inline width
+     and height, so capping the canvas narrows it and leaves its height, and the
+     fish comes out stretched. Capped because the daughters' half is wide enough
+     that three would otherwise grow past the size they had when there were six,
+     which is the opposite of what this layout is for. */
   .spec-individuals{
     display: grid;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 96px));
+    justify-content: center;
     gap: 5px;
     margin-bottom: 4px;
   }
@@ -1648,7 +1989,19 @@
   .deck details.adapt-advanced.spec-advanced[open]{ flex: 1 0 100%; padding: 2px 16px; }
   .deck details.adapt-advanced.spec-advanced summary{ font-size: 12px; }
 
-  .spec-strip-wrap{ overflow-x: auto; padding-bottom: 4px; }
+  .spec-strip-wrap{ overflow-x: auto; padding-bottom: 4px; min-width: 0; }
+  /* Every wrapper that holds one of these tables scrolls in its own box. A table
+     does not shrink below the sum of its columns, so the substitutions table's
+     760px min-content was handed to .reading — a grid — as its column minimum,
+     and every block in the room's closing section was laid out to it, the
+     history scrubber included: on a phone the whole room scrolled sideways.
+     Written as a list rather than per id because the Speciation Room has two of
+     these and the Adaptation Room seven, and the next one added would otherwise
+     bring the bug back with it. */
+  #subTableWrap_spec,
+  #divTableWrap_spec,
+  #divMatrixWrap_adapt,
+  [id^="traitTableWrap_"]{ overflow-x: auto; min-width: 0; }
   /* The 13 morphological loci keep a column each, narrow enough that all five
      trait groups still leave room for the barcodes; the 1,000 non-morphological
      ones share whatever width is left. The min-width is what the trait groups
@@ -1686,7 +2039,7 @@
     text-overflow: ellipsis;
   }
   .spec-mode-divergent .spec-sel-tag{ color: var(--help-red); font-weight: 700; }
-  .spec-mode-parallel .spec-sel-tag{ color: var(--stamp); }
+  .spec-mode-parallel .spec-sel-tag{ color: var(--stamp-deep); }
   .spec-strip-cells{ display: grid; gap: 2px; margin-bottom: 2px; }
   .spec-cell{
     height: 17px;
@@ -1720,23 +2073,41 @@
   .spec-chart-box canvas{ display: block; width: 100%; }
 
   @media (max-width: 900px){
-    .stage-area{ grid-template-columns: 1fr !important; }
+    /* Every one-column override here is minmax(0, 1fr) rather than a bare 1fr.
+       These grids hold canvases, and scaleCanvas gives a canvas an inline pixel
+       width; a plain 1fr track will not shrink below that min-content width, so
+       after a narrowing resize the column keeps the size it had on the desktop
+       layout and pushes the room sideways off the page. The note on
+       .spec-individuals is the same point. */
+    .stage-area{ grid-template-columns: minmax(0, 1fr) !important; }
     header.masthead .masthead-brand{ display:none; }
     /* One column: the cards are stacked one under another, so there is no tier
        to drop and no ⊥ to draw. drawFounderConnectors() reads the SVG's
        display to know it is in this layout and removes its inline drop. */
-    .adapt-row-grid{ grid-template-columns: 1fr !important; --adapt-drop: 0px; }
+    .adapt-row-grid{ grid-template-columns: minmax(0, 1fr) !important; --adapt-drop: 0px; }
     .adapt-connector-svg{ display: none !important; }
-    .adapt-n-row{ grid-template-columns: 1fr !important; }
-    .spec-daughters{ grid-template-columns: 1fr !important; }
+    .adapt-n-row{ grid-template-columns: minmax(0, 1fr) !important; }
+    .spec-daughters{ grid-template-columns: minmax(0, 1fr) !important; }
+    /* Below this the card is too narrow to hold both halves side by side.
+       minmax(0, 1fr) and not a bare 1fr, for the reason the note on
+       .spec-individuals gives: the cells hold canvases that scaleCanvas has
+       given an inline pixel width, so a plain 1fr refuses to shrink under that
+       min-content width and the card overflows the page instead. */
+    .spec-pop-body{ grid-template-columns: minmax(0, 1fr) !important; }
+    .spec-individuals{ grid-template-columns: repeat(6, minmax(0, 1fr)) !important; }
     .spec-y-connector{ display: none !important; }
-    .spec-criteria{ grid-template-columns: 1fr !important; }
-    .spec-charts{ grid-template-columns: 1fr !important; }
+    .spec-criteria{ grid-template-columns: minmax(0, 1fr) !important; }
+    .spec-charts{ grid-template-columns: minmax(0, 1fr) !important; }
+    /* One column: the wheels wrap on their own and the wide panel has nothing
+       left to be wide against. */
+    .mut-wheel-row .wheel-grid{ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) !important; }
+    .mut-derived-card{ grid-column: auto !important; }
   }
 </style>
 </head>
 <body>
 
+  <a class="skip-link" href="#roomContent">Skip to the room</a>
 
   <!-- Master Navigation Tab Bar. Order is the reading order, and a rule stands
        at each boundary between the four parts: README | I Copying, Branching |
@@ -1761,8 +2132,20 @@
     <button class="tab-btn" role="tab" id="tabbtn-hardyweinberg" aria-controls="tab-hardyweinberg" aria-selected="false" style="--tab: #8B3E62" onclick="switchTab('hardyweinberg', event)">H–W</button>
     <button class="tab-btn" role="tab" id="tabbtn-linkage" aria-controls="tab-linkage" aria-selected="false" style="--tab: #8B5E3C" onclick="switchTab('linkage', event)">Linkage</button>
   </div>
+  <!-- Sound sits in the bar but outside the tablist above: it is not a
+       thirteenth room, and a screen reader should not count it as one. It is
+       hidden until js/sound.js has found the track. -->
+  <button type="button" id="soundToggle" class="sound-toggle" aria-pressed="false"
+          aria-label="Turn simulation sound on" title="Turn simulation sound on" hidden>&#128263;</button>
   </div>
 
+
+  <!-- Every room lives in here, so that "the content" is one landmark a screen
+       reader can jump to rather than twelve panels it has to be walked through.
+       tabindex="-1" is what lets the skip link above put focus on it; the rooms
+       keep their own headers, which are plain headers rather than banners once
+       they sit inside main. -->
+  <main id="roomContent" tabindex="-1">
 
   <!-- ========================================== -->
   <!-- TAB 0: README                               -->
@@ -1784,14 +2167,14 @@
     <div class="readme-content">
         <p class="lead">Welcome to the Evolutionary Laboratories. On these pages you can use interactive simulations to explore evolutionary mechanisms and processes in an intuitive, hands-on way.</p>
 
-        <h3>How to use the rooms</h3>
+        <h2 class="readme-minor">How to use the rooms</h2>
         <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong> (or Start), and <strong>read the panels</strong> that fill in below. Nothing is precomputed — each run is a fresh simulation, so running the same settings twice will not give the same result: these are random processes, and the parameters set tendencies, never outcomes.</p>
         <p>Two features are worth knowing about before you start:</p>
         <ul>
           <li>The <strong>History Scrubber</strong> at the bottom of the Copying, Branching, Drift, Selection, Adaptation and Speciation rooms lets you drag back through a finished run and replay any generation. Nothing is lost when a run ends.</li>
           <li>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</li>
         </ul>
-        <h3>Words worth pinning down</h3>
+        <h2 class="readme-minor">Words worth pinning down</h2>
         <p>These seventeen come up again and again. Each is underlined wherever it first appears — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
         <ul>
           <li><span class="gloss" data-help="glosChromosome">Chromosome</span> — a long molecule of DNA carrying many genes in a fixed order.</li>
@@ -1904,7 +2287,7 @@
   <!-- ========================================== -->
   <!-- TAB 1: THE COPYING ROOM                    -->
   <!-- ========================================== -->
-  <div id="tab-copying" class="tab-content page">
+  <div id="tab-copying" class="tab-content page" style="--room: #3D6E6E; --room-deep: #34504F">
     <header class="masthead">
       <div>
         <h1>The Copying Room</h1>
@@ -1919,26 +2302,27 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
-      <p><strong>What it shows.</strong> A single starting figure is copied over and over. Every copy introduces a small random error — no error is large, and none of them is aimed at anything. You can run up to 100 lineages side by side, all starting from the same figure.</p>
-      <p><span class="try-label">Try this.</span> Press <em>Start copying</em> and watch a single lineage drift away from the shape it began as. Then switch to 3 lineages and run it again: all three start out identical, and all three end up different from one another. Set the <span class="gloss" data-help="glosMutation">mutation</span> size to its smallest value and run it for many <span class="gloss" data-help="glosGeneration">generations</span>. Finally, switch to 100 lineages to see the whole cloud of possibilities at once.</p>
+      <h2>Start here</h2>
+      <p><strong>What it shows.</strong> A single starting figure is copied over and over. Every copy introduces a small random error — no error is large, and none of them is aimed at anything. You can run up to 50 lineages side by side, all starting from the same figure.</p>
+      <p><span class="try-label">Try this.</span> Press <em>Start copying</em> and watch a single lineage drift away from the shape it began as. Then switch to 3 lineages and run it again: all three start out identical, and all three end up different from one another. Set the <span class="gloss" data-help="glosMutation">mutation</span> size to its smallest value and run it for many <span class="gloss" data-help="glosGeneration">generations</span>. Finally, switch to 50 lineages to see the whole cloud of possibilities at once.</p>
     </div>
 
-    <div class="deck">
-      <div class="field" style="grid-column: 1 / -1;">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">four choices, then press Start copying.</span></div>
+      <div class="field">
         <label id="lbl-shapeSeg_copy">Starting shape</label>
         <div role="group" aria-labelledby="lbl-shapeSeg_copy" class="segmented" id="shapeSeg_copy">
-          <button data-shape="polygon" class="active">Polygon</button>
-          <button data-shape="fish">Fish</button>
+          <button data-shape="polygon" class="active"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 4.4 L12.6 2.9 L13.1 12.4 L4.1 12.9 Z"/><circle class="seg-ico-solid" cx="6.6" cy="6.8" r="1.5"/><circle class="seg-ico-solid" cx="10" cy="9.9" r="1.5"/></svg>Polygon</button>
+          <button data-shape="fish"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.6 8 C4 4.6 8.6 4.4 10.8 8 C8.6 11.6 4 11.4 2.6 8 Z"/><path class="seg-ico-solid" d="M10.8 8 L14.6 5.2 L13.5 8 L14.6 10.8 Z"/><circle class="seg-ico-solid" cx="4.9" cy="7.3" r="0.8"/></svg>Fish</button>
         </div>
       </div>
 
       <div class="field">
-        <label id="lbl-lineageCountSeg_copy">Lineages running in parallel</label>
+        <label id="lbl-lineageCountSeg_copy">Lineages in parallel</label>
         <div role="group" aria-labelledby="lbl-lineageCountSeg_copy" class="segmented" id="lineageCountSeg_copy">
           <button data-n="1" class="active">1</button>
           <button data-n="3">3</button>
-          <button data-n="100">100</button>
+          <button data-n="50">50</button>
         </div>
       </div>
 
@@ -1948,18 +2332,13 @@
       </div>
 
       <div class="field">
-        <label for="speed_copy"><span>Copying speed</span> <span class="value" id="speedVal_copy">50 ms/gen</span></label>
-        <input type="range" id="speed_copy" min="10" max="200" value="50">
-      </div>
-
-      <div class="field">
         <label for="maxGen_copy"><span>Stop after <var>N</var> copies</span> <span class="value" id="maxGenVal_copy">100</span></label>
         <input type="range" id="maxGen_copy" min="2" max="400" value="100">
       </div>
 
       <div class="transport">
-        <button class="btn" id="playBtn_copy">▶ Start copying</button>
-        <button class="btn secondary" id="stepBtn_copy">Step once</button>
+        <button class="btn" id="playBtn_copy" data-sound data-results="#stageArea_copy">▶ Start copying</button>
+        <button class="btn secondary" id="stepBtn_copy" data-results="#stageArea_copy">Step once</button>
         <button class="btn secondary" id="resetBtn_copy">↺ New starting shape</button>
         <span class="status mono" id="statusLine_copy">gen 0 / 100 — idle</span>
       </div>
@@ -1969,7 +2348,7 @@
 
     <div class="time-machine-container" style="margin-top: 20px;">
       <div class="field">
-        <label for="timeScrubber_copy" style="color: var(--stamp)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_copy">0</span></label>
+        <label for="timeScrubber_copy" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_copy">0</span></label>
         <input type="range" id="timeScrubber_copy" min="0" max="0" value="0" disabled>
       </div>
     </div>
@@ -1981,7 +2360,7 @@
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>No population.</strong> One fish copies itself, and that is all. Nothing is born, nothing dies and nothing competes, so nothing here can be selected for or against — every change you see is copying error and nothing else.</li>
         <li><strong>Traits mutate independently, inside fixed bounds.</strong> Each feature takes its own step, and the drawing holds every one inside a range so that the fish stays a fish. Real traits are tied to one another by development, and real limits are pressures, not walls.</li>
@@ -1992,7 +2371,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>There is no selection here and no goal — yet the shapes still change, and they change in <em>different directions</em>. The divergence readout (Δ) climbs steadily. This is the base fact all the other rooms build on: copying is imperfect, it introduces mutations, which are not bad or good <em>per se</em>.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('branching');">Branching Room</button> lets these lineages split, which is how one species becomes several. The <button type="button" class="room-link" onclick="switchTab('fate');">Fate Room</button> picks a single one of these copying errors and follows it, in a whole population, to the end — and the <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> zooms in on where such an error comes from in the first place.</p>
     </div>
@@ -2001,7 +2380,7 @@
       <p>One lineage — or 3, or 100, every one of them started from the identical figure — copied for up to 400 generations, with no population, no death and nothing competing. A shape is a list of independent parameters: 18 for the polygon, 26 for the fish, counting the colours and the stroke width as well as the geometry. Each generation every parameter takes its own Gaussian step of standard deviation <var>σ</var> and is then clipped to the range that keeps the figure drawable, the Mutation size slider setting <var>σ</var> as a fraction of that range — about 0.017 at setting 1, 0.041 at 3, 0.065 at 5. The Δ on each card and the pairwise Δ under the stage are one and the same measure, a root-mean-square over the <var>K</var> parameters:</p>
       <p class="eq">Δ = √[(1/<var>K</var>)·Σ(<var>δ</var><sub><var>k</var></sub>/range<sub><var>k</var></sub>)²]<span class="eq-note">Δ = 0.10 means the traits differ by a tenth of their range on average — normalising by the range is what makes the number comparable between a polygon and a fish, which have neither the same parameters nor the same units</span></p>
       <p>Every parameter is therefore an unbiased random walk, and everything the room shows falls out of that one fact.</p>
-      <p class="eq"><var>x</var>(<var>t</var>) − <var>x</var>(0) ~ Normal(0, <var>σ</var>²<var>t</var>)<span class="eq-note">no step is aimed at anything, so the cloud of 100 lineages spreads without travelling: the variance grows with time, the average does not move</span></p>
+      <p class="eq"><var>x</var>(<var>t</var>) − <var>x</var>(0) ~ Normal(0, <var>σ</var>²<var>t</var>)<span class="eq-note">no step is aimed at anything, so the cloud of 50 lineages spreads without travelling: the variance grows with time, the average does not move</span></p>
       <p class="eq">E[Δ²] = <var>σ</var>²<var>t</var>, so Δ ≈ <var>σ</var>√<var>t</var><span class="eq-note">the "Δ from origin" on each card — divergence grows with the square root of elapsed time, so twice as different takes four times as long</span></p>
       <p class="eq">for two lineages, E[Δ²] = 2<var>σ</var>²<var>t</var>, so Δ<sub>pair</sub> ≈ √2·Δ<sub>origin</sub><span class="eq-note">two independent walks instead of one: the divergence line under the stage should read about 1.41 times the figure on the cards, and over 500 simulated runs it comes out at 1.40–1.43</span></p>
       <p>Both laws hold until the walks start meeting the bounds, and then they stop, because the parameters are clipped rather than reflected: Δ bends away from <var>σ</var>√<var>t</var> and flattens towards a ceiling a little under 0.5. At the middle Mutation size the fit is good to a few per cent for the first 25 generations and about a quarter low by generation 100; at the smallest setting it holds out to roughly 100. That ceiling is the same wall the <button type="button" class="room-link" onclick="switchTab('branching');">Branching Room</button> meets from the other side — two lineages that have both saturated are as different as this model can make them, and more time will not separate them further.</p>
@@ -2012,7 +2391,7 @@
   <!-- ========================================== -->
   <!-- TAB 2: THE BRANCHING ROOM                  -->
   <!-- ========================================== -->
-  <div id="tab-branching" class="tab-content page">
+  <div id="tab-branching" class="tab-content page" style="--room: #A8442A; --room-deep: #743626">
     <header class="masthead">
       <div>
         <h1>The Branching Room</h1>
@@ -2027,18 +2406,19 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>Coming from the <button type="button" class="room-link" onclick="switchTab('copying');">Copying Room</button>, where one lineage simply accumulated copying errors.</p>
       <p><strong>What it shows.</strong> The same copying process, but now lineages <em>split</em>. One ancestor becomes two independent lineages, each of which keeps drifting on its own and may split again. You choose when the splits happen by dragging the marks on the little tree diagram.</p>
       <p><span class="try-label">Try this.</span> Run it once with the default splits. When it finishes, scroll to the <em>Tanglegram</em> at the bottom: on the left is the true history you just watched, on the right is the family tree an algorithm reconstructs using <em>only</em> the final shapes. Compare them. Then drag the splits so they all happen close together and run it again.</p>
     </div>
 
-    <div class="deck">
-      <div class="field" style="grid-column: 1 / -1;">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">four choices, then press Start copying.</span></div>
+      <div class="field">
         <label id="lbl-shapeSeg_branch">Starting shape</label>
         <div role="group" aria-labelledby="lbl-shapeSeg_branch" class="segmented" id="shapeSeg_branch">
-          <button data-shape="polygon" class="active">Polygon</button>
-          <button data-shape="fish">Fish</button>
+          <button data-shape="polygon" class="active"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 4.4 L12.6 2.9 L13.1 12.4 L4.1 12.9 Z"/><circle class="seg-ico-solid" cx="6.6" cy="6.8" r="1.5"/><circle class="seg-ico-solid" cx="10" cy="9.9" r="1.5"/></svg>Polygon</button>
+          <button data-shape="fish"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.6 8 C4 4.6 8.6 4.4 10.8 8 C8.6 11.6 4 11.4 2.6 8 Z"/><path class="seg-ico-solid" d="M10.8 8 L14.6 5.2 L13.5 8 L14.6 10.8 Z"/><circle class="seg-ico-solid" cx="4.9" cy="7.3" r="0.8"/></svg>Fish</button>
         </div>
       </div>
 
@@ -2048,24 +2428,19 @@
       </div>
 
       <div class="field">
-        <label for="speed_branch"><span>Copying speed</span> <span class="value" id="speedVal_branch">50 ms/gen</span></label>
-        <input type="range" id="speed_branch" min="10" max="200" value="50">
-      </div>
-
-      <div class="field">
         <label for="maxGen_branch"><span>Total generations</span> <span class="value" id="maxGenVal_branch">500</span></label>
         <input type="range" id="maxGen_branch" min="100" max="2000" step="10" value="500">
       </div>
 
       <div class="field" style="grid-column: 1 / -1;">
-        <label><span>Split generations (drag each mark)</span><button class="help-btn" data-help="splitGens"></button> <span class="value" id="splitVals_branch">B→D,E: 200 · E→F,G: 350 · F→H,I: 450</span></label>
+        <label><span>Splits</span><button class="help-btn" data-help="splitGens"></button> <span class="value" id="splitVals_branch">B→D,E: 200 · E→F,G: 350 · F→H,I: 450</span></label>
         <div id="treeSelector_branch" style="width: 100%; height: 80px; position: relative; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; touch-action: none; margin-top: 6px;">
           <svg id="selSvg_branch" width="100%" height="100%" style="overflow: visible; display: block;"></svg>
         </div>
       </div>
 
       <div class="transport">
-        <button class="btn" id="playBtn_branch">▶ Start copying</button>
+        <button class="btn" id="playBtn_branch" data-sound>▶ Start copying</button>
         <button class="btn secondary" id="stepBtn_branch">Step once</button>
         <button class="btn secondary" id="resetBtn_branch">↺ New starting shape</button>
         <span class="status mono" id="statusLine_branch">gen 0 / 500 — idle</span>
@@ -2087,13 +2462,13 @@
 
     <div class="time-machine-container" style="margin-top: 20px;">
       <div class="field">
-        <label for="timeScrubber_branch" style="color: var(--stamp)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_branch">0</span></label>
+        <label for="timeScrubber_branch" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_branch">0</span></label>
         <input type="range" id="timeScrubber_branch" min="0" max="0" value="0" disabled>
       </div>
     </div>
     
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>Lineages split and never meet again.</strong> No hybridisation and no gene flow, from the moment of a split. <span class="lifted">What it would take for that to be a real species boundary is the <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button>.</span></li>
         <li><strong>The splits are yours, not the model's.</strong> When a lineage divides is a setting; nothing in the simulation decides it.</li>
@@ -2103,7 +2478,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>The reconstructed tree often disagrees with the real one. Lineages that happened to drift very little can look like close relatives even when they separated long ago, and a fast-changing lineage can look like an outsider. This is the central problem of real phylogenetics: <em>similarity is not the same thing as ancestry</em>.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> builds its founders with a small phylogeny just like this one, then shows the opposite trap: unrelated lineages that come to look alike because they live in the same place.</p>
     </div>
@@ -2121,7 +2496,7 @@
   <!-- ========================================== -->
   <!-- TAB 3: THE FATE ROOM                       -->
   <!-- ========================================== -->
-  <div id="tab-fate" class="tab-content page">
+  <div id="tab-fate" class="tab-content page" style="--room: #6E7B3F; --room-deep: #515733">
     <header class="masthead">
       <div>
         <h1>The Fate Room</h1>
@@ -2136,46 +2511,46 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p><strong>What it shows.</strong> The Copying Room let errors pile up along a single line of descent. Here we follow just <em>one</em> of those errors, in a whole population. A shape is copied once and comes out different — that copy is a <span class="gloss" data-help="glosMutation">mutation</span>, and at the moment it appears it exists in exactly one individual out of <var>N</var>. Two populations then run forward in time until the mutation has either vanished or replaced every other copy. The <span class="gloss" data-help="glosGene">gene</span> for the shape now comes in two <span class="gloss" data-help="glosAllele">alleles</span> — ancestral and mutant — and the graph tracks how common the mutant one is.</p>
       <p><span class="try-label">Try this.</span> Press <em>Mutate</em> and look at the third panel, where the parent shape sits faded behind its copy. Then press <em>Simulate evolution through time</em> and read the tally above the two populations before watching them: it says how many populations had to be run to find one where the mutation survived at all. Do that again at <var>N</var> = 100 and watch that number grow. Notice how fast the losing population finishes compared with the winning one.</p>
     </div>
 
     <h2 class="fate-step">Step 1 — a mutation appears</h2>
-    <div class="deck">
-      <div class="field" style="grid-column: 1 / -1;">
+    <div class="deck deck-setup">
+      <div class="field">
         <label id="lbl-shapeSeg_fate">Starting shape</label>
         <div role="group" aria-labelledby="lbl-shapeSeg_fate" class="segmented" id="shapeSeg_fate">
-          <button data-shape="polygon" class="active">Polygon</button>
-          <button data-shape="fish">Fish</button>
+          <button data-shape="polygon" class="active"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 4.4 L12.6 2.9 L13.1 12.4 L4.1 12.9 Z"/><circle class="seg-ico-solid" cx="6.6" cy="6.8" r="1.5"/><circle class="seg-ico-solid" cx="10" cy="9.9" r="1.5"/></svg>Polygon</button>
+          <button data-shape="fish"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.6 8 C4 4.6 8.6 4.4 10.8 8 C8.6 11.6 4 11.4 2.6 8 Z"/><path class="seg-ico-solid" d="M10.8 8 L14.6 5.2 L13.5 8 L14.6 10.8 Z"/><circle class="seg-ico-solid" cx="4.9" cy="7.3" r="0.8"/></svg>Fish</button>
         </div>
       </div>
 
       <div class="transport">
-        <button class="btn" id="mutateBtn_fate">✦ Mutate</button>
+        <button class="btn" id="mutateBtn_fate" data-results="#mutRow_fate">✦ Mutate</button>
         <button class="btn secondary" id="resetBtn_fate">↺ New starting shape</button>
       </div>
     </div>
 
-    <div class="fate-mut-row">
+    <div class="fate-mut-row" id="mutRow_fate">
       <div class="fate-mut-card" style="--accent: #6b6258">
         <span class="fate-mut-name">The parent</span>
-        <canvas class="stage-canvas" id="ancCanvas_fate"></canvas>
+        <canvas class="stage-canvas" id="ancCanvas_fate" role="img" aria-label="The parent shape, before it is copied"></canvas>
       </div>
       <div class="fate-mut-card" style="--accent: #C08A2E">
         <span class="fate-mut-name">The mutant copy</span>
-        <canvas class="stage-canvas" id="mutCanvas_fate"></canvas>
+        <canvas class="stage-canvas" id="mutCanvas_fate" role="img" aria-label="The mutant copy, one random error away from its parent"></canvas>
       </div>
       <div class="fate-mut-card" style="--accent: #6E7B3F">
         <span class="fate-mut-name">The two superimposed</span>
-        <canvas class="stage-canvas" id="ovlCanvas_fate"></canvas>
+        <canvas class="stage-canvas" id="ovlCanvas_fate" role="img" aria-label="The parent and its mutant copy drawn on top of one another"></canvas>
       </div>
     </div>
     <p class="fate-caption" id="mutSummary_fate">Press <strong>Mutate</strong> to copy this shape once, with one random error.</p>
 
     <h2 class="fate-step">Step 2 — one mutant in a population of <var>N</var></h2>
     <p class="fate-lede">The mutant is a single individual among <var>N</var>. Everyone reproduces on equal terms — this mutation is <span class="gloss" data-help="glosNeutral">neutral</span>, so it brings neither an advantage nor a handicap. The gold ring marks who carries it.</p>
-    <div class="deck">
+    <div class="deck deck-setup">
       <div class="field">
         <label id="lbl-nSeg_fate"><span>Population size (<var>N</var>)</span><button class="help-btn" data-help="fatePopSize"></button></label>
         <div role="group" aria-labelledby="lbl-nSeg_fate" class="segmented" id="nSeg_fate">
@@ -2187,7 +2562,7 @@
       </div>
 
       <div class="transport">
-        <button class="btn" id="simBtn_fate" disabled>▶ Simulate evolution through time</button>
+        <button class="btn" id="simBtn_fate" data-sound disabled>▶ Simulate evolution through time</button>
         <span class="status mono" id="statusLine_fate">no mutation yet</span>
       </div>
     </div>
@@ -2198,26 +2573,26 @@
           <span class="name" style="color:#3D6E6E">Population 1</span>
           <span class="stat mono" id="pop0Stat_fate">waiting</span>
         </div>
-        <div class="canvas-wrap fate-pop" id="pop0Wrap_fate"><canvas id="pop0Canvas_fate"></canvas></div>
+        <div class="canvas-wrap fate-pop" id="pop0Wrap_fate"><canvas id="pop0Canvas_fate" role="img" aria-label="Population 1: every individual, with the mutation carrier ringed in gold"></canvas></div>
       </div>
       <div class="lineage-card" style="--accent: #A8442A">
         <div class="lineage-head">
           <span class="name" style="color:#A8442A">Population 2</span>
           <span class="stat mono" id="pop1Stat_fate">waiting</span>
         </div>
-        <div class="canvas-wrap fate-pop" id="pop1Wrap_fate"><canvas id="pop1Canvas_fate"></canvas></div>
+        <div class="canvas-wrap fate-pop" id="pop1Wrap_fate"><canvas id="pop1Canvas_fate" role="img" aria-label="Population 2: every individual, with the mutation carrier ringed in gold"></canvas></div>
       </div>
     </div>
 
     <p class="fate-lede fate-lede-spaced">One gene, two alleles. At <strong>0</strong> the population carries only the ancestral form; at <strong>1</strong> only the mutant is left, and the mutation has become the new normal — it is <span class="gloss" data-help="fixation">fixed</span>. Everything in between is a population carrying both.</p>
-    <div class="canvas-wrap fate-chart"><canvas id="chart_fate"></canvas></div>
+    <div class="canvas-wrap fate-chart"><canvas id="chart_fate" role="img" aria-label="Frequency of the mutation in each population over the generations, from 0 (lost) to 1 (fixed)"></canvas></div>
 
     <div class="reading">
       <p id="readingText_fate">Every allele in every population began as a single mutation in a single individual. This room follows one of them from the moment it appears.</p>
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>The mutation is strictly neutral.</strong> Its fate is decided by sampling alone. <span class="lifted">A mutation with a fitness advantage is the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button>.</span></li>
         <li><strong>One locus, and nothing else happening in the genome.</strong> No second mutation arrives while the run lasts, and there is nothing for this one to be linked to.</li>
@@ -2227,7 +2602,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>Nothing in this room favours the mutation or works against it, and yet the two populations end in opposite places. The mutation is not lost because it was bad, and it does not take over because it was good — the difference is entirely chance, acting through who happened to leave offspring.</p>
       <p>The tally is the part worth remembering. A brand-new <span class="gloss" data-help="glosNeutral">neutral</span> mutation survives with probability 1/<var>N</var>, so in a population of 20 it is lost about 19 times out of 20. Almost everything mutation produces disappears within a few generations, which is why the losing population finishes almost immediately while the winning one grinds on for roughly 2<var>N</var> generations.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> is this same process, named and measured: it starts from a frequency you choose rather than from 1/<var>N</var>, and shows how population size governs the whole thing. The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> then gives the mutation an advantage and asks how much difference that makes — the answer, at small <var>N</var>, is less than you would expect. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> comes at it from the other end: not what happens to a mutation, but which mutations happen in the first place.</p>
@@ -2247,7 +2622,7 @@
   <!-- ========================================== -->
   <!-- TAB 4: THE DRIFT ROOM                      -->
   <!-- ========================================== -->
-  <div id="tab-drifting" class="tab-content page">
+  <div id="tab-drifting" class="tab-content page" style="--room: #2E5C8A; --room-deep: #2B4560">
     <header class="masthead">
       <div>
         <h1>The Drift Room</h1>
@@ -2262,13 +2637,14 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('fate');">Fate Room</button> followed one new mutation from a frequency of 1/<var>N</var> to its end. This room is the same process, named and measured: it starts from any frequency you choose, and asks what population size does to the whole thing.</p>
       <p><strong>What it shows.</strong> This is where the real <span class="gloss" data-help="glosPopulation">population</span> genetics starts. Imagine the copying errors of the first two rooms have already happened, so a population of <var>N</var> individuals now carries two versions of a locus — two <em>alleles</em>, <var>A</var>₁ and <var>A</var>₂. This room asks what becomes of that existing variation. Each <span class="gloss" data-help="glosGeneration">generation</span> is built by <em>randomly sampling</em> the previous one — the spinning wheel makes a single draw of one allele, and a full generation means one draw per gene copy. No allele has an advantage over the other; the only force at work is chance.</p>
-      <p><span class="try-label">Try this.</span> Run the default settings and watch the first three generations sample one individual at a time. Then set <var>N</var> = 10 and run, and afterwards set <var>N</var> = 200 and run again with everything else unchanged. Finally press <em>Run 10 Simulations</em> to see ten independent populations at once.</p>
+      <p><span class="try-label">Try this.</span> Run the default settings and watch the first two generations sample one individual at a time. Then set <var>N</var> = 10 and run, and afterwards set <var>N</var> = 200 and run again with everything else unchanged. Finally press <em>Run 10 Simulations</em> to see ten independent populations at once.</p>
     </div>
 
-    <div class="deck">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">four choices, then press Run Simulation.</span></div>
       <div class="field">
         <label for="sliderN_drift"><span>Population size <var>N</var></span> <span class="value" id="nVal_drift">50</span><button class="help-btn" data-help="popN"></button></label>
         <input type="range" id="sliderN_drift" min="10" max="200" step="1" value="50">
@@ -2290,8 +2666,8 @@
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnRun_drift">▶ Run Simulation</button>
-        <button class="btn secondary" id="btnRun10_drift">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
+        <button class="btn" id="btnRun_drift" data-sound data-results="#singleRunStage_drift">▶ Run Simulation</button>
+        <button class="btn secondary" id="btnRun10_drift" data-sound data-results="#chartStage_drift">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
         <button class="btn secondary" id="btnPause_drift" style="display:none;">⏸ Pause after gen</button>
         <button class="btn secondary" id="btnReset_drift">↺ Reset</button>
         <span class="status mono" id="statusBar_drift">Configure parameters and press Run.</span>
@@ -2307,7 +2683,7 @@
           <span class="name">Sampling Wheel<button class="help-btn" data-help="wheel"></button></span>
         </div>
         <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
-          <canvas id="wheelCanvas_drift"></canvas>
+          <canvas id="wheelCanvas_drift" role="img" aria-label="Sampling wheel, its two slices sized by the current allele frequency"></canvas>
           <div class="needle"></div>
         </div>
         <div class="drift-stats">
@@ -2324,30 +2700,30 @@
           <span class="stat mono allele-legend"><span><span style="color:#2E5C8A;">●</span> <span id="legendA_drift">Allele <var>A</var>₁</span></span><span id="legendAB_drift" style="display:none;"><span style="color:#2E5C8A;">◖</span><span style="color:#A8442A;">◗</span> <span>Heterozygote</span></span><span><span style="color:#A8442A;">●</span> <span id="legenda_drift">Allele <var>A</var>₂</span></span></span>
         </div>
         <div class="canvas-wrap tall">
-          <canvas id="popCanvas_drift"></canvas>
+          <canvas id="popCanvas_drift" role="img" aria-label="The current population, one mark per individual, coloured by allele"></canvas>
         </div>
       </div>
     </div>
 
     <!-- Charts Area -->
-    <div class="stage-area" style="--cols: 2; margin-top: 20px;">
+    <div class="stage-area" id="chartStage_drift" style="--cols: 2; margin-top: 20px;">
       
       <!-- Chart 1: Allele frequency -->
       <div class="lineage-card" style="grid-column: 1 / -1;">
         <div class="lineage-head"><span class="name">Allele Frequency (<var>p</var>) over Generations<button class="help-btn" data-help="freqChart"></button></span><span class="stat mono" id="multiRunSummary_drift"></span></div>
-        <div class="canvas-wrap" id="chartWrap_drift"><canvas id="chartCanvas_drift"></canvas></div>
+        <div class="canvas-wrap" id="chartWrap_drift"><canvas id="chartCanvas_drift" role="img" aria-label="Frequency of allele A1 plotted against generation"></canvas></div>
       </div>
 
       <!-- Chart 2: Binomial Distribution -->
       <div class="lineage-card" id="binomCard_drift">
         <div class="lineage-head"><span class="name">Binomial Distribution <var>P</var>(<var>k</var> | <var>N</var>, <var>p</var>)<button class="help-btn" data-help="binomDist"></button></span><span class="stat mono"><span class="k-expected">E[<var>k</var>] = <span id="kFormula_drift"><var>N</var>·<var>p</var></span> = <span id="expectedK_drift">—</span></span> · <span class="k-observed">O[<var>k</var>] = <span id="realizedK_drift">—</span></span></span></div>
-        <div class="canvas-wrap"><canvas id="binomCanvas_drift"></canvas></div>
+        <div class="canvas-wrap"><canvas id="binomCanvas_drift" role="img" aria-label="Binomial distribution of the number of A1 copies the next generation could draw"></canvas></div>
       </div>
 
       <!-- Chart 3: Binomial Variance -->
       <div class="lineage-card" id="varCard_drift">
         <div class="lineage-head"><span class="name"><span>Binomial Variance <var>V</var> = <var>p</var>·(1−<var>p</var>) /</span> <span id="varFormula_drift">N</span><button class="help-btn" data-help="binomVar"></button></span></div>
-        <div class="canvas-wrap"><canvas id="varCanvas_drift"></canvas></div>
+        <div class="canvas-wrap"><canvas id="varCanvas_drift" role="img" aria-label="Variance of the change in frequency against frequency, largest at one half"></canvas></div>
       </div>
 
     </div>
@@ -2359,13 +2735,13 @@
     
     <div class="time-machine-container" id="scrubberRow_drift" style="margin-top: 20px;">
       <div class="field">
-        <label for="timeScrubber_drift" style="color: var(--stamp)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_drift">0</span></label>
+        <label for="timeScrubber_drift" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_drift">0</span></label>
         <input type="range" id="timeScrubber_drift" min="0" max="0" value="0" disabled>
       </div>
     </div>
     
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>A closed population.</strong> No migration in or out, and no new mutation once the run starts: the two alleles present are the only ones there will ever be. That is why every run ends at 0 or 1 and stays there.</li>
         <li><strong>No selection.</strong> The two alleles are identical in every respect except their label. <span class="lifted">Give one of them an advantage in the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button>.</span></li>
@@ -2376,18 +2752,20 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>Small populations lurch around and quickly end up with only one allele left; large populations barely move, but will eventually also fix an allele, although after more generations. In fact, one important point to note is that in evolution time is measured in generations, not years. Once an allele reaches 0 or 1 it can never come back — drift permanently destroys variation. And across ten identical runs the outcomes differ wildly, which is why a single run can never tell you what a random process "does".</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> keeps this machinery and gives one allele an advantage, so you can watch selection and drift compete. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> asks where the two alleles came from to begin with.</p>
     </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
-      <p>The first three generations are sampled one individual at a time on the wheel, in real time, so you can see where a frequency actually comes from. After that the run is computed at once and stepped through at about five generations a second: fast enough to watch, slow enough to follow. Nothing is replayed from a script — each frequency is the outcome of its own binomial draw.</p>
+      <p>The first two generations are sampled one individual at a time on the wheel, in real time, so you can see where a frequency actually comes from. After that the run is computed at once and stepped through at about five generations a second: fast enough to watch, slow enough to follow. Nothing is replayed from a script — each frequency is the outcome of its own binomial draw.</p>
       <p><strong>The three results the panels are drawing.</strong> Write <var>M</var> for the gene copies sampled each generation: <var>M</var> = <var>N</var> under haploidy, <var>M</var> = 2<var>N</var> under diploidy.</p>
       <p class="eq">Var(Δ<var>p</var>) = <var>p</var>(1 − <var>p</var>)/<var>M</var><span class="eq-note">how far one generation of sampling can move the frequency: largest at <var>p</var> = 0.5, and smaller in every larger population — this is the curve the variance panel plots</span></p>
       <p class="eq"><var>u</var>(<var>p</var>) = <var>p</var><span class="eq-note">probability of fixation: with nothing favoured, an allele's chance of ending up as the only one is simply how common it is now</span></p>
       <p class="eq"><var>H</var>(<var>t</var>) = <var>H</var>₀(1 − 1/<var>M</var>)<sup><var>t</var></sup> ≈ <var>H</var>₀e<sup>−<var>t</var>/<var>M</var></sup><span class="eq-note">heterozygosity — the variation still left — decays by a factor 1/<var>M</var> per generation, so half of it is gone after about 0.69<var>M</var></span></p>
+      <p class="eq">E[<var>T</var><sub>fix</sub>] ≈ 2<var>M</var> generations<span class="eq-note">how long an allele that does fix takes to get there — 4<var>N</var> under diploidy, 2<var>N</var> under haploidy</span></p>
       <p>Read together they say that fixation is not a special event but the end every run has: drift removes variation at a rate set by <var>M</var> and nothing else, and a locus started at <var>p</var> = 0.5 reaches one edge or the other after about 1.4<var>M</var> generations on average.</p>
+      <p><strong>Where the default <var>G</var> comes from.</strong> The generations slider opens at 1.5 × E[<var>T</var><sub>fix</sub>], which is 3<var>M</var>, so a run at the default settings has room to finish instead of stopping part-way through the wander. It follows <var>N</var> and the ploidy as you change them, and stops following the moment you move the slider yourself. It is a generous figure at <var>p</var> = 0.5: 2<var>M</var> is the time for an allele starting from a single copy, and one starting at half takes closer to 1.4<var>M</var>, so most default runs reach an edge with generations to spare.</p>
     </details>
 
   </div>
@@ -2395,7 +2773,7 @@
   <!-- ========================================== -->
   <!-- TAB 5: THE SELECTION ROOM                  -->
   <!-- ========================================== -->
-  <div id="tab-selection" class="tab-content page">
+  <div id="tab-selection" class="tab-content page" style="--room: #388047; --room-deep: #315A37">
     <header class="masthead">
       <div>
         <h1>The Selection Room</h1>
@@ -2410,13 +2788,14 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> let chance alone decide. Now one allele is genuinely better — and chance is still in the room.</p>
       <p><strong>What it shows.</strong> Exactly the same sampling machinery as the Drift Room, with one addition: allele <var>A</var>₁ now carries a <span class="gloss" data-help="glosFitness">fitness</span> advantage <em>s</em>. Before each <span class="gloss" data-help="glosGeneration">generation</span> is drawn, the frequency is reweighted by fitness — so selection <em>tilts the odds</em>, and then ordinary random sampling does the drawing. Under diploid settings you can also set dominance <em>h</em>.</p>
       <p><span class="try-label">Try this.</span> Run with <var>s</var> = 0.1 at <var>N</var> = 200, and notice how closely the real trajectory tracks the dashed line (which is what selection would do with no randomness at all). Then run the same <var>s</var> = 0.1 at <var>N</var> = 10. Finally switch to Diploid, set <var>s</var> = 0.2, and compare <var>h</var> = 1 against <var>h</var> = 0.</p>
     </div>
 
-    <div class="deck">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">five choices &mdash; a sixth appears in Diploid &mdash; then press Run Simulation.</span></div>
       <div class="field">
         <label for="sliderN_selection"><span>Population size <var>N</var></span> <span class="value" id="nVal_selection">50</span><button class="help-btn" data-help="popN"></button></label>
         <input type="range" id="sliderN_selection" min="10" max="200" step="1" value="50">
@@ -2446,8 +2825,8 @@
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnRun_selection">▶ Run Simulation</button>
-        <button class="btn secondary" id="btnRun10_selection">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
+        <button class="btn" id="btnRun_selection" data-sound data-results="#singleRunStage_selection">▶ Run Simulation</button>
+        <button class="btn secondary" id="btnRun10_selection" data-sound data-results="#chartStage_selection">▶ Run 10 Simulations</button><button class="help-btn" data-help="run10"></button>
         <button class="btn secondary" id="btnPause_selection" style="display:none;">⏸ Pause after gen</button>
         <button class="btn secondary" id="btnReset_selection">↺ Reset</button>
         <span class="status mono" id="statusBar_selection">Configure parameters and press Run.</span>
@@ -2463,7 +2842,7 @@
           <span class="name">Sampling Wheel<button class="help-btn" data-help="wheelSelection"></button></span>
         </div>
         <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
-          <canvas id="wheelCanvas_selection"></canvas>
+          <canvas id="wheelCanvas_selection" role="img" aria-label="Sampling wheel, its two slices sized by the frequency after selection has reweighted it"></canvas>
           <div class="needle"></div>
         </div>
         <div class="drift-stats">
@@ -2481,30 +2860,30 @@
           <span class="stat mono allele-legend"><span><span style="color:#2E5C8A;">●</span> <span id="legendA_selection">Allele <var>A</var>₁</span></span><span id="legendAB_selection" style="display:none;"><span style="color:#2E5C8A;">◖</span><span style="color:#A8442A;">◗</span> <span>Heterozygote</span></span><span><span style="color:#A8442A;">●</span> <span id="legenda_selection">Allele <var>A</var>₂</span></span></span>
         </div>
         <div class="canvas-wrap tall">
-          <canvas id="popCanvas_selection"></canvas>
+          <canvas id="popCanvas_selection" role="img" aria-label="The current population, one mark per individual, coloured by allele"></canvas>
         </div>
       </div>
     </div>
 
     <!-- Charts Area -->
-    <div class="stage-area" style="--cols: 2; margin-top: 20px;">
+    <div class="stage-area" id="chartStage_selection" style="--cols: 2; margin-top: 20px;">
       
       <!-- Chart 1: Allele frequency -->
       <div class="lineage-card" style="grid-column: 1 / -1;">
         <div class="lineage-head"><span class="name">Allele Frequency (<var>p</var>) over Generations<button class="help-btn" data-help="freqChart"></button><button class="help-btn" data-help="deterministic"></button></span><span class="stat mono" id="multiRunSummary_selection"></span></div>
-        <div class="canvas-wrap" id="chartWrap_selection"><canvas id="chartCanvas_selection"></canvas></div>
+        <div class="canvas-wrap" id="chartWrap_selection"><canvas id="chartCanvas_selection" role="img" aria-label="Frequency of allele A1 against generation, with the dashed line selection alone would follow"></canvas></div>
       </div>
 
       <!-- Chart 2: Binomial Distribution -->
       <div class="lineage-card" id="binomCard_selection">
         <div class="lineage-head"><span class="name">Binomial Distribution <var>P</var>(<var>k</var> | <var>N</var>, <var>p′</var>)<button class="help-btn" data-help="binomDist"></button></span><span class="stat mono"><span class="k-expected">E[<var>k</var>] = <span id="kFormula_selection"><var>N</var>·<var>p′</var></span> = <span id="expectedK_selection">—</span></span> · <span class="k-observed">O[<var>k</var>] = <span id="realizedK_selection">—</span></span></span></div>
-        <div class="canvas-wrap"><canvas id="binomCanvas_selection"></canvas></div>
+        <div class="canvas-wrap"><canvas id="binomCanvas_selection" role="img" aria-label="Binomial distribution of the number of A1 copies the next generation could draw"></canvas></div>
       </div>
 
       <!-- Chart 3: Binomial Variance -->
       <div class="lineage-card" id="varCard_selection">
         <div class="lineage-head"><span class="name"><span>Binomial Variance <var>V</var> = <var>p</var>·(1−<var>p</var>) /</span> <span id="varFormula_selection">N</span><button class="help-btn" data-help="binomVar"></button></span></div>
-        <div class="canvas-wrap"><canvas id="varCanvas_selection"></canvas></div>
+        <div class="canvas-wrap"><canvas id="varCanvas_selection" role="img" aria-label="Variance of the change in frequency against frequency, largest at one half"></canvas></div>
       </div>
 
     </div>
@@ -2516,13 +2895,13 @@
     
     <div class="time-machine-container" id="scrubberRow_selection" style="margin-top: 20px;">
       <div class="field">
-        <label for="timeScrubber_selection" style="color: var(--stamp)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_selection">0</span></label>
+        <label for="timeScrubber_selection" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_selection">0</span></label>
         <input type="range" id="timeScrubber_selection" min="0" max="0" value="0" disabled>
       </div>
     </div>
     
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>Fitness is constant.</strong> <var>s</var> does not change with time, with frequency, or with anything the population does. No fluctuating selection, no frequency dependence, no density dependence — the advantage you set on generation 1 is the advantage on generation 900.</li>
         <li><strong>A closed population, and no new mutation.</strong> The favoured allele has to be present at the start; nothing arrives from elsewhere and nothing new appears. <span class="lifted">A single new copy, and what usually becomes of it, is the <button type="button" class="room-link" onclick="switchTab('fate');">Fate Room</button>.</span></li>
@@ -2532,7 +2911,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>What matters is not <em>s</em> by itself but <strong><var>N</var>·<var>s</var></strong> — the product of <span class="gloss" data-help="glosPopulation">population</span> size and advantage. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (<var>h</var> = 0) is nearly invisible to selection while it is rare, because it is hiding inside heterozygotes, so it too can be lost like a <span class="gloss" data-help="glosNeutral">neutral</span> allele.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> shows the half of the story this room cannot tell: selection decides a <span class="gloss" data-help="glosMutation">mutation</span>'s fate, but has no say in whether it appears. The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> then runs selection and drift on five traits at once.</p>
     </div>
@@ -2543,6 +2922,9 @@
       <p class="eq"><var>p</var><sub><var>t</var></sub>/(1 − <var>p</var><sub><var>t</var></sub>) = [<var>p</var>₀/(1 − <var>p</var>₀)]·(1 + <var>s</var>)<sup><var>t</var></sup><span class="eq-note">the dashed line: an S-shaped sweep, slow while the allele is rare and slow again while the last few of the other allele are mopped up</span></p>
       <p>Sampling turns that certainty into a bet. The fixation probability from frequency <var>p</var>, for the haploid model, is Kimura's diffusion result:</p>
       <p class="eq"><var>u</var>(<var>p</var>) = (1 − e<sup>−2<var>Nsp</var></sup>)/(1 − e<sup>−2<var>Ns</var></sup>)<span class="eq-note">for one new copy, <var>p</var> = 1/<var>N</var>, this is about 2<var>s</var> whenever <var>Ns</var> ≫ 1 — an allele with a 10% advantage is still lost about four times in five</span></p>
+      <p>How long that sweep takes, once it is under way, is the other figure the room uses:</p>
+      <p class="eq">E[<var>T</var><sub>fix</sub>] ≈ (2/<var>s</var>)·ln <var>M</var> generations<span class="eq-note">with <var>M</var> the gene copies — (2/<var>s</var>)·ln 2<var>N</var> under diploidy — so a strong advantage sweeps in a few dozen generations and a weak one takes thousands</span></p>
+      <p><strong>Where the default <var>G</var> comes from.</strong> The generations slider opens at 1.5 × that, and follows <var>N</var>, the ploidy and <var>s</var> until you move it yourself. It is capped at the neutral 3<var>M</var>, because (2/<var>s</var>)·ln <var>M</var> runs away as <var>s</var> approaches zero while the truth does not: with <var>s</var> that small it is drift that decides the outcome, on drift's timescale. That cap is also what the slider does at <var>s</var> = 0, where the room is the Drift Room with an extra control.</p>
       <p>Two limits are worth setting the sliders to. When |<var>Ns</var>| is around 1 or less the exponentials nearly cancel and <var>u</var>(<var>p</var>) → <var>p</var>, the neutral answer: the advantage is real, but the population is too small for it to be the thing that decides. When <var>Ns</var> ≫ 1 the runs hug the dashed line. In Diploid mode the same approximation for a new mutation is 2<var>hs</var> rather than 2<var>s</var>, which is why lowering <var>h</var> towards 0 makes a genuinely advantageous allele so easy to lose: while it is rare it is almost only ever in heterozygotes, and a recessive advantage is invisible there.</p>
     </details>
 
@@ -2551,7 +2933,7 @@
   <!-- ========================================== -->
   <!-- TAB 6: THE MUTATION ROOM                   -->
   <!-- ========================================== -->
-  <div id="tab-mutation" class="tab-content page">
+  <div id="tab-mutation" class="tab-content page" style="--room: #C08A2E; --room-deep: #826028">
     <header class="masthead">
       <div>
         <h1>The Mutation Room</h1>
@@ -2566,67 +2948,78 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> decided which of two alleles won. This room asks where they came from in the first place.</p>
       <p><strong>What it shows.</strong> The Selection Room let selection decide which of two alleles won. This room asks the prior question: where did those alleles come from, and does selection have any say in that? Four spinning wheels, one per character — body shape, body colour, tail size and fin size. Each wheel's slices are the possible <em>derived</em> states, deliberately different sizes: some <span class="gloss" data-help="glosMutation">mutations</span> are simply more likely than others. Spin, and the four results become a new mutant fish. Each derived state is then an independent allele: a panel plays out all four frequencies in a <span class="gloss" data-help="glosPopulation">population</span> of <var>N</var> over <var>G</var> <span class="gloss" data-help="glosGeneration">generations</span>, and a final panel shows the population's fish at the end.</p>
-      <p><span class="try-label">Try this.</span> Press <em>Spin</em> and watch the four alleles enter the population as single copies and drift — usually to loss. Now press <em>Simulate natural selection</em> — the same selection coefficient <em>s</em> you set in the Selection Room, here shared by all four characters: the stream favours a slender body, blue colour, a long tail and short fins (marked ★). Raise <em>s</em> and watch two things at once — the wheels, and the allele-frequency lines.</p>
+      <p><span class="try-label">Try this.</span> Press <em>Spin</em> and watch the four alleles enter the population as single copies and drift — usually to loss. Then switch <em>Fate of the alleles</em> from <em>Neutral</em> to <em>Selection</em> — the same selection coefficient <em>s</em> you set in the Selection Room, here shared by all four characters: the stream favours a slender body, blue colour, a long tail and short fins (marked ★). Raise <em>s</em> and watch two things at once — the wheels, and the allele-frequency lines.</p>
     </div>
 
     <div class="mut-rate-note">
       <p>In nature the <strong>mutation rate</strong> — the chance that a character changes from its ancestral state to a derived one — is <strong>extremely low</strong>, on the order of one error per hundred million sites each time the genome is copied. Here we set that aside and simply <em>assume</em> a mutation occurs in each of four characters, then ask <strong>which</strong> derived state appears.<button class="help-btn" data-help="mutRate"></button></p>
     </div>
 
-    <div class="stage-area mut-fish-stage" style="--cols:4;">
+    <div class="deck deck-setup">
+      <div class="transport mut-transport" style="border-top:none; padding-top:0; margin-top:0;">
+        <button class="btn" id="spinBtn_mut" data-sound data-results="#stageTop_mut">🎡 Spin — mutate all four characters</button>
+        <button class="btn secondary" id="rerunBtn_mut" data-sound data-results="#stageTop_mut" disabled>↻ Run again — same mutations</button>
+        <button class="btn secondary" id="resetBtn_mut">↺ Reset</button>
+        <div class="field mut-n-field">
+          <label for="nSlider_mut"><span>Population size <var>N</var></span> <span class="value" id="nVal_mut">50</span></label>
+          <input type="range" id="nSlider_mut" min="10" max="300" step="10" value="50">
+        </div>
+      </div>
+
+      <div class="field">
+        <label id="lbl-scenarioSeg_mut">Fate of the alleles<button class="help-btn" data-help="mutSelection"></button></label>
+        <div role="group" aria-labelledby="lbl-scenarioSeg_mut" class="segmented" id="scenarioSeg_mut">
+          <button data-scenario="neutral" class="active" data-results="#stageTop_mut">Neutral</button>
+          <button data-scenario="selection" data-results="#stageTop_mut">Selection</button>
+        </div>
+      </div>
+
+      <div class="mut-selection-panel" id="selPanel_mut">
+        <p class="mut-sel-sentence">This fish lives in a fast-flowing <strong>stream</strong>. The current favours <strong>a slender body</strong>, <strong>blue colouring</strong>, <strong>a long tail</strong> and <strong>short fins</strong> — fish carrying those states survive and reproduce more.<button class="help-btn" data-help="mutSelection"></button></p>
+        <p class="mut-sel-prompt">Set a single selection coefficient <span class="sym"><var>s</var></span> — the same <span class="sym"><var>s</var></span> as the Selection Room, here shared by all four characters. Two places to watch: the <strong>wheels</strong> (the favoured slices, marked <span class="fav-star">★</span>, never change size) and the <strong>Derived alleles</strong> panel (where the favoured alleles now climb and the rest are pushed down).</p>
+        <div class="deck mut-sel-sliders" id="selSliders_mut"></div>
+      </div>
+    </div>
+
+    <!-- What the spin acts on, and the wheels that do it: the fish you start
+         from beside the four characters that are about to change. -->
+    <div class="stage-area mut-wheel-row" id="stageTop_mut" style="--cols:5;">
       <div class="lineage-card" style="--accent: var(--ink-soft)">
         <div class="lineage-head">
           <span class="name" style="color: var(--ink-soft)">Original</span>
           <span class="stat mono">ancestral state</span>
         </div>
-        <canvas class="stage-canvas" id="fishOrig_mut"></canvas>
+        <canvas class="stage-canvas" id="fishOrig_mut" role="img" aria-label="The original fish, in its ancestral state"></canvas>
       </div>
+      <div class="wheel-grid" id="wheelGrid_mut"></div>
+    </div>
+
+    <!-- And what the spin produced: the mutant, the fates of its four derived
+         alleles, and the population those fates leave behind. -->
+    <div class="stage-area mut-fish-stage" style="--cols:5;">
       <div class="lineage-card" style="--accent: var(--stamp)">
         <div class="lineage-head">
-          <span class="name" style="color: var(--stamp)">Mutant</span>
+          <span class="name" style="color: var(--stamp-deep)">Mutant</span>
           <span class="stat mono" id="mutStat_mut">— spin the wheels —</span>
         </div>
-        <canvas class="stage-canvas" id="fishMut_mut"></canvas>
+        <canvas class="stage-canvas" id="fishMut_mut" role="img" aria-label="The mutant fish, carrying whichever derived state each wheel landed on"></canvas>
       </div>
-      <div class="lineage-card" style="--accent: var(--lineage-a)">
+      <div class="lineage-card mut-derived-card" style="--accent: var(--lineage-a)">
         <div class="lineage-head">
           <span class="name" style="color: var(--lineage-a)">Derived alleles<button class="help-btn" data-help="mutDrift"></button></span>
           <span class="stat mono" id="freqStat_mut">—</span>
         </div>
-        <canvas class="stage-canvas freq-canvas" id="freqCanvas_mut"></canvas>
+        <canvas class="stage-canvas freq-canvas" id="freqCanvas_mut" role="img" aria-label="Frequency of each of the four derived alleles against generation"></canvas>
       </div>
       <div class="lineage-card" style="--accent: var(--lineage-c)">
         <div class="lineage-head">
           <span class="name" style="color: var(--lineage-c)">After G gens</span>
           <span class="stat mono" id="popStat_mut">—</span>
         </div>
-        <canvas class="stage-canvas" id="fishPop_mut"></canvas>
-      </div>
-    </div>
-
-    <div class="wheel-grid" id="wheelGrid_mut"></div>
-
-    <div class="deck" style="margin-top:20px;">
-      <div class="transport mut-transport" style="border-top:none; padding-top:0; margin-top:0;">
-        <button class="btn" id="spinBtn_mut">🎡 Spin — mutate all four characters</button>
-        <button class="btn secondary" id="rerunBtn_mut" disabled>↻ Run again — same mutations</button>
-        <button class="btn secondary" id="resetBtn_mut">↺ Reset</button>
-        <div class="field mut-n-field">
-          <label for="nSlider_mut"><span>Population size <var>N</var></span> <span class="value" id="nVal_mut">50</span> · <span class="sym"><var>G</var></span> ≥ 2.5N</label>
-          <input type="range" id="nSlider_mut" min="10" max="300" step="10" value="50">
-        </div>
-      </div>
-    </div>
-
-    <div class="mut-selection">
-      <button class="btn secondary" id="selBtn_mut">▼ Simulate natural selection</button>
-      <div class="mut-selection-panel" id="selPanel_mut">
-        <p class="mut-sel-sentence">This fish lives in a fast-flowing <strong>stream</strong>. The current favours <strong>a slender body</strong>, <strong>blue colouring</strong>, <strong>a long tail</strong> and <strong>short fins</strong> — fish carrying those states survive and reproduce more.<button class="help-btn" data-help="mutSelection"></button></p>
-        <p class="mut-sel-prompt">Set a single selection coefficient <span class="sym"><var>s</var></span> — the same <span class="sym"><var>s</var></span> as the Selection Room, here shared by all four characters. Two places to watch: the <strong>wheels</strong> (the favoured slices, marked <span class="fav-star">★</span>, never change size) and the <strong>Derived alleles</strong> panel (where the favoured alleles now climb and the rest are pushed down).</p>
-        <div class="deck mut-sel-sliders" id="selSliders_mut"></div>
+        <canvas class="stage-canvas" id="fishPop_mut" role="img" aria-label="The fish the population is made of after G generations"></canvas>
       </div>
     </div>
 
@@ -2635,7 +3028,7 @@
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>Mutation probabilities are stipulated, and never depend on fitness.</strong> Some derived states are far easier to reach than others — that asymmetry is the point of the wheels — but no slice is larger because the state it leads to would be useful.</li>
         <li><strong>Four independent loci.</strong> No linkage between them and no epistasis: a mutation's effect does not depend on what the other three are doing.</li>
@@ -2645,7 +3038,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>Selection bends the frequency lines — favoured alleles climb, the rest are pushed down — and reshapes the fish after <var>G</var> generations. But however hard you push, the ★ wheel slices never change size. That is the whole point, and it is the half of the story the Selection Room could not tell: selection governs a mutation's <em>fate</em>, never its <em>origin</em>. Mutation proposes, blindly; selection disposes.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> puts the two halves together: mutation keeps proposing, blindly, and selection keeps disposing — across five traits and three <span class="gloss" data-help="glosHabitat">habitats</span>.</p>
     </div>
@@ -2662,7 +3055,7 @@
   <!-- ========================================== -->
   <!-- TAB 7: THE ADAPTATION ROOM                 -->
   <!-- ========================================== -->
-  <div id="tab-adaptation" class="tab-content page">
+  <div id="tab-adaptation" class="tab-content page" style="--room: #7A5C99; --room-deep: #584569">
     <header class="masthead">
       <div>
         <h1>The Adaptation Room</h1>
@@ -2677,13 +3070,14 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>Everything so far, combined.</p>
       <p><strong>What it shows.</strong> Everything so far, combined. Three founder fish — Gigi, Mario and Nani — are produced first by a small branching phylogeny, as in the Branching Room: one ancestor, three splits, and an <strong>outgroup</strong> alongside the three founders. Each founder then splits into two lineages: a <strong><span class="gloss" data-help="glosNeutral">Neutral</span></strong> one where nothing is selected, and a <strong>Habitat</strong> one assigned to a Stream, Pond or River. Five traits (shape, colour, eye size, fin size, tail size) each behave as an independent locus, mutating and then running a full Wright–Fisher trajectory exactly as in the Selection Room. Each <span class="gloss" data-help="glosHabitat">habitat</span> favours a different combination of traits.</p>
-      <p><span class="try-label">Try this.</span> Press Run and watch the two lineages of each founder evolve side by side from the same ancestor. When it finishes, compare the <em>Average divergence from own founder</em> for Neutral versus Habitat. Then take the three <strong>preset tasks</strong> in turn — each sets the controls and runs, and the status line tells you what to look for: <em>same habitat, different founders</em> for convergence, <em>turn selection off</em> as a control, and <em>small vs large population</em> for what population size does to both.<button class="help-btn" data-help="adaptPresets"></button></p>
+      <p><span class="try-label">Try this.</span> Press Run and watch the two lineages of each founder evolve side by side from the same ancestor. When it finishes, read the table under <em>Each lineage against its own founder</em>: a row for Neutral and one for Habitat, a column per founder, and the mean of each row at the end. Then take the three <strong>preset tasks</strong> in turn — each sets the controls and runs, and the status line tells you what to look for: <em>same habitat, different founders</em> for convergence, <em>turn selection off</em> as a control, and <em>small vs large population</em> for what population size does to both.<button class="help-btn" data-help="adaptPresets"></button></p>
     </div>
 
-    <div class="deck">
+    <div class="deck deck-setup">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">set the controls &mdash; or take a preset task below &mdash; then press Run Simulation.</span></div>
       <div class="field">
         <label for="sliderG_adapt"><span>Generations G</span> <span class="value" id="gVal_adapt">5000</span><button class="help-btn" data-help="genG"></button></label>
         <input type="range" id="sliderG_adapt" min="1000" max="10000" step="100" value="5000">
@@ -2788,14 +3182,14 @@
 
       <div class="adapt-section-label">Preset tasks &mdash; each one sets the controls and runs<button class="help-btn" data-help="adaptPresets"></button></div>
       <div class="adapt-presets" id="presets_adapt">
-        <button class="btn preset" data-preset="sameHabitat">Same habitat, different founders</button>
-        <button class="btn preset" data-preset="noSelection">Turn selection off</button>
-        <button class="btn preset" data-preset="smallVsLarge">Small vs large population</button>
+        <button class="btn preset" data-preset="sameHabitat" data-results="#scrubberRow_adapt">Same habitat, different founders</button>
+        <button class="btn preset" data-preset="noSelection" data-results="#scrubberRow_adapt">Turn selection off</button>
+        <button class="btn preset" data-preset="smallVsLarge" data-results="#scrubberRow_adapt">Small vs large population</button>
         <button class="btn preset preset-restore" data-preset="defaults">↺ Restore defaults</button>
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnRun_adapt">▶ Run Simulation</button>
+        <button class="btn" id="btnRun_adapt" data-sound data-results="#scrubberRow_adapt">▶ Run Simulation</button>
         <button class="btn secondary" id="btnReset_adapt">↺ New Founders</button>
         <span class="status mono" id="statusBar_adapt">Configure parameters and press Run.</span>
       </div>
@@ -2803,13 +3197,17 @@
 
     <div class="time-machine-container" id="scrubberRow_adapt" style="margin-bottom: 20px;">
       <div class="field">
-        <label for="timeScrubber_adapt" style="color: var(--stamp)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_adapt">0</span> / <span id="scrubMaxLabel_adapt">0</span></label>
+        <label for="timeScrubber_adapt" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_adapt">0</span> / <span id="scrubMaxLabel_adapt">0</span></label>
         <input type="range" id="timeScrubber_adapt" min="0" max="0" value="0" disabled>
       </div>
     </div>
 
     <div class="help-inline-note" id="founderModeNote_adapt" hidden></div>
-    <div class="help-inline-note" style="margin-bottom:10px;">Each row compares one founder's Neutral and Habitat lineage, both starting from the same ancestor. The fish shown is that lineage's consensus — its typical individual <button class="help-btn" data-help="consensusFish"></button></div>
+    <div class="help-inline-note">Each row compares one founder's Neutral and Habitat lineage, both starting from the same ancestor. The fish shown is that lineage's consensus — its typical individual <button class="help-btn" data-help="consensusFish"></button></div>
+    <!-- The trait tables' abbreviations, spelled out once for all six of them.
+         Filled by js/adaptation-room.js so the wording stays beside the code
+         that builds the tables. -->
+    <div class="help-inline-note" id="traitKey_adapt" style="margin-bottom:10px;"></div>
     <div class="adapt-founder-row" id="founderRow_gigi_adapt">
       <div class="adapt-founder-name">Gigi</div>
       <div class="adapt-founder-n" id="founderN_gigi_adapt"></div>
@@ -2852,14 +3250,15 @@
     <div class="reading">
       <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong><button class="help-btn" data-help="adaptDivMatrix"></button> <span class="gloss" data-help="glosGeneration">generation</span>-0 founder (rows) vs. each lineage's final consensus fish (columns).</p>
       <div id="divMatrixWrap_adapt"></div>
-      <p><strong>Average divergence from own founder:</strong> <span id="avgDeltaSummary_adapt" class="mono"></span></p>
+      <p style="margin-bottom:0;"><strong>Each lineage against its own founder:</strong><button class="help-btn" data-help="adaptDivMatrix"></button></p>
+      <div id="ownFounderTable_adapt"></div>
       <p style="margin-top:24px; margin-bottom: 0;"><strong>Tanglegram Comparison:</strong><button class="help-btn" data-help="tanglegram"></button><br>
       <span style="font-size: 13px; color: var(--ink-soft);">Left: the actual lineage history — one ancestor split three times before the run began, producing an <strong>outgroup</strong> and the three founders, each of which then divided into a Neutral and a Habitat lineage. Right: the tree inferred using <em>only</em> the seven lineages' final observable shapes. <span id="tanglegramClaim_adapt">The true branching order is there to be recovered — does the reconstruction find it?</span></span></p>
       <div id="tanglegramWrap_adapt" style="overflow-x: auto; margin-top: 14px;"></div>
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>One trait, one locus.</strong> Five traits, five independent loci of large effect. Real morphology is polygenic, with many loci of small effect per trait, and this room would look very different if it were.</li>
         <li><strong>No linkage and no epistasis.</strong> The five loci are inherited independently and never interact: no combination is worth more or less than its parts. <span class="lifted">Two loci that travel together is the <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button>.</span></li>
@@ -2870,7 +3269,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>The Habitat lineages travel much further from their ancestor than the Neutral ones — that gap is what selection contributes on top of drift. Two unrelated founders placed in the <em>same</em> habitat tend to converge on a similar look, which is convergent evolution. And in the trait tables, notice that new <em><span class="gloss" data-help="glosMutation">mutations</span></em> keep arising in both lineages at much the same rate — mutation is blind to habitat. What selection changes is not how many mutations appear but the probability that they change in frequency compared to a neutral one: it turns far more of them into fixed <em>substitutions</em>.</p>
       <p><strong>Where this goes next.</strong> One question is still open. These lineages diverged, but they never stopped being able to interbreed — nothing here would prevent a Neutral fish and a Habitat fish from producing offspring. The <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button> takes two populations that genuinely cannot exchange genes and asks at what point they stop being one species.</p>
       <p><strong>Looking back.</strong> Every thread meets here: copying error from the <button type="button" class="room-link" onclick="switchTab('copying');">Copying Room</button>, splitting lineages from the <button type="button" class="room-link" onclick="switchTab('branching');">Branching Room</button>, blind mutation from the <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button>, and the tug-of-war between drift and selection from the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button>.</p>
@@ -2891,7 +3290,7 @@
   <!-- ========================================== -->
   <!-- TAB 8: THE SPECIATION ROOM                 -->
   <!-- ========================================== -->
-  <div id="tab-speciation" class="tab-content page">
+  <div id="tab-speciation" class="tab-content page" style="--room: #1F6E5E; --room-deep: #225045">
     <header class="masthead">
       <div>
         <h1>The Speciation Room</h1>
@@ -2906,7 +3305,7 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>Two populations, one ancestor, and nothing passing between them.</p>
       <p><strong>What it shows.</strong> One ancestral <span class="gloss" data-help="glosPopulation">population</span> of <var>N</var> fish lives in a <strong>lake</strong>, and has done for a thousand generations — so it is already a lake fish: deep-bodied, amber, big-eyed and long-finned, shaped by the place it lives in.<button class="help-btn" data-help="specAncestor"></button> An adapted population is not a uniform one, though. It carries 1,013 <span class="gloss" data-help="glosLocus">loci</span>, and the variation at them is drawn from what a population at <strong>mutation–drift equilibrium</strong> actually has:<button class="help-btn" data-help="specStandingVar"></button> most loci are <em>monomorphic</em>, and the ones that vary mostly carry a <em>rare</em> second allele. How much of it there is comes down to <strong>θ</strong><button class="help-btn" data-help="specTheta"></button> — the ancestral population's own property, independent of the mutation rate you give the run ahead — and the ancestral card reports what it produced. Those loci are of three kinds: <strong>13</strong> that build the five traits — three for shape, four for colour, one for eye size, two for fins, three for the tail; <strong>40</strong> that build no part of the fish but set what its body has to do to live where it lives — how it takes up oxygen, holds its salt balance, pays for swimming; and <strong>960</strong> that neither habitat has any use for. The middle group is 4% of the non-morphological genome, and it matters because still water and fast water make <em>different</em> physiological demands: those loci are under selection too, even though nothing about them can be drawn.<button class="help-btn" data-help="specLoci"></button></p>
       <p>The population splits into two groups. Population <strong>A</strong> remains in the original lake. Population <strong>B</strong>, founded by <var>N</var>₂ individuals, moves away — either to <strong>another lake</strong>, which is a different location but the same type of <span class="gloss" data-help="glosHabitat">habitat</span>, or to a <strong>stream</strong>, which is not. In either case, the two populations are permanently separated. From the moment of the split, nothing is exchanged: no migration and no gene flow. What each population does with the variation it carries is determined by <span class="gloss" data-help="glosDrift">drift</span> and whatever its habitat favours, as well as new <span class="gloss" data-help="glosMutation">mutations</span> that arise within it.<button class="help-btn" data-help="specMutation"></button></p>
@@ -2915,11 +3314,12 @@
       <p>Runs differ a great deal, and that is the model being honest rather than noisy — at realistic variation, whether a trait can respond at all depends on which few variants the ancestral population happened to be carrying. At the default settings a move to the <strong>stream</strong> ends in speciation about <strong>four runs in five</strong>, and a move to <strong>another lake</strong> about <strong>one in three</strong>: the habitat shifts the odds without deciding the outcome, so a single run tells you far less than a handful do. Press <em>New Ancestral Population</em> a few times to see the spread — how far a trait can move is decided partly by which variants that particular ancestor happened to carry. Then raise <strong>θ</strong>: a more variable ancestor makes everything faster and more repeatable, and you can watch the polymorphic count on the ancestral card climb as you do it.</p>
     </div>
 
-    <div class="deck">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seven choices, then press Run Simulation.</span></div>
       <div class="adapt-n-row spec-setup-row">
         <div class="adapt-n-row-label">Setup</div>
         <div class="field">
-          <label for="sliderN_spec"><span>Ancestral &amp; population A</span> <span class="sym"><var>N</var></span> <span class="value" id="nVal_spec">200</span><button class="help-btn" data-help="specN"></button></label>
+          <label for="sliderN_spec"><span>Ancestral &amp; A</span> <span class="sym"><var>N</var></span> <span class="value" id="nVal_spec">200</span><button class="help-btn" data-help="specN"></button></label>
           <input type="range" id="sliderN_spec" min="20" max="250" step="10" value="200">
         </div>
         <div class="field">
@@ -2927,7 +3327,7 @@
           <input type="range" id="sliderN2_spec" min="5" max="250" step="5" value="50">
         </div>
         <div class="field">
-          <label for="sliderG_spec"><span>Generations in isolation</span> <span class="sym"><var>G</var></span> <span class="value" id="gVal_spec">1000</span><button class="help-btn" data-help="genG"></button></label>
+          <label for="sliderG_spec"><span>In isolation</span> <span class="sym"><var>G</var></span> <span class="value" id="gVal_spec">1000</span><button class="help-btn" data-help="genG"></button></label>
           <input type="range" id="sliderG_spec" min="100" max="3000" step="50" value="1000">
         </div>
         <div class="field">
@@ -2945,57 +3345,57 @@
           <summary>More parameters &mdash; ancestral diversity, selection strength, mutation rate, per-locus effect size</summary>
           <div class="adapt-advanced-grid">
             <div class="field">
-              <label for="sliderTheta_spec"><span>Ancestral diversity</span> <span class="sym"><var>θ</var></span> <span class="value" id="thetaVal_spec">0.16</span><button class="help-btn" data-help="specTheta"></button></label>
+              <label for="sliderTheta_spec"><span>Ancestral</span> <span class="sym"><var>θ</var></span> <span class="value" id="thetaVal_spec">0.16</span><button class="help-btn" data-help="specTheta"></button></label>
               <input type="range" id="sliderTheta_spec" min="0.02" max="2" step="0.02" value="0.16">
             </div>
             <div class="field">
-              <label for="sliderS_spec"><span>Selection strength</span> <span class="sym"><var>s</var></span> <span class="value" id="sVal_spec">0.20</span><button class="help-btn" data-help="specS"></button></label>
+              <label for="sliderS_spec"><span>Selection</span> <span class="sym"><var>s</var></span> <span class="value" id="sVal_spec">0.20</span><button class="help-btn" data-help="specS"></button></label>
               <input type="range" id="sliderS_spec" min="0" max="0.5" step="0.01" value="0.20">
             </div>
             <div class="field">
-              <label for="sliderMu_spec"><span>Mutation rate per locus</span> <span class="sym"><var>μ</var></span> <span class="value" id="muVal_spec">0.0050</span><button class="help-btn" data-help="specMutation"></button></label>
+              <label for="sliderMu_spec"><span>Mutation</span> <span class="sym"><var>μ</var></span> <span class="value" id="muVal_spec">0.0050</span><button class="help-btn" data-help="specMutation"></button></label>
               <input type="range" id="sliderMu_spec" min="0" max="0.02" step="0.0005" value="0.005">
             </div>
             <div class="field">
-              <label for="sliderEff_spec"><span>Effect size per locus</span> <span class="value" id="effVal_spec">0.20</span><button class="help-btn" data-help="specEffect"></button></label>
+              <label for="sliderEff_spec"><span>Effect size</span> <span class="value" id="effVal_spec">0.20</span><button class="help-btn" data-help="specEffect"></button></label>
               <input type="range" id="sliderEff_spec" min="0.05" max="0.50" step="0.01" value="0.20">
             </div>
           </div>
         </details>
       </div>
       <div class="field">
-        <label for="sliderX_spec"><span>Fixed differences needed</span> <span class="sym"><var>X</var></span> <span class="value" id="xVal_spec">154</span><button class="help-btn" data-help="specX"></button></label>
+        <label for="sliderX_spec"><span>Fixed differences</span> <span class="sym"><var>X</var></span> <span class="value" id="xVal_spec">154</span><button class="help-btn" data-help="specX"></button></label>
         <input type="range" id="sliderX_spec" min="1" max="1013" step="1" value="154">
       </div>
       <div class="field">
-        <label id="lbl-matingSeg_spec">Body colour is a mating signal<button class="help-btn" data-help="specMating"></button></label>
+        <label id="lbl-matingSeg_spec">Colour as mating signal<button class="help-btn" data-help="specMating"></button></label>
         <div role="group" aria-labelledby="lbl-matingSeg_spec" class="segmented" id="matingSeg_spec">
           <button data-mating="on" class="active">Yes</button>
           <button data-mating="off">No</button>
         </div>
       </div>
       <div class="field" id="matingField_spec">
-        <label for="sliderY_spec"><span>Hue divergence needed</span> <span class="sym"><var>Y</var></span> <span class="value" id="yVal_spec">75°</span><button class="help-btn" data-help="specY"></button></label>
+        <label for="sliderY_spec"><span>Hue divergence</span> <span class="sym"><var>Y</var></span> <span class="value" id="yVal_spec">75°</span><button class="help-btn" data-help="specY"></button></label>
         <input type="range" id="sliderY_spec" min="5" max="180" step="5" value="75">
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnRun_spec">▶ Run Simulation</button>
+        <button class="btn" id="btnRun_spec" data-sound data-results="#stage_spec">▶ Run Simulation</button>
         <button class="btn secondary" id="btnReset_spec">↺ New Ancestral Population</button>
         <span class="status mono" id="statusBar_spec">Set the parameters and press Run.</span>
       </div>
     </div>
 
-    <div class="spec-verdict is-one" id="verdict_spec" role="status" aria-live="polite"></div>
-
-    <div class="spec-split">
+    <div class="spec-split" id="stage_spec">
       <div class="spec-pop-card spec-ancestral">
         <h3>Ancestral population</h3>
         <p class="spec-pop-sub" id="ancSub_spec"></p>
-        <div class="spec-mean-wrap"><canvas id="ancMean_spec" role="img" aria-label="The ancestral population's mean fish"></canvas></div>
-        <div class="spec-mean-label">mean phenotype</div>
-        <div class="spec-individuals" id="ancIndividuals_spec"></div>
-        <div class="spec-individuals-label">six individuals drawn from the population<button class="help-btn" data-help="specIndividuals"></button></div>
+        <div class="spec-pop-body">
+          <div class="spec-mean"><div class="spec-mean-wrap"><canvas id="ancMean_spec" role="img" aria-label="The ancestral population's mean fish"></canvas></div>
+        <div class="spec-mean-label">mean phenotype</div></div>
+          <div class="spec-sample"><div class="spec-individuals" id="ancIndividuals_spec"></div>
+        <div class="spec-individuals-label">six individuals drawn from the population<button class="help-btn" data-help="specIndividuals"></button></div></div>
+        </div>
         <div class="spec-stats" id="ancStats_spec"></div>
       </div>
     </div>
@@ -3009,27 +3409,33 @@
       <div class="spec-pop-card spec-pop-a" id="popCard_a_spec">
         <h3>Population A — stayed put</h3>
         <p class="spec-pop-sub" id="popSub_a_spec"></p>
-        <div class="spec-mean-wrap"><canvas id="popMean_a_spec" role="img" aria-label="Population A's mean fish"></canvas></div>
-        <div class="spec-mean-label">mean phenotype</div>
-        <div class="spec-individuals" id="popIndividuals_a_spec"></div>
-        <div class="spec-individuals-label">six individuals drawn from the population</div>
+        <div class="spec-pop-body">
+          <div class="spec-mean"><div class="spec-mean-wrap"><canvas id="popMean_a_spec" role="img" aria-label="Population A's mean fish"></canvas></div>
+        <div class="spec-mean-label">mean phenotype</div></div>
+          <div class="spec-sample"><div class="spec-individuals" id="popIndividuals_a_spec"></div>
+        <div class="spec-individuals-label">six individuals drawn from the population</div></div>
+        </div>
         <div class="spec-stats" id="popStats_a_spec"></div>
       </div>
       <div class="spec-pop-card spec-pop-b" id="popCard_b_spec">
         <h3>Population B — moved away, <var>N</var>₂ founders</h3>
         <p class="spec-pop-sub" id="popSub_b_spec"></p>
-        <div class="spec-mean-wrap"><canvas id="popMean_b_spec" role="img" aria-label="Population B's mean fish"></canvas></div>
-        <div class="spec-mean-label">mean phenotype</div>
-        <div class="spec-individuals" id="popIndividuals_b_spec"></div>
-        <div class="spec-individuals-label">six individuals drawn from the population</div>
+        <div class="spec-pop-body">
+          <div class="spec-mean"><div class="spec-mean-wrap"><canvas id="popMean_b_spec" role="img" aria-label="Population B's mean fish"></canvas></div>
+        <div class="spec-mean-label">mean phenotype</div></div>
+          <div class="spec-sample"><div class="spec-individuals" id="popIndividuals_b_spec"></div>
+        <div class="spec-individuals-label">six individuals drawn from the population</div></div>
+        </div>
         <div class="spec-stats" id="popStats_b_spec"></div>
       </div>
     </div>
 
+    <div class="spec-verdict is-one" id="verdict_spec" role="status" aria-live="polite"></div>
+
     <div class="reading">
       <div class="time-machine-container" id="scrubberRow_spec" style="margin: 0 0 20px;">
         <div class="field">
-          <label for="timeScrubber_spec" style="color: var(--stamp)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_spec">0</span> / <span id="scrubMaxLabel_spec">0</span></label>
+          <label for="timeScrubber_spec" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_spec">0</span> / <span id="scrubMaxLabel_spec">0</span></label>
           <input type="range" id="timeScrubber_spec" min="0" max="0" value="0" disabled>
         </div>
       </div>
@@ -3051,7 +3457,7 @@
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>No gene flow — and here that is the premise, not a simplification.</strong> The room asks what accumulates between two populations that never exchange a gene. Any migration at all would slow or undo it, and how much is the question this room does not ask.</li>
         <li><strong>1,013 loci, all inherited independently.</strong> No linkage anywhere in this genome, which is why divergence accumulates as smoothly as it does. A real genome sorts in blocks.</li>
@@ -3062,7 +3468,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p><strong>Nothing here is a speciation mechanism.</strong> There is no machinery in this room that is not already in the Drift and Selection rooms — the same sampling, the same fitness bias, one locus at a time, 1,013 times over. Speciation is what that ordinary machinery <em>amounts to</em> once two populations stop exchanging genes. Isolation is not the result; isolation is the starting condition.</p>
       <p><strong>Most of the divergence is at loci nobody is selecting.</strong> 960 of the 1,013 loci are of no use to either habitat, and that is where most fixed differences end up — around 120 of them in a default run. Selection sorts the 53 loci it acts on much faster, five times faster per locus, but 53 is a small number against 960, so the total is carried by drift almost entirely. Moving population B to the stream rather than to another lake shifts the total by about nine differences out of 150 — six per cent, and all of it from the 53: whichever habitat B lives in, genome-wide divergence is set mostly by population size and elapsed time. It is closer to a <em>clock</em> than to a record of adaptation — which is exactly what makes it such a good clock.</p>
       <p><strong>Mutation is blind; substitution is not.</strong> This is the ledger under the strip, and it is the sharpest statement of what selection actually does. New alleles arrive at every locus at the same rate, so they arrive in proportion to how many loci there are: 13 to 40 to 960, and no habitat, effect size or selection strength changes that. Selection cannot make a useful mutation happen. What it changes is what becomes of one after it has happened — at the loci it can see, a new allele fixes tens of times more often than a neutral one does. Adaptation is not a matter of the right mutations arising; it is a matter of which of the ones that arise anyway get anywhere.</p>
@@ -3097,7 +3503,7 @@
   <!-- ========================================== -->
   <!-- TAB 9: THE REPRODUCTION ROOM               -->
   <!-- ========================================== -->
-  <div id="tab-reproduction" class="tab-content page">
+  <div id="tab-reproduction" class="tab-content page" style="--room: #4F7CAC; --room-deep: #3F5874">
     <header class="masthead">
       <div>
         <h1>The Reproduction Room</h1>
@@ -3112,23 +3518,23 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>The rooms so far copied a shape, or tracked an allele, without ever asking how a generation is actually made. This one does — and asks what difference it makes that most organisms need two parents.</p>
       <p><strong>What it shows.</strong> The same two founders reproduce in two different ways, side by side for four <span class="gloss" data-help="glosGeneration">generations</span>. On the left, <em>asexually</em>: every individual makes two exact clones of itself, so the <span class="gloss" data-help="glosPopulation">population</span> doubles — 2 → 4 → 8 → 16. Copying errors are switched off in this room — the Copying Room showed that copying is never really exact — so that the <em>only</em> difference between the two sides is how the genes are combined. On the right, <em>sexually</em>: the two parents make two offspring, each carrying one recombined copy from each parent, so the population only replaces itself. Both panels report their head count <em>and</em> their number of genetically distinct individuals.</p>
       <p><span class="try-label">Try this.</span> Press <em>Auto-play</em> and watch the two panels to the end. Then compare the two numbers under each heading. Look closely at a circle on the right where a half changes shade partway down — that is a crossover, a piece of one copy swapped onto the other during meiosis.</p>
     </div>
 
-    <div class="deck">
+    <div class="deck deck-setup">
       <div class="transport" style="border-top:none; padding-top:0;">
-        <button class="btn" id="btnNext_sa">▶ Next generation</button>
-        <button class="btn secondary" id="btnAuto_sa">⏵ Auto-play</button>
+        <button class="btn" id="btnNext_sa" data-results="#stage_sa">▶ Next generation</button>
+        <button class="btn secondary" id="btnAuto_sa" data-sound data-results="#stage_sa">⏵ Auto-play</button>
         <button class="btn secondary" id="btnReset_sa">↺ Reset</button>
         <span class="status mono" id="genReadout_sa" aria-live="polite"></span>
       </div>
     </div>
 
     <!-- The two family trees, run from the same founders -->
-    <div class="stage-area" style="--cols: 2; align-items: start;">
+    <div class="stage-area" id="stage_sa" style="--cols: 2; align-items: start;">
       <div class="lineage-card" style="--accent: var(--asex);">
         <div class="lineage-head">
           <span class="name-group"><span class="name" style="color:var(--asex);">Asexual</span></span>
@@ -3153,7 +3559,7 @@
     <div class="sa-takeaway" id="takeaway_sa" aria-live="polite"></div>
 
     <div class="sa-legend">
-      <h3>How to read a circle</h3>
+      <h2>How to read a circle</h2>
       <ul>
         <li>Each circle is <strong>one individual</strong>, drawn as a single <span class="gloss" data-help="glosChromosome">chromosome</span> — its <strong>two copies</strong>, the
           <strong>homologues</strong>, shown as the left and right halves.<button class="help-btn" data-help="homologues"></button></li>
@@ -3166,15 +3572,15 @@
 
     <div class="sa-cards">
       <section class="sa-card" style="--accent: var(--asex);">
-        <h3>Asexual reproduction</h3>
+        <h2>Asexual reproduction</h2>
         <p class="lede">One parent, no mate, offspring are exact clones.</p>
-        <h4>Advantages</h4>
+        <h3>Advantages</h3>
         <ul>
           <li><strong>Fast.</strong> Every individual reproduces, so the population doubles each generation (2 → 4 → 8 → 16).</li>
           <li><strong>No mate needed</strong> — no time, energy, or risk spent finding or courting one.</li>
           <li>A <strong>well-adapted genotype</strong> is passed on intact, unchanged.</li>
         </ul>
-        <h4>Disadvantages</h4>
+        <h3>Disadvantages</h3>
         <ul>
           <li><strong>No variety.</strong> Every offspring is a clone, so the whole line is genetically identical.</li>
           <li><strong>Shared weakness.</strong> A disease or change that harms one can wipe out them all.</li>
@@ -3184,15 +3590,15 @@
       </section>
 
       <section class="sa-card" style="--accent: var(--sex);">
-        <h3>Sexual reproduction</h3>
+        <h2>Sexual reproduction</h2>
         <p class="lede">Two parents, each offspring a fresh reshuffle of both.</p>
-        <h4>Advantages</h4>
+        <h3>Advantages</h3>
         <ul>
           <li><strong>Variety.</strong> Recombination plus mixing two parents makes new gene combinations every generation.</li>
           <li><strong>Spreads risk.</strong> With varied genotypes, a single threat is unlikely to take everyone at once.</li>
           <li>Good <span class="gloss" data-help="glosMutation">mutations</span> from different individuals can be <strong>brought together</strong>, and bad ones weeded out.</li>
         </ul>
-        <h4>Disadvantages</h4>
+        <h3>Disadvantages</h3>
         <ul>
           <li><strong>Slow.</strong> A pair produces only two offspring, so the population exactly replaces itself — half the
             descendants the same two individuals would have left asexually (the <strong>two-fold cost of sex</strong>).<button class="help-btn" data-help="twofold"></button></li>
@@ -3203,7 +3609,7 @@
     </div>
 
     <div class="sa-note">
-      <h3>The trade-off in one line</h3>
+      <h2>The trade-off in one line</h2>
       <p>
         Both panels started from the same two individuals. After four generations the asexual panel holds <strong>16</strong>
         and the sexual panel just <strong>2</strong> — an eight-fold gap. That is the <strong>cost of sex</strong> compounding:
@@ -3228,7 +3634,7 @@
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>No selection and no mutation.</strong> Nothing here is favoured and nothing new arises — the only thing being compared is how much variety each way of reproducing can <em>make</em> from what is already present.</li>
         <li><strong>Four generations, and two founders.</strong> A short run, chosen so that every genotype can be shown; nothing is drifting to fixation in that time.</li>
@@ -3238,7 +3644,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>After four generations the asexual side has sixteen individuals but still only the two genotypes it started with; the sexual side has two individuals carrying two genotypes that never existed before. Selection can only act on <em>differences</em>, so sixteen identical individuals offer it no more to work with than one. That is the bargain: numbers on one side, variety on the other — and it is the <span class="gloss" data-help="glosGamete">gametes</span> made here that the next room pairs up at random.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('hardyweinberg');">Hardy–Weinberg Room</button> takes the gametes made here and pairs them at random. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> returns to the point about mixing, and shows in population-genetic terms why two good mutations in different asexual lineages can never be combined.</p>
     </div>
@@ -3260,7 +3666,7 @@
   <!-- ========================================== -->
   <!-- TAB 10: THE HARDY-WEINBERG ROOM             -->
   <!-- ========================================== -->
-  <div id="tab-hardyweinberg" class="tab-content page">
+  <div id="tab-hardyweinberg" class="tab-content page" style="--room: #8B3E62; --room-deep: #633348">
     <header class="masthead">
       <div>
         <h1>The Hardy–Weinberg Room</h1>
@@ -3275,15 +3681,16 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('reproduction');">Reproduction Room</button> made the <span class="gloss" data-help="glosGamete">gametes</span>. This room pairs them up, and works out what that does to the <span class="gloss" data-help="glosGenotype">genotypes</span>.</p>
       <p><strong>What it shows.</strong> A single locus with two alleles — <var>A</var>₁ at frequency <var>p</var>, <var>A</var>₂ at frequency <var>q</var> = 1 − <var>p</var>. Two handles cut the parent <span class="gloss" data-help="glosPopulation">population</span> into any mix of <var>A</var>₁<var>A</var>₁, <var>A</var>₁<var>A</var>₂ and <var>A</var>₂<var>A</var>₂ you like, and three histograms sit side by side: the genotypes the parents actually have (<em>observed</em>), the <var>p</var>²:2<var>pq</var>:<var>q</var>² <em>expected</em> from their allele frequency, and what one round of random mating really produces. Below them, the <em>Hardy–Weinberg square</em> shows where those proportions come from — and how many individuals each one means — while a gamete wheel builds the offspring one gamete at a time.</p>
       <p><span class="try-label">Try this.</span> Collapse the <em>One <span class="gloss" data-help="glosGeneration">generation</span> of random mating</em> panel and slide <var>p</var> from 0.5 down toward 0.1: watch where the rare allele goes — almost every copy ends up inside a heterozygote, not a homozygote. Then open the panel again and drag the two handles on the genotype bar to build a lop-sided population of your own — more <var>A</var>₁<var>A</var>₁ <em>and</em> more <var>A</var>₂<var>A</var>₂, fewer <var>A</var>₁<var>A</var>₂. Press <em>Mate randomly</em> at each setting and see where the offspring land.</p>
     </div>
 
-    <div class="deck">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">two choices, then press Mate randomly.</span></div>
       <div class="field">
-        <label for="sliderP_hw"><span>Allele freq.</span> <span class="sym"><var>f</var>(<var>A</var>₁) = <var>p</var></span> <span class="value" id="pVal_hw">0.50</span> · <span class="sym"><var>q</var></span> = <span class="value" id="qVal_hw">0.50</span><button class="help-btn" data-help="hwP"></button></label>
+        <label for="sliderP_hw"><span class="sym"><var>f</var>(<var>A</var>₁) = <var>p</var></span> <span class="value" id="pVal_hw">0.50</span> · <span class="sym"><var>q</var></span> <span class="value" id="qVal_hw">0.50</span><button class="help-btn" data-help="hwP"></button></label>
         <input type="range" id="sliderP_hw" min="0.01" max="0.99" step="0.01" value="0.50">
         <div class="mix-scale mono" id="pHint_hw" hidden>set by the handles below — close the panel to use this slider</div>
       </div>
@@ -3293,8 +3700,8 @@
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnMate_hw">⚡ Mate randomly</button>
-        <button class="btn secondary" id="btnBuild_hw">▶ Build G1 gamete by gamete</button>
+        <button class="btn" id="btnMate_hw" data-sound data-results="#stage_hw">⚡ Mate randomly</button>
+        <button class="btn secondary" id="btnBuild_hw" data-sound data-results="#stage_hw">▶ Build G1 gamete by gamete</button>
         <button class="btn secondary" id="btnReset_hw">↺ Reset</button>
         <span class="status mono" id="statusBar_hw">Ready.</span>
       </div>
@@ -3319,25 +3726,25 @@
             <div class="drift-chip"><var>f</var>(<var>A</var>₁) = <var>p</var><span id="startP_hw">—</span></div>
           </div>
         </div>
-        <div class="canvas-wrap hw-hist" style="margin-top:14px;"><canvas id="equilCanvas_hw"></canvas></div>
+        <div class="canvas-wrap hw-hist" style="margin-top:14px;"><canvas id="equilCanvas_hw" role="img" aria-label="Genotype counts after one generation of random mating, against the Hardy–Weinberg expectation"></canvas></div>
         <p id="equilNote_hw" style="font-size:13.5px; line-height:1.55; color:var(--ink); margin:12px 0 0;"></p>
       </details>
     </div>
 
     <!-- Row 1: G0 · the gamete wheel · G1 -->
-    <div class="stage-area" style="--cols: 3;">
+    <div class="stage-area" id="stage_hw" style="--cols: 3;">
       <div class="lineage-card card-fill">
         <div class="lineage-head">
           <span class="name-group"><span class="name">G0 — parents<button class="help-btn" data-help="hwG0"></button></span></span>
         </div>
-        <div class="canvas-wrap tall"><canvas id="g0Canvas_hw"></canvas></div>
+        <div class="canvas-wrap tall"><canvas id="g0Canvas_hw" role="img" aria-label="The parent generation, one disc per individual, coloured by genotype"></canvas></div>
         <div class="mono pop-stat" id="g0Stat_hw" style="font-size:11.5px; color:var(--ink); margin-top:8px; line-height:1.5;">—</div>
       </div>
 
       <div class="lineage-card" style="display:flex; flex-direction:column; align-items:center;">
         <div class="lineage-head" style="width:100%;"><span class="name">Gamete wheel<button class="help-btn" data-help="hwWheel"></button></span></div>
         <div style="position:relative; width:150px; height:150px; margin: 10px 0;">
-          <canvas id="wheelCanvas_hw"></canvas>
+          <canvas id="wheelCanvas_hw" role="img" aria-label="Gamete wheel, its two slices sized by the allele frequency of the parents"></canvas>
           <div class="needle"></div>
         </div>
         <div class="drift-stats">
@@ -3352,7 +3759,7 @@
         <div class="lineage-head">
           <span class="name-group"><span class="name">G1 — offspring<button class="help-btn" data-help="hwG1"></button></span></span>
         </div>
-        <div class="canvas-wrap tall"><canvas id="g1Canvas_hw"></canvas></div>
+        <div class="canvas-wrap tall"><canvas id="g1Canvas_hw" role="img" aria-label="The offspring generation, each individual assembled from two drawn gametes"></canvas></div>
         <div class="mono pop-stat" id="g1Stat_hw" style="font-size:11.5px; color:var(--ink); margin-top:8px; line-height:1.5;">—</div>
       </div>
     </div>
@@ -3367,7 +3774,7 @@
     <div class="stage-area" style="--cols: 2; margin-top: 20px;">
       <div class="lineage-card">
         <div class="lineage-head"><span class="name-group"><span class="name">The Hardy–Weinberg square</span><button class="help-btn" data-help="hwSquare"></button></span></div>
-        <div class="canvas-wrap hw-square"><canvas id="squareCanvas_hw"></canvas></div>
+        <div class="canvas-wrap hw-square"><canvas id="squareCanvas_hw" role="img" aria-label="The Hardy–Weinberg square: the four gamete pairings, each area its genotype frequency"></canvas></div>
         <div class="mono" id="squareNote_hw" style="font-size:11px; color:var(--ink-soft); text-align:center; margin-top:8px; line-height:1.5;">—</div>
         <div class="drift-stats">
           <div class="drift-chip"><var>f</var>(<var>A</var>₁<var>A</var>₁) = <var>p</var>²<span id="freqAA_hw">—</span></div>
@@ -3377,7 +3784,7 @@
       </div>
       <div class="lineage-card card-fill">
         <div class="lineage-head"><span class="name-group"><span class="name">Genotype frequencies as <var>p</var> varies<button class="help-btn" data-help="hwCurves"></button></span></span><span class="stat mono" style="color:var(--ink-soft);">● G0 &nbsp; ○ G1</span></div>
-        <div class="canvas-wrap"><canvas id="curvesCanvas_hw"></canvas></div>
+        <div class="canvas-wrap"><canvas id="curvesCanvas_hw" role="img" aria-label="The three genotype frequencies as the allele frequency p varies from 0 to 1"></canvas></div>
       </div>
     </div>
 
@@ -3386,7 +3793,7 @@
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>These are the theorem's own assumptions, and here they are the subject rather than a simplification.</strong> Random mating, no selection, no mutation, no migration, and no drift.</li>
         <li><strong>An infinitely large population — and this room breaks that one on purpose.</strong> "No drift" means a population large enough that a generation is a perfect draw. The panel here instead draws a real 2<var>N</var> gametes, so with <var>N</var> small the offspring miss the p²:2pq:q² proportions by a little, and the allele frequency shifts a little too. That gap is <span class="gloss" data-help="glosDrift">drift</span>, and watching it appear as you lower <var>N</var> is the point: within any one generation the genotypes still follow the allele frequency exactly, which is what the theorem promises — what it cannot promise is that the allele frequency stays put. The <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> is that second half on its own.</li>
@@ -3396,7 +3803,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>Genotype frequencies are completely fixed by the allele frequency, and heterozygotes are most common at <var>p</var> = 0.5. Any starting mix snaps to <var>p</var>²:2<var>pq</var>:<var>q</var>² after a single generation of random mating and stays there. That is exactly why the diploid Drift and Selection rooms can draw 2<var>N</var> alleles and pair them: the genotypes follow automatically, so only the allele frequency has to be tracked.</p>
       <p><strong>Where this connects.</strong> This is the licence the earlier rooms were using: because genotype frequency follows from allele frequency, the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> could track the allele frequency alone and pair gametes as they went — which is what their Diploid setting quietly relies on. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> shows where this convenient one-locus picture breaks down.</p>
     </div>
@@ -3416,7 +3823,7 @@
   <!-- ========================================== -->
   <!-- TAB 11: THE LINKAGE ROOM                   -->
   <!-- ========================================== -->
-  <div id="tab-linkage" class="tab-content page">
+  <div id="tab-linkage" class="tab-content page" style="--room: #8B5E3C; --room-deep: #634631">
     <header class="masthead">
       <div>
         <h1>The Linkage Room</h1>
@@ -3431,7 +3838,7 @@
     </header>
 
     <div class="room-brief">
-      <h3>Start here</h3>
+      <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('hardyweinberg');">Hardy–Weinberg Room</button> followed a single locus. Everything changes once you follow two.</p>
       <p><strong>What it shows.</strong> The previous room follows one locus. This one follows two, sitting a chosen distance apart on the same chromosome. Part 1 builds an association between them — allele <var>A</var>₁ travelling with allele <var>B</var>₁ — and lets <span class="gloss" data-help="glosRecombination">recombination</span> pull it apart, <span class="gloss" data-help="glosGeneration">generation</span> by generation, at the rate <em>r</em> you set. Part 2 drops two beneficial <span class="gloss" data-help="glosMutation">mutations</span> into a finite <span class="gloss" data-help="glosPopulation">population</span>, one in each of two different individuals, and counts how often the population manages to keep both.</p>
       <p><span class="try-label">Try this.</span> In Part 1, set <var>r</var> = 0.5 and press <em>Auto-play</em>: the association is gone almost at once. Now set <var>r</var> = 0.005 and run it again — after sixty generations most of it is still there. Then, in Part 2, press <em>Run all replicates</em> at a low <var>r</var> and compare the two sets of bars.</p>
@@ -3440,39 +3847,41 @@
     <!-- ---------- PART 1: linkage disequilibrium and its decay ---------- -->
     <h2 class="lk-part">Part 1 · How long an association lasts<button class="help-btn" data-help="ldWhat"></button></h2>
 
-    <div class="deck">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up part 1<span class="deck-kicker-note">three choices, then step or auto-play.</span></div>
       <div class="field">
-        <label for="sliderR_lk"><span>Recombination rate</span> <span class="sym"><var>r</var></span> <span class="value" id="rVal_lk">0.010</span><button class="help-btn" data-help="ldRate"></button></label>
+        <label for="sliderR_lk"><span>Recombination</span> <span class="sym"><var>r</var></span> <span class="value" id="rVal_lk">0.010</span><button class="help-btn" data-help="ldRate"></button></label>
         <input type="range" id="sliderR_lk" min="0" max="0.5" step="0.005" value="0.01">
         <div class="mix-scale" id="rHint_lk">—</div>
       </div>
       <div class="field">
-        <label for="sliderD0_lk"><span>Starting association</span> <span class="sym"><var>D</var>₀ / <var>D</var><sub>max</sub></span> <span class="value" id="d0Val_lk">1.00</span><button class="help-btn" data-help="ldD"></button></label>
+        <label for="sliderD0_lk"><span>Association</span> <span class="sym"><var>D</var>₀/<var>D</var><sub>max</sub></span> <span class="value" id="d0Val_lk">1.00</span><button class="help-btn" data-help="ldD"></button></label>
         <input type="range" id="sliderD0_lk" min="-1" max="1" step="0.05" value="1">
         <div class="mix-scale">−1 = <var>A</var>₁ travels with <var>B</var>₂ &nbsp;·&nbsp; 0 = no association &nbsp;·&nbsp; +1 = <var>A</var>₁ travels with <var>B</var>₁</div>
       </div>
       <div class="field">
-        <label for="sliderP_lk"><span>Allele freq. at both loci</span> <span class="sym"><var>p</var></span> <span class="value" id="pVal_lk">0.50</span><button class="help-btn" data-help="ldAlleleFreq"></button></label>
+        <label for="sliderP_lk"><span>Allele freq.</span> <span class="sym"><var>p</var></span> <span class="value" id="pVal_lk">0.50</span><button class="help-btn" data-help="ldAlleleFreq"></button></label>
         <input type="range" id="sliderP_lk" min="0.05" max="0.95" step="0.01" value="0.5">
+        <div class="mix-scale">the same <var>p</var> at both loci</div>
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnStep_lk">▶ One generation</button>
-        <button class="btn secondary" id="btnAuto_lk">⏵ Auto-play</button>
+        <button class="btn" id="btnStep_lk" data-results="#stage1_lk">▶ One generation</button>
+        <button class="btn secondary" id="btnAuto_lk" data-sound data-results="#stage1_lk">⏵ Auto-play</button>
         <button class="btn secondary" id="btnReset_lk">↺ Reset to generation 0</button>
         <span class="status mono" id="statusBar_lk">Ready.</span>
       </div>
     </div>
 
-    <div class="stage-area" style="--cols: 2; align-items: start;">
+    <div class="stage-area" id="stage1_lk" style="--cols: 2; align-items: start;">
       <div class="lineage-card">
         <div class="lineage-head"><span class="name-group"><span class="name">The gamete square</span><button class="help-btn" data-help="ldSquare"></button></span><span class="stat mono" id="genLabel_lk">Generation 0</span></div>
-        <div class="canvas-wrap lk-square"><canvas id="squareCanvas_lk"></canvas></div>
+        <div class="canvas-wrap lk-square"><canvas id="squareCanvas_lk" role="img" aria-label="The gamete square: the four two-locus gametes, each area its frequency"></canvas></div>
         <div class="mono" id="squareNote_lk" style="font-size:11px; color:var(--ink-soft); text-align:center; margin-top:8px; line-height:1.5;">—</div>
       </div>
       <div class="lineage-card">
         <div class="lineage-head"><span class="name-group"><span class="name">How the association decays</span><button class="help-btn" data-help="ldDecay"></button></span><span class="stat mono">D<sub>t</sub> = <var>D</var>₀(1 − <var>r</var>)<sup>t</sup></span></div>
-        <div class="canvas-wrap lk-decay"><canvas id="decayCanvas_lk"></canvas></div>
+        <div class="canvas-wrap lk-decay"><canvas id="decayCanvas_lk" role="img" aria-label="Linkage disequilibrium D against generation, decaying as recombination breaks the association"></canvas></div>
       </div>
     </div>
 
@@ -3501,36 +3910,38 @@
       is a copy of <var>B</var>₁ displaced, and the population can only keep one of them.
     </p>
 
-    <div class="deck">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up part 2<span class="deck-kicker-note">four choices, then run all the replicates.</span></div>
       <div class="field">
         <label for="sliderN_lk"><span>Population size <var>N</var></span> <span class="value" id="nVal_lk">50</span><button class="help-btn" data-help="ldN"></button></label>
         <input type="range" id="sliderN_lk" min="20" max="500" step="10" value="50">
       </div>
       <div class="field">
-        <label for="sliderS_lk"><span>Advantage of each mutation</span> <span class="sym"><var>s</var></span> <span class="value" id="sVal_lk">0.20</span><button class="help-btn" data-help="ldS"></button></label>
+        <label for="sliderS_lk"><span>Advantage</span> <span class="sym"><var>s</var></span> <span class="value" id="sVal_lk">0.20</span><button class="help-btn" data-help="ldS"></button></label>
         <input type="range" id="sliderS_lk" min="0.01" max="0.4" step="0.01" value="0.2">
+        <div class="mix-scale">carried by each of the two mutations</div>
       </div>
       <div class="field">
-        <label for="sliderF0_lk"><span>Starting freq. of each mutation</span> <span class="value" id="f0Val_lk">0.050</span><button class="help-btn" data-help="ldF0"></button></label>
+        <label for="sliderF0_lk"><span>Starting freq.</span> <span class="value" id="f0Val_lk">0.050</span><button class="help-btn" data-help="ldF0"></button></label>
         <input type="range" id="sliderF0_lk" min="0.005" max="0.25" step="0.005" value="0.05">
         <div class="mix-scale" id="f0Hint_lk">—</div>
       </div>
       <div class="field">
-        <label for="sliderRep_lk"><span>Replicate populations</span> <span class="value" id="repVal_lk">200</span><button class="help-btn" data-help="ldReplicates"></button></label>
+        <label for="sliderRep_lk"><span>Replicates</span> <span class="value" id="repVal_lk">200</span><button class="help-btn" data-help="ldReplicates"></button></label>
         <input type="range" id="sliderRep_lk" min="20" max="400" step="20" value="200">
       </div>
 
       <div class="transport">
-        <button class="btn" id="btnRunOne_lk">▶ Watch one population</button>
-        <button class="btn secondary" id="btnRunMany_lk">▶▶ Run all replicates</button>
+        <button class="btn" id="btnRunOne_lk" data-results="#stage2_lk">▶ Watch one population</button>
+        <button class="btn secondary" id="btnRunMany_lk" data-sound data-results="#stage2_lk">▶▶ Run all replicates</button>
         <span class="status mono" id="hrStatus_lk">Uses the recombination rate <var>r</var> set in Part 1.</span>
       </div>
     </div>
 
-    <div class="stage-area" style="--cols: 2; align-items: start;">
+    <div class="stage-area" id="stage2_lk" style="--cols: 2; align-items: start;">
       <div class="lineage-card">
         <div class="lineage-head"><span class="name-group"><span class="name">One population, gamete by gamete</span><button class="help-btn" data-help="ldTrajectory"></button></span><span class="stat mono" id="hrRunLabel_lk">—</span></div>
-        <div class="canvas-wrap lk-traj"><canvas id="trajCanvas_lk"></canvas></div>
+        <div class="canvas-wrap lk-traj"><canvas id="trajCanvas_lk" role="img" aria-label="Frequencies of the four gametes in one population against generation"></canvas></div>
         <div class="mono" style="font-size:11px; color:var(--ink-soft); margin-top:8px; text-align:center;">
           <span style="color:#C08A2E;">━</span> <var>A</var>₁<var>B</var>₁ &nbsp; <span style="color:#2E5C8A;">━</span> <var>A</var>₁<var>B</var>₂ &nbsp;
           <span style="color:#388047;">━</span> <var>A</var>₂<var>B</var>₁ &nbsp; <span style="color:#6b6258;">━</span> <var>A</var>₂<var>B</var>₂
@@ -3538,7 +3949,7 @@
       </div>
       <div class="lineage-card">
         <div class="lineage-head"><span class="name-group"><span class="name">How often both mutations survive</span><button class="help-btn" data-help="ldOutcome"></button></span><span class="stat mono">your <var>r</var> vs. free recombination</span></div>
-        <div class="canvas-wrap lk-outcome"><canvas id="outcomeCanvas_lk"></canvas></div>
+        <div class="canvas-wrap lk-outcome"><canvas id="outcomeCanvas_lk" role="img" aria-label="How often the replicate populations kept both mutations, one bar per outcome"></canvas></div>
       </div>
     </div>
 
@@ -3547,7 +3958,7 @@
     </div>
 
     <div class="room-assumes">
-      <h3>What this model assumes</h3>
+      <h2>What this model assumes</h2>
       <ul>
         <li><strong>Two loci, and only two.</strong> A real chromosome puts a locus in the company of thousands, and the interference this room demonstrates is correspondingly stronger there.</li>
         <li><strong>Fitness is multiplicative across the two loci,</strong> so there is <em>no epistasis</em>: the double mutant is worth exactly what its two halves are worth. That is deliberate — it isolates the effect of linkage itself, and any interference you see cannot be blamed on the two alleles interacting.</li>
@@ -3557,7 +3968,7 @@
     </div>
 
     <div class="room-payoff">
-      <h3>What to notice</h3>
+      <h2>What to notice</h2>
       <p>Hardy–Weinberg is reached in one generation and stays; linkage equilibrium is only ever approached, at a speed set by how close the two loci sit. And while an association lasts, it has a cost: two good mutations on different chromosomes are rivals rather than allies, because the chromosome carrying both has to be built by recombination before selection can favour it. With little recombination, one of the two is usually thrown away. That is <em>Hill–Robertson interference</em> — and an asexual lineage lives at <var>r</var> = 0 across its whole genome, permanently.</p>
       <p><strong>Where this connects.</strong> Linkage is the reason the one-locus rooms are a simplification, not the whole story. The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> treated its five traits as independent loci — worth going back with the knowledge that real traits are not always so obliging.</p>
     </div>
@@ -3573,32 +3984,36 @@
 
   </div>
 
+  </main>
+
   <!-- ========================================== -->
   <!-- SCRIPTS                                    -->
   <!-- Load order matters: i18n defines T() for every room and must come -->
-  <!-- first; nav has no dependencies; shapes-engine and canvas-utils    -->
+  <!-- first; nav and sound have no dependencies beyond it; shapes-engine -->
+  <!-- and canvas-utils                                                   -->
   <!-- are shared and must load before the room scripts that consume     -->
   <!-- them. To add a new room: drop a new file in                       -->
   <!-- js/, add a <script src> line for it below, and add its markup     -->
   <!-- and tab button above.                                             -->
   <!-- ========================================== -->
-  <script src="js/i18n.js?v=1788512753"></script>
-  <script src="js/nav.js?v=1788512753"></script>
-  <script src="js/help.js?v=1788512753"></script>
-  <script src="js/shapes-engine.js?v=1788512753"></script>
-  <script src="js/canvas-utils.js?v=1788512753"></script>
-  <script src="js/phylo.js?v=1788512753"></script>
-  <script src="js/copying-room.js?v=1788512753"></script>
-  <script src="js/branching-room.js?v=1788512753"></script>
-  <script src="js/fate-room.js?v=1788512753"></script>
-  <script src="js/sex-asex-room.js?v=1788512753"></script>
-  <script src="js/hardy-weinberg-room.js?v=1788512753"></script>
-  <script src="js/linkage-room.js?v=1788512753"></script>
-  <script src="js/wright-fisher-core.js?v=1788512753"></script>
-  <script src="js/drift-room.js?v=1788512753"></script>
-  <script src="js/selection-room.js?v=1788512753"></script>
-  <script src="js/mutation-room.js?v=1788512753"></script>
-  <script src="js/adaptation-room.js?v=1788512753"></script>
-  <script src="js/speciation-room.js?v=1788512753"></script>
+  <script src="js/i18n.js?v=17894664785656"></script>
+  <script src="js/nav.js?v=17894664785656"></script>
+  <script src="js/sound.js?v=17894664785656"></script>
+  <script src="js/help.js?v=17894664785656"></script>
+  <script src="js/shapes-engine.js?v=17894664785656"></script>
+  <script src="js/canvas-utils.js?v=17894664785656"></script>
+  <script src="js/phylo.js?v=17894664785656"></script>
+  <script src="js/copying-room.js?v=17894664785656"></script>
+  <script src="js/branching-room.js?v=17894664785656"></script>
+  <script src="js/fate-room.js?v=17894664785656"></script>
+  <script src="js/sex-asex-room.js?v=17894664785656"></script>
+  <script src="js/hardy-weinberg-room.js?v=17894664785656"></script>
+  <script src="js/linkage-room.js?v=17894664785656"></script>
+  <script src="js/wright-fisher-core.js?v=17894664785656"></script>
+  <script src="js/drift-room.js?v=17894664785656"></script>
+  <script src="js/selection-room.js?v=17894664785656"></script>
+  <script src="js/mutation-room.js?v=17894664785656"></script>
+  <script src="js/adaptation-room.js?v=17894664785656"></script>
+  <script src="js/speciation-room.js?v=17894664785656"></script>
 </body>
 </html>

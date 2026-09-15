@@ -4,8 +4,14 @@
     const LINEAGE_COLORS = ['#3D6E6E', '#A8442A', '#7A5C99'];
     const LINEAGE_NAMES = ['Lineage A', 'Lineage B', 'Lineage C'];
 
+    // The third lineage setting is the crowd view: no per-card heading, laid out
+    // ten to a row. Named, because the count appears in four places and the grid
+    // is meant to stay ten wide whatever it is — 50 makes that five rows.
+    const MANY = 50;
     let currentShape = 'polygon'; let lineageCount = 1;
-    let mutSigmaFrac = 0.005 + (3/10)*0.12; let speedMs = 50; let maxGen = 100;
+    // Fixed pace: the speed slider was one more thing to set before anything
+    // happened, and 50 ms/gen is the value it defaulted to anyway.
+    let mutSigmaFrac = 0.005 + (3/10)*0.12; const speedMs = 50; let maxGen = 100;
     let playing = false; let timer = null; let ancestor = freshAncestor(currentShape); let lineages = []; 
 
     const stageArea = document.getElementById('stageArea_copy');
@@ -17,8 +23,6 @@
     const resetBtn = document.getElementById('resetBtn_copy');
     const mutRate = document.getElementById('mutRate_copy');
     const mutVal = document.getElementById('mutVal_copy');
-    const speedInput = document.getElementById('speed_copy');
-    const speedVal = document.getElementById('speedVal_copy');
     const maxGenInput = document.getElementById('maxGen_copy');
     const maxGenVal = document.getElementById('maxGenVal_copy');
     const seg = document.getElementById('lineageCountSeg_copy');
@@ -29,18 +33,22 @@
     function buildStage(){
       // Cards are always laid out on a 3-wide grid (even with 1 or 2 lineages showing)
       // so a card's physical size never changes as you switch between 1/2/3 lineages.
-      let cols = lineageCount === 100 ? 10 : 3;
+      let cols = lineageCount === MANY ? 10 : 3;
       stageArea.style.setProperty('--cols', cols); stageArea.innerHTML = ''; lineages = [];
       timeScrubber.min = 0; timeScrubber.max = 0; timeScrubber.value = 0;
       scrubVal.textContent = 0; timeScrubber.disabled = true;
 
       for(let i=0;i<lineageCount;i++){
         const color = LINEAGE_COLORS[i % LINEAGE_COLORS.length];
-        const name = lineageCount === 100 ? `Lineage ${i+1}` : LINEAGE_NAMES[i];
+        const name = lineageCount === MANY ? `Lineage ${i+1}` : LINEAGE_NAMES[i];
         const card = document.createElement('div');
         
-        if (lineageCount === 100) {
-          card.innerHTML = `<canvas class="stage-canvas" style="background:transparent; border:none;"></canvas>`;
+        // The crowd view has no card heading, so its canvas carries the only
+        // name that lineage has; the named cards repeat theirs, since a heading
+        // beside a picture does not tell a screen reader what the picture is.
+        if (lineageCount === MANY) {
+          card.innerHTML = `<canvas class="stage-canvas" role="img" aria-label="${name}, current shape"
+            style="background:transparent; border:none;"></canvas>`;
         } else {
           card.className = 'lineage-card'; card.style.setProperty('--accent', color);
           card.innerHTML = `
@@ -48,7 +56,7 @@
               <span class="name" style="color:${color}">${name}</span>
               <span class="stat mono" data-role="stat">gen 0 · Δ 0.00</span>
             </div>
-            <canvas class="stage-canvas"></canvas>
+            <canvas class="stage-canvas" role="img" aria-label="${name}, current shape"></canvas>
           `;
         }
 
@@ -90,7 +98,12 @@
     window.addEventListener('resize', () => lineages.forEach(l => renderLineage(l)));
 
     function stepAll(){
-      const genIndex = lineages[0].history.length; if(genIndex >= maxGen){ stopPlaying(); return; }
+      // history[0] is the original, which is not a copy, so the copy about to
+      // be made is numbered by the length of the history so far: the first step
+      // makes copy 1. The reader asked for maxGen copies, so there is still one
+      // to make while that number is maxGen itself — stopping at >= would end
+      // the run at 99 of the 100 that were asked for.
+      const genIndex = lineages[0].history.length; if(genIndex > maxGen){ stopPlaying(); return; }
       lineages.forEach(lineage=>{
         const next = mutate(lineage.genome, mutSigmaFrac, currentShape);
         lineage.genome = next; lineage.history.push(next); renderLineage(lineage);
@@ -102,7 +115,7 @@
       timeScrubber.max = genIndex; timeScrubber.value = genIndex; scrubVal.textContent = genIndex;
       statusLine.textContent = T('cp.status', 'gen {g} / {max} — {state}',
         { g: genIndex, max: maxGen, state: playing ? T('cp.state.copying', 'copying…') : T('cp.state.stepped', 'stepped') });
-      updateReading(genIndex); if(genIndex + 1 > maxGen) stopPlaying();
+      updateReading(genIndex); if(genIndex >= maxGen) stopPlaying();
     }
 
     function scrubTo(genIndex) {
@@ -141,18 +154,18 @@
       if(lineages.length === 1){
         const d = normDist(ancestor, lineages[0].history[genIndex], currentShape);
         readingText.innerHTML = T('cp.read.one',
-          'At generation <strong>{g}</strong>, this lineage has drifted <strong>{d}</strong> normalized units from the original — no single copy was a big change, but the small ones never stopped adding up.',
+          'At generation <strong>{g}</strong>, this lineage has drifted <strong>{d}</strong> normalised units from the original — no single copy was a big change, but the small ones never stopped adding up.',
           { g: genIndex, d: d.toFixed(2) });
-      } else if (lineages.length === 100) {
+      } else if (lineages.length === MANY) {
         readingText.innerHTML = T('cp.read.many',
-          'At generation <strong>{g}</strong>, 100 distinct lineages are copying and drifting in parallel.', { g: genIndex });
+          'At generation <strong>{g}</strong>, {n} distinct lineages are copying and drifting in parallel.', { g: genIndex, n: MANY });
       } else {
         let dMax = 0;
         for (let i = 0; i < lineages.length; i++)
           for (let j = i + 1; j < lineages.length; j++)
             dMax = Math.max(dMax, normDist(lineages[i].history[genIndex], lineages[j].history[genIndex], currentShape));
         readingText.innerHTML = T('cp.read.pair',
-          'At generation <strong>{g}</strong>, lineages that began as the <em>exact same {shape}</em> have drifted up to <strong>{d}</strong> normalized units apart — and each has gone its own way.',
+          'At generation <strong>{g}</strong>, lineages that began as the <em>exact same {shape}</em> have drifted up to <strong>{d}</strong> normalised units apart — and each has gone its own way.',
           { g: genIndex, shape: shapeWord, d: dMax.toFixed(2) });
       }
     }
@@ -200,10 +213,6 @@
 
     mutRate.addEventListener('input', ()=>{ 
       mutVal.textContent = mutRate.value; mutSigmaFrac = 0.005 + (mutRate.value/10)*0.12; 
-    });
-    speedInput.addEventListener('input', ()=>{ 
-      speedMs = Number(speedInput.value); speedVal.textContent = `${speedMs} ms/gen`; 
-      if(playing){ clearInterval(timer); timer = setInterval(stepAll, speedMs); } 
     });
     maxGenInput.addEventListener('input', ()=>{ 
       maxGen = Math.max(2, Math.min(400, Number(maxGenInput.value)||40)); maxGenVal.textContent = maxGen; 
