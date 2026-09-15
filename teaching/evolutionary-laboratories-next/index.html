@@ -28,8 +28,18 @@
 <meta property="og:title" content="Evolutionary Laboratories">
 <meta property="og:description" content="Eleven interactive laboratories for teaching evolution: mutation, drift, selection and adaptation, each a live simulation you set up and run yourself.">
 <meta property="og:type" content="website">
-<!-- Inline so the page keeps working as a folder copied onto a VLE or a stick. -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23EDE6D6'/%3E%3Cpath d='M8 23c4-3 6-8 6-12' stroke='%233D6E6E' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Cpath d='M14 11c0 4 2 9 6 12' stroke='%23A8442A' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='14' cy='9' r='2.6' fill='%23C08A2E'/%3E%3C/svg%3E">
+<!-- Three files rather than the one inline data: URI this used to be. The icon
+     was a data:image/svg+xml URL, which Firefox honours and Chrome and Safari
+     both quietly ignore — so the tab and the bookmark came up blank in exactly
+     the two browsers most readers use. A real file is fetched by all of them,
+     and relative paths keep the folder-on-a-stick case working just as img/
+     already does for the logo. The .ico is the fallback that every browser and
+     every bookmark bar has read for twenty years; the .svg is what a modern one
+     picks instead (sizes on the .ico stops Chrome preferring it); the .png is
+     for Safari's bookmarks and iOS home screens, which read neither. -->
+<link rel="icon" href="img/favicon.ico" sizes="32x32">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <style>
   :root{
     --paper: #EDE6D6;
