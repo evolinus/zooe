@@ -1,0 +1,44 @@
+{% comment %}
+  the cookie banner. analytics.html defines the tag but does not run it, so
+  nothing reaches Google until one of these buttons is pressed.
+
+  hidden in the markup rather than shown and then dismissed: a visitor who has
+  already answered should never see it flash on the way past. fr-consent.js
+  reveals it only when no choice is stored.
+
+  not wrapped in a production check, unlike the tag itself - it should be
+  visible in a local preview so the thing can be looked at while it is worked
+  on. with no tag loaded there, the buttons only record the choice.
+{% endcomment %}
+
+<div
+  class="fr-consent"
+  data-fr-consent
+  data-dark="true"
+  role="dialog"
+  aria-modal="false"
+  aria-label="Cookies"
+  hidden
+>
+  <p class="fr-consent-text">
+    We would like to count visits with Google Analytics, which stores a cookie
+    in your browser. It stays off unless you accept, and the site works the
+    same either way.
+    <span lang="it">
+      <em>
+        Vorremmo contare le visite con Google Analytics, che salva un cookie
+        nel tuo browser. Resta disattivato se non acconsenti, e il sito
+        funziona allo stesso modo in entrambi i casi.
+      </em>
+    </span>
+  </p>
+
+  <div class="fr-consent-actions">
+    <button class="fr-btn fr-btn-secondary" type="button" data-fr-consent-action="denied">
+      Decline
+    </button>
+    <button class="fr-btn fr-btn-primary" type="button" data-fr-consent-action="granted">
+      Accept
+    </button>
+  </div>
+</div>

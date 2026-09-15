@@ -1,18 +1,36 @@
 {% comment %}
   Google Analytics (GA4), property G-3HJ9BYVMN3.
 
-  production only. the CI build runs with JEKYLL_ENV=production
+  nothing is loaded here. the tag is wrapped in a loader that only runs once
+  the visitor has accepted in the cookie banner, on this visit or an earlier
+  one - see _scripts/fr-consent.js. until then no request reaches Google and
+  no cookie is set.
+
+  production only: the CI build runs with JEKYLL_ENV=production
   (.github/workflows/build-site.yaml), while the Docker preview runs plain
   jekyll serve, so a local preview never sends hits to the property.
 {% endcomment %}
 {% if jekyll.environment == "production" %}
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3HJ9BYVMN3"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    window.frAnalytics = {
+      id: "G-3HJ9BYVMN3",
+      loaded: false,
+      load: function () {
+        if (this.loaded) return;
+        this.loaded = true;
 
-    gtag('config', 'G-3HJ9BYVMN3');
+        // Google tag (gtag.js)
+        var script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=" + this.id;
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag("js", new Date());
+        gtag("config", this.id);
+      },
+    };
   </script>
 {% endif %}

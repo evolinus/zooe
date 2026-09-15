@@ -1,0 +1,55 @@
+---
+---
+
+/* — cookie consent —
+   a bar across the foot of the window, in the dark ink the header and footer
+   switch to. square and ruled like everything else: no rounding, no shadow,
+   the amber rule doing the separating. */
+.fr-consent {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* over the sticky header, which sits at 10 */
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 28px;
+  padding: 18px 24px;
+  border-top: 2px solid var(--panel);
+  background: var(--background);
+  color: var(--text);
+}
+.fr-consent-text {
+  margin: 0;
+  max-width: 78ch;
+  font-size: 14px;
+  line-height: 1.55;
+  /* the Italian under the English, as everywhere the site addresses Italians */
+  em { color: var(--dark-gray); }
+}
+.fr-consent-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+}
+/* everywhere else .fr-btn dresses an <a>, which has no ground of its own.
+   these are real <button>s, so the browser's default face has to be cleared */
+.fr-consent .fr-btn { background: transparent; }
+.fr-consent .fr-btn-primary { background: var(--primary); }
+.fr-consent .fr-btn-primary:hover { background: var(--primary-hover); }
+/* the outline button needs an edge that reads against the dark bar */
+.fr-consent .fr-btn-secondary {
+  border-color: var(--gray);
+  color: var(--text) !important;
+}
+.fr-consent .fr-btn-secondary:hover { background: rgba(255, 250, 240, 0.12); }
+
+@media (max-width: 700px) {
+  .fr-consent { padding: 16px; }
+  .fr-consent-actions { width: 100%; }
+  /* equal weight to both answers, which is the point of the thing */
+  .fr-consent-actions .fr-btn { flex: 1; justify-content: center; }
+}
