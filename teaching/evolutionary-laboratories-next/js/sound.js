@@ -1,5 +1,5 @@
-// Music while a simulation runs. One track, started by a Run button and faded
-// out when that run finishes.
+// Music while a simulation runs. One of two tracks, drawn afresh each time a
+// Run button starts one, and faded out when that run finishes.
 //
 // Silent until the reader asks for it. The rooms are used in lecture theatres,
 // libraries and shared computer rooms, and a page that makes a noise nobody
@@ -23,10 +23,14 @@
 (function () {
   'use strict';
 
-  // Drop the file in at this path. Any format the browser plays will do; mp3 is
-  // the safe choice. If it is missing or will not decode, the toggle takes
-  // itself out of the tab bar rather than offering a control that does nothing.
-  const TRACK = 'audio/Last_Life_Jump.mp3';
+  // Drop the files in at these paths. Any format the browser plays will do; mp3
+  // is the safe choice. If none of them is there or will decode, the toggle
+  // takes itself out of the tab bar rather than offering a control that does
+  // nothing. Which one a run gets is a coin flip — see pickTrack.
+  const TRACKS = [
+    'audio/Last_Life_Jump.mp3',
+    'audio/Controller_Under_Pressure.mp3'
+  ];
 
   const STORAGE_KEY = 'lab:sound';
 
@@ -50,7 +54,8 @@
   const FADE_STEP_MS = 50;
 
   let audio = null;       // built on first use, so a missing file costs nothing at load
-  let available = true;   // false once the file has failed to load
+  let usable = TRACKS.slice();  // the tracks that have not failed to load
+  let track = null;       // the one currently in the element, null until a run picks
   let enabled = false;    // the reader's preference
   let watch = null;       // { btn, since, timer } while a run is in flight
   let fadeTimer = null;   // set while the track is on its way out
@@ -69,31 +74,59 @@
 
   /* ---- the track -------------------------------------------------------- */
 
-  function ensureAudio() {
-    if (audio || !available) return audio;
-    // Built empty and told not to preload BEFORE it is given a source: passing
-    // the source to the constructor starts the fetch before preload can be set,
-    // and the whole track goes down the wire whether or not it is ever played.
-    audio = new Audio();
-    audio.preload = 'none';
-    audio.loop = true;          // the run decides the length, not the file
-    audio.addEventListener('error', () => {
-      // The track is missing or will not decode. Take the control away rather
-      // than leave a speaker that does nothing.
-      available = false;
-      audio = null;
-      syncToggle();
-    });
-    audio.src = TRACK;
+  // A fresh draw for every run. Three runs in a row are three coin flips, so
+  // the same track twice running is a perfectly ordinary outcome and not a
+  // fault — with two files that is what random means. The cost is that a reader
+  // who sits with a room may pull down both files rather than one; each is
+  // cached after its first play, and neither is fetched at all until somebody
+  // has turned sound on and pressed Run.
+  function pickTrack() {
+    return usable[Math.floor(Math.random() * usable.length)];
+  }
+
+  // The element is made once and re-pointed, rather than rebuilt per run: a new
+  // Audio for every press would leave the old one to be collected mid-fade.
+  function ensureAudio(next) {
+    if (!usable.length) return null;
+    if (!audio) {
+      // Built empty and told not to preload BEFORE it is given a source: passing
+      // the source to the constructor starts the fetch before preload can be set,
+      // and the whole track goes down the wire whether or not it is ever played.
+      audio = new Audio();
+      audio.preload = 'none';
+      audio.loop = true;        // the run decides the length, not the file
+      audio.addEventListener('error', () => {
+        // Strike off the file the element was actually on, read from the element
+        // rather than from `track`: a late error belonging to a load that a
+        // newer run has already replaced would otherwise condemn a track that
+        // plays perfectly well.
+        const src = (audio && audio.currentSrc) || '';
+        const failed = usable.filter((t) => src.indexOf(t) !== -1)[0] || track;
+        usable = usable.filter((t) => t !== failed);
+        // The element is left holding a source that will not play, so it is
+        // dropped and the next run builds a clean one. That run loses its
+        // music; the one after it draws from what is left, and only when
+        // nothing is left does the toggle leave the tab bar.
+        audio = null;
+        track = null;
+        syncToggle();
+      });
+    }
+    if (track !== next) {
+      track = next;
+      audio.src = next;         // aborts whatever was loaded and starts this one
+    }
     return audio;
   }
 
   function startTrack() {
-    const a = ensureAudio();
-    if (!a) return;
     // A run started while the last one is still fading takes the track back at
-    // full volume, from the top, rather than inheriting a half-faded one.
+    // full volume, from the top, rather than inheriting a half-faded one — and
+    // the fade is called off before the draw, so that it cannot be left turning
+    // down a track the new run has just switched away from.
     cancelFade();
+    const a = ensureAudio(pickTrack());
+    if (!a) return;
     a.volume = 1;
     try {
       a.currentTime = 0;
@@ -199,7 +232,7 @@
   document.addEventListener('click', (e) => {
     const btn = e.target.closest && e.target.closest('button[data-sound]');
     if (!btn) return;
-    if (!enabled || !available) return;
+    if (!enabled || !usable.length) return;
     // A press on a button that already offered to pause is the reader stopping
     // the run, not starting one.
     if (!atRest(btn)) { endRun(); return; }
@@ -220,7 +253,7 @@
   function syncToggle() {
     if (!toggleBtn) return;
     // No file, no control: an inert speaker icon is worse than none at all.
-    toggleBtn.hidden = !available;
+    toggleBtn.hidden = !usable.length;
     toggleBtn.setAttribute('aria-pressed', enabled ? 'true' : 'false');
     toggleBtn.classList.toggle('is-on', enabled);
     const label = enabled
@@ -245,7 +278,7 @@
       toggleBtn.addEventListener('click', () => setEnabled(!enabled));
       syncToggle();
     }
-    // There is deliberately no check here that the track exists. Asking the
+    // There is deliberately no check here that a track exists. Asking the
     // question costs the answer: preload="metadata" is a hint, and a browser
     // answers it by requesting "bytes=0-" — measured against this very file, a
     // page load with sound switched off pulled all 1.6MB of it. For a room used
