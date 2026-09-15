@@ -33,11 +33,46 @@ const frConsentStart = () => {
   if (window.frAnalytics) window.frAnalytics.load();
 };
 
+/*
+  no consent means no analytics cookies, including ones from before there was
+  anything to consent to: the tag ran ungated for a few days, and _ga lasts two
+  years. so anything GA left behind is cleared unless the answer was yes.
+*/
+const frConsentClearCookies = () => {
+  const names = document.cookie
+    .split("; ")
+    .map((pair) => pair.split("=")[0])
+    .filter((name) => /^(_ga|_gid|_gat|_gac_)/.test(name));
+
+  if (!names.length) return;
+
+  /* a cookie only goes away if the domain and path match the ones it was set
+     with, and gtag's "auto" domain is not readable from here - so every
+     candidate is expired and the misses are harmless */
+  const host = window.location.hostname;
+  const parts = host.split(".");
+  const domains = [null, host, "." + host];
+  for (let i = 1; i < parts.length - 1; i++) {
+    const parent = parts.slice(i).join(".");
+    domains.push(parent, "." + parent);
+  }
+
+  names.forEach((name) =>
+    domains.forEach((domain) => {
+      document.cookie =
+        name +
+        "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/" +
+        (domain ? "; domain=" + domain : "");
+    })
+  );
+};
+
 const frConsent = () => {
   const choice = frConsentRead();
 
   // an answer from an earlier visit
   if (choice === "granted") frConsentStart();
+  else frConsentClearCookies();
 
   const banner = document.querySelector("[data-fr-consent]");
   if (!banner) return;
@@ -47,6 +82,7 @@ const frConsent = () => {
       const answer = button.getAttribute("data-fr-consent-action");
       frConsentWrite(answer);
       if (answer === "granted") frConsentStart();
+      else frConsentClearCookies();
       banner.hidden = true;
     })
   );
