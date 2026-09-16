@@ -2202,7 +2202,7 @@
           <li>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</li>
         </ul>
         <h2 class="readme-minor">Words worth pinning down</h2>
-        <p>These seventeen come up again and again. Each is underlined wherever it first appears — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
+        <p>These twenty come up again and again. Each is underlined wherever it first appears — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
         <ul>
           <li><span class="gloss" data-help="glosChromosome">Chromosome</span> — a long molecule of DNA carrying many genes in a fixed order.</li>
           <li><span class="gloss" data-help="glosGene">Gene</span> — a stretch of DNA that does a job; the unit itself.</li>
@@ -2217,8 +2217,11 @@
           <li><span class="gloss" data-help="glosHabitat">Habitat</span> — the surroundings that decide which variants do well — fitness is always fitness somewhere.</li>
           <li><span class="gloss" data-help="glosGamete">Gamete</span> — an egg or a sperm, carrying one copy of each chromosome instead of two.</li>
           <li><span class="gloss" data-help="glosGenotype">Genotype</span> — the pair of alleles an individual carries at a locus — the two homozygotes and the heterozygote.</li>
+          <li><span class="gloss" data-help="glosPhenotype">Phenotype</span> — what the alleles build: here the drawing itself, and in the Speciation Room the physiology too.</li>
+          <li><span class="gloss" data-help="glosZygosity">Heterozygote</span> (and <em>homozygote</em>) — the two alleles at a locus differing, or matching. A rare allele is nearly always in a heterozygote.</li>
           <li><span class="gloss" data-help="glosRecombination">Recombination</span> — the swap between paired chromosomes during meiosis, which is what makes sex more than averaging.</li>
           <li><span class="gloss" data-help="glosFitness">Fitness</span> — how well a variant does at getting into the next generation, always relative to the alternatives.</li>
+          <li><span class="gloss" data-help="glosEpistasis">Epistasis</span> — an allele’s effect depending on which alleles sit at other loci. Left out of these rooms on purpose.</li>
           <li><span class="gloss" data-help="fixation">Fixation</span> — an allele reaching frequency 1, so that every individual carries it; <em>loss</em> is the same story at frequency 0. Both are the end of the road: with one allele left there is nothing for drift or selection to act on.</li>
           <li><span class="gloss" data-help="glosSpeciation">Speciation</span> — one population becoming two that no longer exchange genes, by pre- or post-zygotic barriers.</li>
         </ul>
@@ -2393,7 +2396,7 @@
         <li><strong>Traits mutate independently, inside fixed bounds.</strong> Each feature takes its own step, and the drawing holds every one inside a range so that the fish stays a fish. Real traits are tied to one another by development, and real limits are pressures, not walls.</li>
         <li><strong>Mutation is unbiased.</strong> A step up is exactly as likely as a step down, and the size of a step never depends on whether it would help.</li>
         <li><strong>Nothing about the world changes.</strong> That holds in every room here: there is no season, no drought and no arriving competitor.</li>
-        <li><strong>The phenotype is the drawing.</strong> A fish in these laboratories is a list of shape parameters — no physiology, no behaviour, no life history. <span class="lifted">Physiology first appears in the <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button>.</span></li>
+        <li><strong>The <span class="gloss" data-help="glosPhenotype">phenotype</span> is the drawing.</strong> A fish in these laboratories is a list of shape parameters — no physiology, no behaviour, no life history. <span class="lifted">Physiology first appears in the <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button>.</span></li>
       </ul>
     </div>
 
@@ -2497,9 +2500,9 @@
     <div class="room-assumes">
       <h2>What this model assumes</h2>
       <ul>
-        <li><strong>Lineages split and never meet again.</strong> No hybridisation and no gene flow, from the moment of a split. <span class="lifted">What it would take for that to be a real species boundary is the <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button>.</span></li>
+        <li><strong>Lineages split and never meet again.</strong> No hybridisation and no <span class="gloss" data-help="glosGene">gene</span> flow, from the moment of a split. <span class="lifted">What it would take for that to be a real species boundary — <span class="gloss" data-help="glosSpeciation">speciation</span> proper — is the <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button>.</span></li>
         <li><strong>The splits are yours, not the model's.</strong> When a lineage divides is a setting; nothing in the simulation decides it.</li>
-        <li><strong>The same copy machine as before.</strong> Independent traits, unbiased mutation, no selection, no population and a constant world.</li>
+        <li><strong>The same copy machine as before.</strong> Independent traits, unbiased <span class="gloss" data-help="glosMutation">mutation</span>, no <span class="gloss" data-help="glosSelection">selection</span>, no <span class="gloss" data-help="glosPopulation">population</span> and a constant world.</li>
         <li><strong>Every lineage mutates at the same rate.</strong> No lineage-specific clock, so a branch's length is elapsed time and nothing else — which is why the tree here can be read straight off the drawings.</li>
       </ul>
     </div>
@@ -2512,7 +2515,7 @@
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Ancestor <var>A</var> splits into <var>B</var> and <var>C</var> at generation 0; where the other three splits fall — <var>B</var>→<var>D</var>,<var>E</var> · <var>E</var>→<var>F</var>,<var>G</var> · <var>F</var>→<var>H</var>,<var>I</var> — is yours to set. The five surviving lineages (<var>C</var>, <var>D</var>, <var>G</var>, <var>H</var>, <var>I</var>) then mutate independently until generation <var>N</var>, at the same rate and with the same step size as the single lineage in the Copying Room.</p>
-      <p><strong>Why the reconstruction goes wrong.</strong> Each trait is an independent random walk — one Gaussian step per generation, of a standard deviation <var>σ</var> that the Mutation size slider sets — so two lineages that parted <var>t</var> generations ago have each taken <var>t</var> steps away from their common ancestor.</p>
+      <p><strong>Why the reconstruction goes wrong.</strong> Each <span class="gloss" data-help="glosPhenotype">trait</span> is an independent random walk — one Gaussian step per <span class="gloss" data-help="glosGeneration">generation</span>, of a standard deviation <var>σ</var> that the Mutation size slider sets — so two lineages that parted <var>t</var> generations ago have each taken <var>t</var> steps away from their common ancestor.</p>
       <p class="eq">E[(<var>x</var>₁ − <var>x</var>₂)²] = 2<var>σ</var>²<var>t</var><span class="eq-note">for one trait measured in two lineages, <var>x</var>₁ and <var>x</var>₂, that split <var>t</var> generations ago: the distance between them grows as √<var>t</var>, so it is proportional to elapsed time only under the square root</span></p>
       <p>The <em>expectation</em> is proportional to time since the split; any one pair of lineages is a single draw from a distribution whose spread is as large as its mean. That gap between expectation and draw is the whole of the discrepancy between the true tree and the reconstructed one. Traits are also bounded, so a lineage that has wandered as far as the shape allows stops getting more different, and a very deep split ends up looking no older than a moderately deep one.</p>
     </details>
@@ -2939,7 +2942,7 @@
 
     <div class="room-payoff">
       <h2>What to notice</h2>
-      <p>What matters is not <em>s</em> by itself but <strong><var>N</var>·<var>s</var></strong> — the product of <span class="gloss" data-help="glosPopulation">population</span> size and advantage. Treat that as a rule of thumb rather than a law: the size that belongs in it is the <em>effective</em> population size, and where exactly the balance tips also depends on ploidy, on dominance and on the details of the life cycle. In this room all of those are pinned down, which is why the plain <var>N</var> on the slider will serve — Wright–Fisher sampling is the very thing effective size is measured against. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (<var>h</var> = 0) is nearly invisible to selection while it is rare, because it is hiding inside heterozygotes, so it too can be lost like a <span class="gloss" data-help="glosNeutral">neutral</span> allele.</p>
+      <p>What matters is not <em>s</em> by itself but <strong><var>N</var>·<var>s</var></strong> — the product of <span class="gloss" data-help="glosPopulation">population</span> size and advantage. Treat that as a rule of thumb rather than a law: the size that belongs in it is the <em>effective</em> population size, and where exactly the balance tips also depends on ploidy, on dominance and on the details of the life cycle. In this room all of those are pinned down, which is why the plain <var>N</var> on the slider will serve — Wright–Fisher sampling is the very thing effective size is measured against. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (<var>h</var> = 0) is nearly invisible to selection while it is rare, because it is hiding inside <span class="gloss" data-help="glosZygosity">heterozygotes</span>, so it too can be lost like a <span class="gloss" data-help="glosNeutral">neutral</span> allele.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> shows the half of the story this room cannot tell: selection decides a <span class="gloss" data-help="glosMutation">mutation</span>'s fate, but has no say in whether it appears. The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> then runs selection and drift on five traits at once.</p>
     </div>
     <details class="room-methods">
@@ -3334,7 +3337,7 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p>Two populations, one ancestor, and nothing passing between them.</p>
-      <p><strong>What it shows.</strong> One ancestral <span class="gloss" data-help="glosPopulation">population</span> of <var>N</var> fish lives in a <strong>lake</strong>, and has done for a thousand generations — so it is already a lake fish: deep-bodied, amber, big-eyed and long-finned, shaped by the place it lives in.<button class="help-btn" data-help="specAncestor"></button> An adapted population is not a uniform one, though. It carries 1,013 <span class="gloss" data-help="glosLocus">loci</span>, and the variation at them is drawn from what a population at <strong>mutation–drift equilibrium</strong> actually has:<button class="help-btn" data-help="specStandingVar"></button> most loci are <em>monomorphic</em>, and the ones that vary mostly carry a <em>rare</em> second allele. How much of it there is comes down to <strong>θ</strong><button class="help-btn" data-help="specTheta"></button> — the ancestral population's own property, independent of the mutation rate you give the run ahead — and the ancestral card reports what it produced. Those loci are of three kinds: <strong>13</strong> that build the five traits — three for shape, four for colour, one for eye size, two for fins, three for the tail; <strong>40</strong> that build no part of the fish but set what its body has to do to live where it lives — how it takes up oxygen, holds its salt balance, pays for swimming; and <strong>960</strong> that neither habitat has any use for. The middle group is 4% of the non-morphological genome, and it matters because still water and fast water make <em>different</em> physiological demands: those loci are under selection too, even though nothing about them can be drawn.<button class="help-btn" data-help="specLoci"></button></p>
+      <p><strong>What it shows.</strong> One ancestral <span class="gloss" data-help="glosPopulation">population</span> of <var>N</var> fish lives in a <strong>lake</strong>, and has done for a thousand generations — so it is already a lake fish: deep-bodied, amber, big-eyed and long-finned, shaped by the place it lives in.<button class="help-btn" data-help="specAncestor"></button> An adapted population is not a uniform one, though. It carries 1,013 <span class="gloss" data-help="glosLocus">loci</span>, and the variation at them is drawn from what a population at <strong>mutation–drift equilibrium</strong> actually has:<button class="help-btn" data-help="specStandingVar"></button> about a third of the loci are <em>monomorphic</em>, and the ones that do vary mostly carry a <em>rare</em> second allele. How much of it there is comes down to <strong>θ</strong><button class="help-btn" data-help="specTheta"></button> — the ancestral population's own property, independent of the mutation rate you give the run ahead — and the ancestral card reports what it produced. Those loci are of three kinds: <strong>13</strong> that build the five traits — three for shape, four for colour, one for eye size, two for fins, three for the tail; <strong>40</strong> that build no part of the fish but set what its body has to do to live where it lives — how it takes up oxygen, holds its salt balance, pays for swimming; and <strong>960</strong> that neither habitat has any use for. The middle group is 4% of the non-morphological genome, and it matters because still water and fast water make <em>different</em> physiological demands: those loci are under selection too, even though nothing about them can be drawn.<button class="help-btn" data-help="specLoci"></button></p>
       <p>The population splits into two groups. Population <strong>A</strong> remains in the original lake. Population <strong>B</strong>, founded by <var>N</var>₂ individuals, moves away — either to <strong>another lake</strong>, which is a different location but the same type of <span class="gloss" data-help="glosHabitat">habitat</span>, or to a <strong>stream</strong>, which is not. In either case, the two populations are permanently separated. From the moment of the split, nothing is exchanged: no migration and no gene flow. What each population does with the variation it carries is determined by <span class="gloss" data-help="glosDrift">drift</span> and whatever its habitat favours, as well as new <span class="gloss" data-help="glosMutation">mutations</span> that arise within it.<button class="help-btn" data-help="specMutation"></button></p>
       <p>After <var>G</var> <span class="gloss" data-help="glosGeneration">generations</span>, we ask whether they are still one species. We apply two independent tests: <strong>fixed differences</strong><button class="help-btn" data-help="specFixedDiff"></button>, standing in for the genetic incompatibilities that break hybrids, and <strong>divergence in a mating signal</strong>, standing in for the failure to recognise each other as mates.</p>
       <p><span class="try-label">Try this.</span> Press Run, then send B to <em>another lake</em> and run again, and compare the <em>morphological</em> fixed differences — the gold line. Divergent selection in the stream sorts most of those 13 loci — around <strong>8</strong> of them end up fixed differences. Two lakes manage about <strong>5</strong>: parallel selection is pushing both populations the <em>same</em> way, so what divergence there is has to come from their fixing different mutations to get there rather than from being pulled apart. Then notice how little either choice moves the black line: 960 loci that neither habitat selects on carry the genome-wide count, whatever B does. Then look at the ledger below the strip. The 40 physiological loci collect around <strong>28</strong> fixed differences in the stream and around <strong>22</strong> between two lakes — against about <strong>120</strong> from the 960 neutral ones, which is five times fewer <em>per locus</em>. A mutation at a locus selection can see fixes far more often than one at a locus it cannot.</p>
@@ -3512,7 +3515,7 @@
     </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
-      <p><strong>The ancestral population.</strong> 1,013 independent diploid loci. Each locus's minor-allele frequency is drawn from the mutation–drift stationary distribution Beta(<var>θ</var>, <var>θ</var>) and rounded to a whole number of copies out of 2<var>N</var>, so most loci come out monomorphic and the polymorphic ones are mostly rare; the polymorphic count and the heterozygosity on the ancestral card are results, not settings. <var>θ</var> is a control of its own rather than 4<var>N</var><var>μ</var> computed from the run, because it describes the ancestor's long-term history and its <var>N</var><sub>e</sub> need not equal the <var>N</var> the daughters get.
+      <p><strong>The ancestral population.</strong> 1,013 independent diploid loci. Each locus's minor-allele frequency is drawn from the mutation–drift stationary distribution Beta(<var>θ</var>, <var>θ</var>) and rounded to a whole number of copies out of 2<var>N</var>, so about a third of the loci come out monomorphic and the variation at the rest is mostly rare — a median minor allele of about 7% at the default θ; the polymorphic count and the heterozygosity on the ancestral card are results, not settings. <var>θ</var> is a control of its own rather than 4<var>N</var><var>μ</var> computed from the run, because it describes the ancestor's long-term history and its <var>N</var><sub>e</sub> need not equal the <var>N</var> the daughters get.
       </p><p>
       <strong>The three kinds of locus.</strong> 13 build the five traits (shape 3, colour 4, eye size 1, fin size 2, tail size 3), each allele carrying an effect vector that its habitat scores. 40 are physiological: no effect vector, only a position on one axis of demand with the ancestral allele at 0, still water asking for −1 and fast water for +1, and an allele favoured when it brings the locus closer to what its habitat needs. The remaining 960 have no effect a habitat can see.
       </p><p>
@@ -3832,7 +3835,7 @@
 
     <div class="room-payoff">
       <h2>What to notice</h2>
-      <p>Genotype frequencies are completely fixed by the allele frequency, and heterozygotes are most common at <var>p</var> = 0.5. Any starting mix reaches <em>expected</em> genotype frequencies of <var>p</var>²:2<var>pq</var>:<var>q</var>² after a single generation of random mating, and stays there. Exactly so only in an infinite population: draw a real 2<var>N</var> gametes, as this room does, and the realised counts fluctuate around those expectations — which is the gap between the two rows of bars, and the whole of what drift is. That is exactly why the diploid Drift and Selection rooms can draw 2<var>N</var> alleles and pair them: the genotypes follow automatically, so only the allele frequency has to be tracked.</p>
+      <p>Genotype frequencies are completely fixed by the allele frequency, and <span class="gloss" data-help="glosZygosity">heterozygotes</span> are most common at <var>p</var> = 0.5. Any starting mix reaches <em>expected</em> genotype frequencies of <var>p</var>²:2<var>pq</var>:<var>q</var>² after a single generation of random mating, and stays there. Exactly so only in an infinite population: draw a real 2<var>N</var> gametes, as this room does, and the realised counts fluctuate around those expectations — which is the gap between the two rows of bars, and the whole of what drift is. That is exactly why the diploid Drift and Selection rooms can draw 2<var>N</var> alleles and pair them: the genotypes follow automatically, so only the allele frequency has to be tracked.</p>
       <p><strong>Where this connects.</strong> This is the licence the earlier rooms were using: because genotype frequency follows from allele frequency, the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> could track the allele frequency alone and pair gametes as they went — which is what their Diploid setting quietly relies on. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> shows where this convenient one-locus picture breaks down.</p>
     </div>
     <details class="room-methods">
@@ -3989,7 +3992,7 @@
       <h2>What this model assumes</h2>
       <ul>
         <li><strong>Two loci, and only two.</strong> A real chromosome puts a locus in the company of thousands, and the interference this room demonstrates is correspondingly stronger there.</li>
-        <li><strong>Fitness is multiplicative across the two loci,</strong> so there is <em>no epistasis</em>: the double mutant is worth exactly what its two halves are worth. That is deliberate — it isolates the effect of linkage itself, and any interference you see cannot be blamed on the two alleles interacting.</li>
+        <li><strong>Fitness is multiplicative across the two loci,</strong> so there is <em>no <span class="gloss" data-help="glosEpistasis">epistasis</span></em>: the double mutant is worth exactly what its two halves are worth. That is deliberate — it isolates the effect of linkage itself, and any interference you see cannot be blamed on the two alleles interacting.</li>
         <li><strong>A constant recombination rate.</strong> <var>r</var> is fixed, the same in both sexes and unaffected by anything else on the chromosome — no interference between crossovers, no hotspots.</li>
         <li><strong>Part 2 follows chromosomes rather than individuals.</strong> The population is diploid — <var>N</var> individuals, 2<var>N</var> chromosomes, the same bookkeeping the diploid settings elsewhere use — but fitness here is multiplicative, so there is no dominance to model and each chromosome can be scored on its own. That is why only the four gamete frequencies have to be tracked. Otherwise it is Wright–Fisher as before: constant <var>N</var>, discrete generations, no migration and no new mutation.</li>
       </ul>
@@ -4024,24 +4027,24 @@
   <!-- js/, add a <script src> line for it below, and add its markup     -->
   <!-- and tab button above.                                             -->
   <!-- ========================================== -->
-  <script src="js/i18n.js?v=17895051767242"></script>
-  <script src="js/nav.js?v=17895051767242"></script>
-  <script src="js/sound.js?v=17895051767242"></script>
-  <script src="js/help.js?v=17895051767242"></script>
-  <script src="js/shapes-engine.js?v=17895051767242"></script>
-  <script src="js/canvas-utils.js?v=17895051767242"></script>
-  <script src="js/phylo.js?v=17895051767242"></script>
-  <script src="js/copying-room.js?v=17895051767242"></script>
-  <script src="js/branching-room.js?v=17895051767242"></script>
-  <script src="js/fate-room.js?v=17895051767242"></script>
-  <script src="js/sex-asex-room.js?v=17895051767242"></script>
-  <script src="js/hardy-weinberg-room.js?v=17895051767242"></script>
-  <script src="js/linkage-room.js?v=17895051767242"></script>
-  <script src="js/wright-fisher-core.js?v=17895051767242"></script>
-  <script src="js/drift-room.js?v=17895051767242"></script>
-  <script src="js/selection-room.js?v=17895051767242"></script>
-  <script src="js/mutation-room.js?v=17895051767242"></script>
-  <script src="js/adaptation-room.js?v=17895051767242"></script>
-  <script src="js/speciation-room.js?v=17895051767242"></script>
+  <script src="js/i18n.js?v=17895356014071"></script>
+  <script src="js/nav.js?v=17895356014071"></script>
+  <script src="js/sound.js?v=17895356014071"></script>
+  <script src="js/help.js?v=17895356014071"></script>
+  <script src="js/shapes-engine.js?v=17895356014071"></script>
+  <script src="js/canvas-utils.js?v=17895356014071"></script>
+  <script src="js/phylo.js?v=17895356014071"></script>
+  <script src="js/copying-room.js?v=17895356014071"></script>
+  <script src="js/branching-room.js?v=17895356014071"></script>
+  <script src="js/fate-room.js?v=17895356014071"></script>
+  <script src="js/sex-asex-room.js?v=17895356014071"></script>
+  <script src="js/hardy-weinberg-room.js?v=17895356014071"></script>
+  <script src="js/linkage-room.js?v=17895356014071"></script>
+  <script src="js/wright-fisher-core.js?v=17895356014071"></script>
+  <script src="js/drift-room.js?v=17895356014071"></script>
+  <script src="js/selection-room.js?v=17895356014071"></script>
+  <script src="js/mutation-room.js?v=17895356014071"></script>
+  <script src="js/adaptation-room.js?v=17895356014071"></script>
+  <script src="js/speciation-room.js?v=17895356014071"></script>
 </body>
 </html>

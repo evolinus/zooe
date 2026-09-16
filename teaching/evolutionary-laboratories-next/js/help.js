@@ -157,8 +157,9 @@
         <p>A variant is <strong>neutral</strong> when it has no effect on fitness: its selection coefficient
         <var>s</var> is 0, so <span class="gloss" data-help="glosSelection">selection</span> is blind to it and its fate is
         settled by <span class="gloss" data-help="glosDrift">drift</span> alone.</p>
-        <p>A neutral allele's chance of eventually fixing is simply its current frequency — a new one, present as a single
-        copy, has probability 1/2<var>N</var>.</p>
+        <p>A neutral allele's chance of eventually fixing is simply its current frequency — so a new one, present as
+        a single copy, has probability 1/2<var>N</var> in a diploid population and 1/<var>N</var> in a haploid one. The
+        Ploidy switch in the Drift and Selection Rooms moves it between the two.</p>
         <p>In the Adaptation Room the <strong>Neutral</strong> lineages are the control: whatever a Habitat lineage does
         beyond them is what selection contributed on top of drift.</p>`
     },
@@ -199,6 +200,57 @@
         simulations can track alleles and read the genotypes off.</p>
         <p>It matters because selection acts on individuals, and so on genotypes — which is what makes dominance
         meaningful.</p>`
+    },
+
+    glosZygosity: {
+      title: 'Heterozygote and homozygote',
+      body: `
+        <p>A diploid carries two <span class="gloss" data-help="glosAllele">alleles</span> at every
+        <span class="gloss" data-help="glosLocus">locus</span>. When they are the same the individual is
+        <strong>homozygous</strong> there (<var>A</var>₁<var>A</var>₁ or <var>A</var>₂<var>A</var>₂);
+        when they differ it is <strong>heterozygous</strong> (<var>A</var>₁<var>A</var>₂). A haploid has one
+        copy and is neither — which is why the distinction, and everything that follows from it, appears only
+        once the Ploidy switch is set to diploid.</p>
+        <p><strong>A rare allele hides in heterozygotes.</strong> Of all the copies of <var>A</var>₁ in a
+        <span class="gloss" data-help="glosPopulation">population</span> at Hardy–Weinberg proportions, the share
+        sitting in a heterozygote is 2<var>pq</var>/2<var>p</var> = <var>q</var>. At <var>p</var> = 0.1 that is nine
+        copies in ten, and only 1% of individuals are <var>A</var>₁<var>A</var>₁.</p>
+        <p>That is why dominance carries so much weight in the Selection Room. A recessive advantage is one
+        <span class="gloss" data-help="glosSelection">selection</span> can barely see while the allele is rare,
+        because rare is exactly when it is almost never in the homozygote that would show it.</p>`
+    },
+
+    glosPhenotype: {
+      title: 'Phenotype',
+      body: `
+        <p>What an organism actually <em>is</em> — here, the drawing: body shape, colour, eye size, fins and
+        tail. The <span class="gloss" data-help="glosGenotype">genotype</span> is the alleles an individual
+        carries; the phenotype is what those alleles build.</p>
+        <p>In these rooms a trait is <strong>additive in allele dosage</strong>: each allele contributes a fixed
+        amount, so two copies shift the trait twice as far as one, and a population's mean fish is the ancestral
+        fish plus each allele frequency times its effect.</p>
+        <p><strong>Selection never sees the genotype directly.</strong> It sees the phenotype, which is the whole
+        reason dominance matters: two different genotypes that build the same fish are, to selection, the same
+        thing.</p>
+        <p>A limit worth keeping in view: a fish here is a list of shape parameters, with no behaviour and no life
+        history. Physiology — a phenotype nothing in the drawing reveals — first appears in the Speciation
+        Room, where 40 of the loci change how the fish works and none of them change how it looks.</p>`
+    },
+
+    glosEpistasis: {
+      title: 'Epistasis',
+      body: `
+        <p>When what an allele does depends on which alleles sit at <em>other</em> loci. The loci interact, so
+        their contributions do not simply add up, and a variant that helps on one genetic background can do
+        nothing — or harm — on another.</p>
+        <p><strong>These rooms leave it out, deliberately.</strong> In the Linkage Room fitness is multiplicative
+        across the two loci, so the double mutant is worth exactly what its two halves are worth. That is what
+        makes the interference there attributable to linkage alone: with no interaction between the loci, none of
+        it can be blamed on one.</p>
+        <p>It matters most where the Speciation Room cannot follow. A <strong>Dobzhansky–Muller
+        incompatibility</strong> — two alleles that each work at home and fail together in a hybrid — is
+        epistasis between two genomes. That room counts fixed differences as a <em>proxy</em> for such
+        incompatibilities precisely because it never models the interaction itself.</p>`
     },
 
     glosFitness: {
@@ -721,9 +773,11 @@
         2<var>N</var>, because a frequency below half a copy is not one the population can hold. Two
         things follow, and both are what real data looks like:</p>
         <ul>
-          <li><strong>Most loci are monomorphic.</strong> The ancestral card reports how many are
-          not — typically around half at the default settings, and fewer still at a lower
-          <var>μ</var>.</li>
+          <li><strong>Many loci carry no variation at all.</strong> Rounding sends every
+          frequency below half a copy to the edge the density was already piling up against, so
+          about a third of the 1,013 come out monomorphic. The ancestral card reports how many are
+          <em>not</em> — around 660 at the default <strong>θ</strong> = 0.16, and fewer as you
+          lower it.</li>
           <li><strong>The polymorphic ones are mostly rare.</strong> The density piles up against
           both edges, so a variant sitting at 50% is unusual and one sitting at 2% is not.</li>
         </ul>
@@ -813,9 +867,10 @@
         from <code>Beta(θ, θ)</code>, the distribution a population at mutation–drift equilibrium
         actually sits at, so θ decides how many loci come out polymorphic and how heterozygous the
         population is. The ancestral card reports both.</p>
-        <p>Low θ is what real marker data looks like: at 0.16 roughly two loci in three are
-        monomorphic on any given draw, and the ones that vary mostly carry a <em>rare</em> second
-        allele. Push θ up and the ancestor becomes implausibly variable — every locus segregating at
+        <p>Low θ is what real marker data looks like: at 0.16 about a third of the loci are
+        monomorphic on any given draw, and of the two thirds that do vary, nearly all carry a
+        <em>rare</em> second allele — a median minor allele around 7%, which is what keeps
+        heterozygosity down at 0.12. Push θ up and the ancestor becomes implausibly variable — every locus segregating at
         middling frequency, which no real population does.</p>
         <p><strong>Why this is not simply 4<var>N</var><var>μ</var>.</strong> It would be, if the
         ancestral population had always been the size you set for the run. But θ describes its
@@ -923,8 +978,8 @@
         A low <var>X</var> is a permissive species concept — a little divergence and they are already
         two. A high <var>X</var> is a demanding one, and takes far longer to reach.</p>
         <p><strong>There is a ceiling, and it is far below 1,013.</strong> A locus can only become
-        a fixed difference if it was polymorphic to begin with, and at mutation–drift equilibrium most
-        are not. Worse, a fixed difference needs the two populations to fix <em>opposite</em> alleles,
+        a fixed difference if it was polymorphic to begin with — and although most of them are, at
+        mutation–drift equilibrium the second allele is nearly always <em>rare</em>. Worse, a fixed difference needs the two populations to fix <em>opposite</em> alleles,
         which happens with probability 2<var>p</var>(1−<var>p</var>) — so what the standing variation
         alone can deliver is the number of loci times the ancestral heterozygosity, around 120 at the
         default settings. The chart's axis is scaled to what a run actually reaches rather than to
