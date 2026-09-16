@@ -3214,7 +3214,7 @@
       </div>
 
       <div class="adapt-section-label">
-        <span>Local adaptation — optional<button class="help-btn" data-help="migLocal"></button></span>
+        <span>Optional — local adaptation and recurrent mutation</span>
       </div>
       <div class="field">
         <label id="lbl-selSeg_mig">Selection<button class="help-btn" data-help="migLocal"></button></label>
@@ -3228,9 +3228,6 @@
         <input type="range" id="sliderS_mig" min="0" max="0.5" step="0.01" value="0.10">
       </div>
 
-      <div class="adapt-section-label">
-        <span>Recurrent mutation — optional<button class="help-btn" data-help="recurrentMu"></button></span>
-      </div>
       <div class="field">
         <label for="sliderMu_mig"><span>Mutation rate</span> <span class="sym"><var>μ</var></span> <span class="value" id="muVal_mig">0.0000</span><button class="help-btn" data-help="recurrentMu"></button></label>
         <input type="range" id="sliderMu_mig" min="0" max="0.01" step="0.0005" value="0">
@@ -3292,6 +3289,13 @@
 
     </div>
 
+    <div class="time-machine-container" id="scrubberRow_mig" style="margin-top: 20px;">
+      <div class="field">
+        <label for="timeScrubber_mig" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_mig">0</span></label>
+        <input type="range" id="timeScrubber_mig" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+
     <!-- The room's actual result, and the only panel that can carry it: the rule
          of thumb is a claim about a distribution, so no single run and no pair of
          runs can test it. It gets its own button because it is a hundred times
@@ -3314,13 +3318,6 @@
     <div class="reading" id="readingRow_mig">
       <div class="divergence-line mono" id="verdict_mig"></div>
       <div class="help-inline-note">What counts as differentiated <button class="help-btn" data-help="migFst"></button></div>
-    </div>
-
-    <div class="time-machine-container" id="scrubberRow_mig" style="margin-top: 20px;">
-      <div class="field">
-        <label for="timeScrubber_mig" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_mig">0</span></label>
-        <input type="range" id="timeScrubber_mig" min="0" max="0" value="0" disabled>
-      </div>
     </div>
 
     <div class="room-assumes">
