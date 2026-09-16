@@ -3,11 +3,17 @@
 
     // The reading order, and the single source of truth for it — the tab bar,
     // the Previous/Next links and the ?#hash all follow this array. The first
-    // eight are the argument; the last three are the machinery rooms, which the
+    // nine are the argument; the last three are the machinery rooms, which the
     // argument refers to but never depends on at its default settings.
+    //
+    // Migration sits directly after Mutation rather than beside the two fish
+    // rooms it feeds: with it there, Part III opens by naming all four forces
+    // that move an allele frequency — selection, mutation, drift (already had
+    // from Part II) and migration — before Adaptation and Speciation put them
+    // to work together.
     const ROOM_ORDER = [
       'readme', 'copying', 'branching', 'fate', 'drifting',
-      'selection', 'mutation', 'adaptation', 'speciation',
+      'selection', 'mutation', 'migration', 'adaptation', 'speciation',
       'reproduction', 'hardyweinberg', 'linkage'
     ];
     const ROOM_NAMES = {
@@ -18,6 +24,7 @@
       drifting: 'The Drift Room',
       selection: 'The Selection Room',
       mutation: 'The Mutation Room',
+      migration: 'The Migration Room',
       adaptation: 'The Adaptation Room',
       speciation: 'The Speciation Room',
       reproduction: 'The Reproduction Room',
@@ -119,7 +126,7 @@
        reader who navigates that way loses nothing. It is a deliberate departure
        from the APG, which would make only the selected tab tabbable.
 
-       Home and End are included because with twelve rooms the bar is long
+       Home and End are included because with thirteen rooms the bar is long
        enough for them to be worth having. */
     document.addEventListener('keydown', (e) => {
       const tab = e.target.closest && e.target.closest('.tab-btn');

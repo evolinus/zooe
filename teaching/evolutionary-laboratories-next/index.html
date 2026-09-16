@@ -23,10 +23,10 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>Evolutionary Laboratories</title>
-<meta name="description" content="Eleven interactive laboratories for teaching evolution: mutation, drift, selection and adaptation, each a live simulation you set up and run yourself.">
+<meta name="description" content="Twelve interactive laboratories for teaching evolution: mutation, drift, selection and adaptation, each a live simulation you set up and run yourself.">
 <meta name="author" content="Lino Ometto">
 <meta property="og:title" content="Evolutionary Laboratories">
-<meta property="og:description" content="Eleven interactive laboratories for teaching evolution: mutation, drift, selection and adaptation, each a live simulation you set up and run yourself.">
+<meta property="og:description" content="Twelve interactive laboratories for teaching evolution: mutation, drift, selection and adaptation, each a live simulation you set up and run yourself.">
 <meta property="og:type" content="website">
 <!-- Three files rather than the one inline data: URI this used to be. The icon
      was a data:image/svg+xml URL, which Firefox honours and Chrome and Safari
@@ -368,7 +368,7 @@
      band and the background wash. --room-deep is that colour carried 60% of the
      way to --ink, and is used wherever paper-coloured text sits ON the accent —
      the step discs and the kicker. The raw tab colours were picked to read as
-     tabs, not as backgrounds for 9.5px type: six of the twelve (the Mutation
+     tabs, not as backgrounds for 9.5px type: six of the thirteen (the Mutation
      gold worst at 2.4:1) fall below 4.5:1 against --paper, and every one of them
      clears it after the 60% deepening. Written out as hex rather than computed,
      so the discs do not depend on color-mix; the wash does, and losing the wash
@@ -872,8 +872,14 @@
     line-height:1.5;
   }
   /* Binomial panel: tint E[<var>k</var>] and O[<var>k</var>] to match the bars they point at. */
+  /* Both readings in the binomial panel's heading are coloured to match their
+     own bar in the histogram below, so the eye can pair the number with the bar
+     without reading either label. E[k] is the literal value of COLORS.expectedK
+     in wright-fisher-core.js; O[k] is --stamp, which the same file mirrors as
+     COLORS.stamp because a canvas cannot resolve a custom property. Change one
+     of a pair and its partner has to move with it. */
   .k-expected{ color:#1F3A52; font-weight:700; }
-  .k-observed{ color: var(--stamp-deep); font-weight:700; }
+  .k-observed{ color: var(--stamp); font-weight:700; }
   .stage-canvas{
     width:100%;
     aspect-ratio: 1 / 1;
@@ -972,6 +978,10 @@
      end up the same size, including before G1 has been built. */
   .pop-stat{ min-height: 3em; }
   .canvas-wrap.multi-run { height: 360px; }
+  /* Shorter than the trajectory chart above it: these ten curves fall together
+     rather than fanning out, so the height that chart needs would be mostly
+     empty here. */
+  .canvas-wrap.multi-het { height: 220px; }
   .canvas-wrap.hw-square { height: auto; aspect-ratio: 1 / 1; max-width: 300px; margin: 0 auto; }
   .canvas-wrap.hw-hist { height: 250px; }
   /* Small caption under a slider — e.g. why the p slider is currently inactive. */
@@ -1371,6 +1381,28 @@
   .canvas-wrap.lk-decay{ height: 320px; }
   .canvas-wrap.lk-traj{ height: 260px; }
   .canvas-wrap.lk-outcome{ height: 260px; }
+
+  /* Migration Room. The two populations share ONE canvas rather than having a
+     card each, because the thing the room has to show is a mark leaving one
+     grid and arriving in the other — and nothing can cross between two canvases.
+     So mig-demes is a single wide box holding the left grid, the channel and the
+     right grid, and it is taller than a drift grid because it carries two of
+     them plus the traffic between. */
+  .canvas-wrap.mig-demes{ height: 250px; }
+  .canvas-wrap.mig-chart{ height: 280px; }
+  .canvas-wrap.mig-fst{ height: 240px; }
+  .canvas-wrap.mig-sweep{ height: 300px; }
+  /* Five columns rather than the default four: the two starting frequencies sit
+     next to each other so the reader sets them as a pair, and the migrant slider
+     needs the room beside it for its two derived readouts. */
+  .adapt-n-row.mig-setup-row{ grid-template-columns: 66px repeat(4, minmax(0, 1fr)); }
+  /* The Nm and m readouts. They are not controls and must not look like fields —
+     they are what the migrant slider *means*, restated in the two forms the
+     literature uses, and the whole room turns on the reader watching them move
+     against each other. Hence chips, borrowed from the Drift Room's stats row,
+     rather than another labelled box in the deck's grid. */
+  .mig-derived{ grid-column: 1 / -1; margin-top: 0; justify-content: flex-start; }
+  .mig-derived .drift-chip{ min-width: 104px; }
 
   /* Room 5 (Adaptation) Specific Styles */
   /* Each founder gets its own row, a 5-column grid:
@@ -2138,7 +2170,8 @@
 
   <!-- Master Navigation Tab Bar. Order is the reading order, and a rule stands
        at each boundary between the four parts: README | I Copying, Branching |
-       II Fate, Drift | III Selection, Mutation, Adaptation, Speciation |
+       II Fate, Drift | III Selection, Mutation, Migration, Adaptation,
+       Speciation |
        IV Reproduction, H-W, Linkage. -->
   <div class="tab-nav-bar">
   <div class="tab-nav" role="tablist" aria-label="Laboratory rooms">
@@ -2152,6 +2185,7 @@
     <span class="tab-sep" aria-hidden="true"></span>
     <button class="tab-btn" role="tab" id="tabbtn-selection" aria-controls="tab-selection" aria-selected="false" style="--tab: #388047" onclick="switchTab('selection', event)">Selection</button>
     <button class="tab-btn" role="tab" id="tabbtn-mutation" aria-controls="tab-mutation" aria-selected="false" style="--tab: #C08A2E" onclick="switchTab('mutation', event)">Mutation</button>
+    <button class="tab-btn" role="tab" id="tabbtn-migration" aria-controls="tab-migration" aria-selected="false" style="--tab: #2F7A8C" onclick="switchTab('migration', event)">Migration</button>
     <button class="tab-btn" role="tab" id="tabbtn-adaptation" aria-controls="tab-adaptation" aria-selected="false" style="--tab: #7A5C99" onclick="switchTab('adaptation', event)">Adaptation</button>
     <button class="tab-btn" role="tab" id="tabbtn-speciation" aria-controls="tab-speciation" aria-selected="false" style="--tab: #1F6E5E" onclick="switchTab('speciation', event)">Speciation</button>
     <span class="tab-sep" aria-hidden="true"></span>
@@ -2160,7 +2194,7 @@
     <button class="tab-btn" role="tab" id="tabbtn-linkage" aria-controls="tab-linkage" aria-selected="false" style="--tab: #8B5E3C" onclick="switchTab('linkage', event)">Linkage</button>
   </div>
   <!-- Sound sits in the bar but outside the tablist above: it is not a
-       thirteenth room, and a screen reader should not count it as one. It is
+       fourteenth room, and a screen reader should not count it as one. It is
        hidden until js/sound.js has found the track. -->
   <button type="button" id="soundToggle" class="sound-toggle" aria-pressed="false"
           aria-label="Turn simulation sound on" title="Turn simulation sound on" hidden>&#128263;</button>
@@ -2198,19 +2232,20 @@
         <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong> (or Start), and <strong>read the panels</strong> that fill in below. Nothing is precomputed — each run is a fresh simulation, so running the same settings twice will not give the same result: these are random processes, and the parameters set tendencies, never outcomes.</p>
         <p>Two features are worth knowing about before you start:</p>
         <ul>
-          <li>The <strong>History Scrubber</strong> at the bottom of the Copying, Branching, Drift, Selection, Adaptation and Speciation rooms lets you drag back through a finished run and replay any generation. Nothing is lost when a run ends.</li>
+          <li>The <strong>History Scrubber</strong> at the bottom of the Copying, Branching, Drift, Selection, Migration, Adaptation and Speciation rooms lets you drag back through a finished run and replay any generation. Nothing is lost when a run ends.</li>
           <li>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</li>
         </ul>
         <h2 class="readme-minor">Words worth pinning down</h2>
-        <p>These twenty come up again and again. Each is underlined wherever it first appears — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
+        <p>These twenty-one come up again and again. Each is underlined wherever it first appears — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
         <ul>
           <li><span class="gloss" data-help="glosChromosome">Chromosome</span> — a long molecule of DNA carrying many genes in a fixed order.</li>
           <li><span class="gloss" data-help="glosGene">Gene</span> — a stretch of DNA that does a job; the unit itself.</li>
           <li><span class="gloss" data-help="glosLocus">Locus</span> (plural <em>loci</em>) — the gene's position on the chromosome, its address.</li>
-          <li><span class="gloss" data-help="glosAllele">Allele</span> — one of the alternative versions that can sit at a locus. Written <var>A</var>₁ and <var>A</var>₂ throughout.</li>
+          <li><span class="gloss" data-help="glosAllele">Allele</span> — one of the alternative versions that can sit at a locus. Written <var>A</var>₁ and <var>A</var>₂ throughout, and wherever a room says <var>p</var> it means the frequency of <var>A</var>₁.</li>
           <li><span class="gloss" data-help="glosSelection">Selection</span> — some alleles leave more descendants, consistently, because of what they do.</li>
           <li><span class="gloss" data-help="glosDrift">Drift</span> — allele frequencies changing by pure chance, strongest in small populations.</li>
           <li><span class="gloss" data-help="glosMutation">Mutation</span> — a copying error in DNA — the only source of genuinely new alleles.</li>
+          <li><span class="gloss" data-help="glosMigration">Migration</span> (or <em>gene flow</em>) — individuals moving between populations and breeding there; the one force that acts between populations rather than within one.</li>
           <li><span class="gloss" data-help="glosPopulation">Population</span> — a group that interbreeds; the level at which evolution actually happens.</li>
           <li><span class="gloss" data-help="glosGeneration">Generation</span> — one complete round of reproduction, and the unit evolutionary time is measured in.</li>
           <li><span class="gloss" data-help="glosNeutral">Neutral</span> — having no effect on fitness, so drift alone decides its fate.</li>
@@ -2226,7 +2261,7 @@
           <li><span class="gloss" data-help="glosSpeciation">Speciation</span> — one population becoming two that no longer exchange genes, by pre- or post-zygotic barriers.</li>
         </ul>
 
-        <p>The eleven rooms fall into <strong>four parts</strong>, and they build on each other in that order. <strong>Part I</strong> asks what a mutation <em>is</em>: copying is imperfect, so differences pile up — and they pile up in no particular direction. <strong>Part II</strong> follows a single one of those errors: a mutation begins in exactly one individual, so what are the chances it ever amounts to anything? <strong>Part III</strong> lets some mutations matter — one allele now carries a real advantage — draws the line selection cannot cross (it governs a mutation's <em>fate</em>, never whether it <em>appears</em>), and ends by asking what all of this adds up to when two populations stop exchanging genes. <strong>Part IV</strong> is the machinery underneath: how gametes are made, how genotype frequencies follow from allele frequencies, and what changes once you follow two loci instead of one. The first three parts run from start to finish without it, so treat it as a reference shelf — dip in when a room sends you there, or read it straight through if you want the mechanism behind the bookkeeping.</p>
+        <p>The twelve rooms fall into <strong>four parts</strong>, and they build on each other in that order. <strong>Part I</strong> asks what a mutation <em>is</em>: copying is imperfect, so differences pile up — and they pile up in no particular direction. <strong>Part II</strong> follows a single one of those errors: a mutation begins in exactly one individual, so what are the chances it ever amounts to anything? <strong>Part III</strong> lets some mutations matter — one allele now carries a real advantage — draws the line selection cannot cross (it governs a mutation's <em>fate</em>, never whether it <em>appears</em>), adds the last of the four forces by letting two populations trade migrants, and ends by asking what all of this adds up to once they stop. <strong>Part IV</strong> is the machinery underneath: how gametes are made, how genotype frequencies follow from allele frequencies, and what changes once you follow two loci instead of one. The first three parts run from start to finish without it, so treat it as a reference shelf — dip in when a room sends you there, or read it straight through if you want the mechanism behind the bookkeeping.</p>
         <p>Working through the rooms in order is recommended, but each one stands on its own.</p>
         <p>One word to watch: in the first two rooms a single lineage simply <em>changes</em> as copying errors pile up. From the Fate Room on, <em>genetic drift</em> means something more precise — the random change, from one generation to the next, in how common an allele is across a whole population.</p>
         <h2 class="part-head">Part I — What a mutation is</h2>
@@ -2254,7 +2289,7 @@
         <p>A finite population, sampled anew each generation. Nobody has any advantage, and yet the allele frequency wanders — and eventually one allele is all that is left.</p>
         <p class="room-open"><a href="#" onclick="switchTab('drifting'); return false;">→ Open the Drift Room</a></p>
         <h2 class="part-head">Part III — Neutral or selected</h2>
-        <p class="part-blurb">Now some mutations matter — selection still has no say in which ones appear — and two isolated populations end up as two species.</p>
+        <p class="part-blurb">Now some mutations matter — selection still has no say in which ones appear — the four forces that move a frequency are all on the table, and two populations that stop trading genes end up as two species.</p>
 
         <h2><span class="room-num">05</span>The Selection Room</h2>
         <p class="room-kicker">Wright–Fisher + selection</p>
@@ -2266,29 +2301,34 @@
         <p>Where do the alleles come from in the first place? Four wheels make a mutant, and no amount of selection can change the size of a single slice.</p>
         <p class="room-open"><a href="#" onclick="switchTab('mutation'); return false;">→ Open the Mutation Room</a></p>
 
-        <h2><span class="room-num">07</span>The Adaptation Room</h2>
+        <h2><span class="room-num">07</span>The Migration Room</h2>
+        <p class="room-kicker">Gene flow against drift</p>
+        <p>Two populations drifting apart, and a slider that moves individuals between them. Somewhere around one migrant a generation the two stop behaving like two — and what decides it is the <em>number</em> of migrants, not the fraction of the population they are.</p>
+        <p class="room-open"><a href="#" onclick="switchTab('migration'); return false;">→ Open the Migration Room</a></p>
+
+        <h2><span class="room-num">08</span>The Adaptation Room</h2>
         <p class="room-kicker">Multi-trait selection vs. drift</p>
         <p>Everything combined: related founders, five traits, three habitats — and a Neutral lineage alongside each one, so you can see exactly what selection contributes.</p>
         <p class="room-open"><a href="#" onclick="switchTab('adaptation'); return false;">→ Open the Adaptation Room</a></p>
 
-        <h2><span class="room-num">08</span>The Speciation Room</h2>
+        <h2><span class="room-num">09</span>The Speciation Room</h2>
         <p class="room-kicker">Divergence in isolation</p>
         <p>One polymorphic population in a lake, split in two, with nothing passing between them ever again. Half of it moves away — to another lake, or to a stream. The same variation, sorted two different ways — until at some point they are no longer one species.</p>
         <p class="room-open"><a href="#" onclick="switchTab('speciation'); return false;">→ Open the Speciation Room</a></p>
         <h2 class="part-head">Part IV — The machinery underneath</h2>
         <p class="part-blurb">How the copying is actually done. The first three parts run without these; dip in when a room sends you here.</p>
 
-        <h2><span class="room-num">09</span>The Reproduction Room</h2>
+        <h2><span class="room-num">10</span>The Reproduction Room</h2>
         <p class="room-kicker">Two ways to make the next generation</p>
         <p>Two founders reproduce side by side for four generations: one asexually, one sexually. Numbers on one side, variety on the other.</p>
         <p class="room-open"><a href="#" onclick="switchTab('reproduction'); return false;">→ Open the Reproduction Room</a></p>
 
-        <h2><span class="room-num">10</span>The Hardy–Weinberg Room</h2>
+        <h2><span class="room-num">11</span>The Hardy–Weinberg Room</h2>
         <p class="room-kicker">From alleles to genotypes</p>
         <p>Under random mating, the frequency of one allele fixes the frequencies of all three genotypes. This is the bookkeeping the rest of the tool leans on.</p>
         <p class="room-open"><a href="#" onclick="switchTab('hardyweinberg'); return false;">→ Open the Hardy–Weinberg Room</a></p>
 
-        <h2><span class="room-num">11</span>The Linkage Room</h2>
+        <h2><span class="room-num">12</span>The Linkage Room</h2>
         <p class="room-kicker">Two loci at once</p>
         <p>Follow two loci instead of one and the tidy single-locus picture breaks: an association between them decays only as fast as recombination breaks it up.</p>
         <p class="room-open"><a href="#" onclick="switchTab('linkage'); return false;">→ Open the Linkage Room</a></p>
@@ -2297,7 +2337,7 @@
         <p>Every room here is a <em>model</em>, which means every room is wrong on purpose. A model earns its keep by leaving out enough of the world that what remains can be watched, and the things it leaves out are not hidden: each room carries a <strong>What this model assumes</strong> panel, just above <em>What to notice</em>, listing what binds in that room and naming the room that lifts it where there is one. Reading those panels is how you tell the model from nature, which is the one habit this whole set is trying to build.</p>
         <p>A few assumptions run through nearly all of it, and are worth having in mind from the start:</p>
         <ul>
-          <li><strong>Populations are closed and constant in size.</strong> No migration in or out, and <var>N</var> fixed for the whole run. Real populations grow, crash and exchange migrants, and even a trickle of migration between two populations is enough to hold them together.</li>
+          <li><strong>Populations are closed and constant in size.</strong> No migration in or out, and <var>N</var> fixed for the whole run. Real populations grow, crash and exchange migrants, and even a trickle of migration between two populations is enough to hold them together — which is what the <button type="button" class="room-link" onclick="switchTab('migration');">Migration Room</button> is for.</li>
           <li><strong>Generations are discrete, mating is random, and every individual has an equal chance of being a parent</strong> before selection is applied. Real generations overlap and real mating is choosy — so the <var>N</var> in these rooms is better read as an <span class="gloss" data-help="glosPopulation">effective population size</span> than as a head count.</li>
           <li><strong>Loci are independent.</strong> No linkage and no epistasis: the fish rooms treat each trait as its own locus, inherited separately and acting on its own. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> is where that assumption is taken apart, and it is worth going back to the earlier rooms afterwards.</li>
           <li><strong>Mutation is random with respect to fitness</strong>, and in the drift and selection demonstrations there is no recurrent mutation at all: the alleles present at the start are the only ones there will ever be. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button>, the <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> and the <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button> are the ones where new alleles keep arriving throughout a run.</li>
@@ -2669,18 +2709,18 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('fate');">Fate Room</button> followed one new mutation from a frequency of 1/<var>N</var> to its end. This room is the same process, named and measured: it starts from any frequency you choose, and asks what population size does to the whole thing.</p>
-      <p><strong>What it shows.</strong> This is where the real <span class="gloss" data-help="glosPopulation">population</span> genetics starts. Imagine the copying errors of the first two rooms have already happened, so a population of <var>N</var> individuals now carries two versions of a locus — two <em>alleles</em>, <var>A</var>₁ and <var>A</var>₂. This room asks what becomes of that existing variation. Each <span class="gloss" data-help="glosGeneration">generation</span> is built by <em>randomly sampling</em> the previous one — the spinning wheel makes a single draw of one allele, and a full generation means one draw per gene copy. No allele has an advantage over the other; the only force at work is chance.</p>
+      <p><strong>What it shows.</strong> This is where the real <span class="gloss" data-help="glosPopulation">population</span> genetics starts. Imagine the copying errors of the first two rooms have already happened, so a population of <var>N</var> individuals now carries two versions of a locus — two <em>alleles</em>, <var>A</var>₁ and <var>A</var>₂. This room asks what becomes of that existing variation. How much of each there is, is written <var>p</var>: <strong><var>p</var> is always the frequency of <var>A</var>₁</strong> — the share of the population carrying it — so <var>p</var> = 0.5 is an even split, <var>p</var> = 0 means <var>A</var>₁ is gone and <var>p</var> = 1 means it is all that is left. That convention holds in every room from here on. Each <span class="gloss" data-help="glosGeneration">generation</span> is built by <em>randomly sampling</em> the previous one — the spinning wheel makes a single draw of one allele, and a full generation means one draw per gene copy. No allele has an advantage over the other; the only force at work is chance.</p>
       <p><span class="try-label">Try this.</span> Run the default settings and watch the first two generations sample one individual at a time. Then set <var>N</var> = 10 and run, and afterwards set <var>N</var> = 200 and run again with everything else unchanged. Finally press <em>Run 10 Simulations</em> to see ten independent populations at once.</p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">four choices, then press Run Simulation.</span></div>
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">four choices — a fifth if you want mutation — then press Run Simulation.</span></div>
       <div class="field">
         <label for="sliderN_drift"><span>Population size <var>N</var></span> <span class="value" id="nVal_drift">50</span><button class="help-btn" data-help="popN"></button></label>
         <input type="range" id="sliderN_drift" min="10" max="200" step="1" value="50">
       </div>
       <div class="field">
-        <label for="sliderF_drift"><span>Initial freq.</span> <span class="sym"><var>p</var></span> <span class="value" id="fVal_drift">0.50</span><button class="help-btn" data-help="freqF"></button></label>
+        <label for="sliderF_drift"><span>Initial</span> <span class="sym"><var>f</var>(<var>A</var>₁) = <var>p</var></span> <span class="value" id="fVal_drift">0.50</span><button class="help-btn" data-help="freqF"></button></label>
         <input type="range" id="sliderF_drift" min="0.01" max="0.99" step="0.01" value="0.50">
       </div>
       <div class="field">
@@ -2693,6 +2733,14 @@
           <button data-ploidy="1" class="active">Haploid</button>
           <button data-ploidy="2">Diploid</button>
         </div>
+      </div>
+
+      <div class="adapt-section-label">
+        <span>Recurrent mutation — optional<button class="help-btn" data-help="recurrentMu"></button></span>
+      </div>
+      <div class="field">
+        <label for="sliderMu_drift"><span>Mutation rate</span> <span class="sym"><var>μ</var></span> <span class="value" id="muVal_drift">0.0000</span><button class="help-btn" data-help="recurrentMu"></button></label>
+        <input type="range" id="sliderMu_drift" min="0" max="0.01" step="0.0005" value="0">
       </div>
 
       <div class="transport">
@@ -2719,7 +2767,7 @@
         <div class="drift-stats">
           <div class="drift-chip"><span>Generation</span><span id="genDisplay_drift">0</span></div>
           <div class="drift-chip">Ind. drawn<span id="spinDisplay_drift">—</span></div>
-          <div class="drift-chip"><span>Freq <var>p</var></span><span id="freqDisplay_drift">—</span></div>
+          <div class="drift-chip"><span><var>p</var> = freq. <var>A</var>₁</span><span id="freqDisplay_drift">—</span></div>
         </div>
       </div>
 
@@ -2742,6 +2790,21 @@
       <div class="lineage-card" style="grid-column: 1 / -1;">
         <div class="lineage-head"><span class="name">Allele Frequency (<var>p</var>) over Generations<button class="help-btn" data-help="freqChart"></button></span><span class="stat mono" id="multiRunSummary_drift"></span></div>
         <div class="canvas-wrap" id="chartWrap_drift"><canvas id="chartCanvas_drift" role="img" aria-label="Frequency of allele A1 plotted against generation"></canvas></div>
+      </div>
+
+      <!-- Only ever visible in the ten-run view, and it reads those ten runs as
+           ten unlinked loci in ONE population rather than as ten populations:
+           their average heterozygosity is that population's genetic diversity.
+           The point of putting it directly under the trajectories is the
+           contrast — ten wildly different histories above, one predictable
+           decay below. The engine shows and hides it; it is hidden on load by
+           setMultiRunMode(false) rather than by an inline style. -->
+      <div class="lineage-card" id="multiHetCard_drift" style="grid-column: 1 / -1;">
+        <div class="lineage-head">
+          <span class="name">Genetic Diversity — mean <var>H</var> across the ten loci<button class="help-btn" data-help="hetChart"></button></span>
+          <span class="stat mono allele-legend"><span><span style="color:#7A5C99;">—</span> <span>measured</span></span><span><span style="color:#262220;">- -</span> <span>expected</span></span></span>
+        </div>
+        <div class="canvas-wrap multi-het"><canvas id="multiHetCanvas_drift" role="img" aria-label="Genetic diversity, heterozygosity averaged across the ten loci, plotted against generation with the expected curve"></canvas></div>
       </div>
 
       <!-- Chart 2: Binomial Distribution -->
@@ -2773,7 +2836,7 @@
     <div class="room-assumes">
       <h2>What this model assumes</h2>
       <ul>
-        <li><strong>A closed population.</strong> No migration in or out, and no new mutation once the run starts: the two alleles present are the only ones there will ever be. That is why every run ends at 0 or 1 and stays there.</li>
+        <li><strong>A closed population, and — unless you say otherwise — a closed supply of alleles.</strong> No migration in or out. With <var>μ</var> left at 0 there is no new mutation either, so the two alleles present are the only ones there will ever be, and that is why every run ends at 0 or 1 and stays there. <span class="lifted">Raise <var>μ</var> and that last part stops being true; two of these populations trading individuals is the <button type="button" class="room-link" onclick="switchTab('migration');">Migration Room</button>.</span></li>
         <li><strong>No selection.</strong> The two alleles are identical in every respect except their label. <span class="lifted">Give one of them an advantage in the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button>.</span></li>
         <li><strong>Wright–Fisher bookkeeping.</strong> <var>N</var> constant, generations discrete and non-overlapping, mating at random, and every individual with an equal chance of leaving offspring. Real populations do none of these exactly, which is why the <var>N</var> here is better read as an <span class="gloss" data-help="glosPopulation">effective population size</span> than as a head count.</li>
         <li><strong>One locus, alone.</strong> Nothing is linked to it and nothing interacts with it. <span class="lifted">Two loci travelling together is the <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button>.</span></li>
@@ -2784,7 +2847,10 @@
     <div class="room-payoff">
       <h2>What to notice</h2>
       <p>Small populations lurch around and quickly end up with only one allele left; large populations barely move, but will eventually also fix an allele, although after more generations. In fact, one important point to note is that in evolution time is measured in generations, not years. Once an allele reaches 0 or 1 it can never come back — drift permanently destroys variation. And across ten identical runs the outcomes differ wildly, which is why a single run can never tell you what a random process "does".</p>
-      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> keeps this machinery and gives one allele an advantage, so you can watch selection and drift compete. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> asks where the two alleles came from to begin with.</p>
+      <p><strong>Press <em>Run 10 Simulations</em> and look at the second chart, not the first.</strong> Read those ten runs as ten <span class="gloss" data-help="glosLocus">loci</span> in one population rather than as ten populations — unlinked loci drift independently of each other, so it is the same arithmetic either way — and their average heterozygosity is that population's <strong>genetic diversity</strong>. The ten trajectories above disagree about everything that looks important: which allele wins, when, whether anything is settled by the end. The single diversity curve below them does not. It follows the dashed line, which is not fitted to anything — it is computed in advance from <var>N</var> and the ploidy alone.<button class="help-btn" data-help="hetChart"></button></p>
+      <p>That is the real content of this room, and it is why nobody measures diversity at one locus. Drift is unpredictable about <em>which</em> variation it removes and highly predictable about <em>how much</em>: the rate depends on the number of gene copies and on nothing else whatever — not on the starting frequency, not on which allele happens to be ahead. One locus is noise. The average over many is a number you can reason about, and it is the number a real study reports.</p>
+      <p><strong>Then put the mutation slider up and run it again.</strong> Everything above was about a population with no new alleles arriving, and all of it was true of that population: variation only ever goes down, 0 and 1 are the end, every run finishes there. With <var>μ</var> above 0 none of it holds. An allele at 0 comes back, because mutation keeps remaking it; runs no longer end; and the heterozygosity curve, instead of decaying to nothing, flattens out at the level drift pulling down and mutation pushing up settle on between them (and the summary line reports where it landed against where the arithmetic says it should). At <var>N</var> = 50 and <var>μ</var> = 0.005 that balance sits near <var>H</var> = 0.25 — half of the most that two alleles can give you. Real populations live at a balance of this kind. The run that ends at 0 or 1 is what you get by leaving the supply of new variation out of the model.<button class="help-btn" data-help="recurrentMu"></button></p>
+      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> keeps this machinery and gives one allele an advantage, so you can watch selection and drift compete. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> asks where the two alleles came from to begin with, and the <button type="button" class="room-link" onclick="switchTab('migration');">Migration Room</button> runs two of these populations side by side with a few individuals crossing between them.</p>
     </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -2792,9 +2858,12 @@
       <p><strong>The three results the panels are drawing.</strong> Write <var>M</var> for the gene copies sampled each generation: <var>M</var> = <var>N</var> under haploidy, <var>M</var> = 2<var>N</var> under diploidy.</p>
       <p class="eq">Var(Δ<var>p</var>) = <var>p</var>(1 − <var>p</var>)/<var>M</var><span class="eq-note">how far one generation of sampling can move the frequency: largest at <var>p</var> = 0.5, and smaller in every larger population — this is the curve the variance panel plots</span></p>
       <p class="eq"><var>u</var>(<var>p</var>) = <var>p</var><span class="eq-note">probability of fixation: with nothing favoured, an allele's chance of ending up as the only one is simply how common it is now</span></p>
-      <p class="eq"><var>H</var>(<var>t</var>) = <var>H</var>₀(1 − 1/<var>M</var>)<sup><var>t</var></sup> ≈ <var>H</var>₀e<sup>−<var>t</var>/<var>M</var></sup><span class="eq-note">heterozygosity — the variation still left — decays by a factor 1/<var>M</var> per generation, so half of it is gone after about 0.69<var>M</var></span></p>
+      <p class="eq"><var>H</var>(<var>t</var>) = <var>H</var>₀(1 − 1/<var>M</var>)<sup><var>t</var></sup> ≈ <var>H</var>₀e<sup>−<var>t</var>/<var>M</var></sup><span class="eq-note">heterozygosity — the variation still left — decays by a factor 1/<var>M</var> per generation, so half of it is gone after about 0.69<var>M</var>. This is the dashed line on the <em>Run 10 Simulations</em> heterozygosity chart</span></p>
       <p class="eq">E[<var>T</var><sub>fix</sub>] ≈ 2<var>M</var> generations<span class="eq-note">how long an allele that does fix takes to get there — 4<var>N</var> under diploidy, 2<var>N</var> under haploidy</span></p>
       <p>Read together they say that fixation is not a special event but the end every run has: drift removes variation at a rate set by <var>M</var> and nothing else, and a locus started at <var>p</var> = 0.5 reaches one edge or the other after about 1.4<var>M</var> generations on average.</p>
+      <p><strong>What the mutation slider does.</strong> Each gene copy has a probability <var>μ</var> of turning into the other allele as it is passed on, the same rate in both directions — so mutation on its own pulls the frequency towards 0.5 rather than towards either allele. It is applied to the frequency the next generation is drawn from, after the wheel has been sized, which is why the wheel grows a small tick at the un-mutated frequency once <var>μ</var> is above 0: the gap between tick and slice is what mutation did. Two things follow. Sampling is now from <var>p</var>′ rather than <var>p</var>, which is what the binomial panel's label changes to say; and 0 and 1 stop being absorbing, so a run does not end when it reaches one.</p>
+      <p>Composing mutation with sampling gives one exact recursion for the expected heterozygosity, and it is what the dashed line is drawn from at every setting:</p>
+      <p class="eq">E[<var>H</var><sub><var>t</var>+1</sub>] = (1 − 1/<var>M</var>)·[(1 − 2<var>μ</var>)²<var>H</var><sub><var>t</var></sub> + 2<var>μ</var>(1 − <var>μ</var>)]<span class="eq-note">at <var>μ</var> = 0 this is the decay above; above 0 it climbs or falls to a balance instead of to zero. At <var>M</var> = 50 and <var>μ</var> = 0.005 the balance works out at <var>H</var> = 0.247, and 4,000 simulated runs put it at 0.249</span></p>
       <p><strong>Where the default <var>G</var> comes from.</strong> The generations slider opens at 1.5 × E[<var>T</var><sub>fix</sub>], which is 3<var>M</var>, so a run at the default settings has room to finish instead of stopping part-way through the wander. It follows <var>N</var> and the ploidy as you change them, and stops following the moment you move the slider yourself. It is a generous figure at <var>p</var> = 0.5: 2<var>M</var> is the time for an allele starting from a single copy, and one starting at half takes closer to 1.4<var>M</var>, so most default runs reach an edge with generations to spare.</p>
     </details>
 
@@ -2831,7 +2900,7 @@
         <input type="range" id="sliderN_selection" min="10" max="200" step="1" value="50">
       </div>
       <div class="field">
-        <label for="sliderF_selection"><span>Initial freq.</span> <span class="sym"><var>p</var></span> <span class="value" id="fVal_selection">0.50</span><button class="help-btn" data-help="freqF"></button></label>
+        <label for="sliderF_selection"><span>Initial</span> <span class="sym"><var>f</var>(<var>A</var>₁) = <var>p</var></span> <span class="value" id="fVal_selection">0.50</span><button class="help-btn" data-help="freqF"></button></label>
         <input type="range" id="sliderF_selection" min="0.01" max="0.99" step="0.01" value="0.50">
       </div>
       <div class="field">
@@ -2878,7 +2947,7 @@
         <div class="drift-stats">
           <div class="drift-chip"><span>Generation</span><span id="genDisplay_selection">0</span></div>
           <div class="drift-chip">Ind. drawn<span id="spinDisplay_selection">—</span></div>
-          <div class="drift-chip"><span>Freq <var>p</var></span><span id="freqDisplay_selection">—</span></div>
+          <div class="drift-chip"><span><var>p</var> = freq. <var>A</var>₁</span><span id="freqDisplay_selection">—</span></div>
           <div class="drift-chip"><span>Δ<var>p</var> (selection shift)</span><span id="deltaFDisplay_selection">—</span></div>
         </div>
       </div>
@@ -3083,7 +3152,218 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- TAB 7: THE ADAPTATION ROOM                 -->
+  <!-- TAB 7: THE MIGRATION ROOM                  -->
+  <!-- ========================================== -->
+  <div id="tab-migration" class="tab-content page" style="--room: #2F7A8C; --room-deep: #2B5761">
+    <header class="masthead">
+      <div>
+        <h1>The Migration Room</h1>
+        <p class="sub"><span class="sub-label">Two populations, one exchange</span> – Drift pulls two populations apart; a handful of migrants a generation holds them together.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h2>Start here</h2>
+      <p>The <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> ran one population until its variation was gone. Run two of them side by side and something a single population cannot show you appears: they lose their variation in <em>different directions</em>, and end up fixed for different alleles. This room puts back the one thing that stops that happening — a few individuals a generation moving between them.</p>
+      <p><strong>What it shows.</strong> Two <span class="gloss" data-help="glosPopulation">populations</span>, <strong>A</strong> and <strong>B</strong>, each of <var>N</var> individuals, each carrying the same two <span class="gloss" data-help="glosAllele">alleles</span>, <var>A</var>₁ and <var>A</var>₂ — the letters name the populations, the digits name the alleles. Every <span class="gloss" data-help="glosGeneration">generation</span> happens in two steps, in this order.<button class="help-btn" data-help="migOrder"></button> First <strong>each population samples its own next generation</strong>, exactly as in the Drift Room: that is <span class="gloss" data-help="glosDrift">drift</span>, and it is what pulls them apart. Then <strong><var>M</var> individuals cross in each direction</strong>: that is <span class="gloss" data-help="glosMigration">gene flow</span>, and it is what pulls them back together. The whole room is those two forces running against each other, and the question is how much gene flow it takes to win.</p>
+      <p><strong>Why the slider counts individuals rather than setting a rate.</strong> The classic result is about a <em>number</em> of migrants, so that is what the control gives you: <var>M</var>, the individuals that cross each way each generation, a number you can count on the screen.<button class="help-btn" data-help="migM"></button> Beside it the deck reports the same setting in the two forms the literature writes it in — the migration rate <var>m</var> = <var>M</var>/<var>N</var>, and the product <var>Nm</var>, which here is just <var>M</var> back again.<button class="help-btn" data-help="migNm"></button> Hold <var>M</var> at 1 and drag <var>N</var> from 20 up to 200: <var>m</var> falls by a factor of ten while the two populations go on behaving the same way. That is the surprise this room is built around. What holds two populations together is the number of migrants they exchange, not the fraction of each that migrates — so a trickle that is negligible <em>as a rate</em> is not negligible at all.</p>
+      <p><span class="try-label">Try this.</span> Press Run on the defaults: A starts at <var>p</var> = 0.90, B at <var>p</var> = 0.10, and one individual crosses each way. Watch B climb to meet A — and notice how the run ends. The two do not drift apart and stay apart; they come together and then lose the last of their variation <em>as a pair</em>, usually within the first couple of hundred generations. Now set the migrants to <strong>0</strong> and run again: nothing pulls B up, and a good half of these runs end with the two populations fixed for different alleles instead. Then set <em>both</em> starting frequencies to <var>p</var> = 0.50 and press <em>Run 20 Replicates</em>, first at 0 migrants and then at 1 — around thirteen runs in twenty become strongly differentiated at some point without migrants, and around five with one. Finally press <em>Run the sweep</em>. Runs vary enormously, so nothing above can be seen from any single one of them.</p>
+    </div>
+
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">six choices, plus two optional ones, then press Run Simulation.</span></div>
+      <div class="adapt-n-row mig-setup-row">
+        <div class="adapt-n-row-label">Populations</div>
+        <div class="field">
+          <label for="sliderN_mig"><span>Each population</span> <span class="sym"><var>N</var></span> <span class="value" id="nVal_mig">50</span><button class="help-btn" data-help="popN"></button></label>
+          <input type="range" id="sliderN_mig" min="10" max="200" step="1" value="50">
+        </div>
+        <div class="field">
+          <label for="sliderFA_mig"><span>A starts at</span> <span class="sym"><var>p</var><sub>A</sub></span> <span class="value" id="faVal_mig">0.90</span><button class="help-btn" data-help="freqF"></button></label>
+          <input type="range" id="sliderFA_mig" min="0.01" max="0.99" step="0.01" value="0.90">
+        </div>
+        <div class="field">
+          <label for="sliderFB_mig"><span>B starts at</span> <span class="sym"><var>p</var><sub>B</sub></span> <span class="value" id="fbVal_mig">0.10</span><button class="help-btn" data-help="freqF"></button></label>
+          <input type="range" id="sliderFB_mig" min="0.01" max="0.99" step="0.01" value="0.10">
+        </div>
+        <div class="field">
+          <label for="sliderG_mig"><span>Generations</span> <span class="sym"><var>G</var></span> <span class="value" id="gVal_mig">200</span><button class="help-btn" data-help="genG"></button></label>
+          <input type="range" id="sliderG_mig" min="20" max="1000" step="10" value="200">
+        </div>
+      </div>
+
+      <!-- The migrant slider steps through a list rather than a range: the
+           interesting settings are bunched below 1 (where differentiation is
+           decided) and spread out above it (where nothing more happens), which
+           no single step size gives you. Its value attribute is an index into
+           that list; the label shows the number of migrants it stands for. -->
+      <div class="field">
+        <label for="sliderM_mig"><span>Migrants each way, each generation</span> <span class="sym"><var>M</var></span> <span class="value" id="mVal_mig">1</span><button class="help-btn" data-help="migM"></button></label>
+        <input type="range" id="sliderM_mig" min="0" max="13" step="1" value="7">
+      </div>
+
+      <div class="drift-stats mig-derived">
+        <div class="drift-chip">Same setting as <span id="nmVal_mig"><var>Nm</var> = 1.00</span></div>
+        <div class="drift-chip">…and as a rate<span id="rateVal_mig"><var>m</var> = 0.0200</span></div>
+      </div>
+
+      <div class="adapt-section-label">
+        <span>Local adaptation — optional<button class="help-btn" data-help="migLocal"></button></span>
+      </div>
+      <div class="field">
+        <label id="lbl-selSeg_mig">Selection<button class="help-btn" data-help="migLocal"></button></label>
+        <div role="group" aria-labelledby="lbl-selSeg_mig" class="segmented" id="selSeg_mig">
+          <button data-sel="off" class="active">None</button>
+          <button data-sel="opposite">Opposite in A and B</button>
+        </div>
+      </div>
+      <div class="field" id="sField_mig" style="display:none;">
+        <label for="sliderS_mig"><span>Advantage</span> <span class="sym"><var>s</var></span> <span class="value" id="sVal_mig">0.10</span><button class="help-btn" data-help="migLocal"></button></label>
+        <input type="range" id="sliderS_mig" min="0" max="0.5" step="0.01" value="0.10">
+      </div>
+
+      <div class="adapt-section-label">
+        <span>Recurrent mutation — optional<button class="help-btn" data-help="recurrentMu"></button></span>
+      </div>
+      <div class="field">
+        <label for="sliderMu_mig"><span>Mutation rate</span> <span class="sym"><var>μ</var></span> <span class="value" id="muVal_mig">0.0000</span><button class="help-btn" data-help="recurrentMu"></button></label>
+        <input type="range" id="sliderMu_mig" min="0" max="0.01" step="0.0005" value="0">
+      </div>
+
+      <div class="transport">
+        <button class="btn" id="btnRun_mig" data-sound data-results="#stage_mig">▶ Run Simulation</button>
+        <button class="btn secondary" id="btnRun20_mig" data-sound data-results="#repCard_mig">▶ Run 20 Replicates</button><button class="help-btn" data-help="migReplicates"></button>
+        <button class="btn secondary" id="btnPause_mig" style="display:none;">⏸ Pause after gen</button>
+        <button class="btn secondary" id="btnReset_mig">↺ Reset</button>
+        <span class="status mono" id="statusBar_mig">Configure parameters and press Run.</span>
+      </div>
+    </div>
+
+    <!-- One canvas, not two cards. A migrant has to be seen leaving one grid and
+         arriving in the other, and a mark cannot cross between two canvases — so
+         both populations and the channel between them are drawn in a single box. -->
+    <div class="stage-area" id="stage_mig" style="--cols: 1;">
+      <div class="lineage-card">
+        <div class="lineage-head">
+          <span class="name-group"><span class="name">Population A &nbsp;⇄&nbsp; Population B<button class="help-btn" data-help="migChannel"></button></span></span>
+          <span class="stat mono allele-legend"><span><span style="color:#2E5C8A;">●</span> <span>Allele <var>A</var>₁</span></span><span><span style="color:#A8442A;">●</span> <span>Allele <var>A</var>₂</span></span></span>
+        </div>
+        <div class="canvas-wrap mig-demes">
+          <canvas id="demeCanvas_mig" role="img" aria-label="The two populations side by side, one mark per individual coloured by allele, with the migrants crossing between them"></canvas>
+        </div>
+        <div class="drift-stats">
+          <div class="drift-chip"><span>Generation</span><span id="genDisplay_mig">0</span></div>
+          <div class="drift-chip"><span>A: <var>p</var><sub>A</sub></span><span id="paDisplay_mig">—</span></div>
+          <div class="drift-chip"><span>B: <var>p</var><sub>B</sub></span><span id="pbDisplay_mig">—</span></div>
+          <div class="drift-chip">Difference<span id="gapDisplay_mig">—</span></div>
+          <div class="drift-chip">Crossed this gen.<span id="migDisplay_mig">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-area" id="chartStage_mig" style="--cols: 2; margin-top: 20px;">
+
+      <!-- One chart with both trajectories on it, not one chart each. What the
+           room is about is the distance between the two lines, and a relation
+           put on two axes becomes a comparison the reader has to do by eye. -->
+      <div class="lineage-card" style="grid-column: 1 / -1;">
+        <div class="lineage-head">
+          <span class="name">Frequency of <var>A</var>₁ in each population<button class="help-btn" data-help="freqChart"></button></span>
+          <span class="stat mono allele-legend"><span><span style="color:#2F7A8C;">—</span> <span>Population A</span></span><span><span style="color:#C08A2E;">- -</span> <span>Population B</span></span></span>
+        </div>
+        <div class="canvas-wrap mig-chart" id="chartWrap_mig"><canvas id="freqCanvas_mig" role="img" aria-label="Frequency of allele A1 in each of the two populations, plotted against generation"></canvas></div>
+      </div>
+
+      <div class="lineage-card" id="fstCard_mig">
+        <div class="lineage-head"><span class="name">Differentiation <var>F</var><sub>ST</sub><button class="help-btn" data-help="migFst"></button></span><span class="stat mono">run mean = <span id="fstMean_mig">—</span></span></div>
+        <div class="canvas-wrap mig-fst"><canvas id="fstCanvas_mig" role="img" aria-label="Differentiation between the two populations plotted against generation"></canvas></div>
+      </div>
+
+      <div class="lineage-card" id="repCard_mig">
+        <div class="lineage-head"><span class="name">Twenty replicates<button class="help-btn" data-help="migReplicates"></button></span><span class="stat mono" id="repSummary_mig"></span></div>
+        <div class="canvas-wrap mig-fst"><canvas id="repCanvas_mig" role="img" aria-label="Distribution of differentiation across twenty independent replicate runs"></canvas></div>
+      </div>
+
+    </div>
+
+    <!-- The room's actual result, and the only panel that can carry it: the rule
+         of thumb is a claim about a distribution, so no single run and no pair of
+         runs can test it. It gets its own button because it is a hundred times
+         the work of one run. -->
+    <div class="stage-area" id="sweepStage_mig" style="--cols: 1; margin-top: 20px;">
+      <div class="lineage-card" id="sweepCard_mig">
+        <div class="lineage-head">
+          <span class="name">Differentiation against <var>Nm</var><button class="help-btn" data-help="migSweep"></button></span>
+          <span class="stat mono allele-legend"><span><span style="color:#2F7A8C;">—</span> <span>mean <var>F</var><sub>ST</sub></span></span><span><span style="color:#C08A2E;">- -</span> <span>share reaching 0.5</span></span></span>
+        </div>
+        <div class="canvas-wrap mig-sweep"><canvas id="sweepCanvas_mig" role="img" aria-label="Mean differentiation between the two populations against the number of migrants per generation, on a logarithmic axis"></canvas></div>
+        <div class="transport" style="margin-top: 12px;">
+          <button class="btn secondary" id="btnSweep_mig" data-sound data-results="#sweepCard_mig">▶ Run the sweep</button>
+          <span class="status mono" id="sweepSummary_mig"></span>
+          <span class="status mono" id="sweepStatus_mig">One hundred replicates at each of ten migration settings, each starting at <var>p</var> = 0.5 in both populations, at the <var>N</var> and <var>G</var> set above.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="reading" id="readingRow_mig">
+      <div class="divergence-line mono" id="verdict_mig"></div>
+      <div class="help-inline-note">What counts as differentiated <button class="help-btn" data-help="migFst"></button></div>
+    </div>
+
+    <div class="time-machine-container" id="scrubberRow_mig" style="margin-top: 20px;">
+      <div class="field">
+        <label for="timeScrubber_mig" style="color: var(--stamp-deep)"><span>History Scrubber: You are at generation</span> <span class="value" id="scrubVal_mig">0</span></label>
+        <input type="range" id="timeScrubber_mig" min="0" max="0" value="0" disabled>
+      </div>
+    </div>
+
+    <div class="room-assumes">
+      <h2>What this model assumes</h2>
+      <ul>
+        <li><strong>Two populations, not many.</strong> The rule of thumb is usually quoted for an <em>island model</em> — many populations all exchanging with a common pool. With two, the qualitative result is the same and the arithmetic behind it is not: the same <var>Nm</var> buys more cohesion between two populations than between twenty, because each one's migrants all come from the only other place there is.<button class="help-btn" data-help="migSweep"></button></li>
+        <li><strong>Migration is symmetric, and neither population changes size.</strong> The same <var>M</var> crosses each way, so <var>N</var> is the same at the end of a generation as at the start. Real gene flow is usually lopsided — one population a source, the other a sink — and that asymmetry is exactly what decides which of the two ends up carrying the other's alleles.</li>
+        <li><strong>Migrants are a random sample of where they came from.</strong> Nothing about an individual's genotype makes it more or less likely to leave, and a migrant breeds on arrival like anyone else. Real dispersers are frequently not a random sample of their population.</li>
+        <li><strong>Haploid, one locus, and no mutation unless you ask for it.</strong> One locus with two alleles and no linkage. <span class="lifted">Ploidy is a setting in the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button>; two loci at once are the <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button>.</span> With <var>μ</var> left at 0 nothing replaces the variation drift removes, so the pair does eventually fix for one allele between them however much they exchange, and what this room measures is the differentiation that builds up <em>before</em> that — which is what the rule of thumb is about.<button class="help-btn" data-help="migFst"></button> Raise <var>μ</var> and the variation stops running out, but note what that does and does not buy you: with only two alleles, mutation pulls both populations towards <var>p</var> = 0.5, so it <em>reduces</em> differentiation rather than preserving it.<button class="help-btn" data-help="recurrentMu"></button></li>
+        <li><strong>Selection, when you switch it on, is exactly opposite in the two populations and constant throughout.</strong> That is the cleanest case and not a typical one: real habitats differ by degree, not by sign. <span class="lifted">Selection against an unchanging habitat is the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button>.</span></li>
+      </ul>
+    </div>
+
+    <div class="room-payoff">
+      <h2>What to notice</h2>
+      <p>With no migrants the two populations are simply two Drift Rooms, and they end up wherever chance sends them — often at opposite edges, which is as different as two populations can be. One migrant a generation changes that: the two lines stay within sight of each other, and the pair behaves far more like a single population of 2<var>N</var> than like two populations of <var>N</var>.</p>
+      <p><strong>The sweep is where that claim gets tested, and it comes back with two different answers.</strong> Mean <var>F</var><sub>ST</sub> — the quantity actually reported in papers — slides down steadily as migrants are added and falls off nothing in particular. The share of runs that ever become <em>strongly</em> differentiated does fall off a cliff, and the cliff is at one migrant a generation: without migrants about two runs in three get there, at half a migrant about one in two, at one migrant about one in four, and at two migrants almost none. The rule of thumb was never a claim about the average. It is a claim about preventing <em>complete</em> differentiation, and it is right about that.<button class="help-btn" data-help="migSweep"></button></p>
+      <p>Then notice what the cliff is measured against. It is <var>Nm</var> — a <em>number</em> — and not <var>m</var>. Ten migrants into a population of a thousand is a migration rate of 1%, and it keeps that population welded to its neighbour; one migrant into a population of ten is a rate of 10%, ten times larger, and does less. This is why "these populations exchange less than one percent of their individuals" is not, on its own, an argument that they are diverging.</p>
+      <p>One thing the equilibrium does <em>not</em> tell you is how long it takes to get there. Raise <var>N</var> with <var>M</var> held at 1 and the two populations end up just as tightly bound — but they take proportionally longer to arrive, because everything about drift is slower in a big population. The end state depends only on the product; the time to reach it depends on <var>N</var>.</p>
+      <p><strong>With local adaptation switched on</strong> the same contest is run against selection instead of drift, and the answer changes shape: what matters is now the comparison between <var>m</var> and <var>s</var>. When migration is the weaker of the two each population keeps its own favoured allele and a stable difference between them survives indefinitely; when it is the stronger, gene flow swamps local adaptation and both populations end up carrying the same allele, whichever one the exchange happens to favour. A population can be prevented from adapting to where it lives by immigrants from somewhere else.</p>
+      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button> sets the migrants to zero permanently and asks what accumulates over a thousand generations of that. This room is why it has to: with even a trickle of gene flow, almost none of it would.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p><strong>One generation, in order.</strong> Each population independently draws <var>N</var> individuals from its own current gene pool — a binomial draw at its own frequency, the Drift Room's recursion run twice — and only then are the migrants exchanged. So the frequencies the chart plots are post-migration frequencies, and the drift that happened in a generation is always drift within a population, never drift on a pool the two share.</p>
+      <p><strong>Fractional migrants.</strong> Settings below one migrant are real settings, not rounded ones: at <var>M</var> = 0.3 a single individual crosses in three generations out of ten, chosen at random, and none in the other seven. The number that crosses in a given generation is shown on the panel, so a reader can see that "0.3 migrants" is a statement about the long run and never about a generation.</p>
+      <p><strong>What the exchange actually does.</strong> <var>M</var> individuals are picked at random from A and <var>M</var> from B, and they swap places. Both populations therefore stay at exactly <var>N</var>, and the expected change in A's frequency in one exchange is</p>
+      <p class="eq">E[Δ<var>p</var><sub>A</sub>] = <var>m</var>(<var>p</var><sub>B</sub> − <var>p</var><sub>A</sub>), with <var>m</var> = <var>M</var>/<var>N</var><span class="eq-note">gene flow always pulls a population towards the other one, by a fraction <var>m</var> of the gap between them — so it can close a difference but never create one</span></p>
+      <p><strong>How differentiation is measured.</strong> <var>F</var><sub>ST</sub> compares the variation within the two populations against the variation in the two taken together. Writing <var>p̄</var> for the average of <var>p</var><sub>A</sub> and <var>p</var><sub>B</sub>:</p>
+      <p class="eq"><var>H</var><sub>S</sub> = ½[2<var>p</var><sub>A</sub>(1−<var>p</var><sub>A</sub>) + 2<var>p</var><sub>B</sub>(1−<var>p</var><sub>B</sub>)] · <var>H</var><sub>T</sub> = 2<var>p̄</var>(1−<var>p̄</var>) · <var>F</var><sub>ST</sub> = 1 − <var>H</var><sub>S</sub>/<var>H</var><sub>T</sub><span class="eq-note">0 when the two populations have the same frequency, 1 when each is fixed for a different allele, and undefined once neither carries any variation at all</span></p>
+      <p><strong>What the sweep measures, and why no curve is drawn over it.</strong> Each point is a hundred runs at that setting. The teal series is the mean of each run's own mean <var>F</var><sub>ST</sub>; the gold series is the share of those hundred runs in which <var>F</var><sub>ST</sub> reached 0.5 at any point, which is this room's operational reading of "completely differentiated".</p>
+      <p>Every sweep run starts at <var>p</var> = 0.5 in <em>both</em> populations, whatever the deck says, and that is not a detail. The sweep asks how much differentiation drift manages to build against a given amount of gene flow, which can only be measured from populations that begin with none. Started at the default <var>p</var> = 0.90 and <var>p</var> = 0.10 the two are already past the 0.5 mark before the first generation is drawn, and the panel would report every setting as complete differentiation and mean nothing by it.</p>
+      <p>The result every textbook quotes is <var>F</var><sub>ST</sub> ≈ 1/(1 + 4<var>Nm</var>), and it does not describe this room directly. It is the <em>many</em>-island result, and with two populations the coefficient is about four times larger — closer to 1/(1 + 16<var>Nm</var>) — because each population's immigrants all come from the only other place there is. It is also an equilibrium between migration and <em>mutation</em>, and this room has no mutation, so nothing here replaces what drift takes away.</p>
+      <p>Given both of those, the measured means come out closer to the two-population formula than you might expect. At <var>N</var> = 50 they run about 0.31, 0.20, 0.15, 0.09, 0.05 and 0.03 as <var>Nm</var> goes 0.1, 0.3, 0.5, 1, 2, 4, against 0.38, 0.17, 0.11, 0.06, 0.03 and 0.015 from 1/(1 + 16<var>Nm</var>). The same shape throughout, crossing from a little below the formula where migration is weakest to about double it where migration is strong — the excess a pair of populations on their way to losing all their variation would be expected to carry. The room plots what it measured and leaves the formula in this paragraph, where its assumptions can be stated alongside it, rather than drawing it across the panel as though it were the answer.</p>
+      <p><strong>Turning the mutation slider up does not close that gap — it opens a different one, and the reason is worth having.</strong> Mutation does the job it was added for: the variation stops running out, so a run can be carried as long as you like and <var>F</var><sub>ST</sub> settles at a value rather than being a quantity measured on the way to nothing. But it does not push the numbers up towards the formula. Over a thousand runs the no-migration end <em>falls</em> — mean <var>F</var><sub>ST</sub> of 0.44, 0.32 and 0.24 at <var>μ</var> = 0, 0.002 and 0.005 — and carried all the way to stationarity it falls further still. The reason is that this room has two alleles, and symmetric mutation between two alleles pulls <em>both</em> populations towards <var>p</var> = 0.5. It is a homogenising force in its own right: a second thing making the two more alike, working alongside the migrants. The formula assumes the opposite arrangement — infinitely many alleles, so mutation only ever makes variants that are <em>new</em>, adding diversity inside a population without making two populations any more similar to each other. What survives is the part that matters: the share of runs reaching 0.5 at <var>Nm</var> = 1 is 27%, 25% and 24% across those same three settings. Gene flow's cliff does not move.</p>
+      <p><strong>Where the default <var>G</var> comes from.</strong> 200 generations is 4<var>N</var> at the default <var>N</var> = 50 — long enough for a run with no migration to reach an edge, and for a run with migration to settle and stay settled long enough to be worth averaging. Like the Drift Room, it follows <var>N</var> until you move it yourself.</p>
+    </details>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TAB 8: THE ADAPTATION ROOM                 -->
   <!-- ========================================== -->
   <div id="tab-adaptation" class="tab-content page" style="--room: #7A5C99; --room-deep: #584569">
     <header class="masthead">
@@ -3318,7 +3598,7 @@
 
   
   <!-- ========================================== -->
-  <!-- TAB 8: THE SPECIATION ROOM                 -->
+  <!-- TAB 9: THE SPECIATION ROOM                 -->
   <!-- ========================================== -->
   <div id="tab-speciation" class="tab-content page" style="--room: #1F6E5E; --room-deep: #225045">
     <header class="masthead">
@@ -3489,7 +3769,7 @@
     <div class="room-assumes">
       <h2>What this model assumes</h2>
       <ul>
-        <li><strong>No gene flow — and here that is the premise, not a simplification.</strong> The room asks what accumulates between two populations that never exchange a gene. Any migration at all would slow or undo it, and how much is the question this room does not ask.</li>
+        <li><strong>No gene flow — and here that is the premise, not a simplification.</strong> The room asks what accumulates between two populations that never exchange a gene. Any migration at all would slow or undo it. <span class="lifted">How much is the <button type="button" class="room-link" onclick="switchTab('migration');">Migration Room</button>, and its answer is the reason this one has to close the door completely: a single migrant a generation would hold these two populations together for as long as you cared to run them.</span></li>
         <li><strong>1,013 loci, all inherited independently.</strong> No linkage anywhere in this genome, which is why divergence accumulates as smoothly as it does. A real genome sorts in blocks.</li>
         <li><strong>Incompatibility is counted, not modelled.</strong> The room treats fixed differences as a proxy for Dobzhansky–Muller incompatibilities — but a real incompatibility is an <em>interaction</em> between two loci, and no interaction between loci is simulated here. <var>X</var> and <var>Y</var> are thresholds you set, not measurements.</li>
         <li><strong>At most two alleles at a locus at a time,</strong> and mutation strikes only a locus that has gone monomorphic. Both are for legibility; real loci carry more, and mutate whenever they please.</li>
@@ -3532,7 +3812,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- TAB 9: THE REPRODUCTION ROOM               -->
+  <!-- TAB 10: THE REPRODUCTION ROOM              -->
   <!-- ========================================== -->
   <div id="tab-reproduction" class="tab-content page" style="--room: #4F7CAC; --room-deep: #3F5874">
     <header class="masthead">
@@ -3695,7 +3975,7 @@
 
 
   <!-- ========================================== -->
-  <!-- TAB 10: THE HARDY-WEINBERG ROOM             -->
+  <!-- TAB 11: THE HARDY-WEINBERG ROOM            -->
   <!-- ========================================== -->
   <div id="tab-hardyweinberg" class="tab-content page" style="--room: #8B3E62; --room-deep: #633348">
     <header class="masthead">
@@ -3852,7 +4132,7 @@
   </div>
 
   <!-- ========================================== -->
-  <!-- TAB 11: THE LINKAGE ROOM                   -->
+  <!-- TAB 12: THE LINKAGE ROOM                   -->
   <!-- ========================================== -->
   <div id="tab-linkage" class="tab-content page" style="--room: #8B5E3C; --room-deep: #634631">
     <header class="masthead">
@@ -3891,7 +4171,7 @@
         <div class="mix-scale">−1 = <var>A</var>₁ travels with <var>B</var>₂ &nbsp;·&nbsp; 0 = no association &nbsp;·&nbsp; +1 = <var>A</var>₁ travels with <var>B</var>₁</div>
       </div>
       <div class="field">
-        <label for="sliderP_lk"><span>Allele freq.</span> <span class="sym"><var>p</var></span> <span class="value" id="pVal_lk">0.50</span><button class="help-btn" data-help="ldAlleleFreq"></button></label>
+        <label for="sliderP_lk"><span>Freq. of <var>A</var>₁ and <var>B</var>₁</span> <span class="sym"><var>p</var></span> <span class="value" id="pVal_lk">0.50</span><button class="help-btn" data-help="ldAlleleFreq"></button></label>
         <input type="range" id="sliderP_lk" min="0.05" max="0.95" step="0.01" value="0.5">
         <div class="mix-scale">the same <var>p</var> at both loci</div>
       </div>
@@ -4044,6 +4324,7 @@
   <script src="js/drift-room.js?v=17895356014071"></script>
   <script src="js/selection-room.js?v=17895356014071"></script>
   <script src="js/mutation-room.js?v=17895356014071"></script>
+  <script src="js/migration-room.js?v=17895356014071"></script>
   <script src="js/adaptation-room.js?v=17895356014071"></script>
   <script src="js/speciation-room.js?v=17895356014071"></script>
 </body>

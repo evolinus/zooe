@@ -119,6 +119,23 @@
         depend on whether it would be useful — which is the whole point of the Mutation Room.</p>`
     },
 
+    glosMigration: {
+      title: 'Migration (gene flow)',
+      body: `
+        <p>Individuals moving between populations <em>and breeding where they arrive</em>. The second half is what makes
+        it gene flow rather than tourism: a migrant that leaves no offspring has moved a body, not an allele.</p>
+        <p>It is the fourth of the forces that change an allele frequency, beside
+        <span class="gloss" data-help="glosSelection">selection</span>, <span class="gloss" data-help="glosDrift">drift</span>
+        and <span class="gloss" data-help="glosMutation">mutation</span> — and the only one that acts <em>between</em>
+        populations rather than inside one. On its own it has no randomness and no direction of its own: it simply
+        moves each population towards the others, and stops mattering the moment they match.</p>
+        <p><strong>Very little of it goes a long way.</strong> What governs how different two populations can become is
+        <var>Nm</var> — the <em>number</em> of migrants a generation, not the fraction of the population they make up —
+        and a number as small as one is enough to keep two populations from diverging completely. This is why gene flow
+        is the standing obstacle to <span class="gloss" data-help="glosSpeciation">speciation</span>, and why the
+        Speciation Room has to shut it off entirely before it can ask its question.</p>`
+    },
+
     glosPopulation: {
       title: 'Population',
       body: `
@@ -612,7 +629,76 @@
         <p>The summary reports how many fixed <var>A</var>₁, how many fixed <var>A</var>₂, and how many were
         still polymorphic at the end, with average fixation times. <strong>Try it with a
         real advantage (<var>s</var> &gt; 0) at small <var>N</var></strong> and count how often the "better"
-        allele still loses.</p>`
+        allele still loses.</p>
+        <p><strong>In the Drift Room a second chart appears below the trajectories</strong>, and it reads the same
+        ten runs a different way — as ten loci in one population rather than ten populations — to plot that
+        population's <span class="gloss" data-help="hetChart">genetic diversity</span>. It is worth more attention
+        than the first chart: the trajectories disagree about everything, and their average diversity falls along a
+        line computed in advance. With <span class="gloss" data-help="recurrentMu">mutation</span> switched on nothing
+        fixes at all, so the summary reports the diversity the ten loci still carry against the balance they are
+        heading for, instead of counting fixations that never happen.</p>`
+    },
+
+    recurrentMu: {
+      title: 'Recurrent mutation (<var>μ</var>)',
+      body: `
+        <p>The rate at which one allele turns into the other. Every gene copy has a probability <var>μ</var> of
+        changing as it is passed on, and the rate is the same in both directions — <var>A</var>₁ to <var>A</var>₂ as
+        often as <var>A</var>₂ to <var>A</var>₁ — so mutation on its own pulls the frequency towards 0.5 rather than
+        towards either allele.</p>
+        <p><strong>It starts at 0, which means no mutation at all.</strong> That is the setting every result in this
+        room is written for: the two alleles present at the start are the only ones there will ever be. Leave it there
+        and nothing below applies.</p>
+        <p><strong>Turn it up and the room tells a different story.</strong> With <var>μ</var> = 0 variation only ever
+        goes down: 0 and 1 are the end of the road and every run gets there. With <var>μ</var> above 0 an allele at 0
+        comes back, because mutation keeps remaking it, and runs no longer end at all. What you get instead is a
+        <strong>balance</strong> — drift removing variation at a rate set by the number of gene copies, mutation
+        putting it back at a rate set by <var>μ</var>, and the amount left settling where the two meet. That is the
+        state real populations are in. A run that ends at fixation is what you get by leaving the supply of new
+        variation out of the model.</p>
+        <p>In the Drift Room the diversity chart under <em>Run 10 Simulations</em> is where to watch it: at
+        <var>μ</var> = 0 the curve decays to nothing, and above 0 it flattens out instead. At <var>N</var> = 50 and
+        <var>μ</var> = 0.005 it settles near <var>H</var> = 0.25, half of the most that two alleles can give.</p>
+        <p><strong>One thing it does <em>not</em> do, in the Migration Room.</strong> You might expect mutation to
+        help two populations stay different by keeping variation in each of them. It does the opposite: with only
+        <em>two</em> alleles, mutation pulls both populations towards <var>p</var> = 0.5, which makes them more alike,
+        not less — so turning <var>μ</var> up lowers <var>F</var><sub>ST</sub>. The textbook migration–mutation results
+        assume infinitely many alleles, where a mutation makes a variant that is genuinely <em>new</em> and so adds
+        diversity inside a population without making two populations any more similar. Two alleles is a different
+        model, and this is where the difference shows.</p>`
+    },
+
+    hetChart: {
+      title: 'Genetic diversity (mean <var>H</var>)',
+      body: `
+        <p>At a single locus, <var>H</var> = 2<var>p</var>(1 − <var>p</var>) is the chance that two gene copies drawn
+        at random are different from each other — the variation still there to be acted on. It is largest at
+        <var>p</var> = 0.5, where it reaches 0.5, and it is 0 at either edge, where only one allele is left.</p>
+        <p><strong>This chart averages that across all ten.</strong> The ten runs are read here as ten
+        <span class="gloss" data-help="glosLocus">loci</span> in <em>one</em> population rather than as ten separate
+        populations — which is a fair reading of the same numbers, because unlinked neutral loci in a population drift
+        independently of one another, and that is precisely what ten independent runs are. Their average is what a
+        population's <strong>genetic diversity</strong> means, and it is what anyone measuring diversity in a real
+        population computes: never one locus, always many, averaged.</p>
+        <p><strong>Why it is worth more attention than the chart above it.</strong> Those ten trajectories disagree
+        about everything that looks important — which allele wins, when, whether anything is settled by the end. Their
+        average diversity does not. It falls along the dashed line, which is not fitted to anything: it is computed in
+        advance from the number of gene copies. Drift is unpredictable about <em>which</em> variation it removes and
+        highly predictable about <em>how much</em>. That is why diversity is measured over many loci — one locus is
+        noise, and the average is a number you can reason about.</p>
+        <p>The rate is 1/<var>M</var> per generation, where <var>M</var> is the gene copies sampled — <var>N</var>
+        under haploidy, 2<var>N</var> under diploidy — so half the diversity is gone after about 0.69<var>M</var>
+        generations. Nothing else enters into it: not the starting frequency, not which allele is ahead anywhere. A
+        locus that has fixed counts as 0 in the average, which is what it is: a locus with no variation left.</p>
+        <p>With the <span class="gloss" data-help="recurrentMu">mutation</span> slider above 0 the dashed line stops
+        heading for zero and levels off, and the measured curve levels off with it. That plateau is the
+        mutation–drift balance, and it is the honest picture of a real population's diversity.</p>
+        <p><strong>Expect the measured value to wander around the balance rather than sit on it.</strong> At
+        <var>N</var> = 50 and <var>μ</var> = 0.005 the prediction is 0.247, and ten loci will hand you anything from
+        about 0.15 to about 0.32 — a wider spread than the decay half of the chart shows. That is not the arithmetic
+        failing. At a mutation rate this low most loci spend most of their time close to one edge or the other, so the
+        diversity that exists is carried by the handful that happen not to be, and ten is a small number of loci to
+        catch them with. Averaging over hundreds is what a real diversity estimate does.</p>`
     },
 
     fixation: {
@@ -1362,6 +1448,156 @@
     },
 
     // ---------- The Fate Room ----------
+
+    /* Migration Room. The room turns on one distinction the cards have to keep
+       making from different angles, because it is the one students arrive with
+       backwards: the quantity that governs differentiation is a NUMBER of
+       migrants, not a rate of migration. migM, migNm and migSweep each come at
+       it a different way — from the control, from the arithmetic, and from the
+       measured result. */
+    migM: {
+      title: 'Migrants, <var>M</var>',
+      body: `
+        <p>How many individuals cross <strong>each way, each generation</strong>. Set it to 2 and two individuals
+        leave A for B and two leave B for A, so both populations stay at <var>N</var>.</p>
+        <p><strong>Why a count and not a rate.</strong> Population genetics states its result about gene flow as
+        <var>Nm</var> — population size times migration rate, which is a <em>number of individuals</em>. Handing you
+        that number directly means the classic setting is a slider position you can find, and means the migrants on
+        the panel can be counted against it.</p>
+        <p><strong>Settings below one are real.</strong> At <var>M</var> = 0.3 an individual crosses in roughly three
+        generations in ten and none in the rest — the panel reports how many actually crossed each generation. Most
+        of what this room has to show happens between <var>M</var> = 0 and <var>M</var> = 1, which is why the slider
+        gives that stretch so many of its stops and hurries through everything above 2.</p>`
+    },
+
+    migNm: {
+      title: 'The same setting three ways',
+      body: `
+        <p>One control, three numbers, and the reason the room shows all three is that students meet all three and
+        are rarely told they are the same thing.</p>
+        <ul>
+          <li><strong><var>M</var></strong> — individuals crossing each way per generation. What the slider sets.</li>
+          <li><strong><var>m</var> = <var>M</var>/<var>N</var></strong> — the <em>migration rate</em>: the chance that
+          any given individual in a population came from the other one. This is what the equations are written in.</li>
+          <li><strong><var>Nm</var></strong> — the product, which is <var>M</var> again. This is what the equations'
+          <em>answers</em> depend on.</li>
+        </ul>
+        <p><strong>The move worth making.</strong> Hold <var>M</var> at 1 and drag <var>N</var> from 20 to 200.
+        <var>m</var> drops from 0.05 to 0.005 — a tenfold fall in the migration rate — and the two populations stay
+        just as tightly bound as they were. Now do it the other way: hold <var>m</var> roughly fixed by raising
+        <var>M</var> along with <var>N</var>, and the populations become harder and harder to tell apart.</p>
+        <p>The rate is the number that <em>sounds</em> meaningful and the number that is usually reported. It is the
+        product that decides the outcome.</p>`
+    },
+
+    migOrder: {
+      title: 'Drift first, then migration',
+      body: `
+        <p>Each generation the two populations are resampled independently — each drawing its own <var>N</var>
+        individuals from its own gene pool — and <em>then</em> the migrants are exchanged.</p>
+        <p><strong>Why the order is worth stating.</strong> Two populations that sample from a shared pool are not two
+        populations at all; they are one population of 2<var>N</var> drawn in two halves, and they would never diverge.
+        Keeping the sampling separate is what makes drift here a force that pulls them apart, and it is the only thing
+        that makes the exchange afterwards mean anything.</p>
+        <p>The frequencies the charts plot are the ones after migration — the state each population is actually in when
+        the next generation starts.</p>`
+    },
+
+    migChannel: {
+      title: 'The two populations',
+      body: `
+        <p>Both populations on one grid, with the channel between them carrying the migrants. Each mark is an
+        individual, blue for <var>A</var>₁ and red for <var>A</var>₂, exactly as in the Drift Room.</p>
+        <p>Watch the marks that cross rather than the grids themselves. A migrant is drawn at random from where it
+        starts, so a migrant leaving a population that is mostly blue is usually blue — which is why gene flow moves a
+        population towards its neighbour in proportion to how far apart they already are, and why it does nothing at
+        all once they match.</p>
+        <p>The chips below count what the grids show: each population's frequency of <var>A</var>₁, the gap between
+        them, and how many individuals crossed in the generation just drawn.</p>`
+    },
+
+    migFst: {
+      title: 'Differentiation, <var>F</var><sub>ST</sub>',
+      body: `
+        <p>A single number for how different the two populations are. It compares the variation <em>within</em> them
+        against the variation in the two taken together: 0 when they have the same allele frequency, 1 when each is
+        fixed for a different allele.</p>
+        <p>It is not the same as the raw gap between the two frequencies, and the difference matters. Two populations
+        at 0.45 and 0.55 have a gap of 0.1 and almost no differentiation, because nearly all the variation is still
+        inside each of them. Two at 0.02 and 0.12 have the same gap and a great deal of differentiation, because
+        neither has much variation left to be inside.</p>
+        <p><strong>It runs out.</strong> Nothing in this room replaces variation once drift has removed it — there is
+        no mutation — so given long enough the two populations between them fix for one allele, no variation is left
+        anywhere, and <var>F</var><sub>ST</sub> stops meaning anything. The trace ends there. Everything the room
+        measures is what happens on the way to that, which is exactly the window the rule of thumb is about.</p>`
+    },
+
+    migReplicates: {
+      title: 'Twenty replicates',
+      body: `
+        <p>Twenty independent runs at the settings in the deck, each carried to generation <var>G</var>, summarised as
+        the spread of differentiation they reached.</p>
+        <p><strong>Why the room insists on this.</strong> "One migrant per generation is enough" is a statement about
+        what <em>usually</em> happens, and a single run can contradict it without the statement being wrong. Run two
+        populations at one migrant a generation and every so often you will see them drift to opposite ends anyway.
+        Twenty runs show you how often that is, which is the only form the claim has ever had.</p>
+        <p>It is the same lesson as the Drift Room's <em>Run 10 Simulations</em>, and for the same reason: the
+        parameters of a random process set tendencies, never outcomes.</p>
+        <p><strong>One thing to watch when reading the count.</strong> Unlike the sweep, these replicates use the
+        starting frequencies you set. With those far apart — the defaults of <var>p</var> = 0.90 and <var>p</var> = 0.10 put
+        <var>F</var><sub>ST</sub> at 0.64 before anything has happened — the runs begin above the 0.5 mark already,
+        so the count tells you how many <em>stayed</em> differentiated rather than how many got there. Set both to
+        0.50 if what you want is the second question.</p>`
+    },
+
+    migSweep: {
+      title: 'The <var>Nm</var> sweep',
+      body: `
+        <p>A hundred replicates at each of ten migration settings, from no migrants at all up to ten a generation, with
+        <var>N</var> and <var>G</var> as you have set them. The horizontal axis is <var>Nm</var>, on a log scale, with
+        the classic value of 1 marked.</p>
+        <p><strong>Every sweep run starts at <var>p</var> = 0.5 in both populations</strong>, whatever the starting
+        frequencies in the deck are set to. The sweep asks how much differentiation drift <em>builds</em> against a
+        given amount of gene flow, and that can only be measured from populations that begin with none — started at
+        0.90 and 0.10 they are already differentiated before the first generation, and every setting would come back
+        the same.</p>
+        <p><strong>Two series, because the question has two answers.</strong> The teal line is the mean
+        <var>F</var><sub>ST</sub> those runs reached — the quantity papers report. The gold line is the share of the
+        hundred runs in which <var>F</var><sub>ST</sub> got as high as 0.5 at any point, which is this room's reading of
+        <em>completely</em> differentiated.</p>
+        <p>They do not behave the same way, and that is the panel's real content. The mean slides down steadily and
+        falls off nothing in particular: adding migrants always helps a little and never suddenly. The share does fall
+        off a cliff, and the cliff is at about one migrant a generation — roughly two runs in three get there with no
+        migrants, one in two at half a migrant, one in four at one, and almost none at two. "One migrant per
+        generation is enough" was never a claim about the average. It is a claim about preventing complete
+        differentiation, and on that it is right.</p>
+        <p><strong>Why no theoretical curve is drawn over the points.</strong> The formula usually quoted,
+        <var>F</var><sub>ST</sub> ≈ 1/(1 + 4<var>Nm</var>), is derived for <em>many</em> populations exchanging with a
+        common pool; with only two, each one's immigrants all come from the only other place there is, and the same
+        <var>Nm</var> binds them about four times more tightly. It is also an equilibrium between migration and
+        <strong>mutation</strong> — mutation being what keeps replacing the variation drift removes — whereas this
+        room has none. The measured means land near the two-population version anyway; the room's methods panel gives
+        both sets of numbers side by side, which is worth more than a line drawn across the panel as though it were
+        the answer.</p>`
+    },
+
+    migLocal: {
+      title: 'Local adaptation, and being swamped',
+      body: `
+        <p>Switch this on and the allele that is favoured in A is the one disfavoured in B, by the same
+        <var>s</var>: two habitats pulling in opposite directions. Selection is applied inside each population before
+        it samples, exactly as in the Selection Room, and the migrants are exchanged afterwards as usual.</p>
+        <p><strong>The contest is now <var>m</var> against <var>s</var>, and that is a different comparison.</strong>
+        Against drift, what mattered was <var>Nm</var> — a number of individuals, with population size in it. Against
+        selection, population size drops out: what matters is whether the fraction arriving from next door each
+        generation is larger or smaller than the advantage the local allele has. When <var>m</var> is the smaller,
+        each population holds on to its own allele and a stable difference persists for as long as you care to run it —
+        something neither drift nor migration alone can produce. When <var>m</var> is the larger, gene flow swamps
+        local adaptation and both populations end up carrying the same allele.</p>
+        <p>The consequence is worth sitting with: a population can be held away from the genotype its own habitat
+        favours by a steady arrival of immigrants adapted to somewhere else. Being well connected is not always being
+        well off.</p>`
+    },
 
     fatePopSize: {
       title: 'Population size (<var>N</var>) in this room',
