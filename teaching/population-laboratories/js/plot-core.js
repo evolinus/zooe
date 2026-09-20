@@ -18,6 +18,24 @@
 
 const PLOT_FONT = 'ui-monospace, "SF Mono", Menlo, Consolas, monospace';
 
+// A reference line's caption is drawn in the line's own colour, which is what
+// ties the two together — except for the gold. --stamp is 2.58:1 on paper: fine
+// for a 1px dashed rule, where nothing has to be legible, and not fine for the
+// 10px caption beside it ('K/2', 'R = R*', 'supply changes'). A canvas cannot
+// resolve a CSS variable, so the swap happens here rather than in the
+// stylesheet, and here rather than at the dozen call sites: every room that
+// draws a gold reference line wants the same thing, and this keeps the rooms
+// saying `color: LAB.C.stamp` and meaning it. Every other series colour in the
+// palette already clears 4.5:1 and passes through untouched.
+function labelInk(color) {
+  const C = (typeof LAB !== 'undefined' && LAB.C) || {};
+  const bright = C.stamp || '#C08A2E';
+  if (color && String(color).toLowerCase() === String(bright).toLowerCase()) {
+    return C.stampDeep || '#7A4D00';
+  }
+  return color;
+}
+
 function niceStep(range, targetTicks) {
   if (!(range > 0)) return 1;
   const raw = range / Math.max(1, targetTicks);
@@ -115,8 +133,8 @@ function createPlot(canvas, cfg = {}) {
 
       ctx.save();
       ctx.font = '9.5px ' + PLOT_FONT;
-      ctx.strokeStyle = col.rule || '#cabfa8';
-      ctx.fillStyle = col.inkSoft || '#6b6258';
+      ctx.strokeStyle = col.grid || '#E6E2B2';
+      ctx.fillStyle = col.inkSoft || '#5A5249';
       ctx.lineWidth = 1;
 
       // --- y ---
@@ -303,7 +321,7 @@ function createPlot(canvas, cfg = {}) {
         ctx.font = '10px ' + PLOT_FONT;
         ctx.textAlign = 'right';
         ctx.textBaseline = 'bottom';
-        ctx.fillStyle = style.color || (C().stamp || '#C08A2E');
+        ctx.fillStyle = labelInk(style.color || (C().stamp || '#C08A2E'));
         ctx.fillText(style.label, S.W - S.padR - 3, yy - 3);
       }
       ctx.restore();
@@ -327,7 +345,7 @@ function createPlot(canvas, cfg = {}) {
         // `labelBottom` puts the caption at the foot of the line instead of its
         // head, for panels whose top edge is already spoken for by a key.
         ctx.textBaseline = style.labelBottom ? 'bottom' : 'top';
-        ctx.fillStyle = style.color || (C().stamp || '#C08A2E');
+        ctx.fillStyle = labelInk(style.color || (C().stamp || '#C08A2E'));
         ctx.fillText(style.label, xx + 4, style.labelBottom ? S.H - S.padB - 3 : S.padT + 2);
       }
       ctx.restore();
@@ -400,8 +418,8 @@ function createPlot(canvas, cfg = {}) {
       const len = Math.hypot(dx, dy);
       if (len < 0.6) return api;
       ctx.save();
-      ctx.strokeStyle = style.color || (C().inkSoft || '#6b6258');
-      ctx.fillStyle = style.color || (C().inkSoft || '#6b6258');
+      ctx.strokeStyle = style.color || (C().inkSoft || '#5A5249');
+      ctx.fillStyle = style.color || (C().inkSoft || '#5A5249');
       ctx.globalAlpha = style.alpha != null ? style.alpha : 0.55;
       ctx.lineWidth = style.width || 1;
       ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
@@ -420,7 +438,7 @@ function createPlot(canvas, cfg = {}) {
     text(x, y, str, style = {}) {
       ctx.save();
       ctx.font = style.font || ('10px ' + PLOT_FONT);
-      ctx.fillStyle = style.color || (C().inkSoft || '#6b6258');
+      ctx.fillStyle = labelInk(style.color || (C().inkSoft || '#5A5249'));
       ctx.textAlign = style.align || 'left';
       ctx.textBaseline = style.baseline || 'alphabetic';
       ctx.globalAlpha = style.alpha != null ? style.alpha : 1;
@@ -443,8 +461,8 @@ function createPlot(canvas, cfg = {}) {
       const x = opts.right === false ? S.padL + 8 : S.W - S.padR - boxW - 6;
       const y = opts.bottom ? S.H - S.padB - boxH - 6 : S.padT + 6;
       ctx.globalAlpha = 0.88;
-      ctx.fillStyle = C().paper || '#EDE6D6';
-      ctx.strokeStyle = C().rule || '#cabfa8';
+      ctx.fillStyle = C().paper || '#F0EED3';
+      ctx.strokeStyle = C().rule || '#DED99A';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.roundRect ? ctx.roundRect(x, y, boxW, boxH, 4) : ctx.rect(x, y, boxW, boxH);
@@ -462,6 +480,24 @@ function createPlot(canvas, cfg = {}) {
         ctx.fillText(it.label, x + pad + sw + 6, cy);
       });
       ctx.restore();
+      return api;
+    },
+
+    /* What this picture currently shows, for a reader who cannot see it.
+
+       A canvas is pixels, so its aria-label is the whole account of it a screen
+       reader gets, and the fixed one in the markup can only name what the panel
+       plots — not what it is plotting right now. The panels whose picture IS the
+       result call this as they redraw. The ones whose numbers already sit in a
+       stat line or a row of chips beside them keep the fixed name: repeating
+       "t = 40 · A = 210 · B = 95" into an aria-label would be noise.
+
+       Deliberately not a live region. These redraw on every frame of a run, so
+       announcing each change would talk over the reader for its whole length.
+       An aria-label is read when the reader arrives at the element, which is
+       when they want it. */
+    describe(text) {
+      canvas.setAttribute('aria-label', text);
       return api;
     },
 

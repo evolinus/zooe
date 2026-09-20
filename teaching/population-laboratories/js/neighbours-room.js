@@ -118,7 +118,7 @@
   function showVerdict(A, ran) {
     const V = VERDICTS[A.kind];
     ui.verdict.className = 'verdict ' + V.cls;
-    let html = `<h4>${V.title}</h4><p>${V.text}</p>`;
+    let html = `<h3>${V.title}</h3><p>${V.text}</p>`;
     if (A.feasible) {
       html += `<p class="mono" style="font-size:12px;">Interior equilibrium: N<sub>A</sub> = ${LAB.fmt(A.eq.NA, 0)}, N<sub>B</sub> = ${LAB.fmt(A.eq.NB, 0)} `
             + `(${A.kind === 'coexist' ? 'stable' : 'a saddle — unstable'}).</p>`;
@@ -205,11 +205,28 @@
     return { xMax, yMax };
   }
 
+  const OUTCOME = {
+    coexist: 'the isoclines cross at a stable interior equilibrium',
+    aWins:   'species A excludes species B',
+    bWins:   'species B excludes species A',
+    founder: 'whichever species arrives first holds the site'
+  };
+
   function drawPhase(frame) {
     const p = plots.phase;
     const KA = ui.KA.value, KB = ui.KB.value, aAB = ui.aAB.value, aBA = ui.aBA.value;
     const rA = ui.rA.value, rB = ui.rB.value;
     const { xMax, yMax } = phaseBounds();
+
+    // The verdict panel states the outcome, but it does not say where the pair
+    // has got to, and that is the whole content of this picture.
+    const verdict = sim ? sim.A : analyse();
+    p.describe('Species A against species B, with their isoclines and a field of '
+      + 'arrows showing which way the pair is pushed. On these parameters, '
+      + OUTCOME[verdict.kind] + '. '
+      + (sim ? `The trajectory has reached A = ${LAB.fmt(sim.As[frame], 0)}, `
+               + `B = ${LAB.fmt(sim.Bs[frame], 0)}.`
+             : 'Nothing run yet.'));
 
     p.begin({ height: 400, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Species A', yLabel: 'Species B' });

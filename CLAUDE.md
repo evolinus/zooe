@@ -104,59 +104,53 @@ Pages serves. Nothing else is needed to publish; there is no manual step.
 
 That makes a push to `main` a public act. Treat unfinished work accordingly.
 
-## The Evolutionary Laboratories snapshot
+## The two laboratory apps
 
-`teaching/evolutionary-laboratories/` is a **hand-copied snapshot** of the
-separate `evolutionary_laboratories` repo, deliberately held at an older
-version (its `main.html` is 74 KB against 199 KB upstream). Updating it is a
-manual copy that is made when the newer version is ready to go public — never
-as a side effect of other work here.
+`teaching/evolutionary-laboratories/` and `teaching/population-laboratories/`
+are the lab's two interactive teaching apps. **This repo is where they live.**
+They were hand-copied snapshots of the private `evolutionary_laboratories` and
+`population_dynamics` repos until September 2026; that arrangement is over, and
+those repos are no longer the source of truth. Edit the apps here.
 
-The homepage depends on it. `_scripts/fr-sim.js` draws the background
-branching animation using `teaching/evolutionary-laboratories/js/shapes-engine.js`,
-loaded by `_includes/fr-project-index.html`, so that the homepage shapes mutate
-by exactly the same rules as the room they came from. Moving or pruning that
-folder breaks the homepage.
+Both are standalone HTML with their own `<head>` — they never reach
+`_includes/meta.html`, use none of the site's styles, and are not Jekyll pages.
+Each is an `index.html` plus sibling folders it alone reaches for: `js/` and
+`img/` for both, and `audio/` for Evolutionary Laboratories, the two music
+tracks `js/sound.js` plays while a simulation runs. Dropping a track is
+survivable rather than broken — the toggle removes itself from the tab bar when
+the file will not load — so the app still works, just silently.
 
-## The two unlisted apps
+`index.html` rather than upstream's old `main.html`, so the bare folder URL
+works and is easy to paste into an email. That is also the URL the teaching
+page links, and the one to hand out.
 
-Two more hand-copied apps sit under `teaching/`, and neither is linked from
-anywhere on the site:
+**Both are public and linked**, from the rail on the teaching page
+(`_includes/fr-teaching.html`), and both are in the generated sitemap. The
+unlisting machinery that used to hide them — `sitemap: false` defaults in
+`_config.yaml`, a `robots` noindex in each file — is gone. Don't reintroduce
+half of it by habit.
 
-- `teaching/population-dynamics/` — a copy of the `population_dynamics` repo.
-- `teaching/evolutionary-laboratories-next/` — the *current* upstream
-  `evolutionary_laboratories`, kept apart from the older public snapshot above
-  rather than replacing it.
+**Two redirect stubs hold the old addresses open.** Unlike the apps, these two
+*are* Jekyll pages — front matter and Liquid — so `relative_url` resolves the
+`--baseurl` that CI passes at build time:
 
-They are **unlisted, not private.** The repo is public, so the files are public
-artifacts; what they get is no inbound link, no nav entry and no crawler. Three
-things hold that, and all three have to survive a re-copy:
+- `teaching/evolutionary-laboratories/main.html` — the app's address until
+  September 2026, and the one in the live sitemap, so Google and anyone's
+  bookmarks still hold it.
+- `teaching/population-dynamics/index.html` — where Population Laboratories sat
+  while it was unlisted, named after its repo rather than itself.
 
-1. No `nav:` front matter anywhere, and no link from any `fr-*` include —
-   `_includes/header.html` builds the tab bar only from pages that declare
-   `nav`, so absence is enough.
-2. `sitemap: false` under their paths in the `defaults` block of
-   `_config.yaml`. This is load-bearing: `jekyll-sitemap` lists static `.html`
-   files as well as pages (`lib/sitemap.xml` filters them on `sitemap != false`),
-   which is why the public `evolutionary-laboratories/main.html` *is* in the
-   deployed sitemap.
-3. A `<meta name="robots" content="noindex, nofollow">` in each `index.html`.
-   These files are standalone HTML with their own `<head>` — they never reach
-   `_includes/meta.html` — so the tag lives in the copied file itself and is a
-   local addition upstream knows nothing about. **Re-copying the app drops it.**
+Each carries `sitemap: false` so only the real page of each app is advertised.
+Don't delete them, and don't let a re-copy of an app overwrite `main.html`.
 
-Deliberately *not* done: no `Disallow` in `robots.txt`. That file is public and
-would advertise the paths, and blocking the crawl would stop Google ever seeing
-the `noindex` that actually does the work.
-
-They are copied as `index.html` rather than upstream's `main.html`, so the bare
-folder URL works and is easy to paste into an email. Everything else is copied
-verbatim; each app reaches only for sibling folders of its own — `js/` and
-`img/` for both, plus `audio/` for Evolutionary Laboratories, which is the
-1.5 MB music track `js/sound.js` plays while a simulation runs. Leaving the
-track behind is survivable rather than broken — the toggle removes itself from
-the tab bar when the file will not load — so a copy that omits it still works,
-just silently.
+The homepage depends on Evolutionary Laboratories. `_scripts/fr-sim.js` draws
+the background branching animation using
+`teaching/evolutionary-laboratories/js/shapes-engine.js`, loaded by
+`_includes/fr-project-index.html`, so that the homepage shapes mutate by exactly
+the same rules as the room they came from. That file carries a comment header
+saying so — keep it. Moving or pruning the folder breaks the homepage; the
+homepage guards on `SHAPES` being defined, so it will not error, it will simply
+stop drawing.
 
 ## Conventions that are easy to break
 
@@ -214,9 +208,18 @@ then open `localhost:4000`. It hot-reloads, and it re-runs `_cite/cite.py` on
 start — so a local preview reaches out to ORCID and PubMed and can modify
 `_data/citations.yaml`. Check `git status` before committing after a preview.
 
-Plain `bundle exec jekyll serve` does **not** work out of the box on this Mac:
-the system Ruby is 2.6 and `Gemfile.lock` wants bundler 2.5.6. Installing a
-modern Ruby would fix it; nobody has.
+Plain `bundle exec jekyll serve` still does **not** work on this Mac, though no
+longer for the old reason — Homebrew Ruby 3.3 and 4.0 are both installed now,
+so the 2.6 problem is gone. What fails is `bundle install`: `posix-spawn`
+0.3.15, a transitive dependency of `jekyll-last-modified-at`, will not compile
+its native extension against this macOS. CI is unaffected — it builds on Ubuntu
+with Ruby 3.1 — so this is a local-toolchain problem, not a site one, and it is
+not worth changing `Gemfile.lock` over.
+
+To check a **laboratory app** you don't need Jekyll at all: they are plain
+static folders, so serve the repo root (`python3 -m http.server`) and open
+`/teaching/<app>/`. That exercises the real relative paths and the JS. It will
+not render the Jekyll pages or the two redirect stubs, which need a build.
 
 `proofer: false` in `_config.yaml` disables the built-in html-proofer link
 check on build. Turn it on locally if you have touched a lot of links.

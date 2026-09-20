@@ -141,9 +141,9 @@
     let html = '<table class="datatable"><thead><tr><th>Species</th><th>R*<sub>1</sub></th>'
              + (P.two ? '<th>R*<sub>2</sub></th>' : '') + '<th>mortality m</th></tr></thead><tbody>';
     const aWin = !P.two && t.winner === 'A', bWin = !P.two && t.winner === 'B';
-    html += `<tr class="${aWin ? 'win' : ''}"><td style="color:var(--sp-a)">A</td><td>${cell(t.RsA1)}</td>`
+    html += `<tr class="${aWin ? 'win' : ''}"><td style="color:var(--sp-a-deep)">A</td><td>${cell(t.RsA1)}</td>`
           + (P.two ? `<td>${cell(t.RsA2)}</td>` : '') + `<td>${LAB.fmt(P.mA, 2)}</td></tr>`;
-    html += `<tr class="${bWin ? 'win' : ''}"><td style="color:var(--sp-b)">B</td><td>${cell(t.RsB1)}</td>`
+    html += `<tr class="${bWin ? 'win' : ''}"><td style="color:var(--sp-b-deep)">B</td><td>${cell(t.RsB1)}</td>`
           + (P.two ? `<td>${cell(t.RsB2)}</td>` : '') + `<td>${LAB.fmt(P.mB, 2)}</td></tr>`;
     html += `<tr><td>supply / loss</td><td>${cell(t.R1max)}</td>`
           + (P.two ? `<td>${cell(t.R2max)}</td>` : '') + `<td>—</td></tr>`;
@@ -191,7 +191,7 @@
     }
 
     ui.verdict.className = 'verdict ' + cls;
-    ui.verdict.innerHTML = `<h4>${title}</h4><p>${body}</p>`
+    ui.verdict.innerHTML = `<h3>${title}</h3><p>${body}</p>`
       + (ran ? '' : `<p style="font-size:13px;color:var(--ink-soft);">Predicted from the parameters alone. Press Run to watch it play out.</p>`);
   }
 
@@ -267,6 +267,13 @@
     const t = sim ? sim.t : theory();
     const T = sim ? sim.T : ui.T.value;
     const two = sim ? sim.P.two : twoRes();
+    p.describe((two ? 'Both resources against time. ' : 'The resource against time. ')
+      + (!sim ? 'Nothing run yet.'
+        : `At t = ${LAB.fmt((frame / FRAMES) * sim.T, 0)}, `
+          + `R\u2081 = ${LAB.fmt(sim.R1s[frame], 2)}`
+          + (two ? ` and R\u2082 = ${LAB.fmt(sim.R2s[frame], 2)}.` : '.')
+          + ` The lower break-even level R* is `
+          + `${LAB.fmt(Math.min(t.RsA1, t.RsB1), 2)}.`));
     const yMax = Math.max(sim ? sim.rPeak : 20, isFinite(t.RsA1) ? t.RsA1 : 0,
                           isFinite(t.RsB1) ? t.RsB1 : 0, 1) * 1.2;
     p.begin({ height: 250, xMin: 0, xMax: T, yMin: 0, yMax, xLabel: 'Time', yLabel: 'Resource' });
@@ -295,6 +302,17 @@
   function drawGrowthVsR(frame) {
     const p = plots.zngi;
     const t = sim ? sim.t : theory(), P = t.P;
+    // The same canvas carries the ZNGI plane in two-resource mode, so it needs
+    // its own description here: what it shows is not what the panel's fixed
+    // name in the markup could say for both.
+    p.describe('Per-capita growth against resource level, one line per consumer. '
+      + `Consumer A breaks even at R* = ${LAB.fmt(t.RsA1, 2)} and consumer B at `
+      + `R* = ${LAB.fmt(t.RsB1, 2)}, so `
+      + (t.winner === 'A' ? 'A is the one that survives on less and wins.'
+       : t.winner === 'B' ? 'B is the one that survives on less and wins.'
+       : t.winner === 'tie' ? 'the two break even at the same level and neither can displace the other.'
+       : 'neither can break even on the resource this environment supplies.')
+      + (sim ? ` The resource now stands at ${LAB.fmt(sim.R1s[frame], 2)}.` : ''));
     // Frame the two break-even crossings rather than the whole resource axis:
     // when the environment is rich, S/l can be an order of magnitude above both
     // R* values and would squash the only part of the plot that matters.
@@ -334,6 +352,24 @@
     if (sim) for (let i = 0; i <= FRAMES; i++) { trajX = Math.max(trajX, sim.R1s[i]); trajY = Math.max(trajY, sim.R2s[i]); }
     const xMax = Math.max(fin(t.RsA1, 0), fin(t.RsB1, 0), trajX, 1) * 1.35;
     const yMax = Math.max(fin(t.RsA2, 0), fin(t.RsB2, 0), trajY, 1) * 1.35;
+
+    // What the picture is for: whose break-even line lies inside whose, and
+    // where the resources have ended up relative to both. Nothing beside this
+    // panel says either.
+    // An infinite intercept means the line never meets that axis, which is the
+    // consumer saying it cannot live on that resource alone however much of it
+    // there is — worth a phrase rather than the em dash LAB.fmt would give.
+    const ends = (r1, r2) =>
+      (isFinite(r1) && r1 > 0 ? `R\u2081 = ${LAB.fmt(r1, 2)}` : 'never on resource 1 alone')
+      + ' and '
+      + (isFinite(r2) && r2 > 0 ? `R\u2082 = ${LAB.fmt(r2, 2)}` : 'never on resource 2 alone');
+    p.describe('The two break-even lines, one per consumer, on a plane of '
+      + 'resource 1 against resource 2. '
+      + `Consumer A breaks even at ${ends(t.RsA1, t.RsA2)}; consumer B at `
+      + `${ends(t.RsB1, t.RsB2)}. `
+      + (sim ? `The resources now stand at R\u2081 = ${LAB.fmt(sim.R1s[frame], 2)}, `
+               + `R\u2082 = ${LAB.fmt(sim.R2s[frame], 2)}.`
+             : 'Nothing run yet.'));
 
     p.begin({ height: 250, padL: 56, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Resource 1', yLabel: 'Resource 2' });

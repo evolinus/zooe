@@ -17,6 +17,7 @@
 (function () {
   createWrightFisherRoom({
     suffix: 'selection',
+    tabId: 'selection',
     selection: true,
     defaultS: 0.10,
     samplingFreq: (freq, state) => {

@@ -39,17 +39,11 @@ defaults:
       path: "google5268eb9fa20642e4.html"
     values:
       sitemap: false
-  # unlisted apps: reachable only by their address. jekyll-sitemap lists static
-  # .html files too, so these have to be excluded by hand or they would be
-  # advertised to crawlers. each index.html also carries its own robots noindex.
-  - scope:
-      path: "teaching/population-dynamics"
-    values:
-      sitemap: false
-  - scope:
-      path: "teaching/evolutionary-laboratories-next"
-    values:
-      sitemap: false
+  # Both laboratory apps are public and linked from the teaching page, so they
+  # belong in the sitemap and are left to jekyll-sitemap, which lists static
+  # .html files as well as pages. The two redirect stubs that hold their former
+  # addresses open carry sitemap: false in their own front matter instead, so
+  # only the real page of each app is advertised.
 
 collections:
   # generate page for each member

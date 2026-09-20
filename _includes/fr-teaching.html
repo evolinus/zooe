@@ -1,6 +1,7 @@
 {% comment %}
   teaching page in the first-run language. courses and school seminars come from
-  _data/first_run.yaml; the simulations are the Evolutionary Laboratories app.
+  _data/first_run.yaml; the simulations are the two laboratory apps that live
+  under teaching/ in this repo.
 {% endcomment %}
 {% assign fr = site.data.first_run %}
 
@@ -24,18 +25,40 @@
       {% endfor %}
     </div>
 
-    <div class="fr-ink">
-      <h3 style="margin: 8px 0 10px">Evolutionary Laboratories</h3>
-      <p class="fr-ink-text">
-        Interactive simulations for teaching genetic drift, selection, adaptation,
-        lineage branching and mutation. Built for classroom and outreach use — no
-        install needed.
-      </p>
-      <a
-        class="fr-btn fr-btn-primary fr-btn-block"
-        style="margin-top: auto"
-        href="{{ "teaching/evolutionary-laboratories/main.html" | relative_url }}"
-      >Launch the simulations</a>
+    {% comment %}
+      two apps in the rail, equal rows so the panels match height and both
+      buttons land on the same line. the link is the bare folder rather than the
+      file inside it, which is what gets pasted into an email or read out in a
+      classroom.
+    {% endcomment %}
+    <div class="fr-labs">
+      <div class="fr-ink">
+        <h3 style="margin: 8px 0 10px">Evolutionary Laboratories</h3>
+        <p class="fr-ink-text">
+          Interactive simulations for teaching mutation, genetic drift, selection,
+          migration, adaptation and speciation. Built for classroom and outreach
+          use — no install needed.
+        </p>
+        <a
+          class="fr-btn fr-btn-primary fr-btn-block"
+          style="margin-top: auto"
+          href="{{ "teaching/evolutionary-laboratories/" | relative_url }}"
+        >Launch the evolution rooms</a>
+      </div>
+
+      <div class="fr-ink">
+        <h3 style="margin: 8px 0 10px">Population Laboratories</h3>
+        <p class="fr-ink-text">
+          The same idea applied to whole populations: growth and crowding, limited
+          resources and overshoot, competition, predation and the species that
+          hold a community together.
+        </p>
+        <a
+          class="fr-btn fr-btn-primary fr-btn-block"
+          style="margin-top: auto"
+          href="{{ "teaching/population-laboratories/" | relative_url }}"
+        >Launch the population rooms</a>
+      </div>
     </div>
   </div>
 

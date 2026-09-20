@@ -235,6 +235,18 @@
     const K = sim ? sim.K : ui.K.value;
     const hi = Math.max(sim ? sim.peak : K * 1.4, K * 1.4);
 
+    // The staircase is the only place the reader can see a step being taken, so
+    // this says which step it is currently on and where that step lands. The
+    // verdict panel names the regime; it never says where the run has got to.
+    p.describe('The reproduction curve, the 45-degree line, and the staircase '
+      + 'that walks between them. '
+      + (!sim ? 'Nothing run yet.'
+        : frame < 1
+          ? `The run starts at N = ${LAB.fmt(sim.series[0], 1)}.`
+          : `Generation ${frame}: N goes from ${LAB.fmt(sim.series[frame - 1], 1)} `
+            + `to ${LAB.fmt(sim.series[frame], 1)}, against a carrying capacity of `
+            + `${LAB.fmt(K, 0)}.`));
+
     p.begin({ height: 290, padL: 52, padR: 14, xMin: 0, xMax: hi, yMin: 0, yMax: hi,
               xLabel: 'N this generation', yLabel: 'N next generation' });
     p.grid({ xTicks: 4, yTicks: 4 });
@@ -335,7 +347,7 @@
       body = `The series never repeats, ranging between ${LAB.fmt(c.lo, 0)} and ${LAB.fmt(c.hi, 0)} with no discernible period. `
            + `It is nevertheless completely deterministic: the same N₀ always gives the same series, to the last digit.`;
     }
-    ui.verdict.innerHTML = `<h4>${title}</h4><p>${body}</p>`;
+    ui.verdict.innerHTML = `<h3>${title}</h3><p>${body}</p>`;
 
     if (sim.twin) {
       const gap = Math.abs(sim.series[sim.gens] - sim.twin[sim.gens]);
@@ -371,7 +383,7 @@
     ui.status.textContent = 'Set the parameters and press Run.';
     ui.note.textContent = '';
     ui.chartStat.textContent = '—';
-    ui.verdict.innerHTML = '<h4>Not yet run</h4><p>Press Run and the population\'s eventual behaviour will be diagnosed here from the last third of the series.</p>';
+    ui.verdict.innerHTML = '<h3>Not yet run</h3><p>Press Run and the population\'s eventual behaviour will be diagnosed here from the last third of the series.</p>';
     ui.reading.innerHTML = 'Press <strong>Run</strong>, then raise the growth parameter a little at a time and run again after each change. Nothing random is ever added: every wobble you see is produced by the density dependence itself.';
     render(0);
   }
