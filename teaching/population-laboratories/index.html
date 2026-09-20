@@ -322,17 +322,27 @@
      population and are only in the panel when Compare two populations is On, so
      the count has to close up behind them and does.
 
-     Numbering is a separate opt-in from the band, because the two do not travel
-     together. Every deck takes .deck-setup: a reader arriving in any room should
-     find the same signal for "this is the part you touch". Only a deck whose
-     controls are a genuine sequence takes .deck-numbered, which rules out the
-     six rooms that group their fields under "Species A" / "Species B" / "Both"
-     — a flat count running across those groups would imply an order the panel
-     does not have — and the two whose extra fields live in a "More parameters"
-     drawer, where a closed drawer would hide controls the count had reserved
-     numbers for. */
+     Every setup deck now takes both .deck-setup and .deck-numbered. Numbering
+     was once held back from the rooms that group their fields under "Species A"
+     / "Species B" / "Both", on the grounds that a flat count across groups
+     implies an order the panel does not have. It reads the other way round in
+     practice: the number is not an instruction to work top to bottom, it is a
+     tally, and the kicker above each panel states the same total in words
+     ("eleven choices, then press Run"), so a reader can see at a glance how
+     much there is to set and check nothing has been missed. A reader moving
+     between rooms gets one convention rather than two.
+
+     The drawer rooms turned out not to be a problem either. A field inside a
+     closed <details> generates no box, so it neither shows a number nor spends
+     one, and both drawers sit last in their panel — opening one appends to the
+     count instead of renumbering what is above it.
+
+     .no-count is for a .field that is not a control: both drawers end with an
+     explanatory note that borrows .field for its layout, and without this it
+     would silently swallow the next number. */
   .deck.deck-numbered{ counter-reset: param; }
   .deck-numbered .field{ counter-increment: param; }
+  .deck-numbered .field.no-count{ counter-increment: none; }
   .deck-numbered .field > label::before{
     content: counter(param);
     display: inline-flex;
@@ -1235,7 +1245,7 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seven choices &mdash; three more if you compare two populations &mdash; then press Run.</span></div>
       <div class="field">
         <label>Compare two populations<button class="help-btn" data-help="compare"></button></label>
         <div class="segmented" id="cmpSeg_growth">
@@ -1422,8 +1432,8 @@
       </details>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seven choices &mdash; three more if you compare two populations, plus the Allee effect in the drawer &mdash; then press Run.</span></div>
       <div class="field">
         <label>Compare two populations<button class="help-btn" data-help="compare"></button></label>
         <div class="segmented" id="cmpSeg_crowd">
@@ -1508,7 +1518,7 @@
             <label>Allee threshold <span class="sym">A</span> <span class="value" id="AVal2_crowd">40</span></label>
             <input type="range" id="A2_crowd" min="5" max="200" step="5" value="40">
           </div>
-          <div class="field" style="grid-column: 1 / -1;">
+          <div class="field no-count" style="grid-column: 1 / -1;">
             <div class="panel-note" style="margin-top:0;">With the Allee effect on, the model becomes dN/dt = r·N·(N/A − 1)·(1 − N/K). Below the threshold A the growth rate is <em>negative</em>: too sparse to find mates, too few to defend the group. A is a second equilibrium — but an unstable one.<span class="cmp-only"> Each population carries its own switch, so the cleanest demonstration in the room is two populations identical in <em>r</em>, <em>K</em> and <em>N₀</em>, one of them with the effect on.</span></div>
           </div>
         </div>
@@ -1666,8 +1676,8 @@
       </details>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">eight choices &mdash; two more in the drawer, to change the environment mid-run &mdash; then press Run.</span></div>
       <div class="section-label">The environment</div>
       <div class="field">
         <label>Resource supply <span class="sym">S</span> <span class="value" id="SVal_res">15.0</span><button class="help-btn" data-help="supply"></button></label>
@@ -1718,7 +1728,7 @@
             <label>Supply multiplier after the shift <span class="value" id="shiftFVal_res">0.50</span></label>
             <input type="range" id="shiftF_res" min="0.1" max="3" step="0.1" value="0.5">
           </div>
-          <div class="field" style="grid-column: 1 / -1;">
+          <div class="field no-count" style="grid-column: 1 / -1;">
             <div class="panel-note" style="margin-top:0;">At the halfway point of the run, the supply rate S is multiplied by this factor and the simulation carries on. The consumers are given no warning and no new traits — only the environment changes.</div>
           </div>
         </div>
@@ -1851,7 +1861,7 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">six choices, then press Run.</span></div>
       <div class="field wide">
         <label>Competition model<button class="help-btn" data-help="discreteModels"></button></label>
         <div class="segmented" id="modelSeg_over">
@@ -2016,8 +2026,8 @@
       </details>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">ten choices, then press Run.</span></div>
       <div class="field wide">
         <label>Presets<button class="help-btn" data-help="presets"></button></label>
         <div class="segmented compact" id="presetSeg_nb">
@@ -2219,8 +2229,8 @@
       </details>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">eleven choices &mdash; three more on two resources &mdash; then press Run.</span></div>
       <div class="field wide">
         <label>How many resources are there?<button class="help-btn" data-help="modeResources"></button></label>
         <div class="segmented" id="modeSeg_cx">
@@ -2433,8 +2443,8 @@
       </details>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">ten choices &mdash; one or two more in the other two models &mdash; then press Run.</span></div>
       <div class="field wide">
         <label>Presets<button class="help-btn" data-help="predPresets"></button></label>
         <div class="segmented compact" id="presetSeg_pd">
@@ -2669,8 +2679,8 @@
       </details>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">the controls are yours; Run is at the foot of this panel</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seventeen choices, then press Run.</span></div>
       <div class="field wide">
         <label>Presets<button class="help-btn" data-help="keystonePresets"></button></label>
         <div class="segmented compact" id="presetSeg_ks">
