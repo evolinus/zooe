@@ -109,8 +109,10 @@ That makes a push to `main` a public act. Treat unfinished work accordingly.
 `teaching/evolutionary-laboratories/` and `teaching/population-laboratories/`
 are the lab's two interactive teaching apps. **This repo is where they live.**
 They were hand-copied snapshots of the private `evolutionary_laboratories` and
-`population_dynamics` repos until September 2026; that arrangement is over, and
-those repos are no longer the source of truth. Edit the apps here.
+`population_dynamics` repos until September 2026. That arrangement is over:
+both repos are **archived**, so they are read-only on GitHub and a push to
+either will be refused. Edit the apps here. A checkout of one of them may still
+be sitting in `~/Documents/GitHub/` — it is history, not a working copy.
 
 Both are standalone HTML with their own `<head>` — they never reach
 `_includes/meta.html`, use none of the site's styles, and are not Jekyll pages.
