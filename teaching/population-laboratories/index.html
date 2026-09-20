@@ -337,12 +337,21 @@
      one, and both drawers sit last in their panel — opening one appends to the
      count instead of renumbering what is above it.
 
-     .no-count is for a .field that is not a control: both drawers end with an
-     explanatory note that borrows .field for its layout, and without this it
-     would silently swallow the next number. */
+     .no-count is for a .field that is not one of the choices. Two kinds. Both
+     drawers end with an explanatory note that borrows .field for its layout,
+     and without this it would silently swallow the next number. And the preset
+     row in the Neighbours, Predator and Keystone Rooms is a shortcut that sets
+     the other controls for you — "pick a preset or set the sliders", as those
+     rooms' own status lines put it — so it is an alternative to the numbered
+     sequence rather than the first step of it. The Evolutionary Laboratories
+     keep their preset tasks out of the count the same way. */
   .deck.deck-numbered{ counter-reset: param; }
   .deck-numbered .field{ counter-increment: param; }
   .deck-numbered .field.no-count{ counter-increment: none; }
+  /* and no disc: without this the label still draws one, showing whatever the
+     counter is up to — a 0 in front of the preset row, which is worse than the
+     number it was meant to remove. */
+  .deck-numbered .field.no-count > label::before{ content: none; }
   .deck-numbered .field > label::before{
     content: counter(param);
     display: inline-flex;
@@ -2027,8 +2036,8 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">ten choices, then press Run.</span></div>
-      <div class="field wide">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">nine choices &mdash; or take a preset &mdash; then press Run.</span></div>
+      <div class="field wide no-count">
         <label>Presets<button class="help-btn" data-help="presets"></button></label>
         <div class="segmented compact" id="presetSeg_nb">
           <button data-preset="a">A excludes B</button>
@@ -2444,8 +2453,8 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">ten choices &mdash; one or two more in the other two models &mdash; then press Run.</span></div>
-      <div class="field wide">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">nine choices &mdash; one or two more in the other two models, or take a preset &mdash; then press Run.</span></div>
+      <div class="field wide no-count">
         <label>Presets<button class="help-btn" data-help="predPresets"></button></label>
         <div class="segmented compact" id="presetSeg_pd">
           <button data-preset="neutral">Neutral cycles</button>
@@ -2680,8 +2689,8 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seventeen choices, then press Run.</span></div>
-      <div class="field wide">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">sixteen choices &mdash; or take a preset &mdash; then press Run.</span></div>
+      <div class="field wide no-count">
         <label>Presets<button class="help-btn" data-help="keystonePresets"></button></label>
         <div class="segmented compact" id="presetSeg_ks">
           <button data-preset="keystone">Keystone predation</button>
