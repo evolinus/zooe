@@ -406,11 +406,24 @@
      deliberately does not take the place of the red ? button. */
   .deck.deck-numbered{ counter-reset: param; }
   .deck-numbered .field{ counter-increment: param; }
-  /* A "More parameters" drawer is not part of the count. Numbering what is
+  /* Every setup deck takes .deck-numbered, including the Reproduction Room,
+     which has no controls at all today — the rule "a setup deck is a numbered
+     deck" is easier to keep than a list of exceptions, and a control added
+     there later numbers itself.
+
+     A "More parameters" drawer is not part of the count. Numbering what is
      inside one would hand a step number to a control the reader cannot see, and
-     — worse — renumber everything below it the moment the drawer is opened. The
-     Speciation Room's seven primary controls therefore stay 1 to 7 whether its
-     drawer is open or shut, and the four inside it are simply unnumbered. */
+     — worse — renumber everything below it the moment the drawer is opened.
+     Both drawers here sit mid-panel: three controls follow the Adaptation
+     Room's, three follow the Speciation Room's. So Speciation's seven primary
+     controls stay 1 to 7 whether its drawer is open or shut, and the four
+     inside it are simply unnumbered; each room's kicker gives the drawer's size
+     in words instead.
+
+     The Population Laboratories do the opposite and number their drawers. Not
+     an inconsistency to tidy away: both of those drawers are the last thing in
+     their panel, so opening one appends to the count rather than disturbing it.
+     The rule in both apps is the same — a number, once shown, does not move. */
   .deck-numbered .adapt-advanced .field{ counter-increment: none; }
   .deck-numbered .adapt-advanced .field > label::before{ content: none; }
   .deck-numbered .field > label::before{
@@ -2582,7 +2595,8 @@
     </div>
 
     <h2 class="fate-step">Step 1 — a mutation appears</h2>
-    <div class="deck deck-setup">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up step 1<span class="deck-kicker-note">one choice, then press Mutate.</span></div>
       <div class="field">
         <label id="lbl-shapeSeg_fate">Starting shape</label>
         <div role="group" aria-labelledby="lbl-shapeSeg_fate" class="segmented" id="shapeSeg_fate">
@@ -2615,7 +2629,8 @@
 
     <h2 class="fate-step">Step 2 — one mutant in a population of <var>N</var></h2>
     <p class="fate-lede">The mutant is a single individual among <var>N</var>. Everyone reproduces on equal terms — this mutation is <span class="gloss" data-help="glosNeutral">neutral</span>, so it brings neither an advantage nor a handicap. The gold ring marks who carries it.</p>
-    <div class="deck deck-setup">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up step 2<span class="deck-kicker-note">one choice, then press Simulate evolution through time.</span></div>
       <div class="field">
         <label id="lbl-nSeg_fate"><span>Population size (<var>N</var>)</span><button class="help-btn" data-help="fatePopSize"></button></label>
         <div role="group" aria-labelledby="lbl-nSeg_fate" class="segmented" id="nSeg_fate">
@@ -3052,7 +3067,8 @@
       <p>In nature the <strong>mutation rate</strong> — the chance that a character changes from its ancestral state to a derived one — is <strong>extremely low</strong>, on the order of one error per hundred million sites per generation in many cellular organisms, ourselves among them — though it is not one figure for all of life, and RNA viruses run orders of magnitude higher. Here we set that aside and simply <em>assume</em> a mutation occurs in each of four characters, then ask <strong>which</strong> derived state appears.<button class="help-btn" data-help="mutRate"></button></p>
     </div>
 
-    <div class="deck deck-setup">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">two choices &mdash; a third under Selection &mdash; then press Spin.</span></div>
       <div class="transport mut-transport" style="border-top:none; padding-top:0; margin-top:0;">
         <button class="btn" id="spinBtn_mut" data-sound data-results="#stageTop_mut">🎡 Spin — mutate all four characters</button>
         <button class="btn secondary" id="rerunBtn_mut" data-sound data-results="#stageTop_mut" disabled>↻ Run again — same mutations</button>
@@ -3172,7 +3188,7 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">six choices, plus two optional ones, then press Run Simulation.</span></div>
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">five choices &mdash; three more if you want local adaptation or recurrent mutation &mdash; then press Run Simulation.</span></div>
       <div class="adapt-n-row mig-setup-row">
         <div class="adapt-n-row-label">Populations</div>
         <div class="field">
@@ -3378,8 +3394,8 @@
       <p><span class="try-label">Try this.</span> Press Run and watch the two lineages of each founder evolve side by side from the same ancestor. When it finishes, read the table under <em>Each lineage against its own founder</em>: a row for Neutral and one for Habitat, a column per founder, and the mean of each row at the end. Then take the three <strong>preset tasks</strong> in turn — each sets the controls and runs, and the status line tells you what to look for: <em>same habitat, different founders</em> for convergence, <em>turn selection off</em> as a control, and <em>small vs large population</em> for what population size does to both.<button class="help-btn" data-help="adaptPresets"></button></p>
     </div>
 
-    <div class="deck deck-setup">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">set the controls &mdash; or take a preset task below &mdash; then press Run Simulation.</span></div>
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">four choices &mdash; fourteen more in the drawer, or a preset task below &mdash; then press Run Simulation.</span></div>
       <div class="field">
         <label for="sliderG_adapt"><span>Generations G</span> <span class="value" id="gVal_adapt">5000</span><button class="help-btn" data-help="genG"></button></label>
         <input type="range" id="sliderG_adapt" min="1000" max="10000" step="100" value="5000">
@@ -3617,7 +3633,7 @@
     </div>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seven choices, then press Run Simulation.</span></div>
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">seven choices &mdash; four more in the drawer &mdash; then press Run Simulation.</span></div>
       <div class="adapt-n-row spec-setup-row">
         <div class="adapt-n-row-label">Setup</div>
         <div class="field">
@@ -3827,7 +3843,8 @@
       <p><span class="try-label">Try this.</span> Press <em>Auto-play</em> and watch the two panels to the end. Then compare the two numbers under each heading. Look closely at a circle on the right where a half changes shade partway down — that is a crossover, a piece of one copy swapped onto the other during meiosis.</p>
     </div>
 
-    <div class="deck deck-setup">
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">nothing to set &mdash; press Next generation and watch both sides.</span></div>
       <div class="transport" style="border-top:none; padding-top:0;">
         <button class="btn" id="btnNext_sa" data-results="#stage_sa">▶ Next generation</button>
         <button class="btn secondary" id="btnAuto_sa" data-sound data-results="#stage_sa">⏵ Auto-play</button>
