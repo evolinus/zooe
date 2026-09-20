@@ -15,11 +15,15 @@
 // halfway along the longest leaf-to-leaf path) because the panel draws a
 // rooted tree and inference has no access to the simulation's real root.
 
+// Fills {placeholders} in an English template string, for the axis and
+// branch-length labels drawn as SVG <text> below.
+const phyloT = (key, en, vars) => String(en).replace(/\{(\w+)\}/g, (m, k) => (vars && k in vars ? vars[k] : m));
+
 // --- neighbour-joining -----------------------------------------------------
 
 // labels: array of taxon ids. dist(a, b): symmetric distance.
 // Returns a rooted tree: { id, isLeaf, branch, children: [...] }.
-function neighborJoining(labels, dist) {
+function neighbourJoining(labels, dist) {
   const created = [];
   const mk = (id, isLeaf) => { const n = { id, isLeaf, adj: [] }; created.push(n); return n; };
   const link = (a, b, len) => { a.adj.push({ node: b, len }); b.adj.push({ node: a, len }); };
@@ -177,9 +181,9 @@ function phylogramSvg(root, opts) {
       return;
     }
     const ys = n.children.map(c => c.y);
-    out += `<line x1="${n.x}" y1="${Math.min(...ys)}" x2="${n.x}" y2="${Math.max(...ys)}" stroke="${ink}" stroke-width="2"/>`;
+    out += `<line x1="${n.x}" y1="${Math.min(...ys)}" x2="${n.x}" y2="${Math.max(...ys)}" stroke="${ink}" stroke-width="4" stroke-linecap="square"/>`;
     for (const c of n.children) {
-      out += `<line x1="${n.x}" y1="${c.y}" x2="${c.x}" y2="${c.y}" stroke="${c.isLeaf ? leafColor(c.id) : ink}" stroke-width="2"/>`;
+      out += `<line x1="${n.x}" y1="${c.y}" x2="${c.x}" y2="${c.y}" stroke="${c.isLeaf ? leafColor(c.id) : ink}" stroke-width="4"/>`;
       draw(c);
     }
   })(root);
@@ -198,7 +202,7 @@ function scaleBarSvg(x, y, pxPerUnit, color) {
   return `<line x1="${x}" y1="${y}" x2="${x + w}" y2="${y}" stroke="${color}" stroke-width="2"/>` +
     `<line x1="${x}" y1="${y - 4}" x2="${x}" y2="${y + 4}" stroke="${color}" stroke-width="1"/>` +
     `<line x1="${x + w}" y1="${y - 4}" x2="${x + w}" y2="${y + 4}" stroke="${color}" stroke-width="1"/>` +
-    `<text x="${x + w / 2}" y="${y + 16}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="${color}">Δ ${val.toFixed(dec)} (branch length)</text>`;
+    `<text x="${x + w / 2}" y="${y + 16}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="${color}">${phyloT('phylo.branchLen', 'Δ {v} (branch length)', { v: val.toFixed(dec) })}</text>`;
 }
 
 // The scale axis under an ultrametric (UPGMA) tree, whose node x positions are
@@ -222,6 +226,6 @@ function upgmaAxisSvg(leafX, spanPx, rootHeight, axisY, color) {
     out += `<line x1="${x}" y1="${axisY}" x2="${x}" y2="${axisY + 5}" stroke="${color}" stroke-width="1"/>`;
     out += `<text x="${x}" y="${axisY + 16}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="9" fill="${color}">${v.toFixed(decimals)}</text>`;
   }
-  out += `<text x="${leafX + spanPx / 2}" y="${axisY + 30}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="${color}">Divergence Δ between lineages</text>`;
+  out += `<text x="${leafX + spanPx / 2}" y="${axisY + 30}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="${color}">${phyloT('phylo.divAxis', 'Divergence Δ between lineages')}</text>`;
   return out;
 }

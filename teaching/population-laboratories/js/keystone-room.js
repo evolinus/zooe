@@ -276,7 +276,7 @@
     const key = phenomenon(t, predPersists);
     const V = PHENOMENA[key];
     ui.verdict.className = 'verdict ' + V.cls;
-    let html = `<h4>${V.title}</h4><p>${V.text}</p>`;
+    let html = `<h3>${V.title}</h3><p>${V.text}</p>`;
     html += `<p class="mono" style="font-size:12px;">`
           + `Without the predator: <strong>${OUTCOMES[t.kindNo]}</strong><br>`
           + `With the predator: <strong>${t.P.hasPred && predPersists ? OUTCOMES[t.kindWith] : '—'}</strong></p>`;
@@ -305,9 +305,9 @@
     const cell = v => (isFinite(v) ? LAB.fmt(v, 1) : '∞');
     html += `<table class="datatable" style="margin-top:12px;"><thead><tr><th>Alone with the predator</th>`
           + `<th>competitor</th><th>predators</th></tr></thead><tbody>`;
-    html += `<tr><td style="color:var(--sp-a)">A</td><td>${cell(t.resA.N)}</td>`
+    html += `<tr><td style="color:var(--sp-a-deep)">A</td><td>${cell(t.resA.N)}</td>`
           + `<td>${t.resA.predHere ? cell(t.resA.P) : 'none'}</td></tr>`;
-    html += `<tr><td style="color:var(--sp-b)">B</td><td>${cell(t.resB.N)}</td>`
+    html += `<tr><td style="color:var(--sp-b-deep)">B</td><td>${cell(t.resB.N)}</td>`
           + `<td>${t.resB.predHere ? cell(t.resB.P) : 'none'}</td></tr>`;
     html += `</tbody></table>`;
     html += `<p style="font-size:12.5px;color:var(--ink-soft);margin:8px 0 0;">When the two species do not
@@ -450,11 +450,31 @@
     return eff > 0 ? eff : 0;         // effective carrying capacity under predation
   }
 
+  const PHASE_OUTCOME = {
+    coexist: 'the two competitors coexist',
+    aWins:   'competitor A excludes competitor B',
+    bWins:   'competitor B excludes competitor A',
+    founder: 'whichever competitor arrives first holds the site'
+  };
+
   function drawPhase(frame) {
     const p = plots.phase;
     const P = current(), t = currentTheory();
     const { xMax, yMax } = phaseBounds();
     const Pnow = sim ? sim.Ps[frame] : (P.hasPred ? P.P0 : 0);
+
+    // This plane is redrawn at the CURRENT predator density, which is the whole
+    // point of the room: the isoclines slide as the predator builds up, and a
+    // reader who cannot see them slide should still be told they have. So the
+    // predator density goes in the description beside the outcome it produces.
+    p.describe('Competitor A against competitor B, with their isoclines and a '
+      + 'field of arrows, drawn at the predator density of this moment. '
+      + (P.hasPred
+          ? `With the predator at ${LAB.fmt(Pnow, 1)}, ` + PHASE_OUTCOME[t.kindWith] + '. '
+          : 'With no predator, ' + PHASE_OUTCOME[t.kindNo] + '. ')
+      + (sim ? `The trajectory has reached A = ${LAB.fmt(sim.As[frame], 1)}, `
+               + `B = ${LAB.fmt(sim.Bs[frame], 1)}.`
+             : 'Nothing run yet.'));
 
     p.begin({ height: 400, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Competitor A', yLabel: 'Competitor B' });

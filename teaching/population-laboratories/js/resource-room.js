@@ -137,6 +137,11 @@
     const p = plots.R;
     const T = sim ? sim.T : ui.T.value;
     const eq = sim ? sim.eq : equilibrium(ui.S.value);
+    p.describe(!sim
+      ? `Resource against time. Nothing run yet; R* would be ${LAB.fmt(eq.Rstar, 1)}.`
+      : `Resource against time. At t = ${LAB.fmt((frame / FRAMES) * sim.T, 0)}, `
+        + `R = ${LAB.fmt(sim.Rs[frame], 1)}, against a break-even level R* of `
+        + `${LAB.fmt(eq.Rstar, 1)}.`);
     const yMax = Math.max(sim ? sim.rPeak : ui.R0.value, eq.Rstar, 1) * 1.2;
     p.begin({ height: 240, xMin: 0, xMax: T, yMin: 0, yMax, xLabel: 'Time', yLabel: 'Resource R' });
     p.grid();
@@ -154,6 +159,12 @@
     const p = plots.N;
     const T = sim ? sim.T : ui.T.value;
     const eq = sim ? sim.eq : equilibrium(ui.S.value);
+    p.describe(!sim
+      ? 'Consumers against time. Nothing run yet.'
+      : `Consumers against time. At t = ${LAB.fmt((frame / FRAMES) * sim.T, 0)}, `
+        + `N = ${LAB.fmt(sim.Ns[frame], 0)}`
+        + (eq.viable ? `, against an equilibrium N* of ${LAB.fmt(eq.Nstar, 0)}.`
+                     : ', and the consumer cannot persist on this supply.'));
     const yMax = Math.max(sim ? sim.nPeak : ui.N0.value, eq.viable ? eq.Nstar : 0, 5) * 1.2;
     p.begin({ height: 240, xMin: 0, xMax: T, yMin: 0, yMax, xLabel: 'Time', yLabel: 'Consumers N' });
     p.grid();
@@ -179,6 +190,15 @@
     const l = ui.l.value, a = ui.a.value;
     const xMax = Math.max(sim ? sim.rPeak : ui.R0.value, eq.Rstar * 2, 1) * 1.15;
     const yMax = Math.max(sim ? sim.nPeak : ui.N0.value, eq.viable ? eq.Nstar : 0, 5) * 1.2;
+
+    p.describe(!sim
+      ? 'Resource against consumers, with the two nullclines. Nothing run yet.'
+      : `Resource against consumers, with the two nullclines. The trajectory has `
+        + `reached R = ${LAB.fmt(sim.Rs[frame], 1)}, N = ${LAB.fmt(sim.Ns[frame], 0)}`
+        + (eq.viable
+            ? `, and the nullclines cross at R* = ${LAB.fmt(eq.Rstar, 1)}, `
+              + `N* = ${LAB.fmt(eq.Nstar, 0)}.`
+            : ', and the nullclines do not cross at a viable consumer density.'));
 
     p.begin({ height: 300, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Resource R', yLabel: 'Consumers N' });

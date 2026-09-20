@@ -1,4 +1,6 @@
   (function(){
+    // Fills {placeholders} in an English template string.
+
     const LEAF_COLOR = { C: 'var(--leaf-c)', D: 'var(--leaf-d)', G: 'var(--leaf-g)', H: 'var(--leaf-h)', I: 'var(--leaf-i)' };
 
     function buildTopology(N, s2, s3, s4){
@@ -21,7 +23,9 @@
     }
 
     let inferMethod = 'upgma'; // which reconstruction the right-hand panel draws
-    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (5/50)*0.12; let speedMs = 50; let N = 500;
+    // Fixed pace, as in the Copying Room: 50 ms/gen is what the slider that used
+    // to set it defaulted to.
+    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; const speedMs = 50; let N = 500;
     let playing = false; let timer = null; let g = 0;
 
     const MIN_SPLIT_GAP = 5;
@@ -37,8 +41,6 @@
     const shapeSeg = document.getElementById('shapeSeg_branch');
     const mutRate = document.getElementById('mutRate_branch');
     const mutVal = document.getElementById('mutVal_branch');
-    const speedInput = document.getElementById('speed_branch');
-    const speedVal = document.getElementById('speedVal_branch');
     const maxGenInput = document.getElementById('maxGen_branch');
     const maxGenVal = document.getElementById('maxGenVal_branch');
     const treeSelector = document.getElementById('treeSelector_branch');
@@ -89,8 +91,18 @@
       splitS4 = Math.max(splitS3 + MIN_SPLIT_GAP, Math.min(splitS4, N - MIN_SPLIT_GAP));
     }
 
+    // "B→D,E: 200 · E→F,G: 350 · F→H,I: 450" named each split by the lineages it
+    // makes, and needed 304px of the 293 this field has on a phone — so the label
+    // it sits in ran to two lines there. The letters are carried by colour
+    // instead: each number takes the colour of the mark you drag to move it, the
+    // same three leaf colours drawNode() uses in the selector below, in the same
+    // left-to-right order. Colour is not the only cue — the order is the other —
+    // and the selector itself is the real control; this is its readout.
     function syncSplitInputs(){
-      splitValsLabel.textContent = `B→D,E: ${splitS2} · E→F,G: ${splitS3} · F→H,I: ${splitS4}`; updateSelector();
+      const at = (gen, leaf) => `<span style="color:var(--leaf-${leaf})">${gen}</span>`;
+      splitValsLabel.innerHTML =
+        `${at(splitS2, 'd')} · ${at(splitS3, 'g')} · ${at(splitS4, 'h')}`;
+      updateSelector();
     }
 
     function updateSelector() {
@@ -162,7 +174,7 @@
     function svgLine(x1,y1,x2,y2,color,dashed){
       const el = document.createElementNS('http://www.w3.org/2000/svg','line');
       el.setAttribute('x1',x1); el.setAttribute('y1',y1); el.setAttribute('x2',x2); el.setAttribute('y2',y2);
-      el.setAttribute('stroke', color); el.setAttribute('stroke-width', 2);
+      el.setAttribute('stroke', color); el.setAttribute('stroke-width', 4);
       if(dashed) el.setAttribute('stroke-dasharray','4,4'); linesSvg.appendChild(el); return el;
     }
 
@@ -202,13 +214,18 @@
       ensureCard(A); positionCard(A, 0); finalStats.innerHTML = ''; activeNodes = [A];
 
       saveBranchingState(0);
-      statusLine.textContent = `gen 0 / ${N} — idle`;
+      statusLine.textContent = T('br.status', 'gen {g} / {max} — {state}', { g: 0, max: N, state: T('br.state.idle', 'idle') });
     }
 
     function ensureCard(node){
       if(node.cardEl) return;
       const card = document.createElement('div'); card.className = 'node-card'; card.style.color = node.color; card.style.borderColor = node.color;
-      const canvas = document.createElement('canvas'); canvas.width = 256; canvas.height = 256; card.appendChild(canvas);
+      const canvas = document.createElement('canvas'); canvas.width = 256; canvas.height = 256;
+      // One card per lineage on the tree; the tag below it carries the name, so
+      // the canvas names itself the same way.
+      canvas.setAttribute('role', 'img');
+      canvas.setAttribute('aria-label', `Lineage ${node.id}, current shape`);
+      card.appendChild(canvas);
       const tag = document.createElement('div'); tag.className = 'tag mono'; card.appendChild(tag);
       treeCanvas.appendChild(card); node.cardEl = card; node.ctx = canvas.getContext('2d'); node.tagEl = tag;
     }
@@ -301,7 +318,7 @@
         drawGenome(node.ctx, 256, 256, node.genome, currentShape);
       }
 
-      statusLine.textContent = `gen ${genIndex} / ${N} — stopped`;
+      statusLine.textContent = T('br.status', 'gen {g} / {max} — {state}', { g: genIndex, max: N, state: T('br.state.stopped', 'stopped') });
       sizeCanvas(genIndex);
       keepGenInView(genIndex);
       if (genIndex >= N) { showFinalStats(); } else { finalStats.innerHTML = ''; }
@@ -365,19 +382,19 @@
       const trueX = (t) => LEFT_START + (t / N) * TREE_SPAN;
       const s1x = trueX(topo.milestones.s1); const s2x = trueX(topo.milestones.s2); const s3x = trueX(topo.milestones.s3); const s4x = trueX(topo.milestones.s4);
 
-      svgLines += `<line x1="${trueX(0)}" y1="${ty.A}" x2="${s1x}" y2="${ty.A}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${s1x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${LEFT_END}" y2="${ty.C}" stroke="${LEAF_COLOR.C}" stroke-width="2"/>`;
-      svgLines += `<line x1="${s1x}" y1="${ty.B}" x2="${s2x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${s2x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${LEFT_END}" y2="${ty.D}" stroke="${LEAF_COLOR.D}" stroke-width="2"/>`;
-      svgLines += `<line x1="${s2x}" y1="${ty.E}" x2="${s3x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s3x}" y2="${ty.G}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s3x}" y1="${ty.G}" x2="${LEFT_END}" y2="${ty.G}" stroke="${LEAF_COLOR.G}" stroke-width="2"/>`;
-      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s4x}" y2="${ty.F}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${s4x}" y2="${ty.I}" stroke="var(--ink)" stroke-width="2"/>`;
-      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${LEFT_END}" y2="${ty.H}" stroke="${LEAF_COLOR.H}" stroke-width="2"/>`;
-      svgLines += `<line x1="${s4x}" y1="${ty.I}" x2="${LEFT_END}" y2="${ty.I}" stroke="${LEAF_COLOR.I}" stroke-width="2"/>`;
+      svgLines += `<line x1="${trueX(0)}" y1="${ty.A}" x2="${s1x}" y2="${ty.A}" stroke="var(--ink)" stroke-width="4"/>`;
+      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${s1x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${LEFT_END}" y2="${ty.C}" stroke="${LEAF_COLOR.C}" stroke-width="4"/>`;
+      svgLines += `<line x1="${s1x}" y1="${ty.B}" x2="${s2x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="4"/>`;
+      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${s2x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${LEFT_END}" y2="${ty.D}" stroke="${LEAF_COLOR.D}" stroke-width="4"/>`;
+      svgLines += `<line x1="${s2x}" y1="${ty.E}" x2="${s3x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="4"/>`;
+      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s3x}" y2="${ty.G}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s3x}" y1="${ty.G}" x2="${LEFT_END}" y2="${ty.G}" stroke="${LEAF_COLOR.G}" stroke-width="4"/>`;
+      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s4x}" y2="${ty.F}" stroke="var(--ink)" stroke-width="4"/>`;
+      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${s4x}" y2="${ty.I}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${LEFT_END}" y2="${ty.H}" stroke="${LEAF_COLOR.H}" stroke-width="4"/>`;
+      svgLines += `<line x1="${s4x}" y1="${ty.I}" x2="${LEFT_END}" y2="${ty.I}" stroke="${LEAF_COLOR.I}" stroke-width="4"/>`;
 
       const trueInternals = ['A', 'B', 'E', 'F'];
       trueInternals.forEach(id => {
@@ -410,17 +427,17 @@
           node.y = (node.left.y + node.right.y) / 2; node.genome = averageGenome(node.left.genome, node.right.genome, currentShape);
           node.isLeaf = false; node.x = RIGHT_LEAF_X + (node.height / maxH) * RIGHT_SPAN; inferredNodes.push(node);
 
-          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="2"/>`;
-          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="${node.left.isLeaf ? LEAF_COLOR[node.left.id] : 'var(--ink)'}" stroke-width="2"/>`;
-          svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="${node.right.isLeaf ? LEAF_COLOR[node.right.id] : 'var(--ink)'}" stroke-width="2"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="${node.left.isLeaf ? LEAF_COLOR[node.left.id] : 'var(--ink)'}" stroke-width="4"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="${node.right.isLeaf ? LEAF_COLOR[node.right.id] : 'var(--ink)'}" stroke-width="4"/>`;
         }
         traverseUpgma(rootCluster);
-        svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="2"/>`;
+        svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="4"/>`;
         svgLines += upgmaAxisSvg(RIGHT_LEAF_X, RIGHT_SPAN, rootCluster.height, RIGHT_AXIS_Y, 'var(--ink-soft)');
       } else {
         // Neighbour-joining: branch lengths differ per lineage, so leaves are
         // NOT aligned — that is the whole point of showing it.
-        const njRoot = neighborJoining(leafOrder, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
+        const njRoot = neighbourJoining(leafOrder, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
         const { scale } = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN);
         (function genomes(n) {
           if (n.isLeaf) { n.genome = nodesById[n.id].genome; return; }
@@ -433,7 +450,7 @@
           leafColor: (id) => LEAF_COLOR[id],
           inkColor: 'var(--ink)'
         });
-        svgLines += `<line x1="${njRoot.x}" y1="${njRoot.y}" x2="${RIGHT_STUB_END}" y2="${njRoot.y}" stroke="var(--ink)" stroke-width="2"/>`;
+        svgLines += `<line x1="${njRoot.x}" y1="${njRoot.y}" x2="${RIGHT_STUB_END}" y2="${njRoot.y}" stroke="var(--ink)" stroke-width="4"/>`;
         svgLines += scaleBarSvg(RIGHT_LEAF_X, RIGHT_AXIS_Y, scale, 'var(--ink-soft)');
       }
 
@@ -447,19 +464,19 @@
       });
 
       svgLines += `<text x="${(LEFT_START+LEFT_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">True History</text>`;
-      svgLines += `<text x="${(GAP_START+GAP_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Final Shapes</text>`;
-      svgLines += `<text x="${(RIGHT_LEAF_X+RIGHT_STUB_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Inferred (${inferMethod === 'upgma' ? 'UPGMA' : 'Neighbour-joining'})</text>`;
+      svgLines += `<text x="${(GAP_START+GAP_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">${T('br.finalShapes', 'Final Shapes')}</text>`;
+      svgLines += `<text x="${(RIGHT_LEAF_X+RIGHT_STUB_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">${T('br.inferred', 'Inferred ({m})', { m: inferMethod === 'upgma' ? 'UPGMA' : T('br.nj', 'Neighbour-joining') })}</text>`;
 
       finalStats.innerHTML = `
-        <p style="margin-top:14px;"><strong>Final divergence matrix (Δ, 0.00 = identical):</strong><button class="help-btn" data-help="branchDivMatrix"></button></p>
+        <p style="margin-top:14px;"><strong>${T('br.divMatrix', 'Final divergence matrix (Δ, 0.00 = identical):')}</strong><button class="help-btn" data-help="branchDivMatrix"></button></p>
         ${html}
-        <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>Tanglegram Comparison:</strong><button class="help-btn" data-help="tanglegram"></button><br>
-        <span style="font-size: 13px; color: var(--ink-soft);">Left: The actual evolutionary timeline you just watched (solid borders mark the true divergence shape). Right: The phylogenetic tree inferred by an algorithm using only the final observable shapes (dashed borders show mathematically inferred ancestral states). Notice any discrepancies?</span></p>
+        <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>${T('br.tanglegram', 'Tanglegram Comparison:')}</strong><button class="help-btn" data-help="tanglegram"></button><br>
+        <span style="font-size: 13px; color: var(--ink-soft);">${T('br.tanglegramNote', 'Left: The actual evolutionary timeline you just watched (solid borders mark the true divergence shape). Right: The phylogenetic tree inferred by an algorithm using only the final observable shapes (dashed borders show mathematically inferred ancestral states). Notice any discrepancies?')}</span></p>
         <div class="infer-toggle">
-          <span class="infer-toggle-label">Reconstruction method</span>
+          <span class="infer-toggle-label">${T('br.method', 'Reconstruction method')}</span>
           <div class="segmented" id="inferSeg_branch">
             <button data-method="upgma" class="${inferMethod === 'upgma' ? 'active' : ''}">UPGMA</button>
-            <button data-method="nj" class="${inferMethod === 'nj' ? 'active' : ''}">Neighbour-joining</button>
+            <button data-method="nj" class="${inferMethod === 'nj' ? 'active' : ''}">${T('br.nj', 'Neighbour-joining')}</button>
           </div>
           <button class="help-btn" data-help="treeMethod"></button>
         </div>
@@ -490,17 +507,21 @@
       if(playing) return; if(g >= N) return;
       const currentMax = historyCache.length - 1;
       if (parseInt(timeScrubber.value) < currentMax) { scrubTo(currentMax); timeScrubber.value = currentMax; }
-      playing = true; playBtn.textContent = '⏸ Pause'; stepBtn.disabled = true; maxGenInput.disabled = true;
+      playing = true; playBtn.textContent = T('br.pause', '⏸ Pause'); stepBtn.disabled = true; maxGenInput.disabled = true;
       timeScrubber.disabled = true;
       treeSelector.style.pointerEvents = 'none'; treeSelector.style.opacity = '0.5';
       timer = setInterval(tick, speedMs);
     }
     function stopPlaying(){
-      playing = false; playBtn.textContent = '▶ Start copying'; stepBtn.disabled = false; maxGenInput.disabled = false;
+      playing = false; playBtn.textContent = T('br.play', '▶ Start copying'); stepBtn.disabled = false; maxGenInput.disabled = false;
       if (historyCache.length > 1) timeScrubber.disabled = false;
       treeSelector.style.pointerEvents = 'auto'; treeSelector.style.opacity = '1';
-      clearInterval(timer); statusLine.textContent = `gen ${g} / ${N} — stopped`;
+      clearInterval(timer); statusLine.textContent = T('br.status', 'gen {g} / {max} — {state}', { g: g, max: N, state: T('br.state.stopped', 'stopped') });
     }
+
+    // Same as the other rooms that animate: walking away stops the run instead
+    // of leaving it to play on in a hidden tab.
+    document.addEventListener('lab:tabchange', (e)=>{ if(e.detail.tabId !== 'branching') stopPlaying(); });
 
     playBtn.addEventListener('click', ()=>{ if(playing) stopPlaying(); else startPlaying(); });
     stepBtn.addEventListener('click', ()=>{ 
@@ -523,10 +544,6 @@
     });
 
     mutRate.addEventListener('input', ()=>{ mutVal.textContent = mutRate.value; mutSigmaFrac = 0.005 + (mutRate.value/50)*0.12; });
-    speedInput.addEventListener('input', ()=>{
-      speedMs = Number(speedInput.value); speedVal.textContent = `${speedMs} ms/gen`;
-      if(playing){ clearInterval(timer); timer = setInterval(tick, speedMs); }
-    });
     maxGenInput.addEventListener('input', ()=>{ maxGenVal.textContent = maxGenInput.value; });
     maxGenInput.addEventListener('change', ()=>{
       N = Math.max(100, Math.min(2000, Number(maxGenInput.value)||500)); maxGenInput.value = N; maxGenVal.textContent = N; buildStage();

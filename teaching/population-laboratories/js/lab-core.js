@@ -21,12 +21,17 @@ const LAB = (function () {
   const C = {};
   function refreshColors() {
     Object.assign(C, {
-      paper:    cssVar('--paper', '#EDE6D6'),
-      paperDim: cssVar('--paper-dim', '#E2D9C4'),
+      paper:    cssVar('--paper', '#F0EED3'),
+      paperDim: cssVar('--paper-dim', '#E9E6BD'),
       ink:      cssVar('--ink', '#262220'),
-      inkSoft:  cssVar('--ink-soft', '#6b6258'),
-      rule:     cssVar('--rule', '#cabfa8'),
+      inkSoft:  cssVar('--ink-soft', '#5A5249'),
+      rule:     cssVar('--rule', '#DED99A'),
+      grid:     cssVar('--grid', '#E6E2B2'),
       stamp:    cssVar('--stamp', '#C08A2E'),
+      // The gold in its readable strength. A canvas cannot resolve a CSS
+      // variable, so anything a room draws as *text* in the gold takes this
+      // rather than `stamp`, which at 2.58:1 is a mark and not a word.
+      stampDeep: cssVar('--stamp-deep', '#7A4D00'),
       spA:      cssVar('--sp-a', '#3D6E6E'),
       spB:      cssVar('--sp-b', '#A8442A'),
       pred:     cssVar('--pred', '#8C3F5D'),
@@ -322,6 +327,21 @@ const LAB = (function () {
         api.seek(parseInt(e.target.value, 10));
       });
     }
+
+    // A reader who presses Run and then goes to look at another room should not
+    // leave an animation playing to an empty tab: the frames go by, the reading
+    // line is written, and they come back to a run that happened without them.
+    // Every room gets this from here rather than subscribing itself, because
+    // every room drives its animation through this player.
+    //
+    // Pausing rather than jumping to the end, which is what the companion lab
+    // does with its live simulations. There, stopping mid-flight would leave a
+    // room genuinely half-computed. Here the whole trajectory already exists
+    // before the first frame is shown, so a pause costs nothing: the reader
+    // comes back to the moment they walked away from, and Run, the scrubber and
+    // the step buttons all carry on from there.
+    document.addEventListener('lab:tabchange', () => { if (st.running) api.pause(); });
+
     return api;
   }
 

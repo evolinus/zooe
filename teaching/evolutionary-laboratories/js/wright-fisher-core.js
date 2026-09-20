@@ -13,6 +13,22 @@
 // a `samplingFreq(freq, state)` function. Set `selection: true` if the room
 // should show the deterministic reference trajectory, the pre-adjustment
 // wheel marker, and the "N·f′" binomial label — see selection-room.js.
+//
+// Two further flags, both used by the Drift Room alone:
+//
+//   mutation: true             adds the recurrent-mutation slider, which is
+//                              off at 0 by default. It changes one structural
+//                              thing beyond the arithmetic: with mutation on,
+//                              0 and 1 stop being absorbing, so a run no longer
+//                              ENDS when it reaches one. Every place that treats
+//                              fixation as the end of the story is guarded by
+//                              mutationOn().
+//   multiRunHeterozygosity     adds a second chart under the ten trajectories,
+//                              plotting the variation still left in each run
+//                              against the expected decay. It is deliberately
+//                              not on in the Selection Room: there the story is
+//                              what happens to one allele, and heterozygosity
+//                              is a statement about the population as a whole.
 function createWrightFisherRoom(cfg) {
   const suffix = cfg.suffix;
   const id = (name) => document.getElementById(`${name}_${suffix}`);
@@ -23,6 +39,12 @@ function createWrightFisherRoom(cfg) {
     sliderG: id('sliderG'),
     sliderS: id('sliderS'), // only present in rooms with selection: true
     sliderH: id('sliderH'), // only present when selection room also supports diploid dominance
+    sliderMu: id('sliderMu'), // only present in rooms with mutation: true
+    muVal: id('muVal'),
+    // Gated on the flag rather than merely on the markup being present, so the
+    // cfg is the single switch and a stray element could never turn it on.
+    hetCard: cfg.multiRunHeterozygosity ? id('multiHetCard') : null,
+    hetCvs: cfg.multiRunHeterozygosity ? id('multiHetCanvas') : null,
     ploidySeg: id('ploidySeg'),
     dominanceField: id('dominanceField'),
     nVal: id('nVal'),
@@ -52,6 +74,8 @@ function createWrightFisherRoom(cfg) {
     kFormula: id('kFormula'),
     varFormula: id('varFormula'),
     legendAB: id('legendAB'),
+    legendA: id('legendA'),
+    legenda: id('legenda'),
     popTitle: id('popTitle'),
     singleRunStage: id('singleRunStage'),
     binomCard: id('binomCard'),
@@ -67,23 +91,30 @@ function createWrightFisherRoom(cfg) {
     p: DOM.popCvs.getContext('2d'),
     c: DOM.chartCvs.getContext('2d'),
     b: DOM.binomCvs.getContext('2d'),
-    v: DOM.varCvs.getContext('2d')
+    v: DOM.varCvs.getContext('2d'),
+    h: DOM.hetCvs ? DOM.hetCvs.getContext('2d') : null
   };
+
+  // Fills {placeholders} in an English template string.
 
   const COLORS = {
     paper: '#EDE6D6',
     paperDim: '#E2D9C4',
     ink: '#262220',
-    inkSoft: '#6b6258',
+    inkSoft: '#5A5249',
     rule: '#cabfa8',
-    alleleA: '#3D6E6E',
+    alleleA: '#2E5C8A',
     alleleB: '#A8442A',
     stamp: '#C08A2E', // canvas contexts can't resolve var(--stamp), so mirror it literally here
     expectedK: '#1F3A52', // darker blue for the binomial panel's expected-k bar
-    deterministic: '#262220' // dashed reference line for the noise-free selection trajectory
+    deterministic: '#262220', // dashed reference line for the noise-free selection trajectory
+    // The diversity line is deliberately NOT an allele colour. Everywhere else
+    // in this room blue means A1 and red means A2, and this line is not about
+    // either of them — it is one number for the population as a whole.
+    diversity: '#7A5C99'
   };
 
-  // Ten visually distinct colors for the "Run 10 Simulations" overlay chart.
+  // Ten visually distinct colours for the "Run 10 Simulations" overlay chart.
   const MULTI_RUN_COLORS = [
     '#3D6E6E', '#A8442A', '#7A5C99', '#C08A2E', '#3C6E3F',
     '#8B3E62', '#3A5A8C', '#B5651D', '#4F7CAC', '#9B4F4F'
@@ -92,6 +123,7 @@ function createWrightFisherRoom(cfg) {
   let state = {
     N: 50, f: 0.5, G: 100, s: cfg.selection ? (cfg.defaultS ?? 0.1) : 0,
     ploidy: 1, h: 0.5, // h (dominance) only meaningful for diploid + selection
+    mu: 0,             // recurrent mutation, each way, per gene copy per generation
     running: false, stopFlag: false,
     pauseRequested: false, paused: false,
     resumeResolve: null,
@@ -99,7 +131,10 @@ function createWrightFisherRoom(cfg) {
     freqHistory: [], population: [],
     historyCache: [],
     detHistory: [],
-    multiRunMode: false, multiRuns: [], multiRunning: false
+    multiRunMode: false, multiRuns: [], multiRunning: false,
+    // Set the moment the reader moves the generations slider, after which the
+    // default stops following N, the ploidy and s. Their number, not ours.
+    gTouched: false
   };
 
   // Ploidy is a property of the population, not of any one room: N always
@@ -150,12 +185,57 @@ function createWrightFisherRoom(cfg) {
     return { pop, freq: counted.a / counted.total };
   }
 
+  function mutationOn() { return !!cfg.mutation && state.mu > 0; }
+
+  /* Recurrent mutation, applied to the frequency the next generation is drawn
+     from. Symmetric: a gene copy turns from A1 into A2, or from A2 into A1,
+     with the same probability mu — so mutation on its own pulls the frequency
+     towards 0.5 rather than towards either allele.
+
+        p* = p(1 − mu) + (1 − p)mu
+
+     It is applied AFTER cfg.samplingFreq, so in a room that has both, selection
+     acts on the parents and mutation happens as their gametes are made. */
+  function applyMutation(freq) {
+    if (!mutationOn()) return freq;
+    return freq * (1 - state.mu) + (1 - freq) * state.mu;
+  }
+
   // The sampling probability actually used to draw each individual for the
   // next generation. For Drift Room this is just the current frequency; for
-  // Selection Room it's been reweighted by fitness first. Reused as the
-  // no-noise recursion for the deterministic reference trajectory too.
+  // Selection Room it's been reweighted by fitness first; with the mutation
+  // slider up, mutation moves it again afterwards. Reused as the no-noise
+  // recursion for the deterministic reference trajectory too.
   function samplingFreq(freq) {
-    return cfg.samplingFreq(freq, state);
+    return applyMutation(cfg.samplingFreq(freq, state));
+  }
+
+  /* The wheel's tick marker shows where the frequency was BEFORE the room's
+     own machinery moved it, so the gap between tick and slice is what that
+     machinery did. Selection earns one; so does mutation, and for the same
+     reason — at mu = 0 there is nothing to show and it stays off. */
+  function wheelMarker(freq) {
+    return (cfg.selection || mutationOn()) ? freq : null;
+  }
+
+  /* Expected heterozygosity after one more generation, exactly.
+
+     Sampling M gene copies from p* gives E[2p(1−p)] = 2p*(1−p*)(1 − 1/M), and
+     symmetric mutation turns 2p(1−p) into (1−2mu)²·2p(1−p) + 2mu(1−mu) — so
+     the two compose into one recursion that is right whether mutation is on or
+     off. With mu = 0 it collapses to the familiar H(1 − 1/M) decay; with mu
+     above 0 it climbs or falls to the mutation-drift balance instead of to
+     zero, which is the whole point of having the slider. */
+  function nextExpectedH(h) {
+    const M = geneCount();
+    const mu = mutationOn() ? state.mu : 0;
+    return (1 - 1 / M) * ((1 - 2 * mu) * (1 - 2 * mu) * h + 2 * mu * (1 - mu));
+  }
+
+  function expectedHSeries(f0, G) {
+    const out = [2 * f0 * (1 - f0)];
+    for (let g = 1; g <= G; g++) out.push(nextExpectedH(out[g - 1]));
+    return out;
   }
 
   const _rBuf = new Uint32Array(1);
@@ -195,6 +275,38 @@ function createWrightFisherRoom(cfg) {
     return Math.exp(logCoeff + k * Math.log(p) + (n - k) * Math.log(1 - p));
   }
 
+  // How long the run needs to be to show what the room is about. Both figures
+  // are the textbook diffusion results, written in gene copies M so one
+  // expression covers both ploidies: M = N haploid, M = 2N diploid.
+  //
+  //   neutral    E[T_fix] ≈ 2M            — 4N under diploidy, 2N under haploidy
+  //   selected   E[T_fix] ≈ (2/s)·ln M    — (2/s)·ln 2N under diploidy
+  //
+  // The selected figure is the deterministic sweep time, and it runs away as s
+  // approaches zero, where the honest answer is that drift decides and fixation
+  // takes the neutral time. So it is capped at the neutral value, which also
+  // covers s = 0 without a special case.
+  function expectedFixationTime() {
+    const M = geneCount();
+    const neutral = 2 * M;
+    if (!DOM.sliderS || !state.s) return neutral;
+    return Math.min((2 / state.s) * Math.log(M), neutral);
+  }
+
+  // Half as long again as the fixation time, so a run at the default settings
+  // has room to finish rather than stopping part-way through the wander.
+  function defaultG() {
+    const g = Math.round(1.5 * expectedFixationTime());
+    return Math.max(+DOM.sliderG.min, Math.min(g, +DOM.sliderG.max));
+  }
+
+  function applyDefaultG() {
+    if (state.gTouched) return;
+    state.G = defaultG();
+    DOM.sliderG.value = state.G;
+    DOM.gVal.textContent = state.G;
+  }
+
   function applyGCap() {
     const maxG = Math.floor(4.5 * geneCount());
     DOM.sliderG.max = maxG;
@@ -219,7 +331,8 @@ function createWrightFisherRoom(cfg) {
 
   DOM.sliderN.addEventListener('input', () => {
     state.N = +DOM.sliderN.value; DOM.nVal.textContent = state.N;
-    applyGCap(); if (!state.running && !state.multiRunMode) init();
+    applyGCap(); applyDefaultG();
+    if (!state.running && !state.multiRunMode) init();
   });
 
   DOM.sliderF.addEventListener('input', () => {
@@ -228,6 +341,7 @@ function createWrightFisherRoom(cfg) {
   });
 
   DOM.sliderG.addEventListener('input', () => {
+    state.gTouched = true;
     state.G = +DOM.sliderG.value; DOM.gVal.textContent = state.G;
     if (!state.running && !state.multiRunMode) {
       state.detHistory = computeDeterministicHistory(state.f, state.G);
@@ -239,6 +353,7 @@ function createWrightFisherRoom(cfg) {
   if (DOM.sliderS) {
     DOM.sliderS.addEventListener('input', () => {
       state.s = +DOM.sliderS.value; DOM.sVal.textContent = state.s.toFixed(2);
+      applyDefaultG();
       if (!state.running && !state.multiRunMode) init();
     });
   }
@@ -250,18 +365,48 @@ function createWrightFisherRoom(cfg) {
     });
   }
 
+  if (DOM.sliderMu) {
+    DOM.sliderMu.addEventListener('input', () => {
+      state.mu = +DOM.sliderMu.value;
+      if (DOM.muVal) DOM.muVal.textContent = state.mu.toFixed(4);
+      // Turning mutation on or off changes what the binomial panel is drawing
+      // from and whether the wheel carries a marker, so the labels move with it.
+      updatePloidyLabels();
+      if (!state.running && !state.multiRunMode) init();
+    });
+  }
+
+  // The population title changes as a run proceeds, and it carries a <br> so it
+  // always occupies the two lines the card reserves for it (see .pop-title) —
+  // otherwise the canvas below resizes whenever the wording changes.
+  function setPopTitle(fn) {
+    if (DOM.popTitle) DOM.popTitle.innerHTML = fn();
+  }
+
   // Reflects the current ploidy in every label that depends on it: the
   // binomial panel's "N·f" formula, the variance panel's "/N" denominator,
   // the population legend's heterozygote swatch, and (Selection Room only)
   // whether the dominance slider is relevant at all.
   function updatePloidyLabels() {
-    const nTerm = state.ploidy === 2 ? '2N' : 'N';
-    const fTerm = cfg.selection ? 'f′' : 'f';
-    if (DOM.kFormula) DOM.kFormula.textContent = `${nTerm}·${fTerm}`;
-    if (DOM.varFormula) DOM.varFormula.textContent = nTerm;
+    // innerHTML, not textContent: N and p are variables and set in italics, the
+    // 2 of 2N is a coefficient and stays upright.
+    const nTerm = state.ploidy === 2 ? '2<var>N</var>' : '<var>N</var>';
+    const fTerm = (cfg.selection || mutationOn()) ? '<var>p′</var>' : '<var>p</var>';
+    if (DOM.kFormula) DOM.kFormula.innerHTML = `${nTerm}·${fTerm}`;
+    if (DOM.varFormula) DOM.varFormula.innerHTML = nTerm;
     if (DOM.legendAB) DOM.legendAB.style.display = state.ploidy === 2 ? '' : 'none';
+    // A haploid individual carries one gene copy, so it IS an allele; a diploid
+    // one is a genotype, and the solid swatches are the two homozygotes.
+    // innerHTML, not textContent: the allele symbol is italic and its index is not.
+    const V = (t) => String(t).replace(/([A-Za-z])([\u2080\u2081\u2082])/g, '<var>$1</var>$2');
+    if (DOM.legendA) DOM.legendA.innerHTML = V(state.ploidy === 2
+      ? T('wf.legendHomA', 'Homozygote A₁')
+      : T('wf.legendA', 'Allele A₁'));
+    if (DOM.legenda) DOM.legenda.innerHTML = V(state.ploidy === 2
+      ? T('wf.legendHoma', 'Homozygote A₂')
+      : T('wf.legenda', 'Allele A₂'));
     if (DOM.dominanceField) DOM.dominanceField.style.display = state.ploidy === 2 ? '' : 'none';
-    if (DOM.popTitle && state.ploidy === 1) DOM.popTitle.textContent = 'Current Population';
+    if (state.ploidy === 1) setPopTitle(() => T('wf.pop', 'Current Population'));
   }
 
   if (DOM.ploidySeg) {
@@ -271,23 +416,32 @@ function createWrightFisherRoom(cfg) {
         state.ploidy = +btn.dataset.ploidy;
         DOM.ploidySeg.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
         updatePloidyLabels();
-        applyGCap();
+        applyGCap(); applyDefaultG();
         if (!state.multiRunMode) init();
       });
     });
+  }
+
+  // Reset and "Pause after gen" share one slot in the transport bar: while a
+  // single run is playing — or paused part-way through it — the pause control
+  // takes Reset's place, and Reset returns once the run ends. Run 10 has no
+  // pause control of its own, so it leaves Reset in place and merely disables it.
+  function showPauseControl(on) {
+    DOM.btnPause.style.display = on ? '' : 'none';
+    DOM.btnReset.style.display = on ? 'none' : '';
   }
 
   DOM.btnPause.addEventListener('click', () => {
     if (!state.running) return;
     if (!state.pauseRequested && !state.paused) {
       state.pauseRequested = true;
-      DOM.btnPause.textContent = '⏸ Pause requested…';
+      DOM.btnPause.textContent = T('wf.pauseReq', '⏸ Pause requested…');
     } else if (state.paused) {
       state.paused = false; state.pauseRequested = false;
-      DOM.btnPause.textContent = '⏸ Pause after gen';
+      DOM.btnPause.textContent = T('wf.pauseAfter', '⏸ Pause after gen');
       if (state.resumeResolve) { state.resumeResolve(); state.resumeResolve = null; }
     } else {
-      state.pauseRequested = false; DOM.btnPause.textContent = '⏸ Pause after gen';
+      state.pauseRequested = false; DOM.btnPause.textContent = T('wf.pauseAfter', '⏸ Pause after gen');
     }
   });
 
@@ -297,8 +451,13 @@ function createWrightFisherRoom(cfg) {
 
   function init() {
     setMultiRunMode(false);
+    // The room is idle here, so the transport slot shows Reset. runSimulation()
+    // calls init() before it shows the pause control, never after.
+    showPauseControl(false);
     updatePloidyLabels();
-    if (state.ploidy === 2 && DOM.popTitle) DOM.popTitle.textContent = 'Current Population — individuals in HW equilibrium';
+    applyGCap(); // enforce the room's G cap (4.5 × gene copies) from the first load, not only after N/ploidy changes
+    applyDefaultG(); // and open on a G long enough to reach fixation, until the reader sets their own
+    if (state.ploidy === 2) setPopTitle(() => T('wf.popHW', 'Current Population<br>— individuals in HW equilibrium'));
 
     const initial = makeInitialPopulation(state.f);
     state.population = initial.pop;
@@ -306,6 +465,7 @@ function createWrightFisherRoom(cfg) {
     state.freqHistory = [initial.freq];
     state.detHistory = computeDeterministicHistory(state.f, state.G);
     state.wheelAngle = 0;
+    state.touchedEdge = false;
 
     state.historyCache = [{
       population: [...state.population],
@@ -318,7 +478,7 @@ function createWrightFisherRoom(cfg) {
     DOM.scrubVal.textContent = 0;
     DOM.timeScrubber.disabled = true;
 
-    drawWheel(samplingFreq(state.f), 0, cfg.selection ? state.f : null);
+    drawWheel(samplingFreq(state.f), 0, wheelMarker(state.f));
     drawPopSettled(state.population);
     drawChart(state.freqHistory, state.G);
     drawBinom(samplingFreq(state.f), geneCount());
@@ -328,11 +488,12 @@ function createWrightFisherRoom(cfg) {
     DOM.spinDisp.textContent = '—';
     DOM.freqDisp.textContent = state.f.toFixed(3);
 
-    if (initial.freq === 0 || initial.freq === 1) {
-      DOM.fixBanner.textContent = `Already fixed at N=${state.N}, f=${state.f.toFixed(2)}. Adjust parameters to see drift.`;
-      DOM.statusBar.textContent = 'Population already fixed — adjust parameters.';
+    if ((initial.freq === 0 || initial.freq === 1) && !mutationOn()) {
+      DOM.fixBanner.innerHTML = T('wf.alreadyFixed', 'Already fixed at <var>N</var>={n}, <var>p</var>={f}. Adjust parameters to see drift.',
+        { n: state.N, f: state.f.toFixed(2) });
+      DOM.statusBar.textContent = T('wf.alreadyFixedStatus', 'Population already fixed — adjust parameters.');
     } else {
-      DOM.statusBar.textContent = 'Ready. Press Run Simulation.';
+      DOM.statusBar.textContent = T('wf.ready', 'Ready. Press Run Simulation.');
       DOM.fixBanner.textContent = '';
     }
   }
@@ -391,13 +552,45 @@ function createWrightFisherRoom(cfg) {
     ctx.lineWidth = 2; ctx.stroke();
   }
 
-  function getSpinTiming(spinIdx, genIdx) {
-    const TARGET_TOTAL = 50, SLOW_TOTAL = 1000;
-    const RAMP_START = 4, RAMP_LEN = 5;
-    if (genIdx >= 3) return { dur: Math.round(TARGET_TOTAL * 0.82), gap: Math.round(TARGET_TOTAL * 0.18) };
-    if (spinIdx < RAMP_START) return { dur: Math.round(SLOW_TOTAL * 0.82), gap: Math.round(SLOW_TOTAL * 0.18) };
-    const t = Math.min((spinIdx - RAMP_START) / RAMP_LEN, 1);
-    const total = SLOW_TOTAL + (TARGET_TOTAL - SLOW_TOTAL) * t * t;
+  // Only generations 1 and 2 are spun one gene copy at a time, and both are paced
+  // the same way: five draws at a second each, so the reader can see what a draw
+  // is, and then everything left in the generation inside one four-second budget
+  // however many there are. The budget is what makes the pacing independent of
+  // N — the old schedule ramped over a fixed nine draws and then held 50ms for
+  // the rest, so a generation took as long as the population was big, and at
+  // N = 200 the two animated generations ran for the better part of a minute.
+  const SLOW_DRAWS = 5;      // held at the slow speed, whatever N is
+  const SLOW_TOTAL = 1000;   // ms per slow draw
+  const RAMP_BUDGET = 4000;  // ms for every draw after them, together
+  // spinWheel resolves on an animation frame, so no draw can take less than one
+  // however small a duration it is given. Below about 17ms a draw costs a frame
+  // and the budget stops being the thing that decides: with more than roughly
+  // 235 gene copies the ramp runs long, which is diploid above N = 120.
+  const FRAME_MS = 17;
+
+  // Starts near the slow speed and eases down quadratically to a twentieth of
+  // it. Normalised against its own sum so the whole ramp lands on the budget.
+  function rampWeight(j, R) {
+    const t = R > 1 ? j / (R - 1) : 1;
+    return 1 - 0.95 * t * t;
+  }
+  let rampSumCache = { R: -1, sum: 0 };
+  function rampWeightSum(R) {
+    if (rampSumCache.R !== R) {
+      let sum = 0;
+      for (let j = 0; j < R; j++) sum += rampWeight(j, R);
+      rampSumCache = { R, sum };
+    }
+    return rampSumCache.sum;
+  }
+
+  function getSpinTiming(spinIdx, genes) {
+    if (spinIdx < SLOW_DRAWS) {
+      return { dur: Math.round(SLOW_TOTAL * 0.82), gap: Math.round(SLOW_TOTAL * 0.18) };
+    }
+    const R = Math.max(1, genes - SLOW_DRAWS);
+    const share = RAMP_BUDGET * rampWeight(spinIdx - SLOW_DRAWS, R) / rampWeightSum(R);
+    const total = Math.max(FRAME_MS, share);
     return { dur: Math.round(total * 0.82), gap: Math.round(total * 0.18) };
   }
 
@@ -431,11 +624,18 @@ function createWrightFisherRoom(cfg) {
     });
   }
 
+  // The population panel stretches to match the Sampling Wheel card beside it,
+  // so its height is read off the wrapper rather than hard-coded.
+  function popHeight() {
+    return Math.round(DOM.popCvs.parentElement.clientHeight) || 200;
+  }
+
   function popGeom(count) {
     const W = DOM.popCvs.parentElement.offsetWidth || 700;
-    const cols = Math.ceil(Math.sqrt(count * W / 200));
+    const H = popHeight();
+    const cols = Math.ceil(Math.sqrt(count * W / H));
     const rows = Math.ceil(count / cols);
-    return { W, cols, cellW: W / cols, cellH: 200 / rows, r: Math.min(W/cols, 200/rows) * 0.28 };
+    return { W, H, cols, cellW: W / cols, cellH: H / rows, r: Math.min(W/cols, H/rows) * 0.28 };
   }
 
   function drawAlleleMarker(ctx, cx, cy, r) {
@@ -443,63 +643,96 @@ function createWrightFisherRoom(cfg) {
     ctx.arc(cx, cy, r, 0, Math.PI*2);
   }
 
-  // Diploid genotype marker: AA is a solid teal circle, BB a solid red
-  // circle, and the heterozygote AB is a circle split teal/red so it reads
-  // as "carries both" at a glance.
-  function drawGenotypeMarker(ctx, genotype, cx, cy, r) {
-    if (genotype === 'AA') {
-      drawAlleleMarker(ctx, cx, cy, r);
-      ctx.fillStyle = COLORS.alleleA; ctx.fill();
-    } else if (genotype === 'BB') {
-      drawAlleleMarker(ctx, cx, cy, r);
-      ctx.fillStyle = COLORS.alleleB; ctx.fill();
-    } else {
-      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, -Math.PI/2, Math.PI/2); ctx.closePath();
-      ctx.fillStyle = COLORS.alleleB; ctx.fill();
+  function alleleColor(al) { return al === 'A' ? COLORS.alleleA : COLORS.alleleB; }
+
+  // A diploid individual is one circle split into two half-discs: the left half
+  // is the first gamete's allele, the right half the second's. Two of the same
+  // allele read as a solid disc (AA blue, aa red); one of each reads as a
+  // blue/red split. a0/a1 may be null while an individual is still being
+  // assembled — that half is left empty, showing only the outline.
+  function drawIndividual(ctx, cx, cy, r, a0, a1) {
+    if (a0) {
       ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, Math.PI/2, Math.PI*1.5); ctx.closePath();
-      ctx.fillStyle = COLORS.alleleA; ctx.fill();
-      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
-      ctx.strokeStyle = COLORS.ink; ctx.lineWidth = 0.75; ctx.stroke();
+      ctx.fillStyle = alleleColor(a0); ctx.fill();
     }
+    if (a1) {
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, -Math.PI/2, Math.PI/2); ctx.closePath();
+      ctx.fillStyle = alleleColor(a1); ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+    ctx.strokeStyle = COLORS.ink; ctx.lineWidth = 0.75; ctx.stroke();
+  }
+
+  function drawGenotypeMarker(ctx, genotype, cx, cy, r) {
+    drawIndividual(ctx, cx, cy, r, genotype[0], genotype[1]);
   }
 
   function drawPopSettled(pop) {
-    const { W, cols, cellW, cellH, r } = popGeom(pop.length);
-    scaleCanvas(DOM.popCvs, CTX.p, W, 200);
+    const counted = countAlleles(pop);
+    DOM.popCvs.setAttribute('aria-label', state.ploidy === 2
+      ? T('wf.aria.popDip',
+          '{n} individuals. {a} of the {t} allele copies are A1, a frequency of {f}.',
+          { n: pop.length, a: counted.a, t: counted.total, f: (counted.a / counted.total).toFixed(3) })
+      : T('wf.aria.popHap',
+          '{n} individuals, {a} of them carrying A1, a frequency of {f}.',
+          { n: pop.length, a: counted.a, f: (counted.a / counted.total).toFixed(3) }));
+    const { W, H, cols, cellW, cellH, r } = popGeom(pop.length);
+    scaleCanvas(DOM.popCvs, CTX.p, W, H);
     const ctx = CTX.p;
-    ctx.clearRect(0,0,W,200);
+    ctx.clearRect(0,0,W,H);
     pop.forEach((type, i) => {
       const cx = cellW * ((i%cols) + 0.5), cy = cellH * (Math.floor(i/cols) + 0.5);
       if (state.ploidy === 2) {
         drawGenotypeMarker(ctx, type, cx, cy, r);
       } else {
         drawAlleleMarker(ctx, cx, cy, r);
-        ctx.fillStyle = type === 'A' ? COLORS.alleleA : COLORS.alleleB;
+        ctx.fillStyle = alleleColor(type);
         ctx.fill();
       }
     });
   }
 
-  // Used only during the animated first-3-generations intro, which always
-  // shows raw allele draws one at a time (geneCount of them) — even under
-  // diploidy, individual gene draws are simple A/B until drawPopSettled
-  // pairs them into genotypes once the generation is complete.
-  function drawPopInProgress(newPop, highlightIdx) {
+  // The animated first-3-generations intro. Haploid: N allele discs filled one
+  // at a time. Diploid: N individuals, each assembled from two gamete draws —
+  // gene copy j is the (j mod 2) half of individual ⌊j/2⌋ — so the grid shows
+  // half-discs completing into whole individuals rather than a strip of loose
+  // alleles. highlightGene is the index of the gene copy about to be drawn next
+  // (−1 when the generation is complete).
+  function drawPopInProgress(drawnGenes, highlightGene) {
+    if (state.ploidy === 2) {
+      const n = state.N;
+      const { W, H, cols, cellW, cellH, r } = popGeom(n);
+      scaleCanvas(DOM.popCvs, CTX.p, W, H);
+      const ctx = CTX.p;
+      ctx.clearRect(0,0,W,H);
+      const curInd = highlightGene >= 0 ? Math.floor(highlightGene / 2) : -1;
+      for (let k = 0; k < n; k++) {
+        const cx = cellW * ((k%cols) + 0.5), cy = cellH * (Math.floor(k/cols) + 0.5);
+        if (k === curInd) {
+          ctx.beginPath(); ctx.arc(cx, cy, r*1.25, 0, Math.PI*2);
+          ctx.fillStyle = COLORS.paperDim; ctx.fill();
+          ctx.strokeStyle = COLORS.ink; ctx.lineWidth = 2; ctx.stroke();
+        }
+        const a0 = 2*k < drawnGenes.length ? drawnGenes[2*k] : null;
+        const a1 = 2*k+1 < drawnGenes.length ? drawnGenes[2*k+1] : null;
+        if (a0 || a1) drawIndividual(ctx, cx, cy, r, a0, a1);
+      }
+      return;
+    }
     const total = geneCount();
-    const { W, cols, cellW, cellH, r } = popGeom(total);
-    scaleCanvas(DOM.popCvs, CTX.p, W, 200);
+    const { W, H, cols, cellW, cellH, r } = popGeom(total);
+    scaleCanvas(DOM.popCvs, CTX.p, W, H);
     const ctx = CTX.p;
-    ctx.clearRect(0,0,W,200);
+    ctx.clearRect(0,0,W,H);
     for (let i = 0; i < total; i++) {
       const cx = cellW * ((i%cols) + 0.5), cy = cellH * (Math.floor(i/cols) + 0.5);
-      if (i === highlightIdx) {
+      if (i === highlightGene) {
         ctx.beginPath(); ctx.arc(cx, cy, r*1.2, 0, Math.PI*2);
         ctx.fillStyle = COLORS.paperDim; ctx.fill();
         ctx.strokeStyle = COLORS.ink; ctx.lineWidth = 2; ctx.stroke();
-      } else if (i < newPop.length) {
-        const type = newPop[i];
+      } else if (i < drawnGenes.length) {
         drawAlleleMarker(ctx, cx, cy, r);
-        ctx.fillStyle = type === 'A' ? COLORS.alleleA : COLORS.alleleB;
+        ctx.fillStyle = alleleColor(drawnGenes[i]);
         ctx.fill();
       }
     }
@@ -551,7 +784,7 @@ function createWrightFisherRoom(cfg) {
     }
 
     ctx.font = '10px ui-monospace, monospace';
-    ctx.fillText('Generation', padL + graphW / 2, axisY + 30);
+    ctx.fillText(T('wf.axisGen', 'Generation'), padL + graphW / 2, axisY + 30);
     ctx.textAlign = 'left';
   }
 
@@ -562,11 +795,27 @@ function createWrightFisherRoom(cfg) {
     ctx.textAlign = 'center';
     ctx.fillStyle = COLORS.inkSoft;
     ctx.font = '10px ui-monospace, monospace';
-    ctx.fillText(text, 0, 0);
+    fillSci(ctx, text, 0, 0);
     ctx.restore();
   }
 
+  // A canvas is pixels, so its aria-label is the only account of it a screen
+  // reader gets. Rewritten as the picture is redrawn, which is read when the
+  // reader arrives at the chart rather than announced over them: these redraw
+  // every generation, and a live region here would talk through the whole run.
+  function describeChart(freqHistory, currentG) {
+    const f = freqHistory[Math.min(currentG, freqHistory.length - 1)];
+    if (f === undefined) return T('wf.aria.chartEmpty', 'Allele frequency against generation — no run yet');
+    const at = f <= 0 ? T('wf.aria.lost', 'lost')
+             : f >= 1 ? T('wf.aria.fixed', 'fixed')
+             : f.toFixed(3);
+    return T('wf.aria.chart',
+      'Frequency of allele A1 against generation. At generation {g} it is {f}.',
+      { g: currentG, f: at });
+  }
+
   function drawChart(freqHistory, maxG, currentG = freqHistory.length - 1) {
+    DOM.chartCvs.setAttribute('aria-label', describeChart(freqHistory, currentG));
     const W = DOM.chartCvs.parentElement.offsetWidth || 700;
     const H = 180;
     scaleCanvas(DOM.chartCvs, CTX.c, W, H);
@@ -580,7 +829,7 @@ function createWrightFisherRoom(cfg) {
     const visibleLen = Math.min(currentG + 1, freqHistory.length);
 
     // Stacked bars: for each generation, the fraction of the population carrying
-    // allele A (teal, bottom) vs allele B (red, top), split at that generation's f.
+    // allele A (blue, bottom) vs allele a (red, top), split at that generation's f.
     // Drawn first so gridlines, axes, and the frequency line stay crisp on top.
     if (visibleLen > 0) {
       const barW = Math.max(1, graphW / maxG);
@@ -612,7 +861,7 @@ function createWrightFisherRoom(cfg) {
     ctx.textAlign = 'left';
 
     drawGenXAxis(ctx, W, H, padL, padR, padB, maxG);
-    drawYAxisTitle(ctx, 'Frequency f(A)', 12, padT, graphH);
+    drawYAxisTitle(ctx, T('wf.axisFreq', 'Frequency <var>p</var>'), 12, padT, graphH);
 
     // Deterministic (noise-free) reference trajectory — shows what selection
     // alone would do with no sampling drift, so the gap between this line and
@@ -691,7 +940,7 @@ function createWrightFisherRoom(cfg) {
     ctx.textAlign = 'left';
 
     drawGenXAxis(ctx, W, H, padL, padR, padB, maxG);
-    drawYAxisTitle(ctx, 'Frequency f(A)', 12, padT, graphH);
+    drawYAxisTitle(ctx, T('wf.axisFreq', 'Frequency <var>p</var>'), 12, padT, graphH);
 
     if (cfg.selection && state.detHistory.length > 1) {
       ctx.beginPath();
@@ -724,6 +973,104 @@ function createWrightFisherRoom(cfg) {
     });
   }
 
+  /* Overall genetic diversity, under the ten trajectories.
+
+     The ten runs are read here as ten unlinked neutral LOCI in one population
+     rather than as ten separate populations. Both readings are of the same
+     numbers and both are legitimate — unlinked loci in a Wright-Fisher
+     population drift independently of each other, which is exactly what ten
+     independent runs are — but they answer different questions, and the two
+     charts are the two questions. The trajectories above ask what happens to
+     one locus, and their answer is that it is unpredictable. This one asks what
+     happens to the population's variation as a whole, and its answer is that it
+     is not.
+
+     So ONE line, not ten: H averaged across the loci, which is what a
+     population's genetic diversity actually means and what anyone measuring it
+     in the field would compute. A locus that has fixed contributes 0 to that
+     average, which is why a run that ended early still counts for every
+     generation after it ended rather than dropping out of the mean.
+
+     H = 2p(1−p) per locus, the chance that two gene copies drawn at random
+     differ. It tops out at 0.5, so the axis does too rather than running to 1
+     and leaving the top half of the panel permanently empty. */
+  function drawMultiHet(runs, maxG) {
+    if (!DOM.hetCvs || !CTX.h) return;
+    const W = DOM.hetCvs.parentElement.offsetWidth || 700;
+    const H = 220;
+    scaleCanvas(DOM.hetCvs, CTX.h, W, H);
+    const ctx = CTX.h;
+    ctx.clearRect(0, 0, W, H);
+
+    const padL = 46, padR = 20, padT = 15, padB = 40;
+    const graphW = W - padL - padR;
+    const graphH = H - padT - padB;
+    const HMAX = 0.5;
+    const Y = (h) => padT + graphH * (1 - h / HMAX);
+
+    ctx.strokeStyle = COLORS.rule;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    // Tenths rather than quarters of the 0.5 maximum: quarters need three
+    // decimals to be written exactly, and a five-character label reaches far
+    // enough left to sit on top of the rotated axis title.
+    [0, 0.1, 0.2, 0.3, 0.4, 0.5].forEach(v => {
+      ctx.beginPath(); ctx.moveTo(padL, Y(v)); ctx.lineTo(W - padR, Y(v)); ctx.stroke();
+      ctx.fillStyle = COLORS.inkSoft;
+      ctx.font = '10px ui-monospace, monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText(v.toFixed(1), padL - 6, Y(v) + 4);
+    });
+    ctx.setLineDash([]);
+    ctx.textAlign = 'left';
+
+    drawGenXAxis(ctx, W, H, padL, padR, padB, maxG);
+    drawYAxisTitle(ctx, T('wf.axisHet', 'Mean <var>H</var> across loci'), 12, padT, graphH);
+
+    // A locus that fixed stopped being extended, and its diversity from that
+    // generation on is 0 — so it is counted as 0 rather than left out, which
+    // would quietly turn the average into "diversity among the loci that still
+    // have some" and make it level off at a value nothing has.
+    const drawn = runs.reduce((m, r) => Math.max(m, r.length), 0);
+    const meanAt = (g) => {
+      let sum = 0;
+      for (const r of runs) {
+        if (g < r.length) sum += 2 * r[g] * (1 - r[g]);
+      }
+      return runs.length ? sum / runs.length : 0;
+    };
+
+    // The expectation, from the exact recursion in nextExpectedH — the decay
+    // with mutation off, the approach to mutation-drift balance with it on.
+    const expected = expectedHSeries(state.f, maxG);
+    ctx.beginPath();
+    for (let g = 0; g <= maxG; g++) {
+      const x = padL + (g / maxG) * graphW;
+      if (g === 0) ctx.moveTo(x, Y(expected[g])); else ctx.lineTo(x, Y(expected[g]));
+    }
+    ctx.save();
+    ctx.strokeStyle = COLORS.deterministic;
+    ctx.lineWidth = 1.75;
+    ctx.setLineDash([5, 4]);
+    ctx.stroke();
+    ctx.restore();
+
+    if (drawn > 0) {
+      ctx.beginPath();
+      for (let g = 0; g < drawn; g++) {
+        const x = padL + (g / maxG) * graphW;
+        if (g === 0) ctx.moveTo(x, Y(meanAt(g))); else ctx.lineTo(x, Y(meanAt(g)));
+      }
+      ctx.strokeStyle = COLORS.diversity;
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+
+    DOM.hetCvs.setAttribute('aria-label', T('wf.aria.het',
+      'Genetic diversity — heterozygosity averaged across the ten loci — against generation, with the expected curve. At generation {g} it is {h}.',
+      { g: Math.max(0, drawn - 1), h: meanAt(Math.max(0, drawn - 1)).toFixed(3) }));
+  }
+
   // Shows/hides the panels that only make sense for a single, generation-by-
   // generation run (wheel, population grid, binomial panels, scrubber),
   // leaving just the frequency chart when comparing 10 runs at once.
@@ -736,6 +1083,9 @@ function createWrightFisherRoom(cfg) {
     DOM.readingRow.style.display = display;
     DOM.scrubberRow.style.display = display;
     DOM.chartWrap.classList.toggle('multi-run', active);
+    // The heterozygosity panel is the mirror image: it exists only in the
+    // ten-run view, where a shared curve can be seen through ten runs at once.
+    if (DOM.hetCard) DOM.hetCard.style.display = active ? '' : 'none';
     DOM.btnRun10.classList.toggle('secondary', !active);
     DOM.btnRun.classList.toggle('secondary', active);
     if (!active) DOM.multiRunSummary.textContent = '';
@@ -777,7 +1127,7 @@ function createWrightFisherRoom(cfg) {
     });
     ctx.setLineDash([]);
     ctx.textAlign = 'left';
-    drawYAxisTitle(ctx, 'Probability', 12, padT, graphH);
+    drawYAxisTitle(ctx, T('wf.axisProb', 'Probability'), 12, padT, graphH);
 
     // x-axis: solid baseline + tick marks + k labels + title
     ctx.strokeStyle = COLORS.ink;
@@ -799,7 +1149,7 @@ function createWrightFisherRoom(cfg) {
       ctx.fillText(String(n), x, axisY + 16);
     }
     ctx.font = '10px ui-monospace, monospace';
-    ctx.fillText('k (count of allele A next gen)', padL + graphW / 2, H - 2);
+    fillSci(ctx, T('wf.axisK', '<var>k</var> (count of allele A₁ next gen)'), padL + graphW / 2, H - 2);
     ctx.textAlign = 'left';
 
     // bars
@@ -846,7 +1196,7 @@ function createWrightFisherRoom(cfg) {
     ctx.textAlign = 'left';
 
     drawGenXAxis(ctx, W, H, padL, padR, padB, maxG);
-    drawYAxisTitle(ctx, 'Variance', 12, padT, graphH);
+    drawYAxisTitle(ctx, T('wf.axisVar', 'Variance'), 12, padT, graphH);
 
     const visibleLen = Math.min(currentG + 1, freqHistory.length);
     if (visibleLen > 0) {
@@ -886,7 +1236,7 @@ function createWrightFisherRoom(cfg) {
     const pFreq = genIndex === 0 ? state.f : state.historyCache[genIndex - 1].freq;
     const pDraw = samplingFreq(pFreq);
     state.wheelAngle = 0;
-    drawWheel(pDraw, 0, cfg.selection ? pFreq : null);
+    drawWheel(pDraw, 0, wheelMarker(pFreq));
     drawPopSettled(cache.population);
     drawChart(state.freqHistory, state.G, genIndex);
     drawVariance(state.freqHistory, state.G, genIndex);
@@ -919,22 +1269,25 @@ function createWrightFisherRoom(cfg) {
     DOM.sliderN.disabled = true; DOM.sliderF.disabled = true; DOM.sliderG.disabled = true;
     if (DOM.sliderS) DOM.sliderS.disabled = true;
     if (DOM.sliderH) DOM.sliderH.disabled = true;
+    if (DOM.sliderMu) DOM.sliderMu.disabled = true;
     if (DOM.ploidySeg) DOM.ploidySeg.querySelectorAll('button').forEach(b => b.disabled = true);
     DOM.timeScrubber.disabled = true;
 
-    DOM.btnPause.style.display = 'inline-block';
-    DOM.btnPause.textContent = '⏸ Pause after gen';
-
     let gStart = state.freqHistory.length - 1;
+    state.endedByFixation = false;
     if (gStart >= state.G) { init(); gStart = 0; }
+
+    // After the init() above, which resets the slot to Reset for the idle state.
+    showPauseControl(true);
+    DOM.btnPause.textContent = T('wf.pauseAfter', '⏸ Pause after gen');
 
     for (let gen = gStart + 1; gen <= state.G; gen++) {
       if (state.stopFlag) break;
       if (state.pauseRequested) {
         state.paused = true;
         state.pauseRequested = false;
-        DOM.btnPause.textContent = '▶ Resume simulation';
-        DOM.statusBar.textContent = `Simulation paused at generation ${gen - 1}. Scrub history or resume.`;
+        DOM.btnPause.textContent = T('wf.resume', '▶ Resume simulation');
+        DOM.statusBar.textContent = T('wf.paused', 'Simulation paused at generation {g}. Scrub history or resume.', { g: gen - 1 });
         if (state.historyCache.length > 1) DOM.timeScrubber.disabled = false;
         await waitForResume();
         const liveMax = state.historyCache.length - 1;
@@ -943,7 +1296,7 @@ function createWrightFisherRoom(cfg) {
           DOM.timeScrubber.value = liveMax;
         }
         state.paused = false;
-        DOM.btnPause.textContent = '⏸ Pause after gen';
+        DOM.btnPause.textContent = T('wf.pauseAfter', '⏸ Pause after gen');
         DOM.timeScrubber.disabled = true;
       }
 
@@ -953,21 +1306,21 @@ function createWrightFisherRoom(cfg) {
       const genes = geneCount();
       let drawnGenes = []; // raw allele draws for this generation, length genes
 
-      if (gen <= 3) {
-        DOM.statusBar.textContent = `Generation ${gen}: sampling individuals one-by-one…`;
-        if (state.ploidy === 2 && DOM.popTitle) DOM.popTitle.textContent = 'Current Population — sampled alleles';
+      if (gen <= 2) {
+        DOM.statusBar.textContent = T('wf.sampling', 'Generation {g}: sampling individuals one-by-one…', { g: gen });
+        if (state.ploidy === 2) setPopTitle(() => T('wf.popSampling', 'Current Population<br>— sampling gametes into individuals'));
         for (let i = 0; i < genes; i++) {
           if (state.stopFlag) break;
           DOM.spinDisp.textContent = `${i + 1} / ${genes}`;
-          const outcome = await spinWheel(pDraw, getSpinTiming(i, gen).dur, cfg.selection ? currentF : null);
+          const outcome = await spinWheel(pDraw, getSpinTiming(i, genes).dur, wheelMarker(currentF));
           drawnGenes.push(outcome);
           drawPopInProgress(drawnGenes, i + 1 < genes ? i + 1 : -1);
-          await delay(getSpinTiming(i, gen).gap);
+          await delay(getSpinTiming(i, genes).gap);
         }
       } else {
-        DOM.statusBar.textContent = `Simulating generation ${gen}…`;
-        DOM.spinDisp.textContent = 'instant';
-        drawWheel(pDraw, state.wheelAngle, cfg.selection ? currentF : null);
+        DOM.statusBar.textContent = T('wf.simulating', 'Simulating generation {g}…', { g: gen });
+        DOM.spinDisp.textContent = T('wf.instant', 'instant');
+        drawWheel(pDraw, state.wheelAngle, wheelMarker(currentF));
         const rands = cryptoRandBatch(genes);
         for (let i = 0; i < genes; i++) drawnGenes.push(rands[i] < pDraw ? 'A' : 'B');
       }
@@ -990,19 +1343,35 @@ function createWrightFisherRoom(cfg) {
       DOM.scrubVal.textContent = gen;
 
       DOM.freqDisp.textContent = nextFreq.toFixed(3);
-      if (state.ploidy === 2 && DOM.popTitle) DOM.popTitle.textContent = 'Current Population — individuals in HW equilibrium';
+      if (state.ploidy === 2) setPopTitle(() => T('wf.popHW', 'Current Population<br>— individuals in HW equilibrium'));
       drawPopSettled(nextPop);
       drawChart(state.freqHistory, state.G);
       drawVariance(state.freqHistory, state.G);
       drawBinom(pDraw, genes, counted.a);
 
-      if (gen > 3) await delay(200); // ~5 generations/sec once past the animated intro
+      if (gen > 2) await delay(200); // ~5 generations/sec once past the animated intro
       else if (state.ploidy === 2) await delay(1000); // pause on the paired genotypes so the HW pairing is visible
 
       if (nextFreq === 0 || nextFreq === 1) {
-        DOM.fixBanner.textContent = `Allele ${nextFreq === 1 ? 'A' : 'B'} reached FIXATION at generation ${gen}!`;
-        DOM.statusBar.textContent = `Simulation complete. Fixation reached at generation ${gen}.`;
-        break;
+        // With mutation on, 0 and 1 are ordinary values the frequency passes
+        // through: the allele that is gone keeps being remade, so the run goes
+        // on. The banner is written once, the first time an edge is touched,
+        // to make exactly that point — otherwise a reader who saw the word
+        // FIXATION would be waiting for a run that has already ended.
+        if (mutationOn()) {
+          if (!state.touchedEdge) {
+            state.touchedEdge = true;
+            DOM.fixBanner.innerHTML = T('wf.edgeWithMu',
+              'Only allele {a} left at generation {g} — but with <var>μ</var> above 0 that is not the end: mutation remakes the other one.',
+              { a: nextFreq === 1 ? 'A₁' : 'A₂', g: gen });
+          }
+        } else {
+          DOM.fixBanner.textContent = T('wf.fixBanner', 'Allele {a} reached FIXATION at generation {g}!',
+            { a: nextFreq === 1 ? 'A₁' : 'A₂', g: gen });
+          DOM.statusBar.textContent = T('wf.fixStatus', 'Simulation complete. Fixation reached at generation {g}.', { g: gen });
+          state.endedByFixation = true;
+          break;
+        }
       }
     }
 
@@ -1011,11 +1380,13 @@ function createWrightFisherRoom(cfg) {
     DOM.sliderN.disabled = false; DOM.sliderF.disabled = false; DOM.sliderG.disabled = false;
     if (DOM.sliderS) DOM.sliderS.disabled = false;
     if (DOM.sliderH) DOM.sliderH.disabled = false;
+    if (DOM.sliderMu) DOM.sliderMu.disabled = false;
     if (DOM.ploidySeg) DOM.ploidySeg.querySelectorAll('button').forEach(b => b.disabled = false);
     if (state.historyCache.length > 1) DOM.timeScrubber.disabled = false;
-    DOM.btnPause.style.display = 'none';
-    if (!DOM.statusBar.textContent.includes('complete') && !DOM.statusBar.textContent.includes('paused')) {
-      DOM.statusBar.textContent = 'Simulation finished.';
+    showPauseControl(false);
+    // An explicit flag, rather than matching a substring of the status-bar text.
+    if (!state.endedByFixation && !state.paused) {
+      DOM.statusBar.textContent = T('wf.finished', 'Simulation finished.');
     }
   });
 
@@ -1032,6 +1403,7 @@ function createWrightFisherRoom(cfg) {
     DOM.sliderN.disabled = true; DOM.sliderF.disabled = true; DOM.sliderG.disabled = true;
     if (DOM.sliderS) DOM.sliderS.disabled = true;
     if (DOM.sliderH) DOM.sliderH.disabled = true;
+    if (DOM.sliderMu) DOM.sliderMu.disabled = true;
     if (DOM.ploidySeg) DOM.ploidySeg.querySelectorAll('button').forEach(b => b.disabled = true);
 
     const N = state.N, f0 = state.f, G = state.G, genes = geneCount();
@@ -1054,14 +1426,15 @@ function createWrightFisherRoom(cfg) {
         for (let k = 0; k < genes; k++) if (rands[k] < pDraw) countA++;
         const nextFreq = countA / genes;
         runs[i].push(nextFreq);
-        if (nextFreq === 0 || nextFreq === 1) {
+        if ((nextFreq === 0 || nextFreq === 1) && !mutationOn()) {
           isActive[i] = false;
           fixation[i] = { gen: g, allele: nextFreq === 1 ? 'A' : 'B' };
         }
       }
 
-      DOM.statusBar.textContent = `Running 10 simulations… generation ${g} / ${G}`;
+      DOM.statusBar.textContent = T('wf.running10', 'Running 10 simulations… generation {g} / {max}', { g, max: G });
       drawMultiChart(runs, G);
+      drawMultiHet(runs, G);
 
       if (isActive.every(a => !a)) break;
       if (delayPerGen > 0) await delay(delayPerGen);
@@ -1074,18 +1447,55 @@ function createWrightFisherRoom(cfg) {
     const polymorphic = 10 - fixedARuns.length - fixedBRuns.length;
     const avg = (arr) => arr.length ? (arr.reduce((s, f) => s + f.gen, 0) / arr.length).toFixed(1) : '—';
 
-    DOM.multiRunSummary.textContent =
-      `Fixed A: ${fixedARuns.length} (avg gen ${avg(fixedARuns)}) · ` +
-      `Fixed B: ${fixedBRuns.length} (avg gen ${avg(fixedBRuns)}) · ` +
-      `Polymorphic: ${polymorphic}`;
-    DOM.statusBar.textContent = `Ran 10 independent simulations (N=${N}, f=${f0}, G=${G}).`;
+    if (mutationOn()) {
+      /* Nothing fixes when mutation keeps remaking the missing allele, so the
+         summary reports what there IS to report: how much variation the ten
+         runs still carry, against what the balance predicts they should.
+
+         Averaged over the last quarter of each run rather than read off the
+         final generation. At the balance an individual population's frequency
+         is not sitting near 0.5, it is wandering over the whole range, so H at
+         any ONE generation across ten runs is noisy enough to land half as far
+         again from the prediction as it should — which reads as the room
+         getting the answer wrong rather than as ten being a small number. */
+      const tail = Math.max(1, Math.round(G / 4));
+      let sum = 0, n = 0;
+      runs.forEach(r => {
+        for (let g = Math.max(0, r.length - tail); g < r.length; g++) {
+          sum += 2 * r[g] * (1 - r[g]); n++;
+        }
+      });
+      const expected = expectedHSeries(f0, G);
+      DOM.multiRunSummary.innerHTML = T('wf.multiSummaryMu',
+        'Diversity over the last {t} generations: mean <var>H</var> = {h} across the ten loci · expected at mutation–drift balance: {e}',
+        { t: tail, h: (n ? sum / n : 0).toFixed(3), e: expected[expected.length - 1].toFixed(3) });
+    } else {
+      DOM.multiRunSummary.textContent = T('wf.multiSummary',
+        'Fixed A₁: {a} (avg gen {ag}) · Fixed A₂: {b} (avg gen {bg}) · Polymorphic: {poly}',
+        { a: fixedARuns.length, ag: avg(fixedARuns), b: fixedBRuns.length, bg: avg(fixedBRuns), poly: polymorphic });
+    }
+    DOM.statusBar.innerHTML = T('wf.ran10', 'Ran 10 independent simulations (<var>N</var>={n}, <var>p</var>={f}, <var>G</var>={g}).',
+      { n: N, f: f0, g: G });
 
     state.multiRunning = false;
     DOM.btnRun.disabled = false; DOM.btnRun10.disabled = false; DOM.btnReset.disabled = false;
     DOM.sliderN.disabled = false; DOM.sliderF.disabled = false; DOM.sliderG.disabled = false;
     if (DOM.sliderS) DOM.sliderS.disabled = false;
     if (DOM.sliderH) DOM.sliderH.disabled = false;
+    if (DOM.sliderMu) DOM.sliderMu.disabled = false;
     if (DOM.ploidySeg) DOM.ploidySeg.querySelectorAll('button').forEach(b => b.disabled = false);
+  });
+
+  // Leaving the room pauses a single run at the next generation instead of
+  // letting it sample on in a hidden tab. It pauses rather than stops so the
+  // reader can come back and press Resume where they left off; Run 10 has no
+  // pause of its own, but it is bounded at a few seconds, so it is left alone.
+  document.addEventListener('lab:tabchange', (e) => {
+    if (e.detail.tabId === cfg.tabId) return;
+    if (state.running && !state.paused && !state.pauseRequested) {
+      state.pauseRequested = true;
+      DOM.btnPause.textContent = T('wf.pauseReq', '⏸ Pause requested…');
+    }
   });
 
   DOM.btnReset.addEventListener('click', () => {
@@ -1097,6 +1507,7 @@ function createWrightFisherRoom(cfg) {
   window.addEventListener('resize', () => {
     if (state.multiRunMode) {
       drawMultiChart(state.multiRuns, state.G);
+      drawMultiHet(state.multiRuns, state.G);
     } else if (!state.running || state.paused) {
       const curGen = parseInt(DOM.timeScrubber.value) || 0;
       if (state.historyCache && state.historyCache[curGen]) scrubToRoom(curGen);

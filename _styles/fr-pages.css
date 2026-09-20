@@ -93,6 +93,26 @@
   text-align: left;
 }
 
+/* the teaching rail: the two laboratory apps, one panel each. equal rows rather
+   than auto, so the shorter blurb does not give its panel a shorter box — with
+   the buttons already pushed down by margin-top: auto, matching rows put both
+   on the same line and the pair reads as one offer. no height here: the rail is
+   a grid item of .fr-cols and stretches to the courses column on its own. */
+.fr-labs {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  /* .fr-btn is nowrap, which is right for an inline button but not for a
+     full-width one carrying a label this long: below about 370px the two
+     labels here become the widest thing on the page and push the whole
+     teaching page into a horizontal scroll. Letting them wrap hands the floor
+     back to the course rows, which ask for ~354px and set it anyway. Nothing
+     changes above that — there is room for one line. */
+}
+.fr-labs .fr-btn-block {
+  white-space: normal;
+}
+
 /* — research project rows — */
 .fr-proj {
   display: grid;

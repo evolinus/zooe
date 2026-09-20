@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The shape the whole lab is about: growth that runs into a ceiling. The
+       curve leaves the floor, steepens, and flattens below the purple line —
+       the logistic S and its carrying capacity, in the page's own colours, with
+       the gold mark at the inflection where growth is fastest. Kept to four
+       shapes and no text, because the tab strip renders this at 16 px and
+       anything finer is mud at that size. -->
+  <rect width="32" height="32" rx="6" fill="#EDE6D6"/>
+  <path d="M4 8h24" stroke="#7A5C99" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 3.5"/>
+  <path d="M5 26C15 26 17 12 27 12" stroke="#3D6E6E" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <circle cx="16" cy="19" r="2.6" fill="#C08A2E"/>
+</svg>

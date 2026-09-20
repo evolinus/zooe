@@ -275,7 +275,7 @@
   function showVerdict(t, ran, kind) {
     const V = VERDICTS[kind || t.kind];
     ui.verdict.className = 'verdict ' + V.cls;
-    let html = `<h4>${V.title}</h4><p>${V.text}</p>`;
+    let html = `<h3>${V.title}</h3><p>${V.text}</p>`;
     if (t.viable) {
       html += `<p class="mono" style="font-size:12px;">Equilibrium: N* = ${LAB.fmt(t.Nstar, 1)} prey, `
             + `P* = ${LAB.fmt(t.Pstar, 1)} predators.</p>`;
@@ -294,9 +294,9 @@
     const cell = v => (isFinite(v) && !isNaN(v) ? LAB.fmt(v, 1) : '—');
 
     let html = '<table class="datatable"><thead><tr><th>Quantity</th><th>predicted</th><th>measured</th></tr></thead><tbody>';
-    html += `<tr><td style="color:var(--sp-a)">Prey N*</td><td>${cell(t.Nstar)}</td>`
+    html += `<tr><td style="color:var(--sp-a-deep)">Prey N*</td><td>${cell(t.Nstar)}</td>`
           + `<td>${meas && meas.meanN != null ? LAB.fmt(meas.meanN, 1) : '—'}</td></tr>`;
-    html += `<tr><td style="color:var(--sp-b)">Predator P*</td><td>${cell(t.Pstar)}</td>`
+    html += `<tr><td style="color:var(--sp-b-deep)">Predator P*</td><td>${cell(t.Pstar)}</td>`
           + `<td>${meas && meas.meanP != null ? LAB.fmt(meas.meanP, 1) : '—'}</td></tr>`;
     html += `<tr><td>Cycle period</td><td>${isFinite(t.period) ? LAB.fmt(t.period, 1) : '—'}</td>`
           + `<td>${meas && meas.period ? LAB.fmt(meas.period, 1) : '—'}</td></tr>`;
@@ -535,11 +535,32 @@
     return { xMax: Math.max(xMax, 1), yMax: Math.max(yMax, 1) };
   }
 
+  const PHASE_OUTCOME = {
+    noPredator: 'there is no interior equilibrium — the predator cannot persist here',
+    neutral:    'the nullclines cross at a neutrally stable centre, so the orbit is closed',
+    damped:     'the equilibrium is a stable spiral, so the orbit winds inwards',
+    settle:     'the equilibrium is stable, and the pair approaches it without circling',
+    limitCycle: 'the equilibrium is unstable and the orbit is drawn onto a limit cycle',
+    marginal:   'the equilibrium sits exactly on the boundary between winding in and out'
+  };
+
   function drawPhase(frame) {
     const p = plots.phase;
     const P = current(), t = currentTheory();
     const f = response(P), g = growth(P);
     const { xMax, yMax } = phaseBounds();
+
+    // Where the orbit is, and which way it is going. The chart beside it plots
+    // the same run against time and says the numbers; the shape of the orbit is
+    // the thing only this panel carries.
+    p.describe('Prey against predators, with their nullclines and a field of '
+      + 'arrows showing which way the pair is pushed. On these parameters, '
+      + (PHASE_OUTCOME[t.kind] || 'the outcome is not classified') + '. '
+      + (t.viable ? `That crossing sits at N* = ${LAB.fmt(t.Nstar, 1)} prey and `
+                    + `P* = ${LAB.fmt(t.Pstar, 1)} predators. ` : '')
+      + (sim ? `The orbit has reached N = ${LAB.fmt(sim.Ns[frame], 1)}, `
+               + `P = ${LAB.fmt(sim.Ps[frame], 1)}.`
+             : 'Nothing run yet.'));
 
     p.begin({ height: 400, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Prey N', yLabel: 'Predators P' });
