@@ -26,38 +26,42 @@
     </div>
 
     {% comment %}
-      two apps in the rail, equal rows so the panels match height and both
-      buttons land on the same line. the link is the bare folder rather than the
-      file inside it, which is what gets pasted into an email or read out in a
-      classroom.
+      two apps in the rail, one colour block each — red for the evolution rooms,
+      the homepage hero's teal for the populations, so the pair reads as two
+      siblings rather than one offer printed twice. the link is the bare folder
+      rather than the file inside it, which is what gets pasted into an email or
+      read out in a classroom.
     {% endcomment %}
     <div class="fr-labs">
-      <div class="fr-ink">
-        <h3 style="margin: 8px 0 10px">Evolutionary Laboratories</h3>
-        <p class="fr-ink-text">
-          Interactive simulations for teaching mutation, genetic drift, selection,
-          migration, adaptation and speciation. Built for classroom and outreach
-          use — no install needed.
+      <div>
+        <h2 class="fr-h6">Interactive laboratories</h2>
+        <p class="fr-labs-note">
+          Built for classroom and outreach use &mdash; no install needed.
         </p>
-        <a
-          class="fr-btn fr-btn-primary fr-btn-block"
-          style="margin-top: auto"
-          href="{{ "teaching/evolutionary-laboratories/" | relative_url }}"
-        >Launch the evolution rooms</a>
       </div>
 
-      <div class="fr-ink">
-        <h3 style="margin: 8px 0 10px">Population Laboratories</h3>
-        <p class="fr-ink-text">
-          The same idea applied to whole populations: growth and crowding, limited
-          resources and overshoot, competition, predation and the species that
-          hold a community together.
+      <div class="fr-lab fr-lab-evolution">
+        <h3 class="fr-lab-name">Evolutionary Laboratories</h3>
+        <p class="fr-lab-text">
+          Mutation, genetic drift, selection, migration, adaptation and
+          speciation &mdash; one room each.
         </p>
         <a
-          class="fr-btn fr-btn-primary fr-btn-block"
-          style="margin-top: auto"
+          class="fr-lab-link"
+          href="{{ "teaching/evolutionary-laboratories/" | relative_url }}"
+        >Launch the evolution rooms &rarr;</a>
+      </div>
+
+      <div class="fr-lab fr-lab-population">
+        <h3 class="fr-lab-name">Population Laboratories</h3>
+        <p class="fr-lab-text">
+          The same idea at the scale of whole populations: growth and crowding,
+          competition, and predation.
+        </p>
+        <a
+          class="fr-lab-link"
           href="{{ "teaching/population-laboratories/" | relative_url }}"
-        >Launch the population rooms</a>
+        >Launch the population rooms &rarr;</a>
       </div>
     </div>
   </div>

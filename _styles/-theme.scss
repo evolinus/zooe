@@ -11,6 +11,7 @@
   --primary-hover: #B32E21;
   --secondary: #97BABC;    // selection / highlight
   --highlight: #{rgba(#97BABC, 0.55)};
+  --teal: #126066;         // the deep teal block: homepage hero, and anything quoting it
   --panel: #E9A431;        // the block colour: header, rail, ink panels
   --panel-ink: #2A1B06;    // text on the panel colour
   --text: #201e1d;         // ink
@@ -27,6 +28,7 @@
   --primary-hover: #FF8B7C;
   --secondary: #3E5654;
   --highlight: #{rgba(#B3CFCD, 0.22)};
+  --teal: #126066;         // a block colour too, so it holds like --panel
   --panel: #E9A431;        // the block colour holds in both themes
   --panel-ink: #2A1B06;
   --text: #FFFAF0;         // matches the ground the site actually uses
