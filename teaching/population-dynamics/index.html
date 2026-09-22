@@ -16,11 +16,32 @@ layout: none
 <meta charset="UTF-8">
 <meta name="robots" content="noindex">
 <link rel="canonical" href="{{ "teaching/population-laboratories/" | absolute_url }}">
-<meta http-equiv="refresh" content="0; url={{ "teaching/population-laboratories/" | relative_url }}">
+{% comment %}
+  ?from= is how arrivals at this old address are counted, and the reason there
+  is no analytics tag on this page. A tag here would have to load gtag.js from
+  Google and get a hit away before the refresh fires, which is a race it would
+  usually lose — the page is built to leave immediately, so whatever it reported
+  would be an undercount of unknowable size. The app next door already reports,
+  so the cheaper trick is to hand it the one fact this page knows: the reader
+  came through the emailed repo-named address. It rides along as a query
+  parameter, which GA4 keeps in page_location, so the arrival shows up under
+  "page path and query string" while "page path" still totals the app as one
+  page.
+
+  It also means this page sends nothing anywhere itself — no script, no cookie,
+  nothing to consent to. The hit is the app's, made under the app's own consent
+  gate, so a reader who never accepted the banner is still not counted.
+
+  The parameter survives being bookmarked or forwarded from the app's address
+  bar, so a re-share of that URL counts as another arrival through the old
+  address. Stripping it after the fact would race the tag the same way, and
+  over-counting a handful of re-shares is the cheaper error.
+{% endcomment %}
+<meta http-equiv="refresh" content="0; url={{ "teaching/population-laboratories/?from=population-dynamics" | relative_url }}">
 <title>Population Laboratories has moved</title>
 </head>
 <body>
 <p>The Population Laboratories are now at
-<a href="{{ "teaching/population-laboratories/" | relative_url }}">{{ "teaching/population-laboratories/" | absolute_url }}</a>.</p>
+<a href="{{ "teaching/population-laboratories/?from=population-dynamics" | relative_url }}">{{ "teaching/population-laboratories/" | absolute_url }}</a>.</p>
 </body>
 </html>
