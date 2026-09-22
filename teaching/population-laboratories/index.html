@@ -38,6 +38,51 @@
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 
+<!-- Google Analytics (GA4), property G-3HJ9BYVMN3 — the same property the rest
+     of the site reports to. This app is a standalone document with its own
+     <head>: it never reaches _includes/analytics.html, so without these lines a
+     visit here is invisible and the trail stops at the teaching page that links
+     it. The id is duplicated from that include rather than shared, because
+     nothing Jekyll writes reaches this file — change one, change both.
+
+     Two gates, and both stay silent when they fail. The first is consent: the
+     site's cookie banner writes fr-consent into localStorage, which is scoped
+     to the origin the whole site shares, so an accept given on any page is
+     readable from here. A reader who arrived straight from an emailed link has
+     never seen that banner and so goes uncounted — the alternative was a second
+     banner over a room that is already short of space, and an undercount is the
+     cheaper mistake. The second gate is the protocol: the folder is meant to
+     keep working copied onto a VLE or a stick, where there is nobody to report
+     to and often no network at all, so anything not served over https says
+     nothing. A browser set to block site data throws on the read, and that is
+     taken as no answer. -->
+<script>
+  (function () {
+    if (location.protocol !== "https:") return;
+
+    var consent = null;
+    try {
+      consent = window.localStorage.getItem("fr-consent");
+    } catch (error) {
+      return;
+    }
+    if (consent !== "granted") return;
+
+    // Google tag (gtag.js)
+    var id = "G-3HJ9BYVMN3";
+    var script = document.createElement("script");
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag("js", new Date());
+    gtag("config", id);
+  })();
+</script>
+
 <style>
   :root{
     --paper: #F0EED3;
