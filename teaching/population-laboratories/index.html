@@ -57,30 +57,42 @@
      nothing. A browser set to block site data throws on the read, and that is
      taken as no answer. -->
 <script>
-  (function () {
-    if (location.protocol !== "https:") return;
+  window.labAnalytics = {
+    id: "G-3HJ9BYVMN3",
+    loaded: false,
+    /* the folder is meant to keep working copied onto a VLE or a stick, where
+       there is nobody to report to and often no network at all. anything not
+       served over https stays quiet, and js/consent.js does not even ask. */
+    reportable: function () { return location.protocol === "https:"; },
+    load: function () {
+      if (this.loaded || !this.reportable()) return;
+      this.loaded = true;
 
-    var consent = null;
-    try {
-      consent = window.localStorage.getItem("fr-consent");
-    } catch (error) {
-      return;
-    }
-    if (consent !== "granted") return;
+      // Google tag (gtag.js)
+      var script = document.createElement("script");
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=" + this.id;
+      document.head.appendChild(script);
 
-    // Google tag (gtag.js)
-    var id = "G-3HJ9BYVMN3";
-    var script = document.createElement("script");
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
-    document.head.appendChild(script);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      gtag("config", this.id);
+    },
+  };
 
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    window.gtag = gtag;
-    gtag("js", new Date());
-    gtag("config", id);
-  })();
+  /* a reader who accepted on an earlier visit - to a room or to the site, which
+     shares the answer - is counted from here rather than waiting for
+     js/consent.js at the end of the body, which by then has only the banner
+     left to do. a browser set to block site data throws, and that reads as no
+     answer. */
+  try {
+    if (window.localStorage.getItem("fr-consent") === "granted")
+      window.labAnalytics.load();
+  } catch (error) {
+    // nothing stored and nothing to load: the banner will ask
+  }
 </script>
 
 <style>
@@ -1111,6 +1123,41 @@
     .eq-key dl{ grid-template-columns: 1fr; gap: 2px; }
     .eq-key dd{ margin-bottom: 9px; }
   }
+
+  /* Cookie consent, for a reader who came straight here and has never seen the
+     site's own banner. Fixed to the foot of the window and above the sticky tab
+     bar, which would otherwise cover it, but below the help overlay at 1000: a
+     question can wait behind the answer someone went looking for. Dressed as
+     the app's own paper rather than the site's dark bar, because it interrupts
+     a room rather than a page. */
+  .consent{
+    position: fixed;
+    right: 0; bottom: 0; left: 0;
+    z-index: 900;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 12px 24px;
+    padding: 14px 20px;
+    background: var(--paper-dim);
+    border-top: 1px solid var(--stamp);
+    box-shadow: 0 -8px 24px -18px rgba(38,34,32,0.5);
+  }
+  .consent[hidden]{ display: none; }
+  .consent-text{
+    margin: 0;
+    max-width: 78ch;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  /* the Italian under the English, as everywhere these rooms address Italians */
+  .consent-text em{ color: var(--ink-soft); }
+  .consent-actions{ display: flex; flex-shrink: 0; gap: 8px; }
+  @media (max-width: 700px){
+    .consent{ padding: 12px 14px; }
+    .consent-actions{ width: 100%; }
+    /* equal weight to both answers, which is the point of the thing */
+    .consent-actions .btn{ flex: 1; }
+  }
 </style>
 </head>
 <body>
@@ -1252,6 +1299,15 @@
 
       <h2>Acknowledgements</h2>
       <p>These laboratories were conceived and directed by Lino Ometto, who set the scientific content, the pedagogical design, the user interface design, and the choices behind every model. The simulation code, its implementation, and the explanatory texts were written collaboratively with <a href="https://www.anthropic.com/claude" target="_blank" rel="noopener">Claude</a>, Anthropic's AI assistant, using <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude Code</a>.</p>
+
+      <!-- Hidden until js/consent.js finds the tag could actually run: a copy
+           opened from a stick sets no cookie and reports nothing, so telling
+           its reader about cookies would be telling them something untrue. -->
+      <div data-consent-note hidden>
+      <h2>Cookies</h2>
+      <p>These laboratories count visits with Google Analytics, which stores a cookie in your browser — but only if you have accepted, either here or anywhere on the <a href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">lab site</a>, which shares your answer. Nothing is stored and nothing is sent until you do, and every room works the same either way. <button type="button" class="room-link" data-consent-reopen>Change your answer</button>.</p>
+      <p lang="it"><em>Questi laboratori contano le visite con Google Analytics, che salva un cookie nel tuo browser — ma solo se hai acconsentito, qui o in qualunque pagina del <a href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">sito del laboratorio</a>, che condivide la tua risposta. Finché non acconsenti non viene salvato né inviato nulla, e ogni stanza funziona allo stesso modo in entrambi i casi.</em></p>
+      </div>
     </div>
   </div>
 
@@ -2944,7 +3000,33 @@
   <!-- Load order matters: nav, canvas-utils, lab-core and plot-core define the
        globals every room leans on, and each room is an IIFE that does its setup
        inside LAB.ready(). The ?v= tokens are bumped per file, not together. -->
-  <script src="js/nav.js?v=16"></script>
+  
+  <!-- Cookie consent. Hidden in the markup and revealed by js/consent.js only
+       when no answer is stored, so a reader who has already answered - here or
+       on the lab site, which shares the answer - never sees it flash past.
+       aria-modal="false" because it does not trap: the rooms stay usable with
+       the question still on screen, which is the honest arrangement when the
+       answer changes nothing about what the app does. -->
+  <div class="consent" data-consent role="dialog" aria-modal="false" aria-label="Cookies" hidden>
+    <p class="consent-text">
+      We would like to count visits with Google Analytics, which stores a cookie
+      in your browser. It stays off unless you accept, and these laboratories
+      work the same either way.
+      <span lang="it">
+        <em>
+          Vorremmo contare le visite con Google Analytics, che salva un cookie
+          nel tuo browser. Resta disattivato se non acconsenti, e questi
+          laboratori funzionano allo stesso modo in entrambi i casi.
+        </em>
+      </span>
+    </p>
+    <div class="consent-actions">
+      <button type="button" class="btn secondary" data-consent-action="denied">Decline</button>
+      <button type="button" class="btn" data-consent-action="granted">Accept</button>
+    </div>
+  </div>
+
+<script src="js/nav.js?v=16"></script>
   <script src="js/canvas-utils.js?v=12"></script>
   <script src="js/lab-core.js?v=18"></script>
   <script src="js/plot-core.js?v=18"></script>
@@ -2957,5 +3039,6 @@
   <script src="js/coexistence-room.js?v=15"></script>
   <script src="js/predator-room.js?v=15"></script>
   <script src="js/keystone-room.js?v=15"></script>
+  <script src="js/consent.js?v=1"></script>
 </body>
 </html>
