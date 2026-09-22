@@ -154,6 +154,22 @@ saying so — keep it. Moving or pruning the folder breaks the homepage; the
 homepage guards on `SHAPES` being defined, so it will not error, it will simply
 stop drawing.
 
+**Analytics lives in three places now, and they have to agree.** GA4 property
+`G-3HJ9BYVMN3` is declared in `_includes/analytics.html` for the site and again
+in the `<head>` of each app, because nothing Jekyll writes reaches those files.
+Each app also carries `js/consent.js`, which mirrors `_scripts/fr-consent.js`
+and deliberately shares its storage: the same `fr-consent` key on the same
+origin, so an answer given in a room is honoured on the site and the other way
+round, and withdrawing in one place withdraws everywhere. Change one of the
+pair and the other has to follow.
+
+Both app tags are gated twice — consent, and `location.protocol === "https:"`
+so a copy on a VLE or a stick stays silent and is never even asked. The two
+redirect stubs carry no tag at all: they are built to leave immediately and
+would lose the race against their own meta refresh, so each appends a `?from=`
+marker to the address it redirects to and lets the app's own hit carry it.
+Don't add a tag to a stub, and don't strip the marker in an app.
+
 ## Conventions that are easy to break
 
 **Colours and type are tokens.** Everything is defined once in
