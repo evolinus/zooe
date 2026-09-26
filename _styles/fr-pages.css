@@ -532,6 +532,11 @@
   grid-template-columns: 110px 4fr 1fr;
   gap: 40px;
   align-items: center;
+  /* the 14px text keeps a comfortable line inside its column, so it can fill
+     it and meet the film rather than stop short at the page-intro measure */
+}
+.fr-with-media .fr-intro {
+  max-width: none;
 }
 
 .fr-badges {
