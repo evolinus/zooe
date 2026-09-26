@@ -70,6 +70,36 @@
   <div class="fr-strip">
     <div class="fr-with-media">
       {% comment %}
+        the two events the text names, as their own badges: text in the
+        middle, what we take part in on its left, what we bring on its right.
+      {% endcomment %}
+      <div class="fr-badges">
+        <img
+          src="{{ "images/pages/notte-ricercatori.jpg" | relative_url }}"
+          alt="Notte delle Ricercatrici e dei Ricercatori"
+          loading="lazy"
+        >
+        <img
+          src="{{ "images/pages/ora-con-la-ricerca.jpg" | relative_url }}"
+          alt="Un'ora con la ricerca, Pavia"
+          loading="lazy"
+        >
+      </div>
+
+      <div>
+        <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
+        <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
+          Partecipiamo regolarmente alla Notte delle Ricercatrici e dei Ricercatori
+          (Researchers' Night). Inoltre teniamo seminari e laboratori didattici
+          riguardo l'evoluzione e la biodiversità, per esempio all'interno degli
+          eventi
+          <a href="https://www.pv.infn.it/oraconlaricerca/">“un'ora con la ricerca”</a>.
+          Per informazioni contattate
+          <a href="mailto:lino.ometto@unipv.it">Lino Ometto</a>.
+        </p>
+      </div>
+
+      {% comment %}
         silent and short, so it runs like a moving illustration. muted is what
         makes autoplay allowed at all; controls stay so it can be stopped, and
         fr-pages.js holds it still for anyone who asks for reduced motion.
@@ -86,22 +116,12 @@
       >
         <source src="{{ "images/pages/disegnolo.mp4" | relative_url }}" type="video/mp4">
       </video>
-
-      <div>
-        <h2 class="fr-h6">Interventi e seminari pubblici e nelle scuole</h2>
-        <p class="fr-intro" style="margin-top: 12px; font-size: 14px">
-          Partecipiamo regolarmente alla
-          <a href="https://www.sharper-night.it/sharper-pavia/">Notte dei Ricercatori</a>
-          (Researchers' Night). Inoltre teniamo seminari e laboratori didattici riguardo
-          l'evoluzione e la biodiversità, per esempio all'interno degli eventi
-          <a href="https://www.sharper-night.it/researchers-at-schools/pavia-scuole/">researchers@school</a>.
-          Per informazioni contattate
-          <a href="{{ "members/lino-ometto.html" | relative_url }}">Lino Ometto</a>.
-        </p>
-      </div>
     </div>
   </div>
 
+  <div class="fr-schools-head">
+    <h2 class="fr-h6">Seminari e laboratori didattici</h2>
+  </div>
   <div class="fr-cols fr-cols-3">
     {% for seminar in fr.seminars %}
       <div>

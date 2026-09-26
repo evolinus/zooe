@@ -403,10 +403,25 @@ $wrap: 900px;
 /* — teaching — */
 .fr-with-media {
   display: grid;
-  /* film first, at 60% of the third it used to take; the text fills the rest */
-  grid-template-columns: 1fr 4fr;
+  /* event badges, then the text, then the film at the width it has always
+     had; the badges are marks, so a fixed narrow column is all they need */
+  grid-template-columns: 110px 4fr 1fr;
   gap: 40px;
   align-items: center;
+}
+.fr-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+/* the seminars' heading sits over the three columns, flush with their text */
+.fr-schools-head {
+  padding: 28px var(--pad) 0;
 }
 
 /* the schools block sits on the highlight colour, end to end */
@@ -646,6 +661,7 @@ $wrap: 900px;
   .fr-cols-2-1,
   .fr-cols-3 { grid-template-columns: 1fr; }
   .fr-with-media { grid-template-columns: 1fr; }
+  .fr-badges { flex-direction: row; img { width: 96px; } }
   .fr-cover { width: 100%; }
   .fr-cols > * { border-right: none !important; border-bottom: 2px solid var(--divider); padding: 24px var(--pad) !important; }
   .fr-cols > *:last-child { border-bottom: none; }
