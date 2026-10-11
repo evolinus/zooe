@@ -186,13 +186,17 @@
         extent: 200,
         params: {
           // The petal count is the one trait that comes in whole numbers, but it
-          // walks like every other parameter, on a continuous scale from 3 to 13,
-          // and the drawing takes its floor. So every count from 3 to 12 owns an
+          // walks like every other parameter, on a continuous scale from 3 to 19,
+          // and the drawing takes its floor. So every count from 3 to 18 owns an
           // equal stretch of the scale, and a lineage gains or loses a petal when
           // its walk crosses a whole number rather than at every step — the Δ
           // between two flowers with the same count still sees how close each is
           // to changing it.
-          petals:      {min:3,   max:13,  circular:false},
+          // The range was 3 to 13 until the maximum went from 12 petals to 18.
+          // Mutation steps are a fraction of a trait's range, so the wider range
+          // would have made the count change 1.6 times as often; stepScale puts
+          // the step back to its old absolute size, 10/16 of the default.
+          petals:      {min:3,   max:19,  circular:false, stepScale: 10/16},
           petalLen:    {min:35,  max:92,  circular:false},
           petalW:      {min:8,   max:40,  circular:false},
           petalHue:    {min:0,   max:360, circular:true},
@@ -216,7 +220,7 @@
         },
         draw(ctx, genome){
           const g = genome;
-          const n = Math.min(12, Math.floor(g.petals));
+          const n = Math.min(18, Math.floor(g.petals));
           // Each fill gets a darker outline of its own hue, so a pale petal still
           // reads against the cream paper.
           const petalFill = `hsl(${g.petalHue.toFixed(1)}, 60%, ${g.petalLight.toFixed(1)}%)`;
@@ -259,12 +263,14 @@
       while(!valid && attempts < 50){
         out = {};
         for(const k of Object.keys(params)){
-          const p = params[k]; const range = p.max - p.min;
+          // stepScale, where a trait sets one, sizes its step on its own rather
+          // than purely by its range (see the flower's petal count).
+          const p = params[k]; const range = p.max - p.min; const step = sigmaFrac * (p.stepScale || 1);
           if(p.circular){
-            let nv = genome[k] + gauss()*sigmaFrac*range*0.5;
+            let nv = genome[k] + gauss()*step*range*0.5;
             nv = ((nv - p.min) % range + range) % range + p.min; out[k] = nv;
           } else {
-            let nv = genome[k] + gauss()*sigmaFrac*range; out[k] = Math.min(p.max, Math.max(p.min, nv));
+            let nv = genome[k] + gauss()*step*range; out[k] = Math.min(p.max, Math.max(p.min, nv));
           }
         }
         valid = true;

@@ -340,7 +340,9 @@
         new sample drawn from it.</p>
         <p>A run stops early if the allele <em>fixes</em> (reaches <var>p</var> = 1) or is
         <em>lost</em> (<var>p</var> = 0), because from that point nothing can change: with no
-        variation left, there is nothing for drift or selection to act on.</p>
+        variation left, there is nothing for drift or selection to act on. The exception is
+        the Drift Room with its mutation slider above 0: there mutation remakes the missing
+        allele, so a run passes through 0 and 1 and goes on to <var>G</var>.</p>
         <p><strong>Rule of thumb:</strong> under pure drift, a neutral allele takes on the
         order of a few × <var>N</var> generations to fix or be lost. If your runs keep ending
         while still polymorphic, raise <var>G</var> or lower <var>N</var>.</p>`
@@ -375,8 +377,9 @@
         <p>The slider is a <em>relative</em> dial, not an absolute step size. Because the
         Branching Room runs over far more generations, it applies a gentler nudge per
         copy at the same setting — otherwise its shapes would become unrecognizable
-        almost at once — so the same number can mean a slightly different jump from one
-        room to another.</p>
+        almost at once. The difference is not small: at the middle setting a Branching
+        step is about a third of a Copying step, so the same number means a different
+        jump from one room to the other.</p>
         <p><strong>What to notice:</strong> even at the smallest setting, the shape still
         drifts away from the original given enough generations. No single copy is a
         big change; the changes simply never stop accumulating.</p>`
@@ -721,7 +724,8 @@
         <strong>what the data suggest happened</strong>.</p>
         <p><strong>Left</strong> is the true history — the real branching order you just
         watched, with solid-bordered ancestors. <strong>Right</strong> is a tree inferred by
-        UPGMA clustering using <em>only</em> the final shapes, with dashed-bordered
+        UPGMA or neighbour-joining — the switch above the panel chooses — using <em>only</em>
+        the final shapes, with dashed-bordered
         ancestors that are mathematical reconstructions, not observed organisms.</p>
         <p><strong>They often disagree.</strong> Clustering groups lineages that <em>look</em>
         alike, but lineages that drifted little can resemble each other while being
@@ -799,8 +803,8 @@
       body: `
         <p>Pairwise <strong>Δ divergence</strong> between the five final lineages: 0.00 means
         identical, larger means more different.</p>
-        <p>This matrix is the <em>only</em> information the UPGMA tree on the right is
-        built from — no ancestry, no timing, just final appearances.</p>
+        <p>This matrix is the <em>only</em> information the inferred tree on the right is
+        built from, whichever method draws it — no ancestry, no timing, just final appearances.</p>
         <p><strong>Look for the mismatch:</strong> find two lineages that split long ago but
         show a small Δ, or a recent pair with a large one. Every such cell is a place
         where appearance misleads about relatedness.</p>`
@@ -1087,8 +1091,8 @@
         sticklebacks, males differ in nuptial colour and females prefer their own.</p>
         <p>When this is switched on, divergence in <strong>body hue</strong> alone can isolate the two
         populations, with no genome-wide divergence at all. That is why it is so much faster than
-        the fixed-difference route: it needs <em>one</em> trait to move far enough, not forty loci
-        to sort.</p>
+        the fixed-difference route: it needs <em>one</em> trait to move far enough, not the 150-odd
+        fixed differences the default threshold asks for.</p>
         <p>Switch it off and body colour becomes ordinary morphology, mattering to survival but not
         to who mates with whom — and the only remaining road to speciation is the slow one.</p>`
     },
@@ -1161,9 +1165,10 @@
         <p>Only the <em>sign</em> of a locus's effect on its trait is used, not the size — so a locus
         with a tiny effect is pushed just as hard as one with a large effect. This is a
         simplification, and it is the same one the Adaptation Room makes.</p>
-        <p>At <var>s</var> = 0 the habitats stop mattering and the whole room is pure drift. The 100
-        non-morphological loci are at <var>s</var> = 0 whatever this slider says — not because they do
-        nothing, but because what they do is outside what this room models.</p>`
+        <p>At <var>s</var> = 0 the habitats stop mattering and the whole room is pure drift. The
+        coefficient reaches 53 loci — the 13 that build the fish and the 40 physiological ones. The
+        other 960 are at <var>s</var> = 0 whatever this slider says — not because they do nothing, but
+        because what they do is outside what this room models.</p>`
     },
 
     specMutation: {
@@ -1196,8 +1201,8 @@
         <p>It is set far higher than any real locus's rate, deliberately: <var>N</var> here is a few
         hundred rather than a few hundred thousand, and a few hundred generations rather than a few
         hundred thousand. What that buys is the <em>mechanism</em> made visible on a timescale you can
-        sit through. At the default, population B fixes around twenty alleles that did not exist at
-        the split; at <var>μ</var> = 0 the room runs on standing variation alone, and every curve
+        sit through. At the default, population A fixes around twenty alleles that did not exist at
+        the split and population B, the smaller one, around fifty; at <var>μ</var> = 0 the room runs on standing variation alone, and every curve
         goes flat once that has been sorted.</p>`
     },
 
@@ -1525,10 +1530,13 @@
         at 0.45 and 0.55 have a gap of 0.1 and almost no differentiation, because nearly all the variation is still
         inside each of them. Two at 0.02 and 0.12 have the same gap and a great deal of differentiation, because
         neither has much variation left to be inside.</p>
-        <p><strong>It runs out.</strong> Nothing in this room replaces variation once drift has removed it — there is
-        no mutation — so given long enough the two populations between them fix for one allele, no variation is left
-        anywhere, and <var>F</var><sub>ST</sub> stops meaning anything. The trace ends there. Everything the room
-        measures is what happens on the way to that, which is exactly the window the rule of thumb is about.</p>`
+        <p><strong>It runs out.</strong> With the mutation slider at its default of 0, nothing in this room replaces
+        variation once drift has removed it, so given long enough the two populations between them fix for one allele,
+        no variation is left anywhere, and <var>F</var><sub>ST</sub> stops meaning anything. The trace ends there.
+        Everything the room measures at that setting is what happens on the way to that, which is exactly the window
+        the rule of thumb is about. Raise <var>μ</var> and the variation stops running out, so
+        <var>F</var><sub>ST</sub> settles at a value instead — though, with two alleles, a lower one, because
+        mutation pulls both populations towards 0.5.</p>`
     },
 
     migReplicates: {
@@ -1575,7 +1583,7 @@
         common pool; with only two, each one's immigrants all come from the only other place there is, and the same
         <var>Nm</var> binds them about four times more tightly. It is also an equilibrium between migration and
         <strong>mutation</strong> — mutation being what keeps replacing the variation drift removes — whereas this
-        room has none. The measured means land near the two-population version anyway; the room's methods panel gives
+        room, at its default μ = 0, has none. The measured means land near the two-population version anyway; the room's methods panel gives
         both sets of numbers side by side, which is worth more than a line drawn across the panel as though it were
         the answer.</p>`
     },
@@ -1982,7 +1990,8 @@
         they imply — so the slider follows them instead of leading. Collapse that panel to take the
         slider back; G0 then returns to Hardy–Weinberg proportions at the <var>p</var> you have reached.</p>
         <p><strong>Watch the rare allele.</strong> As <var>p</var> gets small, the ratio of <var>A</var>₁ copies sitting in
-        homozygotes (<var>p</var>²) to <var>A</var>₁ copies in heterozygotes (2<var>pq</var>) is <var>p</var>/2<var>q</var> → nearly all copies of a rare
+        homozygotes (two in each of a share <var>p</var>² of individuals) to <var>A</var>₁ copies in heterozygotes (one in each of
+        a share 2<var>pq</var>) is 2<var>p</var>²/2<var>pq</var> = <var>p</var>/<var>q</var> → nearly all copies of a rare
         allele are hidden inside heterozygotes. That is the reason a rare recessive allele is
         almost invisible to selection in the Selection Room.</p>`
     },

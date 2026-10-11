@@ -521,9 +521,14 @@
       redrawAll();
     }
 
-    function resetRoom() {
+    // The ancestor is the caller's to choose. Opening the room and picking a
+    // shape start from that shape's standard form, as the Copying and Branching
+    // rooms do; only "New starting shape" asks for a random one. This used to
+    // randomise every time, which silently overrode the standard form the shape
+    // picker had just set.
+    function resetRoom(startFrom) {
       stopPlaying();
-      ancestor = mutate(freshAncestor(currentShape), 0.4, currentShape);
+      ancestor = startFrom;
       mutant = null; batch = null; gen = 0; maxG = 0;
       clearSprites();
       simBtn.disabled = true;
@@ -540,7 +545,7 @@
     // --------------------------------------------------------------- wiring
 
     mutateBtn.addEventListener('click', newMutation);
-    resetBtn.addEventListener('click', resetRoom);
+    resetBtn.addEventListener('click', () => resetRoom(mutate(freshAncestor(currentShape), 0.4, currentShape)));
     simBtn.addEventListener('click', () => {
       if (playing) { stopPlaying(); statusLine.textContent = T('fate.statusPaused', 'paused at generation {g}', { g: gen }); return; }
       if (batch && gen < maxG) {
@@ -557,8 +562,7 @@
       [...shapeSeg.children].forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentShape = btn.dataset.shape;
-      ancestor = freshAncestor(currentShape);
-      resetRoom();
+      resetRoom(freshAncestor(currentShape));
     });
 
     nSeg.addEventListener('click', (e) => {
@@ -585,5 +589,5 @@
       else { clearSprites(); requestAnimationFrame(redrawAll); }
     });
 
-    resetRoom();
+    resetRoom(freshAncestor(currentShape));
   })();
