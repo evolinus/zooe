@@ -11,7 +11,7 @@ links:
   # email: 
   orcid: 0009-0005-0984-2524
   github: albmarino
-  google-scholar: NQOGMNMAAAAJ 
+  google-scholar: -lvNas4AAAAJ
 ---
 I am a post-doctoral researcher at the [Department of Biology and Biotechnology](https://dbb.dip.unipv.it/it) of the [University of Pavia](https://portale.unipv.it/it).
 I have a background in evolutionary biology and a broad interest towards evolutionary genomics. During my MSc studies in Biodiversity and Evolution at the [University of Bologna](https://www.unibo.it/it), I had the chance to carry out an internship in the [Simakov group](https://neurodevbio.univie.ac.at/simakov-research/) in Vienna. This further sparked my interest in transposable elements and their impact on genomic architecture.  
