@@ -958,38 +958,39 @@
   }
 
   /* Room 2 (Branching) Specific Tree Graphics */
+  /* The tree runs left to right and is fitted to this panel's width (see
+     branching-room.js). Its grid is drawn in the SVG at the generation ticks
+     rather than as a background here, so that it means something. */
   .tree-wrap{
     position:relative;
     overflow-x:auto; overflow-y:visible;
     border: 1px solid var(--rule);
     border-radius: 6px;
-    background:
-      linear-gradient(var(--paper-dim) 1px, transparent 1px) 0 0/100% 40px,
-      var(--paper);
+    background: var(--paper);
     margin-bottom: 8px;
   }
   .tree-canvas{ position:relative; }
   svg.lines{ position:absolute; top:0; left:0; pointer-events:none; }
   
+  /* Each shape on a darker square, as in the tanglegram below: no border, no
+     label. The square is its own element, smaller than the shape's canvas and
+     on a lower layer, so every square sits behind every shape and none can hide
+     a neighbour (TILE, CARD and GAP in branching-room.js). */
+  .node-tile{
+    position:absolute;
+    width:60px; height:60px; /* TILE in branching-room.js */
+    background: var(--paper-dim);
+    border-radius: 4px;
+    display:none;
+    z-index: 1;
+  }
   .node-card{
     position:absolute;
-    width:128px; height:128px; 
-    background: var(--paper);
-    border: 3px solid var(--ink);
-    border-radius: 8px;
-    box-shadow: var(--card-shadow);
+    width:80px; height:80px; /* CARD in branching-room.js */
     display:none;
     z-index: 2;
   }
   .node-card canvas{ width:100%; height:100%; display:block; }
-  .node-card .tag{
-    position:absolute; top: 100%; left:50%; transform:translateX(-50%);
-    margin-top:4px;
-    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-    font-size: 11px; color: var(--ink-soft); white-space:nowrap;
-    background: var(--paper); padding: 0 4px; border-radius:3px;
-  }
-  .node-card.frozen{ box-shadow: var(--card-shadow), 0 0 0 3px var(--paper), 0 0 0 5px currentColor; }
 
   .legend{ display:flex; gap:16px; flex-wrap:wrap; margin: 10px 0 4px; font-size:12px; }
   .legend .item{ display:flex; align-items:center; gap:6px; }
@@ -2627,7 +2628,7 @@
     </div>
 
     <div class="legend" id="legend_branch"></div>
-    <div class="help-inline-note">Lineage colours <button class="help-btn" data-help="legend"></button> &nbsp;·&nbsp; Cards &amp; split snapshots <button class="help-btn" data-help="frozenCard"></button></div>
+    <div class="help-inline-note">Lineage colours <button class="help-btn" data-help="legend"></button> &nbsp;·&nbsp; Shapes &amp; split snapshots <button class="help-btn" data-help="frozenCard"></button></div>
 
     <div class="tree-wrap">
       <div class="tree-canvas" id="treeCanvas_branch">
@@ -4443,26 +4444,26 @@
     </div>
   </div>
 
-<script src="js/i18n.js?v=17895356014071"></script>
-  <script src="js/nav.js?v=17895356014071"></script>
-  <script src="js/sound.js?v=17895356014071"></script>
-  <script src="js/help.js?v=17895356014071"></script>
-  <script src="js/shapes-engine.js?v=17895356014071"></script>
-  <script src="js/canvas-utils.js?v=17895356014071"></script>
-  <script src="js/phylo.js?v=17895356014071"></script>
-  <script src="js/copying-room.js?v=17895356014071"></script>
-  <script src="js/branching-room.js?v=17895356014071"></script>
-  <script src="js/fate-room.js?v=17895356014071"></script>
-  <script src="js/sex-asex-room.js?v=17895356014071"></script>
-  <script src="js/hardy-weinberg-room.js?v=17895356014071"></script>
-  <script src="js/linkage-room.js?v=17895356014071"></script>
-  <script src="js/wright-fisher-core.js?v=17895356014071"></script>
-  <script src="js/drift-room.js?v=17895356014071"></script>
-  <script src="js/selection-room.js?v=17895356014071"></script>
-  <script src="js/mutation-room.js?v=17895356014071"></script>
-  <script src="js/migration-room.js?v=17895356014071"></script>
-  <script src="js/adaptation-room.js?v=17895356014071"></script>
-  <script src="js/speciation-room.js?v=17895356014071"></script>
-  <script src="js/consent.js?v=17895356014071"></script>
+<script src="js/i18n.js?v=17917250667944"></script>
+  <script src="js/nav.js?v=17917250667944"></script>
+  <script src="js/sound.js?v=17917250667944"></script>
+  <script src="js/help.js?v=17917250667944"></script>
+  <script src="js/shapes-engine.js?v=17917250667944"></script>
+  <script src="js/canvas-utils.js?v=17917250667944"></script>
+  <script src="js/phylo.js?v=17917250667944"></script>
+  <script src="js/copying-room.js?v=17917250667944"></script>
+  <script src="js/branching-room.js?v=17917250667944"></script>
+  <script src="js/fate-room.js?v=17917250667944"></script>
+  <script src="js/sex-asex-room.js?v=17917250667944"></script>
+  <script src="js/hardy-weinberg-room.js?v=17917250667944"></script>
+  <script src="js/linkage-room.js?v=17917250667944"></script>
+  <script src="js/wright-fisher-core.js?v=17917250667944"></script>
+  <script src="js/drift-room.js?v=17917250667944"></script>
+  <script src="js/selection-room.js?v=17917250667944"></script>
+  <script src="js/mutation-room.js?v=17917250667944"></script>
+  <script src="js/migration-room.js?v=17917250667944"></script>
+  <script src="js/adaptation-room.js?v=17917250667944"></script>
+  <script src="js/speciation-room.js?v=17917250667944"></script>
+  <script src="js/consent.js?v=17917250667944"></script>
 </body>
 </html>

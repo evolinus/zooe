@@ -172,6 +172,8 @@ function phylogramSvg(root, opts) {
   const leafColumnX = opts.leafColumnX;
   const leafColor = opts.leafColor || (() => opts.inkColor);
   const ink = opts.inkColor;
+  // The Branching Room draws its trees thinner than the Adaptation Room does.
+  const sw = opts.strokeWidth || 4;
   let out = '';
   (function draw(n) {
     if (n.isLeaf) {
@@ -181,9 +183,9 @@ function phylogramSvg(root, opts) {
       return;
     }
     const ys = n.children.map(c => c.y);
-    out += `<line x1="${n.x}" y1="${Math.min(...ys)}" x2="${n.x}" y2="${Math.max(...ys)}" stroke="${ink}" stroke-width="4" stroke-linecap="square"/>`;
+    out += `<line x1="${n.x}" y1="${Math.min(...ys)}" x2="${n.x}" y2="${Math.max(...ys)}" stroke="${ink}" stroke-width="${sw}" stroke-linecap="square"/>`;
     for (const c of n.children) {
-      out += `<line x1="${n.x}" y1="${c.y}" x2="${c.x}" y2="${c.y}" stroke="${c.isLeaf ? leafColor(c.id) : ink}" stroke-width="4"/>`;
+      out += `<line x1="${n.x}" y1="${c.y}" x2="${c.x}" y2="${c.y}" stroke="${c.isLeaf ? leafColor(c.id) : ink}" stroke-width="${sw}"/>`;
       draw(c);
     }
   })(root);
