@@ -23,10 +23,11 @@
     }
 
     let inferMethod = 'upgma'; // which reconstruction the right-hand panel draws
-    // Fixed pace: 50 generations a second. Faster than the Copying Room's 20,
+    // Fixed pace: 40 generations a second. Faster than the Copying Room's 20,
     // because a run here is 500 generations by default rather than 100, and at
-    // 20 a second the default run took 25 s to reach the tanglegram.
-    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; const speedMs = 20; let N = 500;
+    // 20 a second the default run took 25 s to reach the tanglegram; 50 a
+    // second was tried and found too quick to follow.
+    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; const speedMs = 25; let N = 500;
     let playing = false; let timer = null; let g = 0;
 
     const MIN_SPLIT_GAP = 5;
