@@ -731,6 +731,13 @@
         alike, but lineages that drifted little can resemble each other while being
         distant relatives, and a fast-evolving lineage can look isolated. This is the
         central difficulty of real phylogenetics: similarity is not ancestry.</p>
+        <p><strong>Reading the lines.</strong> Each tree is drawn in an order
+        of its own — the inferred one in whichever arrangement of its branches lines up best
+        with the truth — and a coloured line carries each final shape across to its leaf on
+        the inferred tree. Where lines cross, no arrangement of the inferred tree matches the
+        true order: the reconstruction has moved those lineages. Straight lines mean only
+        that the order agrees; the branch points can still group the lineages differently,
+        so read those too.</p>
         <p>In the Adaptation Room the true tree has a real shape to recover: the three
         founders are themselves the tips of a short phylogeny, with two of them closer
         relatives than the third, plus an <strong>outgroup</strong> that branched off

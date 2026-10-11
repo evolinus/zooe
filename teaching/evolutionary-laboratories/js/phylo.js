@@ -231,3 +231,50 @@ function upgmaAxisSvg(leafX, spanPx, rootHeight, axisY, color) {
   out += `<text x="${leafX + spanPx / 2}" y="${axisY + 30}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="${color}">${phyloT('phylo.divAxis', 'Divergence Δ between lineages')}</text>`;
   return out;
 }
+
+// --- tanglegram ------------------------------------------------------------
+
+// A tree keeps its shape however each internal node lists its children, so the
+// same inferred tree can be drawn with its leaves in several orders. A
+// tanglegram draws each tree in an order of its own and joins matching leaves
+// with lines; this picks, of all those orders, the one whose lines cross least
+// against the true tree's (fewest pairs of leaves in opposite order), breaking
+// ties by how far the leaves have to travel. Lines that still cross are then
+// the reconstruction's real disagreements, not an accident of drawing.
+//
+// childrenOf(node) returns a node's children, [] for a leaf; trueRank maps a
+// leaf id to its position (any increasing measure) in the true tree. Every
+// order is tried, which is fine for the handful of leaves these rooms draw —
+// five leaves in a binary tree have sixteen.
+function untangledLeafOrder(root, childrenOf, trueRank) {
+  const perms = (n) => n <= 1 ? [[0]] :
+    perms(n - 1).flatMap(p => Array.from({ length: n }, (_, i) => [...p.slice(0, i), n - 1, ...p.slice(i)]));
+  function orders(node) {
+    const kids = childrenOf(node);
+    if (!kids.length) return [[node.id]];
+    const options = kids.map(orders);
+    return perms(kids.length).flatMap(perm =>
+      perm.reduce((acc, k) => acc.flatMap(a => options[k].map(o => a.concat(o))), [[]]));
+  }
+  const truth = Object.keys(trueRank).filter(id => trueRank[id] !== undefined);
+  const trueIndex = (id) => truth.filter(o => trueRank[o] < trueRank[id]).length;
+  const cost = (order) => {
+    let crossings = 0, travel = 0;
+    order.forEach((a, i) => {
+      travel += Math.abs(i - trueIndex(a));
+      for (let j = i + 1; j < order.length; j++) if (trueRank[a] > trueRank[order[j]]) crossings++;
+    });
+    return crossings * 1000 + travel;
+  };
+  return orders(root).reduce((best, o) => (best === null || cost(o) < cost(best)) ? o : best, null);
+}
+
+// The lines between the two trees: from each leaf's place in one column to its
+// place in the other, eased so that a line that stays level is straight and one
+// that changes row leaves and arrives horizontally.
+function tanglegramLinksSvg(ids, fromX, fromY, toX, toY, colorOf, width) {
+  const mid = (fromX + toX) / 2;
+  return ids.map(id =>
+    `<path d="M ${fromX} ${fromY[id]} C ${mid} ${fromY[id]}, ${mid} ${toY[id]}, ${toX} ${toY[id]}" fill="none" stroke="${colorOf(id)}" stroke-width="${width}" stroke-linecap="round"/>`
+  ).join('');
+}
