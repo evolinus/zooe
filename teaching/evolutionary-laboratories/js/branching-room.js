@@ -362,10 +362,15 @@
 
         const node = nodesById[def.id];
         const lineX2 = lineEnd(node, Math.min(genIndex, node.end));
-        const lineColor = (genIndex >= node.end && node.children.length > 0) ? 'var(--ink)' : def.color;
+        // A lineage has split once it is frozen, not merely once its split
+        // generation has come: A's split is at generation 0, so testing the
+        // generation drew its fork on the untouched starting view, where a run
+        // has not yet made it. Freezing is what tick() draws the fork on.
+        const hasSplit = node.frozen && node.children.length > 0;
+        const lineColor = hasSplit ? 'var(--ink)' : def.color;
         node.lineEl = svgLine(genX(node.start), laneY(node.lane), lineX2, laneY(node.lane), lineColor, false);
 
-        if (genIndex >= node.end && node.children.length > 0) drawSplit(node);
+        if (hasSplit) drawSplit(node);
 
         ensureCard(node);
         placeCard(node, Math.min(genIndex, node.end));
