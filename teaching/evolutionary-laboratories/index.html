@@ -972,15 +972,19 @@
   .tree-canvas{ position:relative; }
   svg.lines{ position:absolute; top:0; left:0; pointer-events:none; }
   
-  /* Each shape on a darker square, as in the tanglegram below: no border, no
-     label. The square is its own element, smaller than the shape's canvas and
-     on a lower layer, so every square sits behind every shape and none can hide
-     a neighbour (TILE, CARD and GAP in branching-room.js). */
+  /* Each shape on a darker square the size of the tanglegram's tiles below: no
+     border, no label. The square is its own element on a lower layer, so every
+     square sits behind every shape and none can hide a neighbour (TILE, CARD and
+     GAP in branching-room.js). Its edges are soft — faded out over the last 10px
+     by two crossed gradient masks — rather than drawn as a hard line. */
   .node-tile{
     position:absolute;
-    width:60px; height:60px; /* TILE in branching-room.js */
+    width:80px; height:80px; /* TILE in branching-room.js */
     background: var(--paper-dim);
-    border-radius: 4px;
+    --soft: linear-gradient(to right, transparent, #000 10px, #000 calc(100% - 10px), transparent),
+            linear-gradient(to bottom, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+    -webkit-mask-image: var(--soft); -webkit-mask-composite: source-in;
+    mask-image: var(--soft); mask-composite: intersect;
     display:none;
     z-index: 1;
   }
@@ -2494,6 +2498,7 @@
         <div role="group" aria-labelledby="lbl-shapeSeg_copy" class="segmented" id="shapeSeg_copy">
           <button data-shape="polygon" class="active"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 4.4 L12.6 2.9 L13.1 12.4 L4.1 12.9 Z"/><circle class="seg-ico-solid" cx="6.6" cy="6.8" r="1.5"/><circle class="seg-ico-solid" cx="10" cy="9.9" r="1.5"/></svg>Polygon</button>
           <button data-shape="fish"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.6 8 C4 4.6 8.6 4.4 10.8 8 C8.6 11.6 4 11.4 2.6 8 Z"/><path class="seg-ico-solid" d="M10.8 8 L14.6 5.2 L13.5 8 L14.6 10.8 Z"/><circle class="seg-ico-solid" cx="4.9" cy="7.3" r="0.8"/></svg>Fish</button>
+          <button data-shape="flower"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(0 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(60 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(120 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(180 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(240 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(300 8 8)"/><circle class="seg-ico-solid" cx="8" cy="8" r="2"/></svg>Flower</button>
         </div>
       </div>
 
@@ -2557,8 +2562,8 @@
     </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
-      <p>One lineage — or 3, or 100, every one of them started from the identical figure — copied for up to 400 generations, with no population, no death and nothing competing. A shape is a list of independent parameters: 18 for the polygon, 26 for the fish, counting the colours and the stroke width as well as the geometry. Each generation every parameter takes its own Gaussian step of standard deviation <var>σ</var> and is then clipped to the range that keeps the figure drawable, the Mutation size slider setting <var>σ</var> as a fraction of that range — about 0.017 at setting 1, 0.041 at 3, 0.065 at 5. The Δ on each card and the pairwise Δ under the stage are one and the same measure, a root-mean-square over the <var>K</var> parameters:</p>
-      <p class="eq">Δ = √[(1/<var>K</var>)·Σ(<var>δ</var><sub><var>k</var></sub>/range<sub><var>k</var></sub>)²]<span class="eq-note">Δ = 0.10 means the traits differ by a tenth of their range on average — normalising by the range is what makes the number comparable between a polygon and a fish, which have neither the same parameters nor the same units</span></p>
+      <p>One lineage — or 3, or 100, every one of them started from the identical figure — copied for up to 400 generations, with no population, no death and nothing competing. A shape is a list of independent parameters: 18 for the polygon, 26 for the fish, 11 for the flower, counting the colours and the stroke width as well as the geometry. Each generation every parameter takes its own Gaussian step of standard deviation <var>σ</var> and is then clipped to the range that keeps the figure drawable, the Mutation size slider setting <var>σ</var> as a fraction of that range — about 0.017 at setting 1, 0.041 at 3, 0.065 at 5. The Δ on each card and the pairwise Δ under the stage are one and the same measure, a root-mean-square over the <var>K</var> parameters:</p>
+      <p class="eq">Δ = √[(1/<var>K</var>)·Σ(<var>δ</var><sub><var>k</var></sub>/range<sub><var>k</var></sub>)²]<span class="eq-note">Δ = 0.10 means the traits differ by a tenth of their range on average — normalising by the range is what makes the number comparable between a polygon, a fish and a flower, which have neither the same parameters nor the same units</span></p>
       <p>Every parameter is therefore an unbiased random walk, and everything the room shows falls out of that one fact.</p>
       <p class="eq"><var>x</var>(<var>t</var>) − <var>x</var>(0) ~ Normal(0, <var>σ</var>²<var>t</var>)<span class="eq-note">no step is aimed at anything, so the cloud of 50 lineages spreads without travelling: the variance grows with time, the average does not move</span></p>
       <p class="eq">E[Δ²] = <var>σ</var>²<var>t</var>, so Δ ≈ <var>σ</var>√<var>t</var><span class="eq-note">the "Δ from origin" on each card — divergence grows with the square root of elapsed time, so twice as different takes four times as long</span></p>
@@ -2599,6 +2604,7 @@
         <div role="group" aria-labelledby="lbl-shapeSeg_branch" class="segmented" id="shapeSeg_branch">
           <button data-shape="polygon" class="active"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 4.4 L12.6 2.9 L13.1 12.4 L4.1 12.9 Z"/><circle class="seg-ico-solid" cx="6.6" cy="6.8" r="1.5"/><circle class="seg-ico-solid" cx="10" cy="9.9" r="1.5"/></svg>Polygon</button>
           <button data-shape="fish"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.6 8 C4 4.6 8.6 4.4 10.8 8 C8.6 11.6 4 11.4 2.6 8 Z"/><path class="seg-ico-solid" d="M10.8 8 L14.6 5.2 L13.5 8 L14.6 10.8 Z"/><circle class="seg-ico-solid" cx="4.9" cy="7.3" r="0.8"/></svg>Fish</button>
+          <button data-shape="flower"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(0 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(60 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(120 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(180 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(240 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(300 8 8)"/><circle class="seg-ico-solid" cx="8" cy="8" r="2"/></svg>Flower</button>
         </div>
       </div>
 
@@ -2704,6 +2710,7 @@
         <div role="group" aria-labelledby="lbl-shapeSeg_fate" class="segmented" id="shapeSeg_fate">
           <button data-shape="polygon" class="active"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.2 4.4 L12.6 2.9 L13.1 12.4 L4.1 12.9 Z"/><circle class="seg-ico-solid" cx="6.6" cy="6.8" r="1.5"/><circle class="seg-ico-solid" cx="10" cy="9.9" r="1.5"/></svg>Polygon</button>
           <button data-shape="fish"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.6 8 C4 4.6 8.6 4.4 10.8 8 C8.6 11.6 4 11.4 2.6 8 Z"/><path class="seg-ico-solid" d="M10.8 8 L14.6 5.2 L13.5 8 L14.6 10.8 Z"/><circle class="seg-ico-solid" cx="4.9" cy="7.3" r="0.8"/></svg>Fish</button>
+          <button data-shape="flower"><svg class="seg-ico" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(0 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(60 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(120 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(180 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(240 8 8)"/><ellipse cx="8" cy="4" rx="1.7" ry="2.7" transform="rotate(300 8 8)"/><circle class="seg-ico-solid" cx="8" cy="8" r="2"/></svg>Flower</button>
         </div>
       </div>
 
@@ -4444,26 +4451,26 @@
     </div>
   </div>
 
-<script src="js/i18n.js?v=17917250667944"></script>
-  <script src="js/nav.js?v=17917250667944"></script>
-  <script src="js/sound.js?v=17917250667944"></script>
-  <script src="js/help.js?v=17917250667944"></script>
-  <script src="js/shapes-engine.js?v=17917250667944"></script>
-  <script src="js/canvas-utils.js?v=17917250667944"></script>
-  <script src="js/phylo.js?v=17917250667944"></script>
-  <script src="js/copying-room.js?v=17917250667944"></script>
-  <script src="js/branching-room.js?v=17917250667944"></script>
-  <script src="js/fate-room.js?v=17917250667944"></script>
-  <script src="js/sex-asex-room.js?v=17917250667944"></script>
-  <script src="js/hardy-weinberg-room.js?v=17917250667944"></script>
-  <script src="js/linkage-room.js?v=17917250667944"></script>
-  <script src="js/wright-fisher-core.js?v=17917250667944"></script>
-  <script src="js/drift-room.js?v=17917250667944"></script>
-  <script src="js/selection-room.js?v=17917250667944"></script>
-  <script src="js/mutation-room.js?v=17917250667944"></script>
-  <script src="js/migration-room.js?v=17917250667944"></script>
-  <script src="js/adaptation-room.js?v=17917250667944"></script>
-  <script src="js/speciation-room.js?v=17917250667944"></script>
-  <script src="js/consent.js?v=17917250667944"></script>
+<script src="js/i18n.js?v=17917346186293"></script>
+  <script src="js/nav.js?v=17917346186293"></script>
+  <script src="js/sound.js?v=17917346186293"></script>
+  <script src="js/help.js?v=17917346186293"></script>
+  <script src="js/shapes-engine.js?v=17917346186293"></script>
+  <script src="js/canvas-utils.js?v=17917346186293"></script>
+  <script src="js/phylo.js?v=17917346186293"></script>
+  <script src="js/copying-room.js?v=17917346186293"></script>
+  <script src="js/branching-room.js?v=17917346186293"></script>
+  <script src="js/fate-room.js?v=17917346186293"></script>
+  <script src="js/sex-asex-room.js?v=17917346186293"></script>
+  <script src="js/hardy-weinberg-room.js?v=17917346186293"></script>
+  <script src="js/linkage-room.js?v=17917346186293"></script>
+  <script src="js/wright-fisher-core.js?v=17917346186293"></script>
+  <script src="js/drift-room.js?v=17917346186293"></script>
+  <script src="js/selection-room.js?v=17917346186293"></script>
+  <script src="js/mutation-room.js?v=17917346186293"></script>
+  <script src="js/migration-room.js?v=17917346186293"></script>
+  <script src="js/adaptation-room.js?v=17917346186293"></script>
+  <script src="js/speciation-room.js?v=17917346186293"></script>
+  <script src="js/consent.js?v=17917346186293"></script>
 </body>
 </html>

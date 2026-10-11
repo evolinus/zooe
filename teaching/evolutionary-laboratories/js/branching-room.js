@@ -23,9 +23,10 @@
     }
 
     let inferMethod = 'upgma'; // which reconstruction the right-hand panel draws
-    // Fixed pace, as in the Copying Room: 50 ms/gen is what the slider that used
-    // to set it defaulted to.
-    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; const speedMs = 50; let N = 500;
+    // Fixed pace: 50 generations a second. Faster than the Copying Room's 20,
+    // because a run here is 500 generations by default rather than 100, and at
+    // 20 a second the default run took 25 s to reach the tanglegram.
+    let currentShape = 'polygon'; let mutSigmaFrac = 0.005 + (3/50)*0.12; const speedMs = 20; let N = 500;
     let playing = false; let timer = null; let g = 0;
 
     const MIN_SPLIT_GAP = 5;
@@ -43,15 +44,12 @@
     // centred on their generation, stay inside the panel. Below MIN_CANVAS_W the
     // generations would be too crowded to read, so a phone scrolls sideways
     // instead.
-    // Each shape sits on a plain darker square, the same tile the tanglegram's
-    // final shapes use, with no border or label. The tile is smaller than the
-    // shape's canvas: a drawn shape rarely reaches the canvas edge (a fish about
-    // two-thirds of the way out, a polygon's outer dots a little further), so a
-    // full-size tile left a wide empty margin. A polygon's dots may stick out
-    // past it, which is harmless because every tile sits on a layer behind every
-    // shape — a tile can never cover a neighbouring shape, only another tile.
+    // Each shape sits on a plain darker square, the same size as the tiles under
+    // the tanglegram's final shapes, with no border or label and its edges faded
+    // out. Every tile sits on a layer behind every shape, so where two nodes
+    // overlap a tile can only cover another tile, never a neighbouring shape.
     // A branch stops at the tile's edge (GAP) rather than running under it.
-    const LANE_GAP = 100, CARD = 80, TILE = 60, GAP = TILE/2, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
+    const LANE_GAP = 100, CARD = 80, TILE = 80, GAP = TILE/2, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
     const MIN_CANVAS_W = 520;
     // One weight for every branch the room draws: the growing tree and both
     // halves of the tanglegram.
