@@ -35,8 +35,28 @@
     let topo = buildTopology(N, splitS2, splitS3, splitS4); let nodesById = {}; let activeNodes = []; let rootAncestorGenome = null;
     let historyCache = [];
 
-    const LANE_WIDTH = 220, MARGIN_X = 100, MARGIN_TOP = 80, MARGIN_BOTTOM = 120, ROW_HEIGHT = 2, CARD = 128;
-    const MIN_CANVAS_H = 480; // comfortable minimum height even at generation 0
+    // Time runs left to right and the whole run is fitted to the panel's width,
+    // so generation N always lands at the right-hand edge whatever N is — the
+    // tree is read the same way as the split selector above it, which is drawn
+    // with the same lanes in the same order (D at the top, C at the bottom).
+    // The margins are half a card each so the first and last shapes, which sit
+    // centred on their generation, stay inside the panel. Below MIN_CANVAS_W the
+    // generations would be too crowded to read, so a phone scrolls sideways
+    // instead.
+    // Each shape sits on a plain darker square, the same tile the tanglegram's
+    // final shapes use, with no border or label. The tile is smaller than the
+    // shape's canvas: a drawn shape rarely reaches the canvas edge (a fish about
+    // two-thirds of the way out, a polygon's outer dots a little further), so a
+    // full-size tile left a wide empty margin. A polygon's dots may stick out
+    // past it, which is harmless because every tile sits on a layer behind every
+    // shape — a tile can never cover a neighbouring shape, only another tile.
+    // A branch stops at the tile's edge (GAP) rather than running under it.
+    const LANE_GAP = 100, CARD = 80, TILE = 60, GAP = TILE/2, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
+    const MIN_CANVAS_W = 520;
+    // One weight for every branch the room draws: the growing tree and both
+    // halves of the tanglegram.
+    const LINE_W = 3;
+    let canvasW = MIN_CANVAS_W;
 
     const shapeSeg = document.getElementById('shapeSeg_branch');
     const mutRate = document.getElementById('mutRate_branch');
@@ -55,34 +75,54 @@
     const linesSvg = document.getElementById('linesSvg_branch');
     const legend = document.getElementById('legend_branch');
     const timeScrubber = document.getElementById('timeScrubber_branch');
+    const treeWrap = treeCanvas.parentElement;
     const scrubVal = document.getElementById('scrubVal_branch');
 
-    function xPix(lane){ return MARGIN_X + lane*LANE_WIDTH; }
-    function yPix(gen){ return MARGIN_TOP + gen*ROW_HEIGHT; }
+    function genX(gen){ return MARGIN_X + (gen / N) * (canvasW - 2*MARGIN_X); }
+    function laneY(lane){ return MARGIN_TOP + lane*LANE_GAP; }
+    const axisY = () => laneY(topo.numLanes-1) + CARD/2 + 12;
+    // Where a lineage's branch stops when its shape is at atGen.
+    const lineEnd = (node, atGen) => Math.max(genX(node.start), genX(atGen) - GAP);
 
-    // Grow the tree panel as generations progress instead of reserving the full
-    // final height up front — keeps the page compact early on.
-    function sizeCanvas(genIndex){
-      const totalW = MARGIN_X*2 + (topo.numLanes-1)*LANE_WIDTH;
-      const fullH = MARGIN_TOP + N*ROW_HEIGHT + MARGIN_BOTTOM;
-      const growH = MARGIN_TOP + Math.max(genIndex, 0)*ROW_HEIGHT + MARGIN_BOTTOM;
-      const totalH = Math.min(fullH, Math.max(MIN_CANVAS_H, growH));
-      treeCanvas.style.width = totalW + 'px'; treeCanvas.style.height = totalH + 'px';
-      linesSvg.setAttribute('width', totalW); linesSvg.setAttribute('height', totalH);
-      linesSvg.style.width = totalW+'px'; linesSvg.style.height = totalH+'px';
+    // The panel is the same size from generation 0 to N: the scale is set by the
+    // total, not by how far the run has got. Its width is read from the page each
+    // time, which is 0 while the room's tab is hidden — hence the floor.
+    function sizeCanvas(){
+      canvasW = Math.max(MIN_CANVAS_W, treeWrap.clientWidth);
+      const totalH = laneY(topo.numLanes-1) + MARGIN_BOTTOM;
+      treeCanvas.style.width = canvasW + 'px'; treeCanvas.style.height = totalH + 'px';
+      linesSvg.setAttribute('width', canvasW); linesSvg.setAttribute('height', totalH);
+      linesSvg.style.width = canvasW+'px'; linesSvg.style.height = totalH+'px';
     }
 
-    // Keep the current generation's row visible so the latest shapes don't
-    // require manual scrolling to find, whether stepping/playing or scrubbing.
-    function keepGenInView(genIndex){
-      const rect = treeCanvas.getBoundingClientRect();
-      const rowViewportY = rect.top + yPix(genIndex);
-      const margin = window.innerHeight * 0.15;
-      if (rowViewportY < margin || rowViewportY > window.innerHeight - margin) {
-        const target = window.scrollY + rowViewportY - window.innerHeight * 0.45;
-        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        window.scrollTo({ top: Math.max(0, Math.min(target, maxScroll)), behavior: 'auto' });
+    // The generation axis, with a faint gridline at each tick. Drawn first after
+    // every clear so the branches sit on top of it. Ticks fall on a round step
+    // giving at most ten intervals, so the labels never collide at N = 2000.
+    function drawAxis(){
+      const step = [10, 20, 25, 50, 100, 200, 250, 500].find(s => N / s <= 10) || 500;
+      const y = axisY();
+      for(let t = 0; t <= N; t += step){
+        const x = genX(t);
+        const grid = svgLine(x, MARGIN_TOP - CARD/2, x, y, 'var(--paper-dim)', false); grid.setAttribute('stroke-width', 1);
+        const tick = svgLine(x, y, x, y + 5, 'var(--ink-soft)', false); tick.setAttribute('stroke-width', 1);
+        svgText(x, y + 18, t, 'middle');
       }
+      const axis = svgLine(genX(0), y, genX(N), y, 'var(--ink-soft)', false); axis.setAttribute('stroke-width', 1);
+      svgText(genX(N), y + 36, T('br.axis', 'generation →'), 'end');
+    }
+
+    function svgText(x, y, str, anchor){
+      const el = document.createElementNS('http://www.w3.org/2000/svg','text');
+      el.setAttribute('x', x); el.setAttribute('y', y); el.setAttribute('text-anchor', anchor);
+      el.setAttribute('font-family', 'ui-monospace, monospace'); el.setAttribute('font-size', 11);
+      el.setAttribute('fill', 'var(--ink-soft)'); el.textContent = str; linesSvg.appendChild(el);
+    }
+
+    // Only a phone, where the panel is wider than the screen, has anywhere to
+    // scroll: keep the growing tips in sight there.
+    function keepGenInView(genIndex){
+      const x = genX(genIndex), view = treeWrap.clientWidth, left = treeWrap.scrollLeft;
+      if (x < left + CARD || x > left + view - CARD) treeWrap.scrollLeft = x - view*0.6;
     }
 
     function clampSplits(){
@@ -140,6 +180,14 @@
       drawLine(s4x, getY(laneF), s4x, getY(laneH), cInk); drawLine(s4x, getY(laneF), s4x, getY(laneI), cInk);
       drawLine(s4x, getY(laneH), endx, getY(laneH), 'var(--leaf-h)'); drawLine(s4x, getY(laneI), endx, getY(laneI), 'var(--leaf-i)');
 
+      // A, the ancestor, splits at generation 0 and cannot be moved, so it gets a
+      // square rather than a draggable circle — black, as its lineage is drawn.
+      const aMark = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      aMark.setAttribute('x', s1x - 7); aMark.setAttribute('y', getY(laneA) - 7);
+      aMark.setAttribute('width', 14); aMark.setAttribute('height', 14);
+      aMark.setAttribute('fill', cInk); aMark.setAttribute('stroke', 'var(--paper)'); aMark.setAttribute('stroke-width', 2);
+      selSvg.appendChild(aMark);
+
       drawNode(s2x, getY(laneB), 'var(--leaf-d)', 's2'); drawNode(s3x, getY(laneE), 'var(--leaf-g)', 's3'); drawNode(s4x, getY(laneF), 'var(--leaf-h)', 's4');
     }
 
@@ -174,8 +222,18 @@
     function svgLine(x1,y1,x2,y2,color,dashed){
       const el = document.createElementNS('http://www.w3.org/2000/svg','line');
       el.setAttribute('x1',x1); el.setAttribute('y1',y1); el.setAttribute('x2',x2); el.setAttribute('y2',y2);
-      el.setAttribute('stroke', color); el.setAttribute('stroke-width', 4);
+      el.setAttribute('stroke', color); el.setAttribute('stroke-width', LINE_W);
       if(dashed) el.setAttribute('stroke-dasharray','4,4'); linesSvg.appendChild(el); return el;
+    }
+
+    // The fork where a lineage splits: up and down from the ancestor's frozen
+    // shape to its two daughters' lanes, leaving the shape itself clear. Every
+    // ancestor's lane is the midpoint of its daughters', so one goes each way.
+    function drawSplit(node){
+      const x = genX(node.end), y = laneY(node.lane);
+      const lanes = node.children.map(id => nodesById[id].lane);
+      svgLine(x, y - GAP, x, laneY(Math.min(...lanes)), 'var(--ink)', false);
+      svgLine(x, y + GAP, x, laneY(Math.max(...lanes)), 'var(--ink)', false);
     }
 
     function saveBranchingState(currentG) {
@@ -197,7 +255,7 @@
 
     function buildStage(){
       stopPlaying(); clampSplits(); syncSplitInputs(); clearSvg();
-      treeCanvas.querySelectorAll('.node-card').forEach(el=>el.remove()); g = 0;
+      clearCards(); g = 0;
       
       historyCache = [];
       timeScrubber.min = 0; timeScrubber.max = 0; timeScrubber.value = 0;
@@ -207,44 +265,57 @@
       for(const def of topo.defs){
         nodesById[def.id] = Object.assign({}, def, { genome: null, cardEl: null, ctx: null, lineEl: null, frozen: false });
       }
-      sizeCanvas(0);
+      sizeCanvas(); drawAxis();
 
       const A = nodesById.A; A.genome = rootAncestorGenome;
-      A.lineEl = svgLine(xPix(A.lane), yPix(0), xPix(A.lane), yPix(0), 'var(--ink)', false);
+      A.lineEl = svgLine(genX(0), laneY(A.lane), lineEnd(A, 0), laneY(A.lane), 'var(--ink)', false);
       ensureCard(A); positionCard(A, 0); finalStats.innerHTML = ''; activeNodes = [A];
 
       saveBranchingState(0);
       statusLine.textContent = T('br.status', 'gen {g} / {max} — {state}', { g: 0, max: N, state: T('br.state.idle', 'idle') });
     }
 
+    function clearCards(){ treeCanvas.querySelectorAll('.node-card, .node-tile').forEach(el => el.remove()); }
+
+    // A lineage's shape and its tile are two separate elements on two layers
+    // (z-index in the stylesheet), moved together.
     function ensureCard(node){
       if(node.cardEl) return;
-      const card = document.createElement('div'); card.className = 'node-card'; card.style.color = node.color; card.style.borderColor = node.color;
+      const tile = document.createElement('div'); tile.className = 'node-tile';
+      treeCanvas.appendChild(tile); node.tileEl = tile;
+      const card = document.createElement('div'); card.className = 'node-card';
       const canvas = document.createElement('canvas'); canvas.width = 256; canvas.height = 256;
-      // One card per lineage on the tree; the tag below it carries the name, so
-      // the canvas names itself the same way.
+      // One shape per lineage on the tree. Nothing on screen names it — the
+      // colour of its branch does that — so the canvas names itself.
       canvas.setAttribute('role', 'img');
       canvas.setAttribute('aria-label', `Lineage ${node.id}, current shape`);
       card.appendChild(canvas);
-      const tag = document.createElement('div'); tag.className = 'tag mono'; card.appendChild(tag);
-      treeCanvas.appendChild(card); node.cardEl = card; node.ctx = canvas.getContext('2d'); node.tagEl = tag;
+      treeCanvas.appendChild(card); node.cardEl = card; node.ctx = canvas.getContext('2d');
+    }
+
+    function placeCard(node, atGen){
+      const x = genX(atGen), y = laneY(node.lane);
+      node.cardEl.style.left = (x - CARD/2) + 'px'; node.cardEl.style.top  = (y - CARD/2) + 'px'; node.cardEl.style.display = 'block';
+      node.tileEl.style.left = (x - TILE/2) + 'px'; node.tileEl.style.top  = (y - TILE/2) + 'px'; node.tileEl.style.display = 'block';
     }
 
     function positionCard(node, atGen){
-      const x = xPix(node.lane), y = yPix(atGen);
-      node.cardEl.style.left = (x - CARD/2) + 'px'; node.cardEl.style.top  = (y - CARD/2) + 'px'; node.cardEl.style.display = 'block';
-      node.tagEl.textContent = `${node.id} · gen ${atGen}`; drawGenome(node.ctx, 256, 256, node.genome, currentShape);
+      placeCard(node, atGen);
+      drawGenome(node.ctx, 256, 256, node.genome, currentShape);
     }
 
     function finalizeNode(node){
-      node.frozen = true; if (node.cardEl) node.cardEl.classList.add('frozen'); node.lineEl.setAttribute('y2', yPix(node.end));
+      node.frozen = true; node.lineEl.setAttribute('x2', lineEnd(node, node.end));
       if(node.children.length === 0) return;
 
-      const kids = node.children.map(id=>nodesById[id]); const lanes = kids.map(k=>k.lane); const y = yPix(node.end);
-      svgLine(xPix(Math.min(...lanes)), y, xPix(Math.max(...lanes)), y, 'var(--ink)', false);
+      const kids = node.children.map(id=>nodesById[id]); const x = genX(node.end);
+      drawSplit(node);
+      // With the coloured card borders gone, a surviving lineage is told apart by
+      // its branch alone, so it is drawn in its own colour from the start rather
+      // than only once the history is scrubbed.
       for(const child of kids){
         child.genome = Object.assign({}, node.genome);
-        child.lineEl = svgLine(xPix(child.lane), y, xPix(child.lane), y, child.color.startsWith('var')? 'var(--ink)': child.color, false);
+        child.lineEl = svgLine(x, laneY(child.lane), x, laneY(child.lane), child.color, false);
         ensureCard(child); positionCard(child, node.end); activeNodes.push(child);
       }
     }
@@ -255,11 +326,10 @@
 
       g++; const stillActive = [];
       for(const node of activeNodes){
-        node.genome = mutate(node.genome, mutSigmaFrac, currentShape); positionCard(node, g); node.lineEl.setAttribute('y2', yPix(g));
+        node.genome = mutate(node.genome, mutSigmaFrac, currentShape); positionCard(node, g); node.lineEl.setAttribute('x2', lineEnd(node, g));
         if(g >= node.end){ finalizeNode(node); } else { stillActive.push(node); }
       }
       activeNodes = stillActive; statusLine.textContent = `gen ${g} / ${N} — ${playing ? 'copying…' : 'stepped'}`;
-      sizeCanvas(g);
       keepGenInView(g);
 
       saveBranchingState(g);
@@ -273,8 +343,8 @@
       if (!cache) return;
 
       activeNodes = [];
-      clearSvg();
-      treeCanvas.querySelectorAll('.node-card').forEach(el => el.remove());
+      clearSvg(); sizeCanvas(); drawAxis();
+      clearCards();
 
       for (const def of topo.defs) {
         const nodeData = cache.nodes[def.id];
@@ -292,34 +362,20 @@
         nodesById[def.id].cardEl = null; 
 
         const node = nodesById[def.id];
-        const lineY2 = yPix(Math.min(genIndex, node.end));
+        const lineX2 = lineEnd(node, Math.min(genIndex, node.end));
         const lineColor = (genIndex >= node.end && node.children.length > 0) ? 'var(--ink)' : def.color;
-        node.lineEl = svgLine(xPix(node.lane), yPix(node.start), xPix(node.lane), lineY2, lineColor, false);
+        node.lineEl = svgLine(genX(node.start), laneY(node.lane), lineX2, laneY(node.lane), lineColor, false);
 
-        if (genIndex >= node.end && node.children.length > 0) {
-          const kids = node.children.map(id => nodesById[id]);
-          const lanes = kids.map(k => k.lane);
-          svgLine(xPix(Math.min(...lanes)), yPix(node.end), xPix(Math.max(...lanes)), yPix(node.end), 'var(--ink)', false);
-        }
+        if (genIndex >= node.end && node.children.length > 0) drawSplit(node);
 
         ensureCard(node);
-        const cardGen = Math.min(genIndex, node.end);
-        node.cardEl.style.left = (xPix(node.lane) - CARD/2) + 'px';
-        node.cardEl.style.top  = (yPix(cardGen) - CARD/2) + 'px';
-        node.cardEl.style.display = 'block';
-        node.tagEl.textContent = `${node.id} · gen ${cardGen}`;
-        
-        if (node.frozen) {
-          node.cardEl.classList.add('frozen');
-        } else {
-          node.cardEl.classList.remove('frozen');
-          activeNodes.push(node);
-        }
+        placeCard(node, Math.min(genIndex, node.end));
+
+        if (!node.frozen) activeNodes.push(node);
         drawGenome(node.ctx, 256, 256, node.genome, currentShape);
       }
 
       statusLine.textContent = T('br.status', 'gen {g} / {max} — {state}', { g: genIndex, max: N, state: T('br.state.stopped', 'stopped') });
-      sizeCanvas(genIndex);
       keepGenInView(genIndex);
       if (genIndex >= N) { showFinalStats(); } else { finalStats.innerHTML = ''; }
     }
@@ -382,19 +438,19 @@
       const trueX = (t) => LEFT_START + (t / N) * TREE_SPAN;
       const s1x = trueX(topo.milestones.s1); const s2x = trueX(topo.milestones.s2); const s3x = trueX(topo.milestones.s3); const s4x = trueX(topo.milestones.s4);
 
-      svgLines += `<line x1="${trueX(0)}" y1="${ty.A}" x2="${s1x}" y2="${ty.A}" stroke="var(--ink)" stroke-width="4"/>`;
-      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${s1x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
-      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${LEFT_END}" y2="${ty.C}" stroke="${LEAF_COLOR.C}" stroke-width="4"/>`;
-      svgLines += `<line x1="${s1x}" y1="${ty.B}" x2="${s2x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="4"/>`;
-      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${s2x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
-      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${LEFT_END}" y2="${ty.D}" stroke="${LEAF_COLOR.D}" stroke-width="4"/>`;
-      svgLines += `<line x1="${s2x}" y1="${ty.E}" x2="${s3x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="4"/>`;
-      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s3x}" y2="${ty.G}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
-      svgLines += `<line x1="${s3x}" y1="${ty.G}" x2="${LEFT_END}" y2="${ty.G}" stroke="${LEAF_COLOR.G}" stroke-width="4"/>`;
-      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s4x}" y2="${ty.F}" stroke="var(--ink)" stroke-width="4"/>`;
-      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${s4x}" y2="${ty.I}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
-      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${LEFT_END}" y2="${ty.H}" stroke="${LEAF_COLOR.H}" stroke-width="4"/>`;
-      svgLines += `<line x1="${s4x}" y1="${ty.I}" x2="${LEFT_END}" y2="${ty.I}" stroke="${LEAF_COLOR.I}" stroke-width="4"/>`;
+      svgLines += `<line x1="${trueX(0)}" y1="${ty.A}" x2="${s1x}" y2="${ty.A}" stroke="var(--ink)" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${s1x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="${LINE_W}" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s1x}" y1="${ty.C}" x2="${LEFT_END}" y2="${ty.C}" stroke="${LEAF_COLOR.C}" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s1x}" y1="${ty.B}" x2="${s2x}" y2="${ty.B}" stroke="var(--ink)" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${s2x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="${LINE_W}" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s2x}" y1="${ty.D}" x2="${LEFT_END}" y2="${ty.D}" stroke="${LEAF_COLOR.D}" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s2x}" y1="${ty.E}" x2="${s3x}" y2="${ty.E}" stroke="var(--ink)" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s3x}" y2="${ty.G}" stroke="var(--ink)" stroke-width="${LINE_W}" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s3x}" y1="${ty.G}" x2="${LEFT_END}" y2="${ty.G}" stroke="${LEAF_COLOR.G}" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s3x}" y1="${ty.F}" x2="${s4x}" y2="${ty.F}" stroke="var(--ink)" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${s4x}" y2="${ty.I}" stroke="var(--ink)" stroke-width="${LINE_W}" stroke-linecap="square"/>`;
+      svgLines += `<line x1="${s4x}" y1="${ty.H}" x2="${LEFT_END}" y2="${ty.H}" stroke="${LEAF_COLOR.H}" stroke-width="${LINE_W}"/>`;
+      svgLines += `<line x1="${s4x}" y1="${ty.I}" x2="${LEFT_END}" y2="${ty.I}" stroke="${LEAF_COLOR.I}" stroke-width="${LINE_W}"/>`;
 
       const trueInternals = ['A', 'B', 'E', 'F'];
       trueInternals.forEach(id => {
@@ -427,12 +483,12 @@
           node.y = (node.left.y + node.right.y) / 2; node.genome = averageGenome(node.left.genome, node.right.genome, currentShape);
           node.isLeaf = false; node.x = RIGHT_LEAF_X + (node.height / maxH) * RIGHT_SPAN; inferredNodes.push(node);
 
-          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="4" stroke-linecap="square"/>`;
-          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="${node.left.isLeaf ? LEAF_COLOR[node.left.id] : 'var(--ink)'}" stroke-width="4"/>`;
-          svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="${node.right.isLeaf ? LEAF_COLOR[node.right.id] : 'var(--ink)'}" stroke-width="4"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.x}" y2="${node.right.y}" stroke="var(--ink)" stroke-width="${LINE_W}" stroke-linecap="square"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.left.y}" x2="${node.left.x}" y2="${node.left.y}" stroke="${node.left.isLeaf ? LEAF_COLOR[node.left.id] : 'var(--ink)'}" stroke-width="${LINE_W}"/>`;
+          svgLines += `<line x1="${node.x}" y1="${node.right.y}" x2="${node.right.x}" y2="${node.right.y}" stroke="${node.right.isLeaf ? LEAF_COLOR[node.right.id] : 'var(--ink)'}" stroke-width="${LINE_W}"/>`;
         }
         traverseUpgma(rootCluster);
-        svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="4"/>`;
+        svgLines += `<line x1="${RIGHT_MERGE_END}" y1="${rootCluster.y}" x2="${RIGHT_STUB_END}" y2="${rootCluster.y}" stroke="var(--ink)" stroke-width="${LINE_W}"/>`;
         svgLines += upgmaAxisSvg(RIGHT_LEAF_X, RIGHT_SPAN, rootCluster.height, RIGHT_AXIS_Y, 'var(--ink-soft)');
       } else {
         // Neighbour-joining: branch lengths differ per lineage, so leaves are
@@ -448,9 +504,10 @@
         svgLines += phylogramSvg(njRoot, {
           leafColumnX: RIGHT_LEAF_X,
           leafColor: (id) => LEAF_COLOR[id],
-          inkColor: 'var(--ink)'
+          inkColor: 'var(--ink)',
+          strokeWidth: LINE_W
         });
-        svgLines += `<line x1="${njRoot.x}" y1="${njRoot.y}" x2="${RIGHT_STUB_END}" y2="${njRoot.y}" stroke="var(--ink)" stroke-width="4"/>`;
+        svgLines += `<line x1="${njRoot.x}" y1="${njRoot.y}" x2="${RIGHT_STUB_END}" y2="${njRoot.y}" stroke="var(--ink)" stroke-width="${LINE_W}"/>`;
         svgLines += scaleBarSvg(RIGHT_LEAF_X, RIGHT_AXIS_Y, scale, 'var(--ink-soft)');
       }
 
@@ -555,12 +612,19 @@
       currentShape = btn.dataset.shape; rootAncestorGenome = freshAncestor(currentShape); buildStage();
     });
 
-    window.addEventListener('resize', () => { 
-      if(!playing) {
-        updateSelector(); 
-        const curGen = parseInt(timeScrubber.value) || 0;
-        if (curGen > 0 && historyCache[curGen]) scrubTo(curGen);
-      }
+    // The tree's scale now depends on the panel's width, so a new width means
+    // redrawing it — at generation 0 too, and mid-run, since the room is also
+    // laid out once while its tab is still hidden and has no width at all.
+    // Opening the tab fires this (nav.js dispatches a resize on every switch).
+    // scrubTo() rebuilds the picture from the history at the current generation;
+    // a running timer carries on from there.
+    window.addEventListener('resize', () => {
+      if(!playing) updateSelector();
+      const w = Math.max(MIN_CANVAS_W, treeWrap.clientWidth);
+      if (treeWrap.clientWidth === 0 || w === canvasW || !historyCache[g]) return;
+      const wasPlaying = playing;
+      scrubTo(g);
+      if (wasPlaying) statusLine.textContent = `gen ${g} / ${N} — copying…`;
     });
 
     buildLegend(); rootAncestorGenome = freshAncestor(currentShape); buildStage();

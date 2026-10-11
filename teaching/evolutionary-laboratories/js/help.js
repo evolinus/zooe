@@ -774,21 +774,20 @@
     legend: {
       title: 'Lineage legend',
       body: `
-        <p>Each surviving lineage has its own colour, used consistently for its card
-        border, its vertical track down the page, and its branch in the trees at the
-        bottom.</p>
+        <p>Each surviving lineage has its own colour, used consistently for its track
+        across the page and its branch in the trees at the bottom.</p>
         <p><strong>Black</strong> marks the ancestors (A, B, E, F) — lineages that existed
         for a while and then split. The five coloured lineages (C, <var>D</var>, <var>G</var>, H, I) are the
         ones that survive to the final generation and get compared at the end.</p>`
     },
 
     frozenCard: {
-      title: 'Cards and split snapshots',
+      title: 'Shapes and split snapshots',
       body: `
-        <p>Each card is one lineage's shape at that moment, drawn at its position down
-        the page — vertical distance is time, so the further down, the later.</p>
-        <p>When a lineage splits, its card is <strong>frozen</strong> and gains a coloured
-        ring. It is a permanent snapshot of the ancestor at the instant of the split;
+        <p>Each shape is one lineage at that moment, drawn at its position along
+        the page — horizontal distance is time, so the further right, the later.</p>
+        <p>When a lineage splits, its shape is <strong>frozen</strong> where the branch
+        forks. It is a permanent snapshot of the ancestor at the instant of the split;
         the two daughter lineages start as identical copies of it and drift apart from
         there.</p>
         <p>Those frozen ancestors are the ground truth the inferred tree is trying to
