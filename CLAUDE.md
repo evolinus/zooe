@@ -68,7 +68,9 @@ Prose sits inline in the `fr-*` includes. Lists sit in `_data/`:
 - `_data/first_run.yaml` — the university courses, the school seminars and the
   closing image band on the homepage.
 - `_data/alumni.yaml` — past people, grouped by the role they held, each with
-  an optional `link:` to where they are now (LinkedIn, Scholar…).
+  an optional `link:` to where they are now (LinkedIn, Scholar…) and an
+  `image:` avatar. Most of those images are stand-ins from `images/alumni/`
+  (insects and flowers, assigned at random), not photos of the person.
 - `_data/citations.yaml` — **generated, never edit.** See below.
 - `_data/sources.yaml` — publication machinery, below.
 - `_data/types.yaml` — two lookups in one file: the role a member holds
@@ -84,8 +86,9 @@ it, so old links keep working.
 
 The two lists meet on the People page, matched by **exact name**: an alumnus in
 `alumni.yaml` whose name matches a `_members_past` file gets that file's photo
-and links to that page; anyone else gets a circle with their initials in their
-group's colour, and links to their `alumni.yaml` link if there is one. On the
+and links to that page; anyone else gets the `image:` from `alumni.yaml` (or,
+failing that, a circle with their initials in their group's colour) and links
+to their `alumni.yaml` link if there is one. On the
 profile page itself, the layout adds the `alumni.yaml` link at the top of
 *Find me elsewhere* (unless the page already has it) and drops the lapsed
 student `email`. Rename someone in one file and not the other and the two stop

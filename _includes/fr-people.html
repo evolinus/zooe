@@ -80,8 +80,9 @@
     {% comment %}
       each alumnus links to the page they had here when there is one (it lists
       where they are now as well), otherwise straight to their current profile.
-      the avatar is that page's photo, or a circle in their group's colour with
-      their initials; the + on it says there is somewhere to go, and the avatar
+      the avatar is that page's photo, else the stand-in image in alumni.yaml,
+      else a circle in their group's colour with their initials (kept for anyone
+      added without an image). the + on it says there is somewhere to go; the avatar
       is the only link - the name stays plain text.
     {% endcomment %}
     <div class="fr-alumni" id="alumni-list">
@@ -96,10 +97,11 @@
             {% assign href = person.link %}
           {% endif %}
           {% assign words = person.name | split: " " %}
+          {% assign photo = former.image | default: person.image %}
           {% capture avatar %}
-            {% if former.image %}
+            {% if photo %}
               <img
-                src="{{ former.image | relative_url | uri_escape }}"
+                src="{{ photo | relative_url | uri_escape }}"
                 alt=""
                 loading="lazy"
                 {% include fallback.html %}

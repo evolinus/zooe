@@ -1,5 +1,10 @@
 # people who have worked in the lab, grouped by the role they held here.
 # used by the People page (_includes/fr-people.html).
+#
+# link:  where they are now (LinkedIn, Scholar...), behind the + on their avatar.
+# image: the avatar, for anyone without a photo in _members_past. these are
+#        stand-ins - insects and flowers, picked at random - so swap any of them
+#        for a real photo, or delete the line to fall back to an initials circle.
 
 - key: Postdocs
   people:
@@ -10,14 +15,18 @@
   people:
     - name: Federica Valerio
       link: https://it.linkedin.com/in/federicavalerio
+      image: images/alumni/bee-thistle.jpg
     - name: Nihel Oueslati
       note: Co-supervision · visiting from University of Monastir, Tunisia
+      image: images/alumni/burnet-moth-2.jpg
     - name: Asma Ghedir
       note: Co-supervision · visiting from University of Monastir, Tunisia
       link: https://www.linkedin.com/in/asma-ghedir-90483019a/
+      image: images/alumni/spotted-moth.jpg
     - name: Burcu Köse
       note: Visiting · Niğde Ömer Halisdemir University, Turkey
       link: https://www.researchgate.net/profile/Burcu-Koese
+      image: images/alumni/mantis.jpg
 
 - key: MSc
   people:
@@ -28,42 +37,63 @@
     - name: Giulia Mercati
       link: https://www.linkedin.com/in/giulia-mercati-9a3437383/
     - name: Dibyojyoti Chattopadhyay
+      image: images/alumni/tiger-moth.jpg
     - name: Aromita Mallik
       link: https://dbb.dip.unipv.it/it/dipartimento/chi-siamo/personale/dottorandi-del-dbb
+      image: images/alumni/blue-butterfly.jpg
     - name: Corinne Castellano
       link: https://it.linkedin.com/in/corinne-castellano-9867a3139
+      image: images/alumni/hornet.jpg
     - name: Verdiana Fazio
       link: https://it.linkedin.com/in/verdiana-fazio-3576b1344
+      image: images/alumni/jumping-spider.jpg
     - name: Alessandro Macchia
       link: https://it.linkedin.com/in/alessandro-macchia-b8b551181
+      image: images/alumni/grasshopper.jpg
     - name: Lucia Foresto
+      image: images/alumni/rose-chafer.jpg
     - name: Saja Boulad
       link: https://ps.linkedin.com/in/saja-boulad-029bab20a
+      image: images/alumni/burnet-moth-1.jpg
     - name: Paola Staffiere
+      image: images/alumni/copper-butterfly.jpg
 
 - key: BSc
   people:
     - name: Simone Raggi
+      image: images/alumni/carpenter-bee.jpg
     - name: Giorgia Ruggenenti
+      image: images/alumni/copper-butterfly.jpg
     - name: Astra Clelia Bertelli
       link: https://clelia.dev
     - name: Gaia Ruga
     - name: Lorenzo Vecchio
+      image: images/alumni/rose-chafer.jpg
     - name: Mattia Vignoli
+      image: images/alumni/hornet.jpg
     - name: Margherita Toppi
       link: https://www.linkedin.com/in/margherita-toppi-62353838a/
+      image: images/alumni/tiger-moth.jpg
     - name: Anita Raccanello
+      image: images/alumni/blue-butterfly.jpg
     - name: Giulia Mercati
       link: https://www.linkedin.com/in/giulia-mercati-9a3437383/
     - name: Samuele Tarozzo
       link: https://it.linkedin.com/in/samueletarozzo
+      image: images/alumni/spotted-moth.jpg
     - name: Mariam Mahmoud
+      image: images/alumni/burnet-moth-1.jpg
     - name: Emma Pesenti
+      image: images/alumni/carpenter-bee.jpg
     - name: Elisa Miragliotta
       link: https://it.linkedin.com/in/elisa-miragliotta-791032192
+      image: images/alumni/bee-thistle.jpg
     - name: Erica Melchionda
       link: https://it.linkedin.com/in/erica-melchionda-954264341
+      image: images/alumni/jumping-spider.jpg
     - name: Morea Tomasi
       link: https://ae.linkedin.com/in/moreatomasi
+      image: images/alumni/mantis.jpg
     - name: Daria Marzanati
       link: https://it.linkedin.com/in/daria-marzanati-288079195
+      image: images/alumni/burnet-moth-2.jpg
