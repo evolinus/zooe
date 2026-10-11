@@ -434,14 +434,20 @@
       const ty = {};
       for (const def of topo.defs) ty[def.id] = 70 + def.lane * 100;
 
-      const OUTER_MARGIN = 20; const TREE_SPAN = 400; const LEFT_START = OUTER_MARGIN; const LEFT_END = LEFT_START + TREE_SPAN;    
-      const GAP_START = LEFT_END; const GAP_END = 1000 - OUTER_MARGIN - TREE_SPAN; const RIGHT_LEAF_X = GAP_END;                          
+      // Left to right: the true tree, the final shapes in the true tree's order,
+      // the lines that carry each shape across to its leaf on the inferred tree,
+      // and the inferred tree in an order of its own.
+      // The margin is half the root's 50px snapshot plus a little, so it is not
+      // cut off at the panel's edge.
+      const OUTER_MARGIN = 30; const TREE_SPAN = 340; const LEFT_START = OUTER_MARGIN; const LEFT_END = LEFT_START + TREE_SPAN;
+      const ICON_W = 80; const iconX = LEFT_END + 10; const LINKS_START = iconX + ICON_W + 6;
+      const RIGHT_LEAF_X = 1000 - OUTER_MARGIN - 40 - TREE_SPAN;
       // Branch lengths are proportional to divergence: a node sits at its own
       // cluster height, measured from the leaf column (height 0). No constant
       // offset is added, so the horizontal run from a leaf to an ancestor is
       // that ancestor's height, and a leaf-to-leaf path is twice it — exactly
       // the Δ between them. See the axis drawn under the tree.
-      const RIGHT_SPAN = TREE_SPAN - 20; const RIGHT_MERGE_END = RIGHT_LEAF_X + RIGHT_SPAN; const RIGHT_STUB_END = RIGHT_MERGE_END + 20;
+      const RIGHT_SPAN = TREE_SPAN; const RIGHT_MERGE_END = RIGHT_LEAF_X + RIGHT_SPAN; const RIGHT_STUB_END = RIGHT_MERGE_END + 20;
       const RIGHT_AXIS_Y = 545;
 
       const trueX = (t) => LEFT_START + (t / N) * TREE_SPAN;
@@ -472,7 +478,6 @@
           </foreignObject>`;
       });
 
-      const ICON_W = 80; const iconX = GAP_START + (GAP_END - GAP_START - ICON_W) / 2;
       leafOrder.forEach(id => {
         svgLines += `
           <foreignObject x="${iconX}" y="${ty[id] - 40}" width="${ICON_W}" height="80">
@@ -485,9 +490,23 @@
       // Inferred ancestors get a canvas each, whichever method drew the tree.
       let inferredNodes = [];
 
+      // The inferred tree takes the same five rows, but in the order of its own
+      // that crosses the true tree least (see untangledLeafOrder in phylo.js).
+      // It used to be pinned to the true tree's order, so a wrong grouping was
+      // drawn as branches reaching over one another; now the tree is always
+      // drawn cleanly and the disagreement shows in the lines between the two.
+      const trueRank = {}; leafOrder.forEach(id => { trueRank[id] = ty[id]; });
+      const rows = leafOrder.map(id => ty[id]).sort((a, b) => a - b);
+      const tyInf = {};
+      const placeLeaves = (order) => {
+        order.forEach((id, i) => { tyInf[id] = rows[i]; });
+        svgLines += tanglegramLinksSvg(leafOrder, LINKS_START, ty, RIGHT_LEAF_X, tyInf, (id) => LEAF_COLOR[id], 2);
+      };
+
       if (inferMethod === 'upgma') {
+        placeLeaves(untangledLeafOrder(rootCluster, (n) => n.left ? [n.left, n.right] : [], trueRank));
         function traverseUpgma(node) {
-          if (!node.left && !node.right) { node.y = ty[node.id]; node.genome = nodesById[node.id].genome; node.isLeaf = true; node.x = RIGHT_LEAF_X; return; }
+          if (!node.left && !node.right) { node.y = tyInf[node.id]; node.genome = nodesById[node.id].genome; node.isLeaf = true; node.x = RIGHT_LEAF_X; return; }
           traverseUpgma(node.left); traverseUpgma(node.right);
           node.y = (node.left.y + node.right.y) / 2; node.genome = averageGenome(node.left.genome, node.right.genome, currentShape);
           node.isLeaf = false; node.x = RIGHT_LEAF_X + (node.height / maxH) * RIGHT_SPAN; inferredNodes.push(node);
@@ -503,7 +522,8 @@
         // Neighbour-joining: branch lengths differ per lineage, so leaves are
         // NOT aligned — that is the whole point of showing it.
         const njRoot = neighbourJoining(leafOrder, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
-        const { scale } = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN);
+        placeLeaves(untangledLeafOrder(njRoot, (n) => n.isLeaf ? [] : n.children, trueRank));
+        const { scale } = layoutPhylogram(njRoot, tyInf, RIGHT_MERGE_END, RIGHT_SPAN);
         (function genomes(n) {
           if (n.isLeaf) { n.genome = nodesById[n.id].genome; return; }
           n.children.forEach(genomes);
@@ -530,14 +550,14 @@
       });
 
       svgLines += `<text x="${(LEFT_START+LEFT_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">True History</text>`;
-      svgLines += `<text x="${(GAP_START+GAP_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">${T('br.finalShapes', 'Final Shapes')}</text>`;
+      svgLines += `<text x="${iconX + ICON_W/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">${T('br.finalShapes', 'Final Shapes')}</text>`;
       svgLines += `<text x="${(RIGHT_LEAF_X+RIGHT_STUB_END)/2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">${T('br.inferred', 'Inferred ({m})', { m: inferMethod === 'upgma' ? 'UPGMA' : T('br.nj', 'Neighbour-joining') })}</text>`;
 
       finalStats.innerHTML = `
         <p style="margin-top:14px;"><strong>${T('br.divMatrix', 'Final divergence matrix (Δ, 0.00 = identical):')}</strong><button class="help-btn" data-help="branchDivMatrix"></button></p>
         ${html}
         <p style="margin-top:24px; margin-bottom: 0; width: 100%; max-width: 1000px;"><strong>${T('br.tanglegram', 'Tanglegram Comparison:')}</strong><button class="help-btn" data-help="tanglegram"></button><br>
-        <span style="font-size: 13px; color: var(--ink-soft);">${T('br.tanglegramNote', 'Left: The actual evolutionary timeline you just watched (solid borders mark the true divergence shape). Right: The phylogenetic tree inferred by an algorithm using only the final observable shapes (dashed borders show mathematically inferred ancestral states). Notice any discrepancies?')}</span></p>
+        <span style="font-size: 13px; color: var(--ink-soft);">${T('br.tanglegramNote', 'Left: the actual evolutionary timeline you just watched (solid borders mark the true ancestral shapes), with the final shapes beside it. Right: the tree an algorithm infers from those final shapes alone (dashed borders show inferred ancestral states). A line joins each shape to its place in the inferred tree. Where lines cross, the inferred tree cannot be drawn in the true order at all — the reconstruction has moved those lineages. Straight lines mean only that the order agrees, so compare the branch points too: the grouping can still differ.')}</span></p>
         <div class="infer-toggle">
           <span class="infer-toggle-label">${T('br.method', 'Reconstruction method')}</span>
           <div class="segmented" id="inferSeg_branch">

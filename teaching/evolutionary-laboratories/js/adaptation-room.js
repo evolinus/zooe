@@ -850,15 +850,20 @@
     const y300 = (ty[fA] + y700) / 2;
     const rootY = (ty[OUTGROUP] + y300) / 2;
 
-    const OUTER_MARGIN = 20, TREE_SPAN = 400;
+    // Left to right, as in the Branching Room: the true tree, the final shapes in
+    // the true tree's order, the lines carrying each shape across to its leaf on
+    // the inferred tree, and the inferred tree in an order of its own. The margin
+    // keeps the root's split mark clear of the panel's edge.
+    const OUTER_MARGIN = 30, TREE_SPAN = 340;
     const LEFT_START = OUTER_MARGIN, LEFT_END = LEFT_START + TREE_SPAN;
-    const GAP_START = LEFT_END, GAP_END = 1000 - OUTER_MARGIN - TREE_SPAN, RIGHT_LEAF_X = GAP_END;
+    const ICON_W = 80, iconX = LEFT_END + 10, LINKS_START = iconX + ICON_W + 6;
+    const RIGHT_LEAF_X = 1000 - OUTER_MARGIN - 40 - TREE_SPAN;
     // Branch lengths are proportional to divergence: a node sits at its own
     // cluster height, measured from the leaf column (height 0). No constant
     // offset is added, so the horizontal run from a leaf to an ancestor is that
     // ancestor's height, and a leaf-to-leaf path is twice it — exactly the Δ
     // between them. See the axis drawn under the tree.
-    const RIGHT_SPAN = TREE_SPAN - 20;
+    const RIGHT_SPAN = TREE_SPAN;
     const RIGHT_MERGE_END = RIGHT_LEAF_X + RIGHT_SPAN, RIGHT_STUB_END = RIGHT_MERGE_END + 20;
     // The prehistory's three splits occupy the first half of the true-history
     // panel; the adaptation run — the founders and their Neutral/Habitat split —
@@ -920,8 +925,6 @@
       svgLines += `<text x="${FOUNDER_X}" y="${ty[f] + 40}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="var(--ink-soft)">${label}</text>`;
     });
 
-    const ICON_W = 80;
-    const iconX = GAP_START + (GAP_END - GAP_START - ICON_W) / 2;
     LINEAGE_ORDER.forEach(key => {
       svgLines += `
         <foreignObject x="${iconX}" y="${ty[key] - 40}" width="${ICON_W}" height="80">
@@ -936,10 +939,23 @@
     let inferredNodes = [];
     let njScale = 0;
 
+    // The inferred tree takes the same seven rows in whichever order of its own
+    // crosses the true tree least (untangledLeafOrder, phylo.js), so it is always
+    // drawn cleanly and its disagreements show in the lines between the two —
+    // a habitat pulling unrelated lineages together reads as lines that cross.
+    const trueRank = {}; LINEAGE_ORDER.forEach(key => { trueRank[key] = ty[key]; });
+    const rows = LINEAGE_ORDER.map(key => ty[key]).sort((a, b) => a - b);
+    const tyInf = {};
+    const placeLeaves = (order) => {
+      order.forEach((key, i) => { tyInf[key] = rows[i]; });
+      svgLines += tanglegramLinksSvg(LINEAGE_ORDER, LINKS_START, ty, RIGHT_LEAF_X, tyInf, LINEAGE_COLOR, 2);
+    };
+
     if (inferMethod === 'upgma') {
+      placeLeaves(untangledLeafOrder(rootCluster, (n) => n.left ? [n.left, n.right] : [], trueRank));
       function traverseUpgma(node) {
         if (!node.left && !node.right) {
-          node.y = ty[node.id]; node.genome = finalGenomes[node.id]; node.isLeaf = true; node.x = RIGHT_LEAF_X;
+          node.y = tyInf[node.id]; node.genome = finalGenomes[node.id]; node.isLeaf = true; node.x = RIGHT_LEAF_X;
           return;
         }
         traverseUpgma(node.left); traverseUpgma(node.right);
@@ -961,7 +977,8 @@
       // Neighbour-joining: each lineage gets its own branch length, so a
       // lineage that evolved faster sticks out further from the root.
       const njRoot = neighbourJoining(LINEAGE_ORDER, (a, b) => a === b ? 0 : distMatrix[a < b ? `${a},${b}` : `${b},${a}`]);
-      njScale = layoutPhylogram(njRoot, ty, RIGHT_MERGE_END, RIGHT_SPAN).scale;
+      placeLeaves(untangledLeafOrder(njRoot, (n) => n.isLeaf ? [] : n.children, trueRank));
+      njScale = layoutPhylogram(njRoot, tyInf, RIGHT_MERGE_END, RIGHT_SPAN).scale;
       (function genomes(n) {
         if (n.isLeaf) { n.genome = finalGenomes[n.id]; return; }
         n.children.forEach(genomes);
@@ -983,7 +1000,7 @@
     });
 
     svgLines += `<text x="${(LEFT_START + LEFT_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">True History</text>`;
-    svgLines += `<text x="${(GAP_START + GAP_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Final Shapes</text>`;
+    svgLines += `<text x="${iconX + ICON_W / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Final Shapes</text>`;
     svgLines += `<text x="${(RIGHT_LEAF_X + RIGHT_STUB_END) / 2}" y="30" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" font-weight="bold" fill="var(--ink-soft)">Inferred (${inferMethod === 'upgma' ? 'UPGMA' : 'Neighbour-joining'})</text>`;
 
     // Leave room below the lowest lineage (and its caption) for the Δ axis.
