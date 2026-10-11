@@ -1041,6 +1041,10 @@
           'strongly differentiated: {z} of runs with no migrants, {o} with one',
           { z: Math.round(atZero.strong * 100) + '%', o: Math.round(atOne.strong * 100) + '%' })
       : '';
+    // drawSweep() names the chart after this summary, and every draw during the
+    // sweep happened while it was still empty — so the chart told a screen
+    // reader "not run yet" once the sweep was done. Draw once more to name it.
+    drawSweep();
     DOM.sweepStatus.innerHTML = T('mig.sweepDone',
       '{r} replicates at each of {k} settings, each starting at <var>p</var> = 0.5 in both populations, at <var>N</var> = {N} and <var>G</var> = {g}.',
       { r: SWEEP_REPLICATES, k: SWEEP_STEPS.length, N: state.N, g: state.G });

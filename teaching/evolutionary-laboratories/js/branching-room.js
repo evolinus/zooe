@@ -426,8 +426,13 @@
       let rootCluster = clusters[0]; let maxH = rootCluster.height || 1;
 
       let svgLines = '';
-      const ty = { C: 70, D: 170, G: 270, H: 370, I: 470 };
-      ty.F = (ty.H + ty.I) / 2; ty.E = (ty.F + ty.G) / 2; ty.B = (ty.D + ty.E) / 2; ty.A = (ty.C + ty.B) / 2;
+      // Rows come straight from the lanes of the tree above, so the tanglegram
+      // reads top to bottom in the same order as the tree the run drew (D, H, I,
+      // G, C) — it once had its own order, which ended up upside down against
+      // the horizontal tree. Each ancestor's lane is already the midpoint of
+      // its daughters', so the internal nodes fall into place too.
+      const ty = {};
+      for (const def of topo.defs) ty[def.id] = 70 + def.lane * 100;
 
       const OUTER_MARGIN = 20; const TREE_SPAN = 400; const LEFT_START = OUTER_MARGIN; const LEFT_END = LEFT_START + TREE_SPAN;    
       const GAP_START = LEFT_END; const GAP_END = 1000 - OUTER_MARGIN - TREE_SPAN; const RIGHT_LEAF_X = GAP_END;                          
