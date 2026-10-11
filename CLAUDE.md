@@ -67,7 +67,8 @@ Prose sits inline in the `fr-*` includes. Lists sit in `_data/`:
   homepage project index.
 - `_data/first_run.yaml` — the university courses, the school seminars and the
   closing image band on the homepage.
-- `_data/alumni.yaml` — past people, grouped by the role they held.
+- `_data/alumni.yaml` — past people, grouped by the role they held, each with
+  an optional `link:` to where they are now (LinkedIn, Scholar…).
 - `_data/citations.yaml` — **generated, never edit.** See below.
 - `_data/sources.yaml` — publication machinery, below.
 - `_data/types.yaml` — two lookups in one file: the role a member holds
@@ -75,8 +76,21 @@ Prose sits inline in the `fr-*` includes. Lists sit in `_data/`:
   `orcid`, `github`…), each with an icon and a URL template. Adding a new kind
   of link to a member means adding it here first.
 
-Current people are one Markdown file each in `_members/`; `_members_past/` is
-kept but not a collection, so those files generate no pages.
+Current people are one Markdown file each in `_members/`. Former members who
+had a profile keep it in `_members_past/`, a collection of its own published at
+the same `/members/<name>.html` address it had before, through the same
+`member` layout. When someone leaves, move their file there rather than delete
+it, so old links keep working.
+
+The two lists meet on the People page, matched by **exact name**: an alumnus in
+`alumni.yaml` whose name matches a `_members_past` file gets that file's photo
+and links to that page; anyone else gets a circle with their initials in their
+group's colour, and links to their `alumni.yaml` link if there is one. On the
+profile page itself, the layout adds the `alumni.yaml` link at the top of
+*Find me elsewhere* (unless the page already has it) and drops the lapsed
+student `email`. Rename someone in one file and not the other and the two stop
+finding each other, with no error. A file with nothing to show yet carries
+`published: false` (Simone Raggi's does).
 
 ## Publications are generated
 

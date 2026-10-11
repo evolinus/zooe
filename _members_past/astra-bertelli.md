@@ -9,7 +9,7 @@ aliases:
   - Bertelli
 
 links:
-  home-page: https://www.cleliasportfolio.xyz
+  home-page: https://clelia.dev
   email: astra.bertelli01@universitadipavia.it
   orcid: 0009-0002-3595-0498
   github: AstraBert

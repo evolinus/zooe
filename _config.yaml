@@ -29,6 +29,11 @@ defaults:
       type: "members"
     values:
       layout: member
+  # markdown files in /_members_past
+  - scope:
+      type: "members_past"
+    values:
+      layout: member
   # markdown files in /_posts
   - scope:
       type: "posts"
@@ -49,6 +54,12 @@ collections:
   # generate page for each member
   members:
     output: true
+  # former members keep their page, at the /members/ address it had while they
+  # were here, so old links - and their own profiles elsewhere - still land.
+  # the alumni list on the People page links to these first.
+  members_past:
+    output: true
+    permalink: /members/:path:output_ext
   # generate page for each post
   posts:
     output: true

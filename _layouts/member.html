@@ -12,6 +12,48 @@ layout: default
 
 {% assign type = site.data.types[page.role] %}
 
+{% comment %}
+  a former member's page is the one written while they were here. the link in
+  _data/alumni.yaml is where they are now, so it joins the list first. their
+  student email has lapsed by then, so it is left out rather than shown dead.
+{% endcomment %}
+{% assign past = false %}
+{% assign current = "" %}
+{% if page.collection == "members_past" %}
+  {% assign past = true %}
+  {% for group in site.data.alumni %}
+    {% for person in group.people %}
+      {% if person.name == page.name and person.link %}
+        {% assign current = person.link %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endif %}
+
+{% if current contains "linkedin.com" %}
+  {% assign current_kind = site.data.types["linkedin"] %}
+{% elsif current contains "scholar.google" %}
+  {% assign current_kind = site.data.types["google-scholar"] %}
+{% else %}
+  {% assign current_kind = site.data.types["website"] %}
+{% endif %}
+
+{% comment %}
+  the current link may already be one of the page's own. count what will show
+  too: a former member whose only link was email has nothing left to list.
+{% endcomment %}
+{% assign shown = 0 %}
+{% for link in page.links %}
+  {% assign key = link[0] %}
+  {% if past and key == "email" %}{% continue %}{% endif %}
+  {% assign shown = shown | plus: 1 %}
+  {% assign kind = site.data.types[key] %}
+  {% assign href = kind.link | default: "$VALUE" | replace: "$VALUE", link[1] %}
+  {% if href == current %}
+    {% assign current = "" %}
+  {% endif %}
+{% endfor %}
+
 <div class="fr-page">
   <div class="fr-profile fr-strip fr-strip-last">
     <aside class="fr-profile-aside">
@@ -24,12 +66,21 @@ layout: default
         >
       </div>
 
-      {% if page.links %}
+      {% if shown > 0 or current != "" %}
         <div class="fr-profile-links">
           <p class="fr-eyebrow">Find me elsewhere</p>
           <ul>
+            {% if current != "" %}
+              <li>
+                <a href="{{ current }}">
+                  {% include icon.html icon=current_kind.icon %}
+                  <span>{{ current_kind.text }}</span>
+                </a>
+              </li>
+            {% endif %}
             {% for link in page.links %}
               {% assign key = link[0] %}
+              {% if past and key == "email" %}{% continue %}{% endif %}
               {% assign kind = site.data.types[key] %}
               <li>
                 <a href="{{ kind.link | default: "$VALUE" | replace: "$VALUE", link[1] }}">
@@ -44,7 +95,7 @@ layout: default
     </aside>
 
     <div class="fr-profile-body">
-      <p class="fr-eyebrow">People</p>
+      <p class="fr-eyebrow">{% if past %}Alumni{% else %}People{% endif %}</p>
       <h1 class="fr-title fr-profile-name">{{ page.name | default: page.title }}</h1>
       {% if page.description or type %}
         <p class="fr-profile-role">{{ page.description | default: type.description }}</p>

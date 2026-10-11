@@ -323,13 +323,78 @@ $wrap: 900px;
 }
 .fr-alumni-row {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 12px;
   padding: 10px 0;
   border-bottom: 1px solid var(--divider);
 }
+.fr-alumni-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .fr-alumni-name { font-family: var(--heading); font-weight: var(--bold); font-size: 15px; }
 .fr-alumni-note { font-size: 12px; color: var(--dark-gray); }
+
+/* the one round thing on the site, on purpose: a face reads as a person in a
+   circle, and it sets the alumni apart from the square cards of the team above.
+   without a photo, the circle takes its group's colour, so the four groups can
+   be told apart at a glance even with the filter on "All". the rules are scoped
+   a step tighter than usual because section[data-size="full"] img squares every
+   image, and .fr-page a recolours every link, ahead of a single class. */
+.fr-alumni .fr-alumni-avatar {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-decoration: none;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+.fr-alumni-initials {
+  font-family: var(--heading);
+  font-weight: var(--bold);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+}
+.fr-alumni-avatar.fr-tone-0 { background: var(--primary); color: var(--background); }
+.fr-alumni-avatar.fr-tone-1 { background: var(--teal); color: var(--background); }
+.fr-alumni-avatar.fr-tone-2 { background: var(--panel); color: var(--panel-ink); }
+.fr-alumni-avatar.fr-tone-3 { background: var(--secondary); color: var(--text); }
+
+/* the same + as the team cards, shrunk onto the avatar's corner */
+.fr-alumni-plus {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border: 1px solid var(--text);
+  background: var(--background);
+  font-family: var(--heading);
+  font-weight: var(--bold);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--text);
+  transition: background var(--transition), color var(--transition);
+}
+/* the avatar is the row's only link, so it alone answers hover and focus */
+a.fr-alumni-avatar:hover .fr-alumni-plus,
+a.fr-alumni-avatar:focus-visible .fr-alumni-plus {
+  background: var(--text);
+  color: var(--background);
+}
+.fr-alumni a.fr-alumni-avatar:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
 
 /* — publications — */
 .fr-pub-head {

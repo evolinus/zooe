@@ -1,7 +1,7 @@
 {% comment %}
   people page in the first-run language. cards come from _members/*.md — the
   "+" button links straight to the member's full profile page. alumni come from
-  _data/alumni.yaml.
+  _data/alumni.yaml, matched by name to _members_past/*.md for a photo and page.
 {% endcomment %}
 {% assign pi = site.members | where_exp: "m", "m.role == 'principal-investigator'" %}
 {% assign rest = site.members | where_exp: "m", "m.role != 'principal-investigator'" | sort: "name" %}
@@ -77,18 +77,53 @@
       </div>
     </div>
 
+    {% comment %}
+      each alumnus links to the page they had here when there is one (it lists
+      where they are now as well), otherwise straight to their current profile.
+      the avatar is that page's photo, or a circle in their group's colour with
+      their initials; the + on it says there is somewhere to go, and the avatar
+      is the only link - the name stays plain text.
+    {% endcomment %}
     <div class="fr-alumni" id="alumni-list">
       {% for group in site.data.alumni %}
+        {% assign tone = forloop.index0 | modulo: 4 %}
         {% for person in group.people %}
+          {% assign former = site.members_past | where: "name", person.name | first %}
+          {% assign href = "" %}
+          {% if former %}
+            {% assign href = former.url | relative_url %}
+          {% elsif person.link %}
+            {% assign href = person.link %}
+          {% endif %}
+          {% assign words = person.name | split: " " %}
+          {% capture avatar %}
+            {% if former.image %}
+              <img
+                src="{{ former.image | relative_url | uri_escape }}"
+                alt=""
+                loading="lazy"
+                {% include fallback.html %}
+              >
+            {% else %}
+              <span class="fr-alumni-initials">{{ words.first | slice: 0 }}{{ words.last | slice: 0 }}</span>
+            {% endif %}
+            {% if href != "" %}<span class="fr-alumni-plus">+</span>{% endif %}
+          {% endcapture %}
+
           <div class="fr-alumni-row" data-fr-key="{{ group.key | slugify }}">
-            <span class="fr-alumni-name">
-              {% if person.link %}
-                <a href="{{ person.link }}">{{ person.name }}</a>
-              {% else %}
-                {{ person.name }}
-              {% endif %}
-            </span>
-            <span class="fr-alumni-note">{{ person.note | default: group.key }}</span>
+            {% if href != "" %}
+              <a
+                class="fr-alumni-avatar fr-tone-{{ tone }}"
+                href="{{ href }}"
+                aria-label="Open {{ person.name }}'s profile"
+              >{{ avatar }}</a>
+            {% else %}
+              <span class="fr-alumni-avatar fr-tone-{{ tone }}" aria-hidden="true">{{ avatar }}</span>
+            {% endif %}
+            <div class="fr-alumni-text">
+              <span class="fr-alumni-name">{{ person.name }}</span>
+              <span class="fr-alumni-note">{{ person.note | default: group.key }}</span>
+            </div>
           </div>
         {% endfor %}
       {% endfor %}
