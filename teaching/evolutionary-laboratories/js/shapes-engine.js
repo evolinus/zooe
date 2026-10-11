@@ -178,6 +178,76 @@
           ctx.fillStyle = bodyColor; ctx.fill();
           ctx.restore();
         }
+      },
+      flower: {
+        label: 'flower',
+        // A daisy: a ring of petals round a disc. Petals run from the centre out
+        // to petalLen (at most 92), plus half the outline — so ±94, inside 200.
+        extent: 200,
+        params: {
+          // The petal count is the one trait that comes in whole numbers, but it
+          // walks like every other parameter, on a continuous scale from 3 to 13,
+          // and the drawing takes its floor. So every count from 3 to 12 owns an
+          // equal stretch of the scale, and a lineage gains or loses a petal when
+          // its walk crosses a whole number rather than at every step — the Δ
+          // between two flowers with the same count still sees how close each is
+          // to changing it.
+          petals:      {min:3,   max:13,  circular:false},
+          petalLen:    {min:35,  max:92,  circular:false},
+          petalW:      {min:8,   max:40,  circular:false},
+          petalHue:    {min:0,   max:360, circular:true},
+          petalLight:  {min:40,  max:88,  circular:false},
+          // A tip in a colour of its own, over the outer tipFrac of each petal.
+          // At 0 the tip is gone, so whether a flower has tipped petals at all is
+          // part of the same walk as how much of the petal they cover.
+          tipFrac:     {min:0,   max:0.5, circular:false},
+          tipHue:      {min:0,   max:360, circular:true},
+          tipLight:    {min:30,  max:85,  circular:false},
+          centreR:     {min:8,   max:34,  circular:false},
+          centreHue:   {min:0,   max:360, circular:true},
+          centreLight: {min:25,  max:65,  circular:false},
+        },
+        ancestor(){
+          return {
+            petals: 8.5, petalLen: 62, petalW: 22, petalHue: 285, petalLight: 76,
+            tipFrac: 0.22, tipHue: 325, tipLight: 55,
+            centreR: 18, centreHue: 45, centreLight: 50
+          };
+        },
+        draw(ctx, genome){
+          const g = genome;
+          const n = Math.min(12, Math.floor(g.petals));
+          // Each fill gets a darker outline of its own hue, so a pale petal still
+          // reads against the cream paper.
+          const petalFill = `hsl(${g.petalHue.toFixed(1)}, 60%, ${g.petalLight.toFixed(1)}%)`;
+          const petalEdge = `hsl(${g.petalHue.toFixed(1)}, 40%, ${Math.max(15, g.petalLight - 38).toFixed(1)}%)`;
+          const tipFill = `hsl(${g.tipHue.toFixed(1)}, 65%, ${g.tipLight.toFixed(1)}%)`;
+          const tipFrom = g.petalLen * (1 - g.tipFrac);
+          const centreFill = `hsl(${g.centreHue.toFixed(1)}, 70%, ${g.centreLight.toFixed(1)}%)`;
+          const centreEdge = `hsl(${g.centreHue.toFixed(1)}, 55%, ${Math.max(12, g.centreLight - 25).toFixed(1)}%)`;
+          ctx.lineWidth = 2; ctx.lineJoin = 'round';
+          for(let i = 0; i < n; i++){
+            const a = -Math.PI/2 + i * 2*Math.PI / n;
+            ctx.save(); ctx.rotate(a);
+            ctx.beginPath(); ctx.ellipse(g.petalLen/2, 0, g.petalLen/2, g.petalW/2, 0, 0, Math.PI*2);
+            ctx.fillStyle = petalFill; ctx.fill();
+            // The tip is the petal's own outline clipped to its outer end, so it
+            // follows the petal's curve; the outline goes on last, over both.
+            if (g.tipFrac > 0) {
+              ctx.save(); ctx.clip();
+              ctx.fillStyle = tipFill; ctx.fillRect(tipFrom, -g.petalW, g.petalLen, 2*g.petalW);
+              ctx.restore();
+            }
+            ctx.strokeStyle = petalEdge; ctx.stroke();
+            ctx.restore();
+          }
+          // centreR and petalLen mutate independently, so a big disc on short
+          // petals would swallow them; drawn, the disc never covers more than the
+          // inner 55% of a petal (as the fish caps its tail notch by its length).
+          ctx.beginPath(); ctx.arc(0, 0, Math.min(g.centreR, g.petalLen * 0.55), 0, Math.PI*2);
+          ctx.fillStyle = centreFill; ctx.fill();
+          ctx.strokeStyle = centreEdge; ctx.stroke();
+        }
       }
     };
 
