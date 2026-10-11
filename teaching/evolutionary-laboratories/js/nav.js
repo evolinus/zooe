@@ -199,12 +199,17 @@
        aria-live anyway, so aiming at it would scroll the three populations off
        the top and leave the reader the answer without the evidence.
 
-       Two rooms are deliberately not wired to it, because they already solve
-       this and solve it better. The Fate Room's revealRun() frames the tally,
-       the two populations and the chart together and holds the first generation
-       back until the scroll has settled; the Branching Room's keepGenInView()
-       follows the growing tree rather than jumping once. A second scroller in
-       either would fight the one that is there.
+       The Branching Room aims at its lineage legend rather than at the tree, so
+       the colour key arrives on screen with the tree under it; the two together
+       fit a laptop window. It used to be left out, when the tree grew down the
+       page and keepGenInView() followed it; the tree now runs across the page at
+       a fixed height, and keepGenInView() only scrolls it sideways on a phone.
+
+       One room is deliberately not wired to it, because it already solves this
+       and solves it better. The Fate Room's revealRun() frames the tally, the
+       two populations and the chart together and holds the first generation
+       back until the scroll has settled. A second scroller there would fight the
+       one that is there.
 
        It listens in the capture phase, and that is load-bearing rather than
        incidental. Run in the ordinary bubble phase, the scroll is asked for
