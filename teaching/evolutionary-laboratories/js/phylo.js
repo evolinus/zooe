@@ -271,10 +271,12 @@ function untangledLeafOrder(root, childrenOf, trueRank) {
 
 // The lines between the two trees: from each leaf's place in one column to its
 // place in the other, eased so that a line that stays level is straight and one
-// that changes row leaves and arrives horizontally.
+// that changes row leaves and arrives horizontally. Dotted — a zero-length dash
+// with a round cap is a dot — so a link reads as a pairing between the trees,
+// not as one more branch of either.
 function tanglegramLinksSvg(ids, fromX, fromY, toX, toY, colorOf, width) {
   const mid = (fromX + toX) / 2;
   return ids.map(id =>
-    `<path d="M ${fromX} ${fromY[id]} C ${mid} ${fromY[id]}, ${mid} ${toY[id]}, ${toX} ${toY[id]}" fill="none" stroke="${colorOf(id)}" stroke-width="${width}" stroke-linecap="round"/>`
+    `<path d="M ${fromX} ${fromY[id]} C ${mid} ${fromY[id]}, ${mid} ${toY[id]}, ${toX} ${toY[id]}" fill="none" stroke="${colorOf(id)}" stroke-width="${width}" stroke-linecap="round" stroke-dasharray="0 ${2.5 * width}"/>`
   ).join('');
 }
