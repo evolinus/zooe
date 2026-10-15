@@ -1,6 +1,6 @@
 // Shared 2-D plotting for every room.
 //
-// All eight rooms draw the same handful of things — a framed panel with a linear
+// All nine rooms draw the same handful of things — a framed panel with a linear
 // (or log) y-axis, some line series, a horizontal reference line, a moving
 // marker, a small legend. Rather than repeat ~80 lines of canvas boilerplate in
 // each room, a room asks for a plot object once and then speaks in data

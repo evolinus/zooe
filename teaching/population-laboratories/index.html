@@ -19,10 +19,10 @@
 <meta http-equiv="Expires" content="0">
 
 <title>Population Laboratories</title>
-<meta name="description" content="Eight interactive laboratories on population dynamics: growth, crowding, resources, overshoot, competition and predation, each a live simulation you set up and run yourself.">
+<meta name="description" content="Nine interactive laboratories on population dynamics: growth, crowding, resources, overshoot, competition, predation and metapopulations, each a live simulation you set up and run yourself.">
 <meta name="author" content="Lino Ometto">
 <meta property="og:title" content="Population Laboratories">
-<meta property="og:description" content="Eight interactive laboratories on population dynamics: growth, crowding, resources, overshoot, competition and predation, each a live simulation you set up and run yourself.">
+<meta property="og:description" content="Nine interactive laboratories on population dynamics: growth, crowding, resources, overshoot, competition, predation and metapopulations, each a live simulation you set up and run yourself.">
 <meta property="og:type" content="website">
 
 <!-- Three files rather than an inline data: URI. A data:image/svg+xml icon is
@@ -339,8 +339,9 @@
      the wash. --room-deep is that colour carried 60% of the way to --ink, and is
      used wherever text is involved — the kicker, and the paper-coloured numerals
      on the step discs. The tab colours were picked to read as tabs, not as
-     grounds for 10px type: two of the eight fall below 4.5:1 against the
-     paper, the Resource gold worst at 2.76. All nine clear it after the
+     grounds for 10px type: two of the nine fall below 4.5:1 against the
+     paper, the Resource gold worst at 2.76 — the Metapopulation indigo is not
+     one of them, at 6.62. All ten clear it after the
      deepening, worst 6.21 on the deck's own wash. Written out as hex rather than
      computed, so the discs never depend on color-mix; the wash does, and a
      browser without it loses the tint and keeps the panel. */
@@ -1030,8 +1031,8 @@
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 13px; color: var(--stamp-deep); margin-right: 8px;
   }
-  /* The four part headings in the room list. Heavier than a room heading and
-     without its rule, so the list reads as four groups rather than eight items. */
+  /* The five part headings in the room list. Heavier than a room heading and
+     without its rule, so the list reads as five groups rather than nine items. */
   .readme-content h2.part-head{
     font-size: 15px;
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -1204,6 +1205,7 @@
     <button class="tab-btn" role="tab" id="tabbtn-coexistence" aria-controls="tab-coexistence" aria-selected="false" tabindex="-1" style="--tab: #7A5C99" onclick="switchTab('coexistence', event)">Coexistence</button>
     <button class="tab-btn" role="tab" id="tabbtn-predator" aria-controls="tab-predator" aria-selected="false" tabindex="-1" style="--tab: #8C3F5D" onclick="switchTab('predator', event)">Predator</button>
     <button class="tab-btn" role="tab" id="tabbtn-keystone" aria-controls="tab-keystone" aria-selected="false" tabindex="-1" style="--tab: #5E6B21" onclick="switchTab('keystone', event)">Keystone</button>
+    <button class="tab-btn" role="tab" id="tabbtn-metapopulation" aria-controls="tab-metapopulation" aria-selected="false" tabindex="-1" style="--tab: #454B96" onclick="switchTab('metapopulation', event)">Metapopulation</button>
   </div>
   </div>
 
@@ -1230,18 +1232,18 @@
     </header>
 
     <div class="readme-content">
-      <p class="lead">Welcome to the Population Laboratories. Eight rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The last four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious.</p>
+      <p class="lead">Welcome to the Population Laboratories. Nine rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The next four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious. The last changes the unit the question is asked in, and counts populations instead of individuals.</p>
 
       <h2 class="readme-minor">How to use the rooms</h2>
       <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong>, and <strong>read the panels</strong> that fill in below. The whole trajectory is computed the moment you press Run and then played back to you, so you can pause anywhere, drag the <strong>History Scrubber</strong> at the bottom of most rooms back and forth, and replay any moment you like. In the Overshoot Room it is worth using deliberately: stepping one generation at a time is what turns the cobweb diagram from a tangle into an explanation.</p>
-      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the eight rooms read as one argument rather than eight separate toys.</p>
+      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the nine rooms read as one argument rather than nine separate toys.</p>
       <p>Between the run and the payoff sits <strong>What this model assumes</strong>: the things the room is quietly taking for granted, and — where there is one — the room that stops taking them for granted. This is worth reading. Most of these laboratories exist precisely to relax an assumption an earlier one made, so what looks like a convenient simplification in one room turns out to be the whole subject of another. It is also the honest answer to "but real populations are not like that", which is true of every model here and is the point rather than an objection.</p>
       <p>Between the two sits the equation the room is running. Underneath it is a collapsible <strong>What each symbol means</strong> key: open it and every letter in the equation above is named, said plainly, and placed against what the earlier rooms called it. Nothing in a room requires reading the algebra — but nothing in the algebra is left unexplained either.</p>
       <p>Some rooms are deterministic: the same settings always give exactly the same curve, because the equations contain no chance. Others draw births and deaths at random, so running twice will not give the same answer twice — the parameters set tendencies, never outcomes. Each room says which kind it is.</p>
       <p>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</p>
 
         <h2 class="readme-minor">Words worth pinning down</h2>
-        <p>These seventeen come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
+        <p>These eighteen come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
         <ul>
           <li><span class="gloss" data-help="glosPopulation">Population</span> — a group of the same species, in one place, that could interbreed — the unit everything here is measured in.</li>
           <li><span class="gloss" data-help="glosPerCapita">Per-capita rate</span> — per individual, per unit of time. Ask of every rate whether it is this or a population total.</li>
@@ -1260,11 +1262,12 @@
           <li><span class="gloss" data-help="glosLimitCycle">Limit cycle</span> — a permanent oscillation whose size belongs to the parameters, not to where the run started.</li>
           <li><span class="gloss" data-help="glosTrophicCascade">Trophic cascade</span> — an effect that travels down a food chain and changes a level the predator never touches.</li>
           <li><span class="gloss" data-help="glosNiche">Niche</span> — the conditions and resources a population needs to persist. Two species with identical niches cannot coexist.</li>
+          <li><span class="gloss" data-help="glosMetapopulation">Metapopulation</span> — a population of populations, linked by colonisation. It can persist although every one of its parts goes extinct.</li>
         </ul>
 
       <h2 class="readme-minor">The through-line</h2>
-      <p>The eight rooms fall into <strong>four parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable.</p>
-      <p>By the last room the honest answer to "what stops this population from growing?" is that you cannot tell by looking at the population, or even at the pair. You have to look at the whole community.</p>
+      <p>The nine rooms fall into <strong>five parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable. <strong>Part V</strong> stops counting individuals altogether: a population becomes a single occupied dot on a landscape of patches, every one of those local populations is certain to go extinct, and the question becomes how the set of them persists anyway.</p>
+      <p>By the end of Part IV the honest answer to "what stops this population from growing?" is that you cannot tell by looking at the population, or even at the pair — you have to look at the whole community. Part V then asks the question of a scale above that one, where the answer turns out not to need the community, or the individuals, at all.</p>
       <p>Working through the rooms in order is recommended, but each one stands on its own.</p>
       <p>One word to watch: in Parts I and II, <em>competition</em> means competition among members of a single species — the crowding that regulates it from within. From Part III on it usually means competition <em>between</em> species. The rooms keep the two apart, and which one dominates decides every coexistence result in the lab.</p>
 
@@ -1319,6 +1322,14 @@
       <p class="room-kicker">Keystone predation &amp; apparent competition</p>
       <p>Competition and predation in one community. A predator can be the reason a competitor survives rather than the reason it dies, and two species that compete for nothing at all can still drive each other out.</p>
       <p class="room-open"><a href="#" onclick="switchTab('keystone');">→ Open the Keystone Room</a></p>
+
+      <h2 class="part-head">Part V — A population spread across space</h2>
+      <p class="part-blurb">The unit changes. A population becomes one dot on a landscape, and the subject becomes the set of them.</p>
+
+      <h2><span class="room-num">09</span>The Metapopulation Room</h2>
+      <p class="room-kicker">Patch occupancy: Levins' model &amp; habitat loss</p>
+      <p>Every other room counts individuals; this one counts populations. Each sits on a patch, each is certain to go extinct, and the landscape persists anyway — for as long as colonisation outruns extinction. It is also where habitat loss stops being a vague worry and becomes arithmetic.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('metapopulation');">→ Open the Metapopulation Room</a></p>
 
       <h2>A note on this beta</h2>
       <p>This is a beta version and may still contain bugs — we're continually working to improve each room. If you run into problems, have questions, or have suggestions, please get in touch with Lino Ometto at <a href="mailto:lino.ometto@unipv.it">lino.ometto@unipv.it</a>.</p>
@@ -3021,6 +3032,191 @@
     </details>
   </div>
 
+  <!-- ========================================== -->
+  <!-- ROOM 9: METAPOPULATION                     -->
+  <!-- ========================================== -->
+  <div id="tab-metapopulation" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-metapopulation" tabindex="0" style="--room: #454B96; --room-deep: #32324F;">
+    <header class="masthead">
+      <div>
+        <h1>The Metapopulation Room</h1>
+        <p class="sub"><span class="sub-label">Patch occupancy</span> &ndash; Every local population goes extinct. The set of them need not.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h2>Start here</h2>
+      <p><strong>What it shows.</strong> Every other room counts individuals. This one counts <em>populations</em>. The landscape is a set of patches; each patch holds a local population or stands empty; occupied patches go extinct and empty ones get colonised from the occupied ones. Nothing here asks how many individuals a patch holds &mdash; a patch is occupied or it is not. What survives is the <span class="gloss" data-help="glosMetapopulation">metapopulation</span>, and it survives something that kills every one of its parts.</p>
+      <p><span class="try-label">Try this.</span> Run the defaults and watch occupancy climb and then level off &mdash; then keep watching the grid, which never stops changing. Set <em>e</em> above <em>c</em> and run again: nothing is wrong with any individual patch, and the whole thing still empties. Finally open <em>More parameters</em> and destroy some habitat, a little at a time, watching what <em>p*</em> does compared with how much you took.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">dp/dt = <span class="var">c</span>·p·(1 &minus; <span class="var">h</span> &minus; p) &minus; <span class="var">e</span>·p</div>
+      <div class="eq-gloss">Levins' model. The first term is colonisation: it needs occupied patches to send migrants (<em>p</em>) and habitable empty ones to receive them (1 &minus; <em>h</em> &minus; <em>p</em>), so it fails at both ends of the scale. The second is extinction, a constant risk per occupied patch. Setting dp/dt to zero gives <strong>p* = 1 &minus; h &minus; e/c</strong>.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>p</dt>
+          <dd>The fraction of all patches currently occupied &mdash; the state variable of this room, in place of the <em>N</em> every earlier room tracked. It runs from 0 to 1 and says nothing whatever about how crowded an occupied patch is.</dd>
+          <dt>dp/dt</dt>
+          <dd>How fast that fraction is changing: patches gained by colonisation minus patches lost to extinction, per unit of time.</dd>
+          <dt>c</dt>
+          <dd>The colonisation rate. An empty habitable patch is colonised at rate <em>c</em>·<em>p</em> &mdash; the product matters, because colonists have to come from somewhere, so a landscape that is already half empty is also half as good at refilling itself.</dd>
+          <dt>e</dt>
+          <dd>The extinction rate: the chance per unit time that an occupied patch loses its population. It is the same for every patch, and it does not fall as the landscape fills up.</dd>
+          <dt>h</dt>
+          <dd>The fraction of patches destroyed &mdash; permanently uninhabitable rather than merely empty. It is zero by default, and the slider for it is in the <em>More parameters</em> drawer, which is why it does not appear in the equation drawn above until you move it.</dd>
+          <dt>p*</dt>
+          <dd>The equilibrium occupancy, 1 &minus; <em>h</em> &minus; <em>e</em>/<em>c</em>. The <span class="gloss" data-help="glosEquilibrium">equilibrium</span> of this room, and the thing to compare against <span class="gloss" data-help="carryingK">carrying capacity</span>: it is a fraction of a landscape, not a number of individuals, and only the <em>ratio</em> e/c appears in it.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Set up the run<span class="deck-kicker-note">six choices &mdash; plus habitat destruction in the drawer &mdash; then press Run.</span></div>
+      <div class="field">
+        <label>Number of patches <span class="sym">H</span> <span class="value" id="HVal_meta">100</span><button class="help-btn" data-help="patchCount"></button></label>
+        <input type="range" id="H_meta" min="16" max="400" step="4" value="100">
+      </div>
+      <div class="field">
+        <label>Starting occupancy <span class="sym">p₀</span> <span class="value" id="p0Val_meta">0.10</span><button class="help-btn" data-help="p0meta"></button></label>
+        <input type="range" id="p0_meta" min="0.01" max="1" step="0.01" value="0.10">
+      </div>
+      <div class="field">
+        <label>Colonisation rate <span class="sym">c</span> <span class="value" id="cVal_meta">0.50</span><button class="help-btn" data-help="colonisation"></button></label>
+        <input type="range" id="c_meta" min="0" max="1.5" step="0.01" value="0.50">
+      </div>
+      <div class="field">
+        <label>Extinction rate <span class="sym">e</span> <span class="value" id="eVal_meta">0.20</span><button class="help-btn" data-help="patchExtinction"></button></label>
+        <input type="range" id="e_meta" min="0" max="1" step="0.01" value="0.20">
+      </div>
+      <div class="field">
+        <label>Time span <span class="value" id="TVal_meta">80</span><button class="help-btn" data-help="timeSpan"></button></label>
+        <input type="range" id="T_meta" min="10" max="250" step="5" value="80">
+      </div>
+      <div class="field">
+        <label>Replicate landscapes<button class="help-btn" data-help="replicates"></button></label>
+        <div class="segmented" id="repSeg_meta">
+          <button data-reps="1" class="active">1</button>
+          <button data-reps="5">5</button>
+          <button data-reps="20">20</button>
+        </div>
+      </div>
+
+      <details class="advanced">
+        <summary>More parameters — habitat destruction</summary>
+        <div class="advanced-grid">
+          <div class="field">
+            <label>Habitat destroyed <span class="sym">h</span> <span class="value" id="hVal_meta">0.00</span><button class="help-btn" data-help="habitatLoss"></button></label>
+            <input type="range" id="h_meta" min="0" max="0.9" step="0.01" value="0">
+          </div>
+          <div class="field no-count" style="grid-column: 1 / -1;">
+            <div class="panel-note" style="margin-top:0;">Destroyed patches are struck through in the grid: not empty and available, but gone. They still count in the denominator of <em>p</em>, because the landscape did not shrink — part of it stopped being habitat. The equilibrium becomes p* = 1 − h − e/c, so <strong>p* falls by exactly h</strong>, one patch of occupancy lost for every patch of habitat taken. Since the species only occupied a fraction of the landscape to begin with, that is a far worse bargain than it sounds — and it runs out at h = p*, with patches still standing empty.</div>
+          </div>
+        </div>
+      </details>
+
+      <div class="transport">
+        <button class="btn" id="playBtn_meta" data-results="#tab-metapopulation .stage-area">▶ Run</button>
+        <button class="btn secondary" id="endBtn_meta">⏭ Skip to end</button>
+        <button class="btn secondary" id="resetBtn_meta">↺ Reset</button>
+        <span class="status mono" id="status_meta">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel" style="--accent: #454B96;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The patch network</span><button class="help-btn" data-help="patchField"></button></span>
+        </div>
+        <div class="canvas-wrap pop-wrap"><canvas id="fieldCanvas_meta" role="img" aria-label="The patch network — occupied, empty and destroyed patches"></canvas></div>
+        <div class="chips">
+          <div class="chip">Time<span id="tDisp_meta">0</span></div>
+          <div class="chip res-1">Patches occupied<span id="occDisp_meta">10 / 100</span></div>
+          <div class="chip res-1">p = fraction occupied<span id="pDisp_meta">0.100</span></div>
+        </div>
+        <div class="chips">
+          <div class="chip cap">p* (predicted)<span id="pStarDisp_meta">0.600</span></div>
+          <div class="chip res-2">Colonisations so far<span id="colDisp_meta">0</span></div>
+          <div class="chip sp-b">Extinctions so far<span id="extDisp_meta">0</span></div>
+        </div>
+        <div class="panel-note">The grid is a tally, not a map. Levins' patches have no positions and every one is reachable from every other, so which cell sits beside which means nothing — and destroyed habitat is scattered through the grid rather than cut from one side for the same reason.</div>
+      </div>
+
+      <div class="panel span2" style="--accent: #454B96;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Occupancy over time</span><button class="help-btn" data-help="occupancyChart"></button></span>
+          <span class="stat" id="chartStat_meta">—</span>
+        </div>
+        <div class="canvas-wrap" style="height: 300px;"><canvas id="chartCanvas_meta" role="img" aria-label="Occupancy over time — chart"></canvas></div>
+        <div class="panel-note">The solid line is the simulated landscape, patch by patch; the dashed line is the equation's own answer, which knows only fractions. The purple line is <em>p*</em>. Once the solid line reaches it, nothing in the grid stops — the two turnover counters beside it keep climbing for the rest of the run.</div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 2;">
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Colonisation and extinction vs. occupancy</span><button class="help-btn" data-help="colExtLines"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 190px;"><canvas id="ratesCanvas_meta" role="img" aria-label="Colonisation and extinction rates vs. occupancy — chart"></canvas></div>
+        <div class="panel-note">The mechanism, and the whole of <em>p*</em>. Colonisation is a hump because it needs both senders and receivers; extinction is a straight line through the origin. They cross once, and that crossing is the equilibrium — the same picture as births against deaths in the Crowding Room, with patches in place of individuals.</div>
+      </div>
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Rate of change vs. occupancy</span><button class="help-btn" data-help="dpdt"></button></span>
+        </div>
+        <div class="canvas-wrap" style="height: 190px;"><canvas id="dpdtCanvas_meta" role="img" aria-label="Rate of change of occupancy — chart"></canvas></div>
+        <div class="panel-note">The difference between the two curves beside it: zero at an empty landscape, zero again at <em>p*</em>, positive in between. Raise <em>e</em> past <em>c</em>(1 − <em>h</em>) and the hump never rises above the axis at all — there is then no occupancy the landscape can hold.</div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp-deep)">History Scrubber: you are at time <span class="value" id="scrubVal_meta">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_meta" type="button" aria-label="Back one step">◀</button>
+          <input type="range" id="scrub_meta" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_meta" type="button" aria-label="Forward one step">▶</button>
+        </div>
+        <div class="help-inline-note">Worth using deliberately here. Park on a moment after the curve has flattened and step forward one frame at a time: the fraction barely moves, and the grid changes every single step.</div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_meta">Press <strong>Run</strong>. Every occupied patch is a population that will go extinct sooner or later; every empty one can be reached from an occupied one. Watch the grid keep changing after the fraction stops.</p>
+      <div class="note-line" id="note_meta"></div>
+    </div>
+
+    <div class="room-assumes">
+      <h2>What this model assumes</h2>
+      <ul>
+        <li><strong>A patch is occupied or empty, and nothing else.</strong> There is no population size inside a patch, so a patch holding three individuals is in exactly the same state as one holding three thousand — and is exactly as likely to go extinct. Every room before this one was about the difference between those two patches. <span class="lifted">The <button type="button" class="room-link" onclick="switchTab('growth');">Growth</button> and <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> rooms are what this model has deliberately thrown away.</span></li>
+        <li><strong>Every patch can be reached from every other.</strong> Patches have no positions, so distance costs nothing and a coloniser is as likely to cross the landscape as to hop next door. Real colonisation falls off sharply with distance, which makes real metapopulations far more fragile than this one — the nearest occupied patch is what matters, not the average.</li>
+        <li><strong>Extinction risk does not depend on how full the neighbourhood is.</strong> Immigrants found new populations here, and never top up an existing one. When they do, extinction falls as <em>p</em> rises — the rescue effect — and occupancy can become all-or-nothing rather than settling gently at <em>p*</em>.</li>
+        <li><strong>All patches are the same size and quality.</strong> One <em>e</em>, one <em>c</em>, for every patch in the landscape. Real patch networks are usually carried by a few large, reliable ones, and a model that averages them away will say a network is safe when the loss of one patch would end it.</li>
+        <li><strong>Colonisation and extinction are instantaneous.</strong> A patch is recolonised the moment a coloniser arrives, with no founding phase in which the new population is small and likely to fail. That is the <button type="button" class="room-link" onclick="switchTab('growth');">Growth</button> room's lesson about small numbers, left out here.</li>
+        <li><strong>The landscape does not change while the model runs.</strong> Destroyed habitat is destroyed before the first frame. Habitat lost gradually leaves a metapopulation sitting above the occupancy its landscape can now support, and paying it off slowly &mdash; an extinction debt this room cannot show.</li>
+      </ul>
+    </div>
+
+    <div class="room-payoff">
+      <h2>What to notice</h2>
+      <p>The steady fraction is made of nothing steady. Park the scrubber after the curve flattens, step forward, and watch: <em>p</em> holds while patches wink out and are refounded underneath it, and the two counters keep climbing to the end of the run. Persistence at the landscape scale is not the absence of extinction — it is extinction being outrun.</p>
+      <p>Notice what <em>p*</em> is made of, too. Only the ratio <em>e</em>/<em>c</em> appears in it: double both rates and the equilibrium does not move, though the turnover beneath it doubles. And a species can be driven out of a landscape in which every patch remains perfectly habitable and every local population is exactly as robust as it ever was &mdash; set <em>e</em> just above <em>c</em> and nothing is wrong anywhere except in the arithmetic of the whole.</p>
+      <p><strong>Where this comes from.</strong> This room inverts the lab's unit. The <button type="button" class="room-link" onclick="switchTab('growth');">Growth</button> and <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> rooms asked what happens inside one population; here each of those is reduced to a single bit, and the question becomes what happens to a population of them. The <button type="button" class="room-link" onclick="switchTab('resource');">Resource</button> room's lesson returns in a new form: as there, the ceiling is not a property of the species but of what the environment supplies &mdash; and taking habitat away lowers it one for one.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>Patches are simulated individually rather than through the equation. Each sub-step, every occupied patch goes extinct with probability 1 − e<sup>−e·dt</sup> and every empty habitable patch is colonised with probability 1 − e<sup>−c·p·dt</sup>, both evaluated against the occupancy at the start of that sub-step so that a patch colonised within a step cannot also send colonists within it. Sub-steps are chosen to keep the per-patch probability per step below about 5%. Destroyed patches are assigned before the run at an even stride through the index and take no part in anything; they remain in the denominator of <em>p</em>. Both h and p₀ are rounded to whole patches and everything downstream — p*, the dashed curve, the two rate panels — is computed from the rounded values, so the prediction is about the landscape that exists rather than the one the sliders asked for; on a small landscape the two can differ visibly, and at the default hundred patches they do not differ at all. The dashed curve is the deterministic dp/dt = c·p(1 − h − p) − e·p integrated with fourth-order Runge–Kutta from the same p₀. Replicates share every parameter and differ only in their draws. The model is Levins (1969); the habitat-destruction term and its p* = 1 − h − e/c are Lande (1987).</p>
+    </details>
+  </div>
+
   </main>
 
   <!-- Load order matters: nav, canvas-utils, lab-core and plot-core define the
@@ -3065,6 +3261,7 @@
   <script src="js/coexistence-room.js?v=15"></script>
   <script src="js/predator-room.js?v=15"></script>
   <script src="js/keystone-room.js?v=15"></script>
+  <script src="js/metapopulation-room.js?v=1"></script>
   <script src="js/consent.js?v=1"></script>
 </body>
 </html>
