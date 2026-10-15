@@ -649,7 +649,14 @@
     flex: 1 1 auto;
     min-width: 92px;
   }
-  .chip span{ display:block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 3px; }
+  /* A chip's label is normally a bare text node, so it simply takes the chip's
+     own 10px soft type. The pairs that appear when Compare two populations is
+     on need two labels where there was one, so those are spans — and every
+     rule below would otherwise dress them as a second figure: 14px bold in the
+     figure's colour, beside a population 2 chip whose bare label stayed 10px
+     grey. .lbl marks a label that happens to be a span, and every figure rule
+     excludes it, so the two labels in a pair match again. */
+  .chip span:not(.lbl){ display:block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 3px; }
   /* The readable strength, as on a deck's section labels: a chip's figure is
      14px bold on --paper-dim, which WCAG counts as ordinary text and not large,
      so it needs 4.5:1. The bright values gave 3.80 for --res-2 and 4.33 for
@@ -658,12 +665,22 @@
      side by side treated differently would be a distinction the reader can see
      and cannot account for. The curve each one names keeps the bright colour;
      the hue is close enough that the chip still points at it. */
-  .chip.sp-a span{ color: var(--sp-a-deep); }
-  .chip.sp-b span{ color: var(--sp-b-deep); }
-  .chip.pred span{ color: var(--pred-deep); }
-  .chip.res-1 span{ color: var(--res-1-deep); }
-  .chip.res-2 span{ color: var(--res-2-deep); }
-  .chip.cap span{ color: var(--cap-deep); }
+  .chip.sp-a span:not(.lbl){ color: var(--sp-a-deep); }
+  .chip.sp-b span:not(.lbl){ color: var(--sp-b-deep); }
+  .chip.pred span:not(.lbl){ color: var(--pred-deep); }
+  .chip.res-1 span:not(.lbl){ color: var(--res-1-deep); }
+  .chip.res-2 span:not(.lbl){ color: var(--res-2-deep); }
+  .chip.cap span:not(.lbl){ color: var(--cap-deep); }
+
+  /* Which population a figure belongs to, said in the colour that population's
+     curve carries on the chart — the pairing is popColor() in the room's
+     script. Only while comparing: with Compare off there is no pair to tell
+     apart, and the one chip keeps the colour it has always had, which for a
+     derived figure like r or N / K is --cap rather than any population's. */
+  #tab-growth{ --pop-1-deep: var(--res-2-deep); --pop-2-deep: var(--pred-deep); }
+  #tab-crowding{ --pop-1-deep: var(--sp-a-deep); --pop-2-deep: var(--pred-deep); }
+  .compare-on .chip.pop-1 span:not(.lbl){ color: var(--pop-1-deep); }
+  .compare-on .chip.pop-2 span:not(.lbl){ color: var(--pop-2-deep); }
 
   /* Verdict / outcome panels */
   .verdict{
@@ -1429,14 +1446,14 @@
         <div class="canvas-wrap pop-wrap"><canvas id="popCanvas_growth" role="img" aria-label="The population — chart"></canvas></div>
         <div class="chips">
           <div class="chip">Time<span id="tDisp_growth">0</span></div>
-          <div class="chip res-2"><span class="cmp-off-only">Individuals N</span><span class="cmp-only">Individuals N₁</span><span id="nDisp_growth">10</span></div>
-          <div class="chip pred cmp-only">Individuals N₂<span id="nDisp2_growth">10</span></div>
+          <div class="chip res-2 pop-1"><span class="lbl cmp-off-only">Individuals N</span><span class="lbl cmp-only">Individuals N₁</span><span id="nDisp_growth">10</span></div>
+          <div class="chip pred pop-2 cmp-only">Individuals N₂<span id="nDisp2_growth">10</span></div>
         </div>
         <div class="chips">
-          <div class="chip cap"><span class="cmp-off-only">r = b − d</span><span class="cmp-only">r₁</span><span id="rDisp_growth">0.20</span></div>
-          <div class="chip cap cmp-only">r₂<span id="rDisp2_growth">0.10</span></div>
-          <div class="chip cap"><span class="cmp-off-only">Doubling time</span><span class="cmp-only">Doubling time ₁</span><span id="dblDisp_growth">3.5</span></div>
-          <div class="chip cap cmp-only">Doubling time ₂<span id="dblDisp2_growth">6.9</span></div>
+          <div class="chip cap pop-1"><span class="lbl cmp-off-only">r = b − d</span><span class="lbl cmp-only">r₁</span><span id="rDisp_growth">0.20</span></div>
+          <div class="chip cap pop-2 cmp-only">r₂<span id="rDisp2_growth">0.10</span></div>
+          <div class="chip cap pop-1"><span class="lbl cmp-off-only">Doubling time</span><span class="lbl cmp-only">Doubling time ₁</span><span id="dblDisp_growth">3.5</span></div>
+          <div class="chip cap pop-2 cmp-only">Doubling time ₂<span id="dblDisp2_growth">6.9</span></div>
         </div>
       </div>
 
@@ -1650,14 +1667,14 @@
         <div class="canvas-wrap pop-wrap"><canvas id="popCanvas_crowd" role="img" aria-label="The population — chart"></canvas></div>
         <div class="chips">
           <div class="chip">Time<span id="tDisp_crowd">0</span></div>
-          <div class="chip sp-a"><span class="cmp-off-only">Individuals N</span><span class="cmp-only">Individuals N₁</span><span id="nDisp_crowd">10</span></div>
-          <div class="chip pred cmp-only">Individuals N₂<span id="nDisp2_crowd">10</span></div>
+          <div class="chip sp-a pop-1"><span class="lbl cmp-off-only">Individuals N</span><span class="lbl cmp-only">Individuals N₁</span><span id="nDisp_crowd">10</span></div>
+          <div class="chip pred pop-2 cmp-only">Individuals N₂<span id="nDisp2_crowd">10</span></div>
         </div>
         <div class="chips">
-          <div class="chip cap"><span class="cmp-off-only">N / K</span><span class="cmp-only">N₁ / K₁</span><span id="nkDisp_crowd">0.03</span></div>
-          <div class="chip cap cmp-only">N₂ / K₂<span id="nkDisp2_crowd">0.02</span></div>
-          <div class="chip"><span class="cmp-off-only">Per-capita rate</span><span class="cmp-only">Per-capita rate ₁</span><span id="pcDisp_crowd">0.39</span></div>
-          <div class="chip cmp-only">Per-capita rate ₂<span id="pcDisp2_crowd">0.39</span></div>
+          <div class="chip cap pop-1"><span class="lbl cmp-off-only">N / K</span><span class="lbl cmp-only">N₁ / K₁</span><span id="nkDisp_crowd">0.03</span></div>
+          <div class="chip cap pop-2 cmp-only">N₂ / K₂<span id="nkDisp2_crowd">0.02</span></div>
+          <div class="chip pop-1"><span class="lbl cmp-off-only">Per-capita rate</span><span class="lbl cmp-only">Per-capita rate ₁</span><span id="pcDisp_crowd">0.39</span></div>
+          <div class="chip pop-2 cmp-only">Per-capita rate ₂<span id="pcDisp2_crowd">0.39</span></div>
         </div>
       </div>
 
