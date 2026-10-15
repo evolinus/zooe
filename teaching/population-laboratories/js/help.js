@@ -1176,6 +1176,163 @@
         <p><strong>An axis worth remembering:</strong> the Keystone room shows that a niche is not only about
         food. Two competitors that eat exactly the same thing can still differ in how well they withstand a
         predator, and that difference alone is enough to keep both present. Enemies are a niche axis too.</p>`
+    },
+
+    // ---------- metapopulation room ----------
+
+    patchCount: {
+      title: 'Number of patches (H)',
+      body: `
+        <p><strong>How many patches the landscape is divided into.</strong> Levins' equation does not contain
+        this number at all — it is written in fractions, and a fraction of ten patches behaves exactly like a
+        fraction of a thousand. The simulation is not, which is the point of having the slider.</p>
+        <p>With few patches, chance dominates: p* can be 0.6 and the landscape still lose every patch at once,
+        because "60% of 10" is a handful of coin flips. With many, the simulated line hugs the dashed
+        prediction and the equation looks like the whole truth. It is not — it is the large-landscape limit.</p>
+        <p><strong>Try this:</strong> take settings that persist comfortably on 400 patches and run them on 16.
+        Then run 20 replicates of each and compare how many end empty.</p>`
+    },
+
+    p0meta: {
+      title: 'Starting occupancy (p₀)',
+      body: `
+        <p><strong>The fraction of patches occupied when the run begins.</strong> It is rounded to a whole
+        number of patches, so p₀ = 0.10 on 100 patches is always exactly ten.</p>
+        <p>In the deterministic model p₀ changes only how long the approach takes: every positive start climbs
+        to the same p*, because there is no Allee-like threshold in Levins' equation. In the simulated
+        landscape it matters more than that — a metapopulation started on two patches can lose both before
+        colonisation has done anything, and zero is absorbing.</p>
+        <p><strong>Watch for:</strong> starting <em>above</em> p* works too. Occupancy falls to the same
+        equilibrium from either side, which is what makes p* an attractor rather than a ceiling.</p>`
+    },
+
+    colonisation: {
+      title: 'Colonisation rate (c)',
+      body: `
+        <p><strong>How fast empty habitable patches are recolonised.</strong> The rate for any one empty patch
+        is <code>c·p</code>, not c: colonists have to come from an occupied patch, so a landscape that is
+        mostly empty is also bad at filling itself. That product is the single most consequential thing in the
+        model.</p>
+        <p>It is what makes the colonisation curve a hump rather than a line. At p near 0 there is nobody to
+        send colonists; at p near 1 there is nowhere to send them; in between, both are available. Extinction
+        has no such shape — it rises steadily with p — so the two cross exactly once.</p>
+        <p><strong>Try this:</strong> double c and e together. p* = 1 − e/c does not move at all, and the
+        turnover counters beside the grid roughly double. The equilibrium is a ratio; the churn underneath it
+        is not.</p>`
+    },
+
+    patchExtinction: {
+      title: 'Extinction rate (e)',
+      body: `
+        <p><strong>The chance per unit time that an occupied patch loses its population.</strong> Every patch
+        carries the same risk, and it does not fall as the landscape fills up.</p>
+        <p>This is local extinction, not the extinction of the species — the distinction the room exists to
+        draw. A landscape can hold steady at p* while every patch in it goes extinct repeatedly, and the
+        counters beside the grid say how many times.</p>
+        <p><strong>The persistence condition is c &gt; e</strong> (or c(1 − h) &gt; e with habitat destroyed).
+        Below it there is no positive p*, and the landscape empties even though nothing has changed about any
+        individual patch. Try e just above c: no patch is worse than it was, and the species still goes.</p>
+        <p><strong>Not modelled here:</strong> the rescue effect, where immigrants top up an existing
+        population rather than only founding new ones, which makes e fall as p rises.</p>`
+    },
+
+    habitatLoss: {
+      title: 'Habitat destroyed (h)',
+      body: `
+        <p><strong>The fraction of patches made permanently uninhabitable.</strong> Destroyed is not the same
+        as empty: an empty patch is a colonisation target, a destroyed one never will be. They are struck
+        through in the grid, and they stay in the denominator of p — the landscape did not get smaller, part of
+        it stopped being habitat.</p>
+        <p>The equilibrium becomes <code>p* = 1 − h − e/c</code>, so <strong>p* falls by exactly h</strong>:
+        destroy a tenth of the patches and occupancy drops by a tenth of the whole landscape, not by a tenth of
+        what the species had. If it occupied 40% and you take 10%, it is left with 30% — it lost a quarter of
+        its populations for a tenth of the land.</p>
+        <p><strong>The threshold:</strong> p* reaches zero at h = 1 − e/c, which is the occupancy the species
+        had <em>before</em> any destruction. A species is lost when the habitat taken equals the habitat it was
+        using — with plenty of empty, perfectly good patches still standing. Run the defaults, read p* off the
+        chip, then set h to that number.</p>
+        <p><strong>Not modelled here:</strong> the extinction debt. Destruction happens before the first frame,
+        so the landscape never has to pay off an occupancy it can no longer support.</p>`
+    },
+
+    patchField: {
+      title: 'The patch network',
+      body: `
+        <p><strong>One cell per patch.</strong> Filled means occupied, a thin outline means empty and
+        habitable, a cross means destroyed.</p>
+        <p><strong>The grid is a tally, not a map.</strong> Levins' model is spatially <em>implicit</em>:
+        patches have no positions, every patch can be reached from every other, and distance costs nothing. So
+        which cell sits next to which means nothing whatever, and destroyed habitat is scattered through the
+        grid rather than cut from one side — there is no side.</p>
+        <p><strong>What to watch:</strong> once occupancy has levelled off, keep watching. The fraction stops
+        changing and the cells do not. That is the whole room in one panel, and the two counters below it put a
+        number on it.</p>`
+    },
+
+    occupancyChart: {
+      title: 'Occupancy over time',
+      body: `
+        <p><strong>The fraction of patches occupied, as the run proceeds.</strong> The solid line is the
+        simulated landscape counted patch by patch; the dashed line is the deterministic equation started from
+        the same p₀; the purple line is p*.</p>
+        <p>The gap between solid and dashed is everything the equation cannot know. It is widest with few
+        patches, where chance is loud, and nearly invisible with many — the equation is the large-landscape
+        limit of the thing being simulated.</p>
+        <p><strong>Watch for:</strong> the solid line reaching p* and then staying there while refusing to be
+        flat. It wanders around the equilibrium rather than resting on it, because patches keep going out and
+        coming back underneath it.</p>`
+    },
+
+    colExtLines: {
+      title: 'Colonisation and extinction vs. occupancy',
+      body: `
+        <p><strong>Where p* comes from.</strong> Both curves are rates — patches gained or lost per unit of
+        time — plotted against how full the landscape currently is.</p>
+        <ul>
+          <li><strong>Colonisation, c·p(1 − h − p)</strong>, is a hump. It needs occupied patches to send
+          migrants and empty habitable ones to receive them, so it is zero at both ends and greatest in
+          between.</li>
+          <li><strong>Extinction, e·p</strong>, is a straight line through the origin: more occupied patches,
+          proportionally more of them going out.</li>
+        </ul>
+        <p>They cross once. To the left of the crossing colonisation is winning and occupancy rises; to the
+        right extinction is, and it falls. That crossing is p*, and it is the same picture as births against
+        deaths in the Crowding Room, with patches in place of individuals.</p>
+        <p><strong>Try this:</strong> raise e until the straight line clears the top of the hump. There is then
+        no crossing at all except at the origin, and no occupancy the landscape can hold.</p>`
+    },
+
+    dpdt: {
+      title: 'Rate of change vs. occupancy',
+      body: `
+        <p><strong>The difference between the two curves beside it.</strong> Positive means occupancy is
+        climbing, negative means it is falling, zero means it is holding.</p>
+        <p>It crosses zero twice: once at an empty landscape and once at p*. The first is an equilibrium too,
+        but an unstable one in the deterministic model — any occupancy at all grows away from it. In the
+        simulated landscape it is not merely stable, it is absorbing: a metapopulation that loses its last
+        patch has no way back, because colonists come only from occupied patches.</p>
+        <p><strong>Compare:</strong> the Crowding Room's dN/dt panel, which humps in exactly this way and for
+        exactly this reason — something that needs both a stock and a vacancy is slow when either is scarce.</p>`
+    },
+
+    glosMetapopulation: {
+      title: 'Metapopulation',
+      body: `
+        <p><strong>A population of populations:</strong> a set of local populations, each on its own patch of
+        habitat, linked by individuals moving between them. The term is Levins' (1970), and it changes the unit
+        of study — the thing that persists is the set, not any member of it.</p>
+        <p>Why it matters: <strong>every local population goes extinct eventually.</strong> A patch network can
+        nonetheless persist indefinitely, because empty patches are recolonised from occupied ones faster than
+        occupied ones empty. Persistence at that scale is not the absence of extinction; it is extinction being
+        outrun.</p>
+        <p>Two consequences that are easy to miss and matter in practice:</p>
+        <ul>
+          <li>A species can be driven out of a landscape in which <em>every remaining patch is perfectly
+          good</em> and every local population is as robust as it ever was. Nothing is wrong anywhere except in
+          the arithmetic of the whole.</li>
+          <li>An empty patch is not a worthless one. It is a colonisation target, and the model stops working
+          without it — which is why counting occupied sites understates what a network needs.</li>
+        </ul>`
     }
   };
 

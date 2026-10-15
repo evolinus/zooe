@@ -43,7 +43,7 @@ function switchTab(tabId, evt) {
   window.dispatchEvent(new Event('resize'));
   // Rooms that animate listen for this so they can stop when the reader walks
   // away rather than playing on in a hidden tab. LAB.createPlayer subscribes on
-  // behalf of all eight, so a room has to do nothing.
+  // behalf of all nine, so a room has to do nothing.
   document.dispatchEvent(new CustomEvent('lab:tabchange', { detail: { tabId: tabId } }));
 }
 
@@ -107,7 +107,7 @@ document.addEventListener('click', (e) => {
 
 /* Previous/Next at the foot of every room.
 
-   The eight rooms are one argument in order, and the only thing that had been
+   The nine rooms are one argument in order, and the only thing that had been
    saying so was a "Where this goes next" link inside each What to notice panel
    — which points where the *idea* goes, and deliberately skips about: the
    Keystone Room sends the reader back to Neighbours and Predator, not on.

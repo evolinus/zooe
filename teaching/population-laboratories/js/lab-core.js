@@ -2,7 +2,7 @@
 // the numerical integrator, a few random-number helpers, and the playback
 // engine that drives the animation and the history scrubber.
 //
-// The playback model is deliberately simple and is the same in all eight rooms:
+// The playback model is deliberately simple and is the same in all nine rooms:
 // pressing Run computes the *entire* trajectory in one synchronous pass and
 // stores it as an array of frames, then a requestAnimationFrame loop reveals
 // those frames one at a time. Nothing is simulated during the animation, so
