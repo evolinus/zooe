@@ -1068,7 +1068,14 @@
     background: var(--paper-dim); border: 1px solid var(--rule); border-radius: 4px;
     padding: 6px 12px; text-align: center; font-family: ui-monospace, 'SF Mono', monospace; font-size: 10px; color: var(--ink-soft);
   }
-  .drift-chip span { display: block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 2px; }
+  /* A chip's label is normally a bare text node or a <var>, so it takes the
+     chip's own 10px soft type; the rule below is for the figure under it.
+     Some labels are spans instead — a span is the only way to hold mixed
+     markup like "p = freq. A₁" together — and those were coming out as a
+     second figure, 14px bold, beside a chip in the same row whose bare label
+     stayed 10px grey. .lbl marks a label that happens to be a span, and the
+     figure rule excludes it, so a row reads as one row again. */
+  .drift-chip span:not(.lbl) { display: block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 2px; }
 
   .needle {
     position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
@@ -2885,9 +2892,9 @@
           <div class="needle"></div>
         </div>
         <div class="drift-stats">
-          <div class="drift-chip"><span>Generation</span><span id="genDisplay_drift">0</span></div>
+          <div class="drift-chip"><span class="lbl">Generation</span><span id="genDisplay_drift">0</span></div>
           <div class="drift-chip">Ind. drawn<span id="spinDisplay_drift">—</span></div>
-          <div class="drift-chip"><span><var>p</var> = freq. <var>A</var>₁</span><span id="freqDisplay_drift">—</span></div>
+          <div class="drift-chip"><span class="lbl"><var>p</var> = freq. <var>A</var>₁</span><span id="freqDisplay_drift">—</span></div>
         </div>
       </div>
 
@@ -3065,10 +3072,10 @@
           <div class="needle"></div>
         </div>
         <div class="drift-stats">
-          <div class="drift-chip"><span>Generation</span><span id="genDisplay_selection">0</span></div>
+          <div class="drift-chip"><span class="lbl">Generation</span><span id="genDisplay_selection">0</span></div>
           <div class="drift-chip">Ind. drawn<span id="spinDisplay_selection">—</span></div>
-          <div class="drift-chip"><span><var>p</var> = freq. <var>A</var>₁</span><span id="freqDisplay_selection">—</span></div>
-          <div class="drift-chip"><span>Δ<var>p</var> (selection shift)</span><span id="deltaFDisplay_selection">—</span></div>
+          <div class="drift-chip"><span class="lbl"><var>p</var> = freq. <var>A</var>₁</span><span id="freqDisplay_selection">—</span></div>
+          <div class="drift-chip"><span class="lbl">Δ<var>p</var> (selection shift)</span><span id="deltaFDisplay_selection">—</span></div>
         </div>
       </div>
 
@@ -3376,9 +3383,9 @@
           <canvas id="demeCanvas_mig" role="img" aria-label="The two populations side by side, one mark per individual coloured by allele, with the migrants crossing between them"></canvas>
         </div>
         <div class="drift-stats">
-          <div class="drift-chip"><span>Generation</span><span id="genDisplay_mig">0</span></div>
-          <div class="drift-chip"><span>A: <var>p</var><sub>A</sub></span><span id="paDisplay_mig">—</span></div>
-          <div class="drift-chip"><span>B: <var>p</var><sub>B</sub></span><span id="pbDisplay_mig">—</span></div>
+          <div class="drift-chip"><span class="lbl">Generation</span><span id="genDisplay_mig">0</span></div>
+          <div class="drift-chip"><span class="lbl">A: <var>p</var><sub>A</sub></span><span id="paDisplay_mig">—</span></div>
+          <div class="drift-chip"><span class="lbl">B: <var>p</var><sub>B</sub></span><span id="pbDisplay_mig">—</span></div>
           <div class="drift-chip">Difference<span id="gapDisplay_mig">—</span></div>
           <div class="drift-chip">Crossed this gen.<span id="migDisplay_mig">—</span></div>
         </div>
