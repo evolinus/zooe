@@ -638,6 +638,10 @@
   /* Numeric readout chips */
   .chips{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
   .chips.center{ justify-content:center; }
+  /* A row whose chips belong together stays one row however narrow the panel:
+     the chips share the width equally and a long label wraps inside its chip. */
+  .chips.one-row{ flex-wrap: nowrap; }
+  .chips.one-row .chip{ flex: 1 1 0; min-width: 0; padding-left: 6px; padding-right: 6px; }
   .chip{
     background: var(--paper-dim);
     border: 1px solid var(--rule);
@@ -1464,14 +1468,16 @@
           <span class="name-group"><span class="name">The population</span><button class="help-btn" data-help="popField"></button></span>
         </div>
         <div class="canvas-wrap pop-wrap"><canvas id="popCanvas_growth" role="img" aria-label="The population — chart"></canvas></div>
-        <div class="chips">
+        <div class="chips one-row">
           <div class="chip">Time<span id="tDisp_growth">0</span></div>
           <div class="chip res-2 pop-1"><span class="lbl cmp-off-only">Individuals N</span><span class="lbl cmp-only">Individuals N₁</span><span id="nDisp_growth">10</span></div>
           <div class="chip pred pop-2 cmp-only">Individuals N₂<span id="nDisp2_growth">10</span></div>
         </div>
-        <div class="chips">
+        <div class="chips one-row">
           <div class="chip cap pop-1"><span class="lbl cmp-off-only">r = b − d</span><span class="lbl cmp-only">r₁</span><span id="rDisp_growth">0.20</span></div>
           <div class="chip cap pop-2 cmp-only">r₂<span id="rDisp2_growth">0.10</span></div>
+        </div>
+        <div class="chips one-row">
           <div class="chip cap pop-1"><span class="lbl cmp-off-only">Doubling time</span><span class="lbl cmp-only">Doubling time ₁</span><span id="dblDisp_growth">3.5</span></div>
           <div class="chip cap pop-2 cmp-only">Doubling time ₂<span id="dblDisp2_growth">6.9</span></div>
         </div>
