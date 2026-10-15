@@ -657,20 +657,29 @@
      grey. .lbl marks a label that happens to be a span, and every figure rule
      excludes it, so the two labels in a pair match again. */
   .chip span:not(.lbl){ display:block; font-size: 14px; font-weight: bold; color: var(--ink); margin-top: 3px; }
+  /* A chip's colour is the colour its own room draws the thing it names, and
+     the rooms differ on what that is: the Resource room draws its equilibrium
+     levels in --cap and its consumers in the gold, the Predator room draws
+     each species' equilibrium in that species' colour. A chip follows its
+     room rather than a house style, because the reader's eye goes from the
+     chip to the chart beside it and nowhere else. */
+
   /* The readable strength, as on a deck's section labels: a chip's figure is
      14px bold on --paper-dim, which WCAG counts as ordinary text and not large,
      so it needs 4.5:1. The bright values gave 3.80 for --res-2 and 4.33 for
-     --cap, with --sp-a and --sp-b scraping over at 4.52 and 4.69. All six take
-     the deepened value rather than only the two that failed, because two chips
-     side by side treated differently would be a distinction the reader can see
-     and cannot account for. The curve each one names keeps the bright colour;
-     the hue is close enough that the chip still points at it. */
+     --cap, with --sp-a and --sp-b scraping over at 4.52 and 4.69, and --stamp
+     worst of the set at 2.39. All seven take the deepened value rather than
+     only the ones that failed, because two chips side by side treated
+     differently would be a distinction the reader can see and cannot account
+     for. The curve each one names keeps the bright colour; the hue is close
+     enough that the chip still points at it. */
   .chip.sp-a span:not(.lbl){ color: var(--sp-a-deep); }
   .chip.sp-b span:not(.lbl){ color: var(--sp-b-deep); }
   .chip.pred span:not(.lbl){ color: var(--pred-deep); }
   .chip.res-1 span:not(.lbl){ color: var(--res-1-deep); }
   .chip.res-2 span:not(.lbl){ color: var(--res-2-deep); }
   .chip.cap span:not(.lbl){ color: var(--cap-deep); }
+  .chip.stamp span:not(.lbl){ color: var(--stamp-deep); }
 
   /* Which population a figure belongs to, said in the colour that population's
      curve carries on the chart — the pairing is popColor() in the room's
@@ -1899,12 +1908,12 @@
           <span class="name-group"><span class="name">The emergent ceiling</span><button class="help-btn" data-help="rStar"></button></span>
         </div>
         <div class="chips" style="margin-top:4px;">
-          <div class="chip res-1">R* (break-even)<span id="rStarDisp_res">—</span></div>
+          <div class="chip cap">R* (break-even)<span id="rStarDisp_res">—</span></div>
           <div class="chip cap">N* (= K)<span id="nStarDisp_res">—</span></div>
         </div>
         <div class="chips">
           <div class="chip res-1">Resource now<span id="rNowDisp_res">—</span></div>
-          <div class="chip sp-a">Consumers now<span id="nNowDisp_res">—</span></div>
+          <div class="chip stamp">Consumers now<span id="nNowDisp_res">—</span></div>
         </div>
         <div class="chips">
           <div class="chip">Time<span id="tDisp_res">0</span></div>
@@ -2661,8 +2670,8 @@
           <div class="chip pred">Predators P<span id="pDisp_pd">20</span></div>
         </div>
         <div class="chips">
-          <div class="chip cap">Prey equilibrium N*<span id="nStarDisp_pd">—</span></div>
-          <div class="chip cap">Predator equilibrium P*<span id="pStarDisp_pd">—</span></div>
+          <div class="chip sp-a">Prey equilibrium N*<span id="nStarDisp_pd">—</span></div>
+          <div class="chip pred">Predator equilibrium P*<span id="pStarDisp_pd">—</span></div>
         </div>
         <div class="panel-note">Small dots mark the peaks. The predator's peaks always sit to the <em>right</em> of the prey's, by about a quarter of a cycle — predators can only become numerous after their food already has.</div>
       </div>
