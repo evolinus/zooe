@@ -1382,12 +1382,23 @@
   /* Fate Room — the room runs as three numbered steps, so it borrows the
      Linkage Room's part heading (see h2.lk-part below) and adds the pieces
      specific to it: the three-shape mutation row, and the panel that owns up to
-     how unrepresentative the two populations underneath it are. */
+     how unrepresentative the two populations above it are. */
+  /* Step 1 is one choice and one button, so its deck is short and wide; the
+     three shapes it produces sit beside it rather than under it, small enough
+     to stand no taller than the deck, so the cause and its result are read on
+     one line. */
+  .fate-step1{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 14px;
+  }
+  .fate-step1 .deck{ margin-bottom: 0; }
   .fate-mut-row{
     display:grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
-    margin-bottom: 14px;
+    gap: 12px;
   }
   .fate-mut-card{
     background: var(--paper);
@@ -1395,15 +1406,23 @@
     border-top: 5px solid var(--accent, var(--ink));
     border-radius: 6px;
     box-shadow: var(--card-shadow);
-    padding: 14px 14px 10px;
+    padding: 8px 8px 6px;
     min-width: 0;
   }
   .fate-mut-card .fate-mut-name{
     font-weight: 700;
-    font-size: 15px;
+    font-size: 12.5px;
+    line-height: 1.25;
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
+  /* Capped so the square stays within the deck's height however wide the
+     column is; the card centres it. */
+  .fate-mut-card .stage-canvas{ max-width: 128px; margin: 0 auto; }
+  /* A name that wraps at this width would push its square below the other
+     two; letting the name take the slack keeps the three squares level. */
+  .fate-step1 .fate-mut-card{ display: flex; flex-direction: column; }
+  .fate-step1 .fate-mut-card .fate-mut-name{ flex: 1; }
   .fate-caption{
     font-size: 14.5px;
     line-height: 1.65;
@@ -1411,7 +1430,8 @@
     margin: 0 0 8px;
   }
   /* Two equal panels showing one loss and one survival would read as 50/50, so
-     the true tally sits above them and is styled to be read first. */
+     the true tally sits right beneath them, before the chart, and is styled to
+     stand out from the prose around it. */
   /* The run button lives with Step 2 rather than in the deck, because pressing it
      is the step — the deck above only sets up the mutation. */
   .fate-odds{
@@ -1420,7 +1440,7 @@
     border-left: 5px solid var(--stamp);
     border-radius: 6px;
     padding: 12px 18px;
-    margin: 0 0 20px;
+    margin: 20px 0 0;
     max-width: var(--prose-width);
   }
   .fate-odds:empty{ display:none; }
@@ -1429,8 +1449,10 @@
   .fate-odds .fate-odds-theory{ color: var(--ink-soft); font-size: 13.5px; }
   .canvas-wrap.fate-pop{ height: 290px; }
   .canvas-wrap.fate-chart{ height: 300px; }
-  @media (max-width: 780px){
-    .fate-mut-row{ grid-template-columns: 1fr; }
+  /* Too narrow for two columns: the shapes go back under the deck, still three
+     abreast, since they are small enough now to fit a phone side by side. */
+  @media (max-width: 900px){
+    .fate-step1{ grid-template-columns: 1fr; }
   }
 
   /* Linkage Room — the room runs in two parts, each with its own deck. */
@@ -2707,10 +2729,11 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The Copying Room let errors pile up along a single line of descent. Here we follow just <em>one</em> of those errors, in a whole population. A shape is copied once and comes out different — that copy is a <span class="gloss" data-help="glosMutation">mutation</span>, and at the moment it appears it exists in exactly one individual out of <var>N</var>. Two populations then run forward in time until the mutation has either vanished or replaced every other copy. The <span class="gloss" data-help="glosGene">gene</span> for the shape now comes in two <span class="gloss" data-help="glosAllele">alleles</span> — ancestral and mutant — and the graph tracks how common the mutant one is.</p>
-      <p><span class="try-label">Try this.</span> Press <em>Mutate</em> and look at the third panel, where the parent shape sits faded behind its copy. Then press <em>Simulate evolution through time</em> and read the tally above the two populations before watching them: it says how many populations had to be run to find one where the mutation survived at all. Do that again at <var>N</var> = 100 and watch that number grow. Notice how fast the losing population finishes compared with the winning one.</p>
+      <p><span class="try-label">Try this.</span> Press <em>Mutate</em> and look at the third panel, where the parent shape sits faded behind its copy. Then press <em>Simulate evolution through time</em> and read the tally beneath the two populations: it says how many populations had to be run to find one where the mutation survived at all. Do that again at <var>N</var> = 100 and watch that number grow. Notice how fast the losing population finishes compared with the winning one.</p>
     </div>
 
     <h2 class="fate-step">Step 1 — a mutation appears</h2>
+    <div class="fate-step1">
     <div class="deck deck-setup deck-numbered">
       <div class="deck-kicker">Set up step 1<span class="deck-kicker-note">one choice, then press Mutate.</span></div>
       <div class="field">
@@ -2742,6 +2765,7 @@
         <canvas class="stage-canvas" id="ovlCanvas_fate" role="img" aria-label="The parent and its mutant copy drawn on top of one another"></canvas>
       </div>
     </div>
+    </div>
     <p class="fate-caption" id="mutSummary_fate">Press <strong>Mutate</strong> to copy this shape once, with one random error.</p>
 
     <h2 class="fate-step">Step 2 — one mutant in a population of <var>N</var></h2>
@@ -2763,7 +2787,6 @@
         <span class="status mono" id="statusLine_fate">no mutation yet</span>
       </div>
     </div>
-    <div class="fate-odds" id="odds_fate"></div>
     <div class="stage-area" style="--cols: 2">
       <div class="lineage-card" style="--accent: #3D6E6E">
         <div class="lineage-head">
@@ -2780,6 +2803,7 @@
         <div class="canvas-wrap fate-pop" id="pop1Wrap_fate"><canvas id="pop1Canvas_fate" role="img" aria-label="Population 2: every individual, with the mutation carrier ringed in gold"></canvas></div>
       </div>
     </div>
+    <div class="fate-odds" id="odds_fate"></div>
 
     <p class="fate-lede fate-lede-spaced">One gene, two alleles. At <strong>0</strong> the population carries only the ancestral form; at <strong>1</strong> only the mutant is left, and the mutation has become the new normal — it is <span class="gloss" data-help="fixation">fixed</span>. Everything in between is a population carrying both.</p>
     <div class="canvas-wrap fate-chart"><canvas id="chart_fate" role="img" aria-label="Frequency of the mutation in each population over the generations, from 0 (lost) to 1 (fixed)"></canvas></div>
@@ -4459,26 +4483,26 @@
     </div>
   </div>
 
-<script src="js/i18n.js?v=17917858682326"></script>
-  <script src="js/nav.js?v=17917858682326"></script>
-  <script src="js/sound.js?v=17917858682326"></script>
-  <script src="js/help.js?v=17917858682326"></script>
-  <script src="js/shapes-engine.js?v=17917858682326"></script>
-  <script src="js/canvas-utils.js?v=17917858682326"></script>
-  <script src="js/phylo.js?v=17917858682326"></script>
-  <script src="js/copying-room.js?v=17917858682326"></script>
-  <script src="js/branching-room.js?v=17917858682326"></script>
-  <script src="js/fate-room.js?v=17917858682326"></script>
-  <script src="js/sex-asex-room.js?v=17917858682326"></script>
-  <script src="js/hardy-weinberg-room.js?v=17917858682326"></script>
-  <script src="js/linkage-room.js?v=17917858682326"></script>
-  <script src="js/wright-fisher-core.js?v=17917858682326"></script>
-  <script src="js/drift-room.js?v=17917858682326"></script>
-  <script src="js/selection-room.js?v=17917858682326"></script>
-  <script src="js/mutation-room.js?v=17917858682326"></script>
-  <script src="js/migration-room.js?v=17917858682326"></script>
-  <script src="js/adaptation-room.js?v=17917858682326"></script>
-  <script src="js/speciation-room.js?v=17917858682326"></script>
-  <script src="js/consent.js?v=17917858682326"></script>
+<script src="js/i18n.js?v=17927399125224"></script>
+  <script src="js/nav.js?v=17927399125224"></script>
+  <script src="js/sound.js?v=17927399125224"></script>
+  <script src="js/help.js?v=17927399125224"></script>
+  <script src="js/shapes-engine.js?v=17927399125224"></script>
+  <script src="js/canvas-utils.js?v=17927399125224"></script>
+  <script src="js/phylo.js?v=17927399125224"></script>
+  <script src="js/copying-room.js?v=17927399125224"></script>
+  <script src="js/branching-room.js?v=17927399125224"></script>
+  <script src="js/fate-room.js?v=17927399125224"></script>
+  <script src="js/sex-asex-room.js?v=17927399125224"></script>
+  <script src="js/hardy-weinberg-room.js?v=17927399125224"></script>
+  <script src="js/linkage-room.js?v=17927399125224"></script>
+  <script src="js/wright-fisher-core.js?v=17927399125224"></script>
+  <script src="js/drift-room.js?v=17927399125224"></script>
+  <script src="js/selection-room.js?v=17927399125224"></script>
+  <script src="js/mutation-room.js?v=17927399125224"></script>
+  <script src="js/migration-room.js?v=17927399125224"></script>
+  <script src="js/adaptation-room.js?v=17927399125224"></script>
+  <script src="js/speciation-room.js?v=17927399125224"></script>
+  <script src="js/consent.js?v=17927399125224"></script>
 </body>
 </html>
