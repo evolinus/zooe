@@ -53,14 +53,19 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the phase plane — drawn from the
+  // sliders — follows them at once rather than waiting for a Run.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's trajectory comes off the phase plane: it was made on other isoclines.
+  const fresh = () => sim && !dirty;
 
   // Changing a K or an α can flip the outcome, so the verdict is refreshed
   // immediately — before the run, to make the point that it was predictable.
   function onStructural() {
-    markDirty();
     showVerdict(analyse(), false);
-    render(player.frame);
+    markDirty();
   }
 
   function applyPreset(key) {
@@ -220,13 +225,13 @@
 
     // The verdict panel states the outcome, but it does not say where the pair
     // has got to, and that is the whole content of this picture.
-    const verdict = sim ? sim.A : analyse();
+    const verdict = analyse();
     p.describe('Species A against species B, with their isoclines and a field of '
       + 'arrows showing which way the pair is pushed. On these parameters, '
       + OUTCOME[verdict.kind] + '. '
-      + (sim ? `The trajectory has reached A = ${LAB.fmt(sim.As[frame], 0)}, `
+      + (fresh() ? `The trajectory has reached A = ${LAB.fmt(sim.As[frame], 0)}, `
                + `B = ${LAB.fmt(sim.Bs[frame], 0)}.`
-             : 'Nothing run yet.'));
+             : (sim ? 'The last run was made on other settings; press Run to see these.' : 'Nothing run yet.')));
 
     p.begin({ height: 400, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Species A', yLabel: 'Species B' });
@@ -243,12 +248,12 @@
     p.line([[0, KB], [aBA > 1e-6 ? KB / aBA : xMax * 10, 0]], { color: LAB.C.spB, width: 2.2 });
 
     // Equilibria: the two single-species ones plus, if it exists, the interior one.
-    const A = analyse();
+    const A = verdict;
     p.dot(KA, 0, { color: LAB.C.spA, r: 5, ring: LAB.C.paper });
     p.dot(0, KB, { color: LAB.C.spB, r: 5, ring: LAB.C.paper });
     if (A.feasible) p.dot(A.eq.NA, A.eq.NB, { color: LAB.C.cap, r: 6.5, ring: LAB.C.paper });
 
-    if (sim) {
+    if (fresh()) {
       const traj = [];
       for (let i = 0; i <= frame; i++) traj.push([sim.As[i], sim.Bs[i]]);
       p.line(traj, { color: LAB.C.ink, width: 2 });

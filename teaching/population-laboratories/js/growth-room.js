@@ -56,7 +56,13 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the two rate panels — drawn from
+  // the sliders — follow them at once rather than waiting for a Run.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's markers come off the rate panels: they were made on other lines.
+  const fresh = () => sim && !dirty;
 
   const comparing = () => ui.cmp.value === 'on';
 
@@ -90,14 +96,13 @@
   // r and the doubling time are properties of the sliders alone, so they can be
   // shown before anything is simulated.
   function onRateChange() {
-    markDirty();
     livePops().forEach(P => {
       ui.rDisp[P.k - 1].textContent = (P.r >= 0 ? '+' : '') + P.r.toFixed(2);
       ui.dblDisp[P.k - 1].textContent = P.r > 0 ? LAB.fmt(Math.log(2) / P.r, 1)
                                       : P.r < 0 ? 'halves in ' + LAB.fmt(Math.log(2) / -P.r, 1)
                                       : '∞';
     });
-    if (!sim) drawRatePanels(null);
+    markDirty();
   }
 
   // ------------------------------------------------------------- simulation
@@ -306,12 +311,19 @@
   }
 
   // The two diagnostic panels. Their whole point is comparison with the
-  // Crowding Room, where the same two plots bend.
+  // Crowding Room, where the same two plots bend. The lines are the sliders';
+  // only the horizontal extent is borrowed from the last run, so the axis does
+  // not jump about while a rate is being dragged.
   function drawRatePanels(frame) {
-    const pops = sim ? sim.pops : livePops();
-    const cmp = sim ? sim.cmp : comparing();
+    const pops = livePops();
+    const cmp = comparing();
     const nMax = Math.max(sim ? sim.peak : Math.max(...pops.map(P => P.N0)) * 10, 10);
-    const at = P => (sim && frame != null ? P.runs[0][frame] : null);
+    // Where each population is: the run's N while the run still belongs to the
+    // sliders, otherwise the N₀ it would start from — drawn paler, as the room
+    // draws anything that has not happened yet.
+    const live = fresh() && frame != null;
+    const at = P => (live ? sim.pops[P.k - 1].runs[0][frame] : P.N0);
+    const mark = live ? LAB.C.ink : LAB.C.inkSoft;
 
     const pc = plots.pc;
     const span = Math.max(...pops.map(P => Math.abs(P.r)), 0.1) * 1.4;
@@ -328,7 +340,7 @@
               `${cmp ? 'r' + (P.k === 1 ? '₁' : '₂') : 'r'} = ${P.r.toFixed(2)}`,
               { color: P.color, baseline: 'bottom', align: rightEnd ? 'right' : 'left' });
       const N = at(P);
-      if (N != null) pc.dot(N, P.r, { color: LAB.C.ink, r: 4 });
+      pc.dot(N, P.r, { color: mark, r: 4 });
     });
     pc.frame();
 
@@ -343,7 +355,7 @@
     pops.forEach(P => {
       dn.line([[0, 0], [nMax, P.r * nMax]], { color: P.color, width: 2.5 });
       const N = at(P);
-      if (N != null) dn.dot(N, P.r * N, { color: LAB.C.ink, r: 4 });
+      dn.dot(N, P.r * N, { color: mark, r: 4 });
     });
     dn.frame();
   }

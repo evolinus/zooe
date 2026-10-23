@@ -49,18 +49,23 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the phase plane — drawn from the
+  // sliders — follows them at once rather than waiting for a Run.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's trajectory comes off the phase plane: it was made on other nullclines.
+  const fresh = () => sim && !dirty;
 
   // R* and N* are pure algebra, so they can be shown the moment a slider moves.
   function onParam() {
-    markDirty();
     const eq = equilibrium(ui.S.value);
     ui.rStar.textContent = LAB.fmt(eq.Rstar, 2);
     ui.nStar.textContent = eq.viable ? LAB.fmt(eq.Nstar, 0) : 'none';
     ui.rStarNote.innerHTML = eq.viable
       ? 'R* = m / (e·a) — notice that the supply rate S is nowhere in it. Enriching the environment raises how many consumers it holds, never the resource level they leave behind.'
       : `R* = ${LAB.fmt(eq.Rstar, 2)} is higher than the resource level the environment reaches even with no consumers at all (S/l = ${LAB.fmt(eq.Rmax, 2)}). This consumer cannot persist here: raise the supply, raise the attack rate or efficiency, or lower the mortality.`;
-    if (!sim) render(0);
+    markDirty();
   }
 
   function equilibrium(S) {
@@ -185,14 +190,15 @@
   // where each variable stops changing; where they cross, both do.
   function drawPhase(frame) {
     const p = plots.phase;
-    const eq = sim ? sim.eq : equilibrium(ui.S.value);
-    const S = sim ? sim.S0 : ui.S.value;
+    const eq = equilibrium(ui.S.value);
+    const S = ui.S.value;
     const l = ui.l.value, a = ui.a.value;
-    const xMax = Math.max(sim ? sim.rPeak : ui.R0.value, eq.Rstar * 2, 1) * 1.15;
-    const yMax = Math.max(sim ? sim.nPeak : ui.N0.value, eq.viable ? eq.Nstar : 0, 5) * 1.2;
+    const xMax = Math.max(fresh() ? sim.rPeak : ui.R0.value, eq.Rstar * 2, 1) * 1.15;
+    const yMax = Math.max(fresh() ? sim.nPeak : ui.N0.value, eq.viable ? eq.Nstar : 0, 5) * 1.2;
 
-    p.describe(!sim
-      ? 'Resource against consumers, with the two nullclines. Nothing run yet.'
+    p.describe(!fresh()
+      ? 'Resource against consumers, with the two nullclines. '
+        + (sim ? 'The last run was made on other settings; press Run to see these.' : 'Nothing run yet.')
       : `Resource against consumers, with the two nullclines. The trajectory has `
         + `reached R = ${LAB.fmt(sim.Rs[frame], 1)}, N = ${LAB.fmt(sim.Ns[frame], 0)}`
         + (eq.viable
@@ -215,12 +221,14 @@
     // dN/dt = 0  ⇒  R = R*
     p.vline(eq.Rstar, { color: LAB.C.stamp, dash: [7, 4], width: 1.8, label: 'R = R*' });
 
-    if (sim) {
+    if (fresh()) {
       const traj = [];
       for (let i = 0; i <= frame; i++) traj.push([sim.Rs[i], sim.Ns[i]]);
       p.line(traj, { color: LAB.C.ink, width: 1.6, alpha: 0.85 });
       p.dot(sim.Rs[0], sim.Ns[0], { color: LAB.C.inkSoft, r: 3.5 });
       p.dot(sim.Rs[frame], sim.Ns[frame], { color: LAB.C.ink, r: 5, ring: LAB.C.paper });
+    } else {
+      p.dot(ui.R0.value, ui.N0.value, { color: LAB.C.inkSoft, r: 4.5 });
     }
     if (eq.viable) p.dot(eq.Rstar, eq.Nstar, { color: LAB.C.cap, r: 6, ring: LAB.C.paper });
     p.legend([

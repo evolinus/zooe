@@ -101,16 +101,21 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the cobweb and the marker on the
+  // bifurcation diagram — drawn from the sliders — follow them at once.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's staircase comes off the cobweb: it was walked on another curve.
+  const fresh = () => sim && !dirty;
 
   function onModelChange() {
     const M = MODELS[ui.model.value];
     ui.eqText.innerHTML = M.eq;
     ui.eqGloss.innerHTML = M.gloss;
     ui.eqKey.innerHTML = M.key;
-    markDirty();
     bif = null;
-    render(player.frame);
+    markDirty();
   }
 
   // ------------------------------------------------------------- simulation
@@ -230,17 +235,17 @@
   // The map itself, plus the diagonal, plus the staircase the run walks.
   function drawCobweb(frame) {
     const p = plots.cobweb;
-    const M = sim ? sim.M : MODELS[ui.model.value];
-    const r = sim ? sim.r : ui.r.value;
-    const K = sim ? sim.K : ui.K.value;
-    const hi = Math.max(sim ? sim.peak : K * 1.4, K * 1.4);
+    const M = MODELS[ui.model.value];
+    const r = ui.r.value;
+    const K = ui.K.value;
+    const hi = Math.max(fresh() ? sim.peak : K * 1.4, K * 1.4);
 
     // The staircase is the only place the reader can see a step being taken, so
     // this says which step it is currently on and where that step lands. The
     // verdict panel names the regime; it never says where the run has got to.
     p.describe('The reproduction curve, the 45-degree line, and the staircase '
       + 'that walks between them. '
-      + (!sim ? 'Nothing run yet.'
+      + (!fresh() ? (sim ? 'The last run was made on other settings; press Run to see these.' : 'Nothing run yet.')
         : frame < 1
           ? `The run starts at N = ${LAB.fmt(sim.series[0], 1)}.`
           : `Generation ${frame}: N goes from ${LAB.fmt(sim.series[frame - 1], 1)} `
@@ -262,7 +267,7 @@
     p.vline(K, { color: LAB.C.cap, dash: [3, 3], alpha: 0.7 });
     p.hline(K, { color: LAB.C.cap, dash: [3, 3], alpha: 0.7 });
 
-    if (sim && frame > 0) {
+    if (fresh() && frame > 0) {
       const stair = [[sim.series[0], 0]];
       for (let i = 0; i < frame; i++) {
         stair.push([sim.series[i], sim.series[i + 1]]);
@@ -271,6 +276,14 @@
       p.line(stair, { color: LAB.C.ink, width: 1, alpha: 0.75 });
       p.dot(sim.series[frame], frame < sim.gens ? sim.series[frame + 1] : sim.series[frame],
             { color: LAB.C.ink, r: 4, ring: LAB.C.paper });
+    } else {
+      // Before the first step: where the staircase will start, on the curve
+      // above N₀ — paler when there is no run belonging to these sliders yet.
+      const N0 = fresh() ? sim.series[0] : ui.n0.value;
+      const N1 = M.step(N0, r, K);
+      if (isFinite(N1) && N0 <= hi) {
+        p.dot(N0, LAB.clamp(N1, 0, hi), { color: fresh() ? LAB.C.ink : LAB.C.inkSoft, r: 4, ring: LAB.C.paper });
+      }
     }
     p.frame();
   }

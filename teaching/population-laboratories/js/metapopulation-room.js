@@ -73,7 +73,13 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the panels drawn from the sliders —
+  // the two rate panels — follow them at once rather than waiting for a Run.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's markers come off the rate panels: they were made on other curves.
+  const fresh = () => sim && !dirty;
 
   // Straight off the sliders, so the rate panels and p* can be shown before
   // anything has been run — with two quantities rounded to whole patches,
@@ -99,10 +105,9 @@
 
   // p* and the rate curves belong to the sliders alone.
   function onRateChange() {
-    markDirty();
     const P = params();
     ui.pStarDisp.textContent = P.c > P.e / Math.max(1e-9, 1 - P.h) ? pStar(P).toFixed(3) : '0 (dies out)';
-    if (!sim) drawRatePanels(null);
+    markDirty();
   }
 
   // ------------------------------------------------------------- simulation
@@ -332,10 +337,18 @@
   // it needs occupied patches to send migrants and empty ones to receive them,
   // so it vanishes at both ends. Extinction is a straight line through the
   // origin. Where they cross, the landscape is standing still.
+  //
+  // Drawn from the sliders, not from the run: both curves are the equation's,
+  // and the equation can be read before anything is simulated or after.
   function drawRatePanels(frame) {
-    const P = sim ? sim.P : params();
-    const star = sim ? sim.pStar : pStar(P);
-    const now = sim && frame != null ? sim.runs[0].occupied[frame] / P.H : null;
+    const P = params();
+    const star = pStar(P);
+    // Where the landscape is: the run's occupancy while the run still belongs
+    // to the sliders, otherwise the starting occupancy it would set out from —
+    // drawn paler, as the room draws anything that has not happened yet.
+    const live = fresh() && frame != null;
+    const now = live ? sim.runs[0].occupied[frame] / P.H : P.n0 / P.H;
+    const mark = live ? LAB.C.ink : LAB.C.inkSoft;
     const lim = 1 - P.h;
 
     const col = x => P.c * x * Math.max(0, lim - x);
@@ -360,10 +373,8 @@
       r.vline(star, { color: LAB.C.cap, dash: [3, 3], alpha: 0.8 });
       r.dot(star, ext(star), { color: LAB.C.cap, r: 5, ring: LAB.C.paper });
     }
-    if (now != null) {
-      r.dot(now, col(now), { color: LAB.C.ink, r: 3.5 });
-      r.dot(now, ext(now), { color: LAB.C.ink, r: 3.5 });
-    }
+    r.dot(now, col(now), { color: mark, r: 3.5 });
+    r.dot(now, ext(now), { color: mark, r: 3.5 });
     r.legend([{ color: C_COL(), label: 'colonisation c·p(1−h−p)' },
               { color: C_EXT(), label: 'extinction e·p' }], { right: false });
     r.frame();
@@ -392,7 +403,7 @@
       d.vline(star, { color: LAB.C.cap, dash: [3, 3], alpha: 0.8, label: 'p*' });
       d.dot(star, 0, { color: LAB.C.cap, r: 5, ring: LAB.C.paper });
     }
-    if (now != null) d.dot(now, net(now), { color: LAB.C.ink, r: 3.5 });
+    d.dot(now, net(now), { color: mark, r: 3.5 });
     d.frame();
   }
 

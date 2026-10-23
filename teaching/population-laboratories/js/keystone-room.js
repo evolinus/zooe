@@ -87,17 +87,23 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the phase plane and the tolerance
+  // panel — drawn from the sliders — follow them at once.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's trajectories and markers come off the theory panels: they were made
+  // on other isoclines.
+  const fresh = () => sim && !dirty;
   // Anything that moves an isocline or an invasion criterion refreshes the
   // theory panels immediately: the point of this room is that the outcome is
   // predictable before the run, including the outcome you would have got
   // without the predator.
   function onStructural() {
-    markDirty();
     refreshTheory();
-    render(player.frame);
+    markDirty();
   }
-  function onStart() { markDirty(); render(player.frame); }
+  function onStart() { markDirty(); }
 
   function applyPreset(key) {
     const p = PRESETS[key];
@@ -366,7 +372,6 @@
   // ---------------------------------------------------------------- drawing
 
   function current() { return sim ? sim.P : params(); }
-  function currentTheory() { return sim ? sim.t : theory(params()); }
 
   function drawSeries(frame) {
     const p = plots.series;
@@ -423,9 +428,9 @@
   // whole community into one corner, so those lines are allowed to run off the
   // top and are clipped instead.
   function phaseBounds() {
-    const P = current();
+    const P = params();
     let pa = P.NA0, pb = P.NB0;
-    if (sim) {
+    if (fresh()) {
       for (let i = 0; i <= FRAMES; i++) {
         pa = Math.max(pa, sim.As[i]);
         pb = Math.max(pb, sim.Bs[i]);
@@ -459,9 +464,9 @@
 
   function drawPhase(frame) {
     const p = plots.phase;
-    const P = current(), t = currentTheory();
+    const P = params(), t = theory(P);
     const { xMax, yMax } = phaseBounds();
-    const Pnow = sim ? sim.Ps[frame] : (P.hasPred ? P.P0 : 0);
+    const Pnow = fresh() ? sim.Ps[frame] : (P.hasPred ? P.P0 : 0);
 
     // This plane is redrawn at the CURRENT predator density, which is the whole
     // point of the room: the isoclines slide as the predator builds up, and a
@@ -472,9 +477,9 @@
       + (P.hasPred
           ? `With the predator at ${LAB.fmt(Pnow, 1)}, ` + PHASE_OUTCOME[t.kindWith] + '. '
           : 'With no predator, ' + PHASE_OUTCOME[t.kindNo] + '. ')
-      + (sim ? `The trajectory has reached A = ${LAB.fmt(sim.As[frame], 1)}, `
-               + `B = ${LAB.fmt(sim.Bs[frame], 1)}.`
-             : 'Nothing run yet.'));
+      + (fresh() ? `The trajectory has reached A = ${LAB.fmt(sim.As[frame], 1)}, `
+                 + `B = ${LAB.fmt(sim.Bs[frame], 1)}.`
+               : (sim ? 'The last run was made on other settings; press Run to see these.' : 'Nothing run yet.')));
 
     p.begin({ height: 400, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Competitor A', yLabel: 'Competitor B' });
@@ -513,7 +518,7 @@
         p.dot(t.eqNo.NA, t.eqNo.NB, { color: LAB.C.inkSoft, r: 4.5, alpha: 0.5 });
       }
 
-      if (sim) {
+      if (fresh()) {
         if (sim.counter) {
           const ct = [];
           for (let i = 0; i <= frame; i++) ct.push([sim.counter.As[i], sim.counter.Bs[i]]);
@@ -537,8 +542,8 @@
   // most predation that species can stand: r_i/a_i.
   function drawTolerance(frame) {
     const p = plots.tol;
-    const P = current(), t = currentTheory();
-    const Pnow = sim ? sim.Ps[frame] : (P.hasPred ? P.P0 : 0);
+    const P = params(), t = theory(P);
+    const Pnow = fresh() ? sim.Ps[frame] : (P.hasPred ? P.P0 : 0);
     const marks = [t.tolA, t.tolB, t.PstarA, t.PstarB, Pnow].filter(v => isFinite(v) && v > 0);
     const xMax = Math.max(...marks, 1) * 1.2;
     const yMax = Math.max(P.rA, P.rB) * 1.25;

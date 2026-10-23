@@ -85,22 +85,25 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the phase plane and the two
+  // panels beneath it — drawn from the sliders — follow them at once.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's orbit and markers come off the theory panels: they were made on
+  // other nullclines.
+  const fresh = () => sim && !dirty;
 
   // Every parameter in this room can move the equilibrium, and the equilibrium
   // is the thing worth predicting before pressing Run — so the numbers panel and
   // the nullclines refresh on every slider move.
   function onParam() {
-    markDirty();
     refreshTheory();
-    render(player.frame);
+    markDirty();
   }
   // Starting abundances change nothing about the equilibrium, but in the classic
   // model they change the entire orbit, which is the point of that model.
-  function onStart() {
-    markDirty();
-    render(player.frame);
-  }
+  function onStart() { markDirty(); }
 
   function onModeChange() {
     const mode = ui.mode.value;
@@ -523,15 +526,15 @@
   }
 
   function phaseBounds() {
-    const P = current(), t = currentTheory();
+    const P = params(), t = theory(P);
     const Ns = t.viable ? t.Nstar : P.N0;
     const Ps = t.viable ? t.Pstar : P.P0;
     // A prey population released from its predator runs to the cap, so the view
     // is bounded independently of the trajectory and the excursion is clipped.
     const capX = Math.max(Ns * 10, isFinite(P.K) ? P.K * 1.05 : 0);
     const capY = Math.max(Ps * 10, 1);
-    const xMax = Math.min(capX, Math.max(Ns * 1.6, P.N0, sim ? sim.phaseN : 0, isFinite(P.K) ? P.K : 0)) * 1.12;
-    const yMax = Math.min(capY, Math.max(Ps * 1.6, P.P0, sim ? sim.phaseP : 0)) * 1.12;
+    const xMax = Math.min(capX, Math.max(Ns * 1.6, P.N0, fresh() ? sim.phaseN : 0, isFinite(P.K) ? P.K : 0)) * 1.12;
+    const yMax = Math.min(capY, Math.max(Ps * 1.6, P.P0, fresh() ? sim.phaseP : 0)) * 1.12;
     return { xMax: Math.max(xMax, 1), yMax: Math.max(yMax, 1) };
   }
 
@@ -546,7 +549,7 @@
 
   function drawPhase(frame) {
     const p = plots.phase;
-    const P = current(), t = currentTheory();
+    const P = params(), t = theory(P);
     const f = response(P), g = growth(P);
     const { xMax, yMax } = phaseBounds();
 
@@ -558,9 +561,9 @@
       + (PHASE_OUTCOME[t.kind] || 'the outcome is not classified') + '. '
       + (t.viable ? `That crossing sits at N* = ${LAB.fmt(t.Nstar, 1)} prey and `
                     + `P* = ${LAB.fmt(t.Pstar, 1)} predators. ` : '')
-      + (sim ? `The orbit has reached N = ${LAB.fmt(sim.Ns[frame], 1)}, `
-               + `P = ${LAB.fmt(sim.Ps[frame], 1)}.`
-             : 'Nothing run yet.'));
+      + (fresh() ? `The orbit has reached N = ${LAB.fmt(sim.Ns[frame], 1)}, `
+                 + `P = ${LAB.fmt(sim.Ps[frame], 1)}.`
+               : (sim ? 'The last run was made on other settings; press Run to see these.' : 'Nothing run yet.')));
 
     p.begin({ height: 400, padL: 58, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Prey N', yLabel: 'Predators P' });
@@ -585,7 +588,7 @@
     // Everything from here on is a trajectory, and trajectories can leave the
     // frame — clip so an escaping prey population cannot draw over the axes.
     p.clipped(() => {
-      if (sim) {
+      if (fresh()) {
         for (const ref of sim.refs) {
           const pts = [];
           for (let i = 0; i <= FRAMES; i++) pts.push([ref.Ns[i], ref.Ps[i]]);
@@ -610,7 +613,7 @@
   // difference between the second and third models is the shape of this line.
   function drawFunctional(frame) {
     const p = plots.fresp;
-    const P = current();
+    const P = params();
     const f = response(P);
     const { xMax } = phaseBounds();
     const ceiling = P.h > 1e-9 ? 1 / P.h : Infinity;
@@ -634,7 +637,7 @@
     }
     p.line(pts, { color: LAB.C.pred, width: 2.4 });
 
-    const N = sim ? sim.Ns[frame] : P.N0;
+    const N = fresh() ? sim.Ns[frame] : P.N0;
     if (N > 0 && N <= xMax) {
       p.vline(N, { color: LAB.C.ink, dash: [2, 3], alpha: 0.5 });
       p.dot(N, f(N), { color: LAB.C.ink, r: 4, ring: LAB.C.paper });
@@ -648,9 +651,9 @@
   // whole of the stability question.
   function drawRisk(frame) {
     const p = plots.risk;
-    const P = current();
+    const P = params();
     const f = response(P), g = growth(P);
-    const Pnow = sim ? sim.Ps[frame] : P.P0;
+    const Pnow = fresh() ? sim.Ps[frame] : P.P0;
     const { xMax } = phaseBounds();
     const risk = N => (N > 1e-9 ? (f(N) / N) * Pnow : P.a * Pnow);
     const yMax = Math.max(P.r * 1.3, risk(0) * 1.15, 1e-3);
@@ -668,7 +671,7 @@
     p.line(born, { color: LAB.C.spA, width: 2.2 });
     p.line(died, { color: LAB.C.pred, width: 2.2 });
 
-    const N = sim ? sim.Ns[frame] : P.N0;
+    const N = fresh() ? sim.Ns[frame] : P.N0;
     if (N > 0 && N <= xMax) p.vline(N, { color: LAB.C.ink, dash: [2, 3], alpha: 0.5 });
     p.legend([{ color: LAB.C.spA, label: 'prey growth' },
               { color: LAB.C.pred, label: 'predation risk' }], { right: true });
