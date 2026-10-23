@@ -329,21 +329,39 @@ function createWrightFisherRoom(cfg) {
     return hist;
   }
 
+  // A control moved while the room is idle. In the single-run view that is a
+  // fresh start at the new settings. The ten-run view keeps its place, but its
+  // ten runs were made at the old settings and answer a question nobody is
+  // asking any more, so they are cleared: what it shows instead is the
+  // expectation for the new settings and the point the next ten will start
+  // from — the same thing init() leaves on the single-run chart.
+  function onControl() {
+    if (state.running || state.multiRunning) return;
+    if (!state.multiRunMode) { init(); return; }
+    state.detHistory = computeDeterministicHistory(state.f, state.G);
+    state.multiRuns = Array.from({ length: 10 }, () => [state.f]);
+    DOM.multiRunSummary.textContent = '';
+    DOM.statusBar.textContent = T('wf.ready10', 'Ready. Press Run 10 Simulations.');
+    drawMultiChart(state.multiRuns, state.G);
+    drawMultiHet(state.multiRuns, state.G);
+  }
+
   DOM.sliderN.addEventListener('input', () => {
     state.N = +DOM.sliderN.value; DOM.nVal.textContent = state.N;
     applyGCap(); applyDefaultG();
-    if (!state.running && !state.multiRunMode) init();
+    onControl();
   });
 
   DOM.sliderF.addEventListener('input', () => {
     state.f = +DOM.sliderF.value; DOM.fVal.textContent = state.f.toFixed(2);
-    if (!state.running && !state.multiRunMode) init();
+    onControl();
   });
 
   DOM.sliderG.addEventListener('input', () => {
     state.gTouched = true;
     state.G = +DOM.sliderG.value; DOM.gVal.textContent = state.G;
-    if (!state.running && !state.multiRunMode) {
+    if (state.multiRunMode) onControl();
+    else if (!state.running) {
       state.detHistory = computeDeterministicHistory(state.f, state.G);
       drawChart(state.freqHistory, state.G);
       drawVariance(state.freqHistory, state.G);
@@ -354,14 +372,14 @@ function createWrightFisherRoom(cfg) {
     DOM.sliderS.addEventListener('input', () => {
       state.s = +DOM.sliderS.value; DOM.sVal.textContent = state.s.toFixed(2);
       applyDefaultG();
-      if (!state.running && !state.multiRunMode) init();
+      onControl();
     });
   }
 
   if (DOM.sliderH) {
     DOM.sliderH.addEventListener('input', () => {
       state.h = +DOM.sliderH.value; DOM.hVal.textContent = state.h.toFixed(2);
-      if (!state.running && !state.multiRunMode) init();
+      onControl();
     });
   }
 
@@ -372,7 +390,7 @@ function createWrightFisherRoom(cfg) {
       // Turning mutation on or off changes what the binomial panel is drawing
       // from and whether the wheel carries a marker, so the labels move with it.
       updatePloidyLabels();
-      if (!state.running && !state.multiRunMode) init();
+      onControl();
     });
   }
 
@@ -417,7 +435,7 @@ function createWrightFisherRoom(cfg) {
         DOM.ploidySeg.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
         updatePloidyLabels();
         applyGCap(); applyDefaultG();
-        if (!state.multiRunMode) init();
+        onControl();
       });
     });
   }
@@ -971,6 +989,13 @@ function createWrightFisherRoom(cfg) {
       ctx.lineWidth = 1.75;
       ctx.stroke();
     });
+
+    // Before the ten have taken a step, all of them sit on one point: the
+    // starting frequency, marked as the single-run chart marks generation 0.
+    if (!runs.some(r => r.length > 1)) {
+      ctx.beginPath(); ctx.arc(padL, padT + graphH * (1 - state.f), 5, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS.stamp; ctx.fill();
+    }
   }
 
   /* Overall genetic diversity, under the ten trajectories.
@@ -1064,6 +1089,11 @@ function createWrightFisherRoom(cfg) {
       ctx.strokeStyle = COLORS.diversity;
       ctx.lineWidth = 2.5;
       ctx.stroke();
+    }
+    // Before a step has been taken there is no line, only where it will start.
+    if (drawn <= 1) {
+      ctx.beginPath(); ctx.arc(padL, Y(expected[0]), 5, 0, Math.PI * 2);
+      ctx.fillStyle = COLORS.diversity; ctx.fill();
     }
 
     DOM.hetCvs.setAttribute('aria-label', T('wf.aria.het',
