@@ -70,7 +70,13 @@
     };
   }
 
-  function markDirty() { dirty = true; }
+  // Every slider move redraws the room, so the three diagnostic panels — drawn
+  // from the sliders — follow them at once rather than waiting for a Run.
+  function markDirty() { dirty = true; player.redraw(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's markers come off the diagnostics: they were made on other curves.
+  const fresh = () => sim && !dirty;
 
   const comparing = () => ui.cmp.value === 'on';
 
@@ -347,10 +353,17 @@
     p.frame();
   }
 
+  // The curves are the sliders'; only the horizontal extent is borrowed from
+  // the last run, so the axis does not jump about while a slider is dragged.
   function drawDiagnostics(frame) {
-    const pops = sim ? sim.pops : livePops();
-    const cmp = sim ? sim.cmp : comparing();
-    const at = P => (sim && frame != null ? P.runs[0][frame] : null);
+    const pops = livePops();
+    const cmp = comparing();
+    // Where each population is: the run's N while the run still belongs to the
+    // sliders, otherwise the N₀ it would start from — drawn paler, as the room
+    // draws anything that has not happened yet.
+    const live = fresh() && frame != null;
+    const at = P => (live ? sim.pops[P.k - 1].runs[0][frame] : P.N0);
+    const mark = live ? LAB.C.ink : LAB.C.inkSoft;
     const xMax = Math.max(...pops.map(P => P.M.K * 1.35), sim ? sim.peak * 1.1 : 0);
     const STEPS = 160;
     const sample = fn => {
@@ -374,7 +387,7 @@
     pops.forEach((P, i) => {
       pc.line(gCurves[i], { color: P.color, width: 2.4 });
       const N = at(P);
-      if (N != null) pc.dot(N, P.M.g(N), { color: LAB.C.ink, r: 4 });
+      pc.dot(N, P.M.g(N), { color: mark, r: 4 });
     });
     pc.frame();
 
@@ -401,7 +414,7 @@
     pops.forEach((P, i) => {
       dn.line(dCurves[i], { color: P.color, width: 2.4 });
       const N = at(P);
-      if (N != null) dn.dot(N, N * P.M.g(N), { color: LAB.C.ink, r: 4 });
+      dn.dot(N, N * P.M.g(N), { color: mark, r: 4 });
     });
     dn.frame();
 
@@ -422,10 +435,8 @@
       bd.line(bdCurves[i].d, { color: LAB.C.spB, width: 2.2, dash });
       bd.dot(P.M.K, P.M.death(P.M.K), { color: LAB.C.cap, r: 4, ring: LAB.C.paper });
       const N = at(P);
-      if (N != null) {
-        bd.dot(N, P.M.birth(N), { color: LAB.C.res2, r: 3.5 });
-        bd.dot(N, P.M.death(N), { color: LAB.C.spB, r: 3.5 });
-      }
+      bd.dot(N, P.M.birth(N), { color: LAB.C.res2, r: 3.5 });
+      bd.dot(N, P.M.death(N), { color: LAB.C.spB, r: 3.5 });
     });
     // this panel's top-right corner belongs to the key, so K names itself at the
     // foot of its line

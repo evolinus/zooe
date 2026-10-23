@@ -58,8 +58,14 @@
     };
   }
 
-  function markDirty() { dirty = true; }
-  function onParam() { markDirty(); refreshTheory(); if (!sim) render(0); }
+  // Every slider move redraws the room, so the right-hand panel — drawn from
+  // the sliders — follows them at once rather than waiting for a Run.
+  function markDirty() { dirty = true; player.redraw(); }
+  function onParam() { refreshTheory(); markDirty(); }
+
+  // The run on screen still belongs to the sliders. Once one has moved, the
+  // run's resource path comes off the right-hand panel: it was made on other lines.
+  const fresh = () => sim && !dirty;
 
   function twoRes() { return ui.mode.value === 'two'; }
 
@@ -197,13 +203,19 @@
 
   // ------------------------------------------------------------- simulation
 
+  // Where the resources start: at the level the environment would reach with
+  // no consumers at all, capped so a rich supply does not start off the chart.
+  function startRes(P) {
+    return [Math.min(P.l > 0 ? P.S1 / P.l : 20, 30),
+            P.two ? Math.min(P.l > 0 ? P.S2 / P.l : 20, 30) : 0];
+  }
+
   function simulate() {
     const P = params();
     const T = ui.T.value;
     const sub = 8, dt = T / FRAMES / sub;
 
-    let R1 = Math.min(P.l > 0 ? P.S1 / P.l : 20, 30);
-    let R2 = P.two ? Math.min(P.l > 0 ? P.S2 / P.l : 20, 30) : 0;
+    let [R1, R2] = startRes(P);
     let NA = ui.NA0.value, NB = ui.NB0.value;
 
     const arr = () => new Float64Array(FRAMES + 1);
@@ -301,7 +313,7 @@
   // point where a species' line crosses zero.
   function drawGrowthVsR(frame) {
     const p = plots.zngi;
-    const t = sim ? sim.t : theory(), P = t.P;
+    const t = theory(), P = t.P;
     // The same canvas carries the ZNGI plane in two-resource mode, so it needs
     // its own description here: what it shows is not what the panel's fixed
     // name in the markup could say for both.
@@ -312,7 +324,7 @@
        : t.winner === 'B' ? 'B is the one that survives on less and wins.'
        : t.winner === 'tie' ? 'the two break even at the same level and neither can displace the other.'
        : 'neither can break even on the resource this environment supplies.')
-      + (sim ? ` The resource now stands at ${LAB.fmt(sim.R1s[frame], 2)}.` : ''));
+      + (fresh() ? ` The resource now stands at ${LAB.fmt(sim.R1s[frame], 2)}.` : ''));
     // Frame the two break-even crossings rather than the whole resource axis:
     // when the environment is rich, S/l can be an order of magnitude above both
     // R* values and would squash the only part of the plot that matters.
@@ -332,7 +344,10 @@
     if (isFinite(t.RsA1) && t.RsA1 <= xMax) p.dot(t.RsA1, 0, { color: LAB.C.spA, r: 4.5, ring: LAB.C.paper });
     if (isFinite(t.RsB1) && t.RsB1 <= xMax) p.dot(t.RsB1, 0, { color: LAB.C.spB, r: 4.5, ring: LAB.C.paper });
     if (isFinite(t.R1max) && t.R1max <= xMax) p.vline(t.R1max, { color: LAB.C.inkSoft, dash: [2, 3], alpha: 0.7, label: 'S/l' });
-    if (sim) p.vline(sim.R1s[frame], { color: LAB.C.stamp, dash: [], width: 1.5, alpha: 0.9, label: 'R now' });
+    // The resource level now, or — with no run that belongs to these sliders —
+    // the level a run would start from, drawn paler.
+    if (fresh()) p.vline(sim.R1s[frame], { color: LAB.C.stamp, dash: [], width: 1.5, alpha: 0.9, label: 'R now' });
+    else if (startRes(P)[0] <= xMax) p.vline(startRes(P)[0], { color: LAB.C.stamp, dash: [], width: 1.5, alpha: 0.45, label: 'R start' });
     p.legend([{ color: LAB.C.spA, label: 'species A' }, { color: LAB.C.spB, label: 'species B' }], { bottom: true });
     p.frame();
   }
@@ -342,14 +357,15 @@
   // the resources actually took.
   function drawZNGI(frame) {
     const p = plots.zngi;
-    const t = sim ? sim.t : theory(), P = t.P;
+    const t = theory(), P = t.P;
     // Frame the break-even lines and the path the resources took, not the whole
     // resource plane: in a rich environment the supply point sits far outside
     // this region and framing to it would crush everything worth seeing into
     // the bottom-left corner. When it is off-scale it gets a corner marker.
     const fin = (v, d) => (isFinite(v) && v > 0 ? v : d);
     let trajX = 0, trajY = 0;
-    if (sim) for (let i = 0; i <= FRAMES; i++) { trajX = Math.max(trajX, sim.R1s[i]); trajY = Math.max(trajY, sim.R2s[i]); }
+    if (fresh()) for (let i = 0; i <= FRAMES; i++) { trajX = Math.max(trajX, sim.R1s[i]); trajY = Math.max(trajY, sim.R2s[i]); }
+    else [trajX, trajY] = startRes(P);
     const xMax = Math.max(fin(t.RsA1, 0), fin(t.RsB1, 0), trajX, 1) * 1.35;
     const yMax = Math.max(fin(t.RsA2, 0), fin(t.RsB2, 0), trajY, 1) * 1.35;
 
@@ -367,9 +383,9 @@
       + 'resource 1 against resource 2. '
       + `Consumer A breaks even at ${ends(t.RsA1, t.RsA2)}; consumer B at `
       + `${ends(t.RsB1, t.RsB2)}. `
-      + (sim ? `The resources now stand at R\u2081 = ${LAB.fmt(sim.R1s[frame], 2)}, `
+      + (fresh() ? `The resources now stand at R\u2081 = ${LAB.fmt(sim.R1s[frame], 2)}, `
                + `R\u2082 = ${LAB.fmt(sim.R2s[frame], 2)}.`
-             : 'Nothing run yet.'));
+             : (sim ? 'The last run was made on other settings; press Run to see these.' : 'Nothing run yet.')));
 
     p.begin({ height: 250, padL: 56, xMin: 0, xMax, yMin: 0, yMax,
               xLabel: 'Resource 1', yLabel: 'Resource 2' });
@@ -398,11 +414,14 @@
     }
     if (t.coexEq && t.coexists) p.dot(t.coexEq.R1, t.coexEq.R2, { color: LAB.C.cap, r: 6, ring: LAB.C.paper });
 
-    if (sim) {
+    if (fresh()) {
       const traj = [];
       for (let i = 0; i <= frame; i++) traj.push([sim.R1s[i], sim.R2s[i]]);
       p.line(traj, { color: LAB.C.ink, width: 1.5, alpha: 0.8 });
       p.dot(sim.R1s[frame], sim.R2s[frame], { color: LAB.C.ink, r: 4.5, ring: LAB.C.paper });
+    } else {
+      const [R1, R2] = startRes(P);
+      p.dot(R1, R2, { color: LAB.C.inkSoft, r: 4.5 });
     }
     p.legend([{ color: LAB.C.spA, label: 'A breaks even' }, { color: LAB.C.spB, label: 'B breaks even' }],
              { bottom: true });

@@ -415,8 +415,9 @@
     // A run starts well below the fold: the deck is at the top of the room and
     // step 2 is three screens down. Bring it into view on the press, or the
     // first generations — the ones that decide most runs — go past unseen.
-    // Prefer framing the tally as well; on a short window settle for the two
-    // populations and the chart, which are the parts that have to be watched.
+    // Frame the two populations, the tally beneath them and the chart together;
+    // on a short window start at the populations, which have to be watched.
+    // The tally waits beneath them, and it is still there when the run ends.
     function revealRun() {
       // The sticky tab bar covers the top of the window, so the usable band is
       // shorter than the viewport and everything has to be pushed down past it.
@@ -425,12 +426,10 @@
       const chartWrap = chartCvs.parentElement;
       const bottom = chartWrap.getBoundingClientRect().bottom + window.scrollY;
       const margin = 12;
-      const tops = [oddsBox, panels[0].wrap.closest('.stage-area')]
-        .map(node => node.getBoundingClientRect().top + window.scrollY);
-      const top = tops.find(t => bottom - t + 2 * margin <= room);
-      const target = top !== undefined
+      const top = panels[0].wrap.closest('.stage-area').getBoundingClientRect().top + window.scrollY;
+      const target = bottom - top + 2 * margin <= room
         ? top - navH - (room - (bottom - top)) / 2   // it fits: centre it
-        : tops[1] - navH - margin;                   // it does not: start at the graphs
+        : top - navH - margin;                       // it does not: start at the populations
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const dest = Math.max(0, Math.min(target, maxScroll));
       if (Math.abs(dest - window.scrollY) < 4) return false;   // already framed
@@ -488,7 +487,7 @@
       const oneIn = Math.round(batch.total / batch.fixations);
       oddsBox.innerHTML = T('fate.odds',
         '<p><strong>These two are not a fair sample.</strong><button class="help-btn" data-help="fateOdds"></button> To find one population where the mutation survived, we simulated <strong>{total}</strong> of them. It was lost in <strong>{losses}</strong> and survived in <strong>{fix}</strong> — roughly one in {oneIn}.</p>' +
-        '<p class="fate-odds-theory">That is not luck of the draw: a brand-new mutation with no advantage survives with probability <var>1/N</var> = 1/{n} = {pct}%. The two populations below are one loser and one winner pulled out of that batch, shown side by side because the winner is otherwise so rarely seen.</p>',
+        '<p class="fate-odds-theory">That is not luck of the draw: a brand-new mutation with no advantage survives with probability <var>1/N</var> = 1/{n} = {pct}%. The two populations above are one loser and one winner pulled out of that batch, shown side by side because the winner is otherwise so rarely seen.</p>',
         { total: batch.total, losses: batch.losses, fix: batch.fixations, oneIn, n: N, pct: (100 / N).toFixed(0) });
     }
 
