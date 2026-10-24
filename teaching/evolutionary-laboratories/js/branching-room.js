@@ -50,12 +50,16 @@
     // out. Every tile sits on a layer behind every shape, so where two nodes
     // overlap a tile can only cover another tile, never a neighbouring shape.
     // The branches lie between the two layers, over every tile and under every
-    // shape, and each fades out towards every shape's centre — fully drawn
-    // FADE_TO from it, gone by GAP. Ending them at the tile's edge instead, under
-    // the tiles, left a late split only a few faint pixels of branch: its
-    // daughters' tiles still overlap their parent's, and a line can only show
-    // where no tile covers it.
-    const LANE_GAP = 100, CARD = 80, TILE = 80, GAP = 18, FADE_TO = 38, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
+    // shape, and each fades out in an oval round every shape's centre — fully
+    // drawn outside FADE_X by FADE_Y, gone inside HIDDEN of that. Ending them at
+    // the tile's edge instead, under the tiles, left a late split only a few
+    // faint pixels of branch: its daughters' tiles still overlap their
+    // parent's, and a line can only show where no tile covers it. The oval is
+    // wider than tall because the shapes are — a fish's mouth and tail reach
+    // nearly to the card's sides — and a round fade wide enough to clear them
+    // swallowed the short fork of a late split whole.
+    const FADE_X = 46, FADE_Y = 38, HIDDEN = 0.7;
+    const LANE_GAP = 100, CARD = 80, TILE = 80, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
     const MIN_CANVAS_W = 520;
     // One weight for every branch the room draws: the growing tree and both
     // halves of the tanglegram.
@@ -104,18 +108,18 @@
     }
 
     // A lineage's branch while its shape is at atGen: sampled every 2px along
-    // the ease and straight once level, and kept out of the squares of both the
-    // shape it split from and the shape it has reached, where the fade has
-    // already hidden it.
+    // the ease and straight once level, and kept out of the hidden middle of
+    // the fade round both the shape it split from and the shape it has reached.
     function branchD(node, atGen){
       const g0 = node.start, g1 = Math.max(g0, atGen);
       const x0 = genX(g0), y0 = nodeY(node, g0), xt = genX(g1), yt = nodeY(node, g1);
-      const out = (x, y, cx, cy) => Math.abs(x - cx) >= GAP - 0.5 || Math.abs(y - cy) >= GAP - 0.5;
+      const hx = HIDDEN*FADE_X, hy = HIDDEN*FADE_Y;
+      const out = (x, y, cx, cy) => ((x - cx)/hx)**2 + ((y - cy)/hy)**2 >= 0.98;
       const level = Math.min(g1, g0 + transGens(node));
       const step = genAt(MARGIN_X + 2);
       const gens = [];
       for(let gen = g0; gen < level; gen += step) gens.push(gen);
-      gens.push(level, genAt(x0 + GAP), genAt(xt - GAP), g1);
+      gens.push(level, genAt(x0 + hx), genAt(xt - hx), g1);
       const pts = gens.filter(gen => gen >= g0 && gen <= g1).sort((a, b) => a - b)
         .map(gen => [genX(gen), nodeY(node, gen)])
         .filter(([x, y]) => out(x, y, x0, y0) && out(x, y, xt, yt));
@@ -270,7 +274,7 @@
       };
       const defs = el('defs', {}, linesSvg);
       const grad = el('radialGradient', { id: 'branchFadeDisc' }, defs);
-      el('stop', { offset: GAP/FADE_TO, 'stop-color': '#000', 'stop-opacity': 1 }, grad);
+      el('stop', { offset: HIDDEN, 'stop-color': '#000', 'stop-opacity': 1 }, grad);
       el('stop', { offset: 1, 'stop-color': '#000', 'stop-opacity': 0 }, grad);
       const mask = el('mask', { id: 'branchFade', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: '100%', height: '100%' }, defs);
       el('rect', { x: 0, y: 0, width: '100%', height: '100%', fill: '#fff' }, mask);
@@ -351,8 +355,8 @@
       canvas.setAttribute('aria-label', `Lineage ${node.id}, current shape`);
       card.appendChild(canvas);
       treeCanvas.appendChild(card); node.cardEl = card; node.ctx = canvas.getContext('2d');
-      const disc = document.createElementNS(SVG_NS, 'circle');
-      disc.setAttribute('r', FADE_TO); disc.setAttribute('fill', 'url(#branchFadeDisc)');
+      const disc = document.createElementNS(SVG_NS, 'ellipse');
+      disc.setAttribute('rx', FADE_X); disc.setAttribute('ry', FADE_Y); disc.setAttribute('fill', 'url(#branchFadeDisc)');
       fadeG.appendChild(disc); node.fadeEl = disc;
     }
 
