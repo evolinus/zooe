@@ -1783,6 +1783,12 @@
      beside it — spanning four tracks gives 4T + 3 gaps, and four columns with
      three gaps of their own hands back T. */
   .mut-wheel-row{ margin: 0 0 20px; align-items: start; }
+  /* Run evolution sits under the Original fish rather than beside Spin: it
+     replays the fates of the mutations already drawn without spinning again,
+     so it belongs with the fish those mutations start from, not with the
+     controls that make new ones. */
+  .mut-orig-col{ display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .mut-orig-col .btn{ width: 100%; }
   .mut-wheel-row .wheel-grid{
     grid-column: span 4;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -3214,7 +3220,6 @@
       <div class="deck-kicker">Set up the run<span class="deck-kicker-note">two choices &mdash; a third under Selection &mdash; then press Spin.</span></div>
       <div class="transport mut-transport" style="border-top:none; padding-top:0; margin-top:0;">
         <button class="btn" id="spinBtn_mut" data-sound data-results="#stageTop_mut">🎡 Spin — mutate all four characters</button>
-        <button class="btn secondary" id="rerunBtn_mut" data-sound data-results="#stageTop_mut" disabled>↻ Run again — same mutations</button>
         <button class="btn secondary" id="resetBtn_mut">↺ Reset</button>
         <div class="field mut-n-field">
           <label for="nSlider_mut"><span>Population size <var>N</var></span> <span class="value" id="nVal_mut">50</span></label>
@@ -3240,12 +3245,15 @@
     <!-- What the spin acts on, and the wheels that do it: the fish you start
          from beside the four characters that are about to change. -->
     <div class="stage-area mut-wheel-row" id="stageTop_mut" style="--cols:5;">
-      <div class="lineage-card" style="--accent: var(--ink-soft)">
-        <div class="lineage-head">
-          <span class="name" style="color: var(--ink-soft)">Original</span>
-          <span class="stat mono">ancestral state</span>
+      <div class="mut-orig-col">
+        <div class="lineage-card" style="--accent: var(--ink-soft)">
+          <div class="lineage-head">
+            <span class="name" style="color: var(--ink-soft)">Original</span>
+            <span class="stat mono">ancestral state</span>
+          </div>
+          <canvas class="stage-canvas" id="fishOrig_mut" role="img" aria-label="The original fish, in its ancestral state"></canvas>
         </div>
-        <canvas class="stage-canvas" id="fishOrig_mut" role="img" aria-label="The original fish, in its ancestral state"></canvas>
+        <button class="btn" id="rerunBtn_mut" data-sound data-results="#stageTop_mut" disabled>↻ Run evolution</button>
       </div>
       <div class="wheel-grid" id="wheelGrid_mut"></div>
     </div>
