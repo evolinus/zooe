@@ -970,19 +970,21 @@
     margin-bottom: 8px;
   }
   .tree-canvas{ position:relative; }
-  svg.lines{ position:absolute; top:0; left:0; pointer-events:none; }
+  svg.lines{ position:absolute; top:0; left:0; pointer-events:none; z-index: 2; }
   
   /* Each shape on a darker square the size of the tanglegram's tiles below: no
      border, no label. The square is its own element on a lower layer, so every
      square sits behind every shape and none can hide a neighbour (TILE, CARD and
-     GAP in branching-room.js). Its edges are soft — faded out over the last 10px
-     by two crossed gradient masks — rather than drawn as a hard line. */
+     GAP in branching-room.js). Its edges are soft — faded out over the last 20px
+     by two crossed gradient masks — rather than drawn as a hard line. The
+     branches' SVG sits between the two layers: over the tiles, so a short
+     branch between overlapping tiles still shows, and under the shapes. */
   .node-tile{
     position:absolute;
     width:80px; height:80px; /* TILE in branching-room.js */
     background: var(--paper-dim);
-    --soft: linear-gradient(to right, transparent, #000 10px, #000 calc(100% - 10px), transparent),
-            linear-gradient(to bottom, transparent, #000 10px, #000 calc(100% - 10px), transparent);
+    --soft: linear-gradient(to right, transparent, #000 20px, #000 calc(100% - 20px), transparent),
+            linear-gradient(to bottom, transparent, #000 20px, #000 calc(100% - 20px), transparent);
     -webkit-mask-image: var(--soft); -webkit-mask-composite: source-in;
     mask-image: var(--soft); mask-composite: intersect;
     display:none;
@@ -992,7 +994,7 @@
     position:absolute;
     width:80px; height:80px; /* CARD in branching-room.js */
     display:none;
-    z-index: 2;
+    z-index: 3;
   }
   .node-card canvas{ width:100%; height:100%; display:block; }
 

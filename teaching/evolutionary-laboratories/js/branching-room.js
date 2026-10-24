@@ -49,8 +49,13 @@
     // the tanglegram's final shapes, with no border or label and its edges faded
     // out. Every tile sits on a layer behind every shape, so where two nodes
     // overlap a tile can only cover another tile, never a neighbouring shape.
-    // A branch stops at the tile's edge (GAP) rather than running under it.
-    const LANE_GAP = 100, CARD = 80, TILE = 80, GAP = TILE/2, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
+    // The branches lie between the two layers, over every tile and under every
+    // shape, and each fades out towards every shape's centre — fully drawn
+    // FADE_TO from it, gone by GAP. Ending them at the tile's edge instead, under
+    // the tiles, left a late split only a few faint pixels of branch: its
+    // daughters' tiles still overlap their parent's, and a line can only show
+    // where no tile covers it.
+    const LANE_GAP = 100, CARD = 80, TILE = 80, GAP = 18, FADE_TO = 38, MARGIN_X = CARD/2 + 12, MARGIN_TOP = CARD/2 + 8, MARGIN_BOTTOM = CARD/2 + 48;
     const MIN_CANVAS_W = 520;
     // One weight for every branch the room draws: the growing tree and both
     // halves of the tanglegram.
@@ -80,8 +85,43 @@
     function genX(gen){ return MARGIN_X + (gen / N) * (canvasW - 2*MARGIN_X); }
     function laneY(lane){ return MARGIN_TOP + lane*LANE_GAP; }
     const axisY = () => laneY(topo.numLanes-1) + CARD/2 + 12;
-    // Where a lineage's branch stops when its shape is at atGen.
-    const lineEnd = (node, atGen) => Math.max(genX(node.start), genX(atGen) - GAP);
+    function genAt(x){ return (x - MARGIN_X) / (canvasW - 2*MARGIN_X) * N; }
+
+    // A new lineage leaves its parent's shape and eases into its own lane, as
+    // the homepage's tree does (_scripts/fr-sim.js), rather than jumping there at
+    // a right angle: the same smoothstep over the same 16% of the run. The ease
+    // is cut short for a lineage born nearer the end than that, so every leaf is
+    // level on its own lane by generation N however late its split was dragged.
+    // It is measured from where the parent actually stopped, which is still on
+    // its way down if its own split came less than a transition ago.
+    const ease = t => t*t*(3 - 2*t);
+    const transGens = node => Math.max(1, Math.min(Math.round(N*0.16), N - node.start));
+    function nodeY(node, gen){
+      if(!node.parent) return laneY(node.lane);
+      const from = nodeY(nodesById[node.parent], node.start), to = laneY(node.lane);
+      const t = Math.min(1, Math.max(0, (gen - node.start) / transGens(node)));
+      return from + (to - from)*ease(t);
+    }
+
+    // A lineage's branch while its shape is at atGen: sampled every 2px along
+    // the ease and straight once level, and kept out of the squares of both the
+    // shape it split from and the shape it has reached, where the fade has
+    // already hidden it.
+    function branchD(node, atGen){
+      const g0 = node.start, g1 = Math.max(g0, atGen);
+      const x0 = genX(g0), y0 = nodeY(node, g0), xt = genX(g1), yt = nodeY(node, g1);
+      const out = (x, y, cx, cy) => Math.abs(x - cx) >= GAP - 0.5 || Math.abs(y - cy) >= GAP - 0.5;
+      const level = Math.min(g1, g0 + transGens(node));
+      const step = genAt(MARGIN_X + 2);
+      const gens = [];
+      for(let gen = g0; gen < level; gen += step) gens.push(gen);
+      gens.push(level, genAt(x0 + GAP), genAt(xt - GAP), g1);
+      const pts = gens.filter(gen => gen >= g0 && gen <= g1).sort((a, b) => a - b)
+        .map(gen => [genX(gen), nodeY(node, gen)])
+        .filter(([x, y]) => out(x, y, x0, y0) && out(x, y, xt, yt));
+      if(pts.length < 2) return '';
+      return pts.map(([x, y], i) => (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1)).join('');
+    }
 
     // The panel is the same size from generation 0 to N: the scale is set by the
     // total, not by how far the run has got. Its width is read from the page each
@@ -114,7 +154,7 @@
       const el = document.createElementNS('http://www.w3.org/2000/svg','text');
       el.setAttribute('x', x); el.setAttribute('y', y); el.setAttribute('text-anchor', anchor);
       el.setAttribute('font-family', 'ui-monospace, monospace'); el.setAttribute('font-size', 11);
-      el.setAttribute('fill', 'var(--ink-soft)'); el.textContent = str; linesSvg.appendChild(el);
+      el.setAttribute('fill', 'var(--ink-soft)'); el.textContent = str; linesSvg.insertBefore(el, branchG);
     }
 
     // Only a phone, where the panel is wider than the screen, has anywhere to
@@ -216,23 +256,44 @@
       }
     }
 
-    function clearSvg(){ while(linesSvg.firstChild) linesSvg.removeChild(linesSvg.firstChild); }
+    // The SVG is rebuilt from nothing on every reset and scrub, so the fade is
+    // too: a white mask over the branches with one soft dark disc per shape,
+    // moved with its card in placeCard().
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    let branchG = null, fadeG = null;
+    function clearSvg(){
+      while(linesSvg.firstChild) linesSvg.removeChild(linesSvg.firstChild);
+      const el = (tag, attrs, parent) => {
+        const e = document.createElementNS(SVG_NS, tag);
+        for(const k in attrs) e.setAttribute(k, attrs[k]);
+        parent.appendChild(e); return e;
+      };
+      const defs = el('defs', {}, linesSvg);
+      const grad = el('radialGradient', { id: 'branchFadeDisc' }, defs);
+      el('stop', { offset: GAP/FADE_TO, 'stop-color': '#000', 'stop-opacity': 1 }, grad);
+      el('stop', { offset: 1, 'stop-color': '#000', 'stop-opacity': 0 }, grad);
+      const mask = el('mask', { id: 'branchFade', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: '100%', height: '100%' }, defs);
+      el('rect', { x: 0, y: 0, width: '100%', height: '100%', fill: '#fff' }, mask);
+      fadeG = el('g', {}, mask);
+      branchG = el('g', { mask: 'url(#branchFade)' }, linesSvg);
+    }
 
+    // The axis goes in before the branches so they are drawn over its grid.
     function svgLine(x1,y1,x2,y2,color,dashed){
       const el = document.createElementNS('http://www.w3.org/2000/svg','line');
       el.setAttribute('x1',x1); el.setAttribute('y1',y1); el.setAttribute('x2',x2); el.setAttribute('y2',y2);
       el.setAttribute('stroke', color); el.setAttribute('stroke-width', LINE_W);
-      if(dashed) el.setAttribute('stroke-dasharray','4,4'); linesSvg.appendChild(el); return el;
+      if(dashed) el.setAttribute('stroke-dasharray','4,4'); linesSvg.insertBefore(el, branchG); return el;
     }
 
-    // The fork where a lineage splits: up and down from the ancestor's frozen
-    // shape to its two daughters' lanes, leaving the shape itself clear. Every
-    // ancestor's lane is the midpoint of its daughters', so one goes each way.
-    function drawSplit(node){
-      const x = genX(node.end), y = laneY(node.lane);
-      const lanes = node.children.map(id => nodesById[id].lane);
-      svgLine(x, y - GAP, x, laneY(Math.min(...lanes)), 'var(--ink)', false);
-      svgLine(x, y + GAP, x, laneY(Math.max(...lanes)), 'var(--ink)', false);
+    // A lineage's branch, from its birth to where its shape is at atGen. The
+    // fork is no longer drawn on its own: it is the two daughters' branches
+    // easing out of their parent's square, one up and one down.
+    function svgBranch(node, atGen, color){
+      const el = document.createElementNS('http://www.w3.org/2000/svg','path');
+      el.setAttribute('d', branchD(node, atGen)); el.setAttribute('fill', 'none');
+      el.setAttribute('stroke', color); el.setAttribute('stroke-width', LINE_W);
+      branchG.appendChild(el); return el;
     }
 
     function saveBranchingState(currentG) {
@@ -267,7 +328,7 @@
       sizeCanvas(); drawAxis();
 
       const A = nodesById.A; A.genome = rootAncestorGenome;
-      A.lineEl = svgLine(genX(0), laneY(A.lane), lineEnd(A, 0), laneY(A.lane), 'var(--ink)', false);
+      A.lineEl = svgBranch(A, 0, 'var(--ink)');
       ensureCard(A); positionCard(A, 0); finalStats.innerHTML = ''; activeNodes = [A];
 
       saveBranchingState(0);
@@ -290,10 +351,14 @@
       canvas.setAttribute('aria-label', `Lineage ${node.id}, current shape`);
       card.appendChild(canvas);
       treeCanvas.appendChild(card); node.cardEl = card; node.ctx = canvas.getContext('2d');
+      const disc = document.createElementNS(SVG_NS, 'circle');
+      disc.setAttribute('r', FADE_TO); disc.setAttribute('fill', 'url(#branchFadeDisc)');
+      fadeG.appendChild(disc); node.fadeEl = disc;
     }
 
     function placeCard(node, atGen){
-      const x = genX(atGen), y = laneY(node.lane);
+      const x = genX(atGen), y = nodeY(node, atGen);
+      node.fadeEl.setAttribute('cx', x); node.fadeEl.setAttribute('cy', y);
       node.cardEl.style.left = (x - CARD/2) + 'px'; node.cardEl.style.top  = (y - CARD/2) + 'px'; node.cardEl.style.display = 'block';
       node.tileEl.style.left = (x - TILE/2) + 'px'; node.tileEl.style.top  = (y - TILE/2) + 'px'; node.tileEl.style.display = 'block';
     }
@@ -304,17 +369,16 @@
     }
 
     function finalizeNode(node){
-      node.frozen = true; node.lineEl.setAttribute('x2', lineEnd(node, node.end));
+      node.frozen = true; node.lineEl.setAttribute('d', branchD(node, node.end));
       if(node.children.length === 0) return;
 
-      const kids = node.children.map(id=>nodesById[id]); const x = genX(node.end);
-      drawSplit(node);
+      const kids = node.children.map(id=>nodesById[id]);
       // With the coloured card borders gone, a surviving lineage is told apart by
       // its branch alone, so it is drawn in its own colour from the start rather
       // than only once the history is scrubbed.
       for(const child of kids){
         child.genome = Object.assign({}, node.genome);
-        child.lineEl = svgLine(x, laneY(child.lane), x, laneY(child.lane), child.color, false);
+        child.lineEl = svgBranch(child, node.end, child.color);
         ensureCard(child); positionCard(child, node.end); activeNodes.push(child);
       }
     }
@@ -325,7 +389,7 @@
 
       g++; const stillActive = [];
       for(const node of activeNodes){
-        node.genome = mutate(node.genome, mutSigmaFrac, currentShape); positionCard(node, g); node.lineEl.setAttribute('x2', lineEnd(node, g));
+        node.genome = mutate(node.genome, mutSigmaFrac, currentShape); positionCard(node, g); node.lineEl.setAttribute('d', branchD(node, g));
         if(g >= node.end){ finalizeNode(node); } else { stillActive.push(node); }
       }
       activeNodes = stillActive; statusLine.textContent = `gen ${g} / ${N} — ${playing ? 'copying…' : 'stepped'}`;
@@ -361,16 +425,7 @@
         nodesById[def.id].cardEl = null; 
 
         const node = nodesById[def.id];
-        const lineX2 = lineEnd(node, Math.min(genIndex, node.end));
-        // A lineage has split once it is frozen, not merely once its split
-        // generation has come: A's split is at generation 0, so testing the
-        // generation drew its fork on the untouched starting view, where a run
-        // has not yet made it. Freezing is what tick() draws the fork on.
-        const hasSplit = node.frozen && node.children.length > 0;
-        const lineColor = hasSplit ? 'var(--ink)' : def.color;
-        node.lineEl = svgLine(genX(node.start), laneY(node.lane), lineX2, laneY(node.lane), lineColor, false);
-
-        if (hasSplit) drawSplit(node);
+        node.lineEl = svgBranch(node, Math.min(genIndex, node.end), def.color);
 
         ensureCard(node);
         placeCard(node, Math.min(genIndex, node.end));
