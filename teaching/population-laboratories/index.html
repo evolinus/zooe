@@ -786,7 +786,6 @@
     border-radius: 6px;
     padding: 12px 18px;
     margin-top: 26px;
-    max-width: 100ch;
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 11px;
     color: var(--ink-soft);
@@ -813,6 +812,29 @@
   details.room-methods > summary:hover{ color: var(--ink); }
   details.room-methods > summary:focus-visible{ outline: 2px solid var(--ink); outline-offset: 2px; }
   details.room-methods p{ margin: 10px 0 0; }
+
+  /* The four room panels — Start here, What this model assumes, What to notice
+     and the methods note — run the full page column, the same width as the
+     setup deck between them, and set their text in two columns. At the old
+     prose measure they sat narrower than the deck, so every room had two left
+     edges and a ragged right one; at full width a single column would run to
+     ~170 characters a line, and two columns pull that back to a readable
+     measure. The heading spans both, and a list item or an equation is never
+     split across the gutter. One column again below 780px, where two would be
+     too narrow to read. The README carries none of these classes, so it keeps
+     its own layout. */
+  .room-brief, .room-payoff, .room-assumes, details.room-methods[open]{
+    column-count: 2;
+    column-gap: 36px;
+    column-rule: 1px solid var(--rule);
+  }
+  .room-brief h2, .room-payoff h2, .room-assumes h2, details.room-methods > summary{
+    column-span: all;
+  }
+  .room-assumes li, details.room-methods .eq{ break-inside: avoid; }
+  @media (max-width: 780px){
+    .room-brief, .room-payoff, .room-assumes, details.room-methods[open]{ column-count: 1; }
+  }
 
   /* Model equation strip shown at the top of each room */
   .equation{
@@ -899,7 +921,6 @@
     border-radius: 6px;
     padding: 14px 18px;
     margin-bottom: 22px;
-    max-width: 100ch;
   }
   .room-payoff{
     border-left-color: var(--stamp);
@@ -968,7 +989,6 @@
     border-radius: 6px;
     padding: 12px 18px 13px;
     margin-top: 26px;
-    max-width: 100ch;
   }
   .room-assumes h2{
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
