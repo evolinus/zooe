@@ -634,12 +634,12 @@
     overflow: hidden;
   }
   .canvas-wrap canvas{ width: 100%; display: block; }
-  /* The Diversity Room's community editor is the one canvas in the lab that is
-     dragged rather than clicked, and dragged vertically: the cursor says so,
-     and touch-action keeps a finger on a bar from scrolling the page instead.
-     It also takes the keyboard, so it needs a visible focus ring. */
-  .div-editor canvas{ cursor: ns-resize; touch-action: none; }
-  .div-editor canvas:focus-visible{ outline: 2px solid var(--ink); outline-offset: -2px; }
+  /* The Diversity and Turnover Rooms' editors are the two canvases in the lab
+     that are dragged rather than clicked, and dragged vertically: the cursor
+     says so, and touch-action keeps a finger on a bar from scrolling the page
+     instead. They also take the keyboard, so they need a visible focus ring. */
+  .div-editor canvas, .tov-editor canvas{ cursor: ns-resize; touch-action: none; }
+  .div-editor canvas:focus-visible, .tov-editor canvas:focus-visible{ outline: 2px solid var(--ink); outline-offset: -2px; }
 
   /* Numeric readout chips */
   .chips{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
@@ -1236,6 +1236,7 @@
     <button class="tab-btn" role="tab" id="tabbtn-predator" aria-controls="tab-predator" aria-selected="false" tabindex="-1" style="--tab: #8C3F5D" onclick="switchTab('predator', event)">Predator</button>
     <button class="tab-btn" role="tab" id="tabbtn-keystone" aria-controls="tab-keystone" aria-selected="false" tabindex="-1" style="--tab: #5E6B21" onclick="switchTab('keystone', event)">Keystone</button>
     <button class="tab-btn" role="tab" id="tabbtn-diversity" aria-controls="tab-diversity" aria-selected="false" tabindex="-1" style="--tab: #1F7A8C" onclick="switchTab('diversity', event)">Diversity</button>
+    <button class="tab-btn" role="tab" id="tabbtn-turnover" aria-controls="tab-turnover" aria-selected="false" tabindex="-1" style="--tab: #C06A2B" onclick="switchTab('turnover', event)">Turnover</button>
     <button class="tab-btn" role="tab" id="tabbtn-metapopulation" aria-controls="tab-metapopulation" aria-selected="false" tabindex="-1" style="--tab: #454B96" onclick="switchTab('metapopulation', event)">Metapopulation</button>
   </div>
   </div>
@@ -1263,18 +1264,18 @@
     </header>
 
     <div class="readme-content">
-      <p class="lead">Welcome to the Population Laboratories. Ten rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The next four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious. The ninth stands back from the question to ask how a community of many species is described and measured at all. The last changes the unit the question is asked in, and counts populations instead of individuals.</p>
+      <p class="lead">Welcome to the Population Laboratories. Eleven rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The next four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious. The ninth stands back from the question to ask how a community of many species is described and measured at all. The last two spread life across a landscape: one asks how the diversity of a region is made up from the diversity of its sites, and the other changes the unit the question is asked in, counting populations instead of individuals.</p>
 
       <h2 class="readme-minor">How to use the rooms</h2>
       <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong>, and <strong>read the panels</strong> that fill in below. The whole trajectory is computed the moment you press Run and then played back to you, so you can pause anywhere, drag the <strong>History Scrubber</strong> at the bottom of most rooms back and forth, and replay any moment you like. In the Overshoot Room it is worth using deliberately: stepping one generation at a time is what turns the cobweb diagram from a tangle into an explanation.</p>
-      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the ten rooms read as one argument rather than ten separate toys.</p>
+      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the eleven rooms read as one argument rather than eleven separate toys.</p>
       <p>Between the run and the payoff sits <strong>What this model assumes</strong>: the things the room is quietly taking for granted, and — where there is one — the room that stops taking them for granted. This is worth reading. Most of these laboratories exist precisely to relax an assumption an earlier one made, so what looks like a convenient simplification in one room turns out to be the whole subject of another. It is also the honest answer to "but real populations are not like that", which is true of every model here and is the point rather than an objection.</p>
       <p>Between the two sits the equation the room is running. Underneath it is a collapsible <strong>What each symbol means</strong> key: open it and every letter in the equation above is named, said plainly, and placed against what the earlier rooms called it. Nothing in a room requires reading the algebra — but nothing in the algebra is left unexplained either.</p>
       <p>Some rooms are deterministic: the same settings always give exactly the same curve, because the equations contain no chance. Others draw births and deaths at random, so running twice will not give the same answer twice — the parameters set tendencies, never outcomes. Each room says which kind it is.</p>
       <p>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</p>
 
         <h2 class="readme-minor">Words worth pinning down</h2>
-        <p>These nineteen come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
+        <p>These twenty come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
         <ul>
           <li><span class="gloss" data-help="glosPopulation">Population</span> — a group of the same species, in one place, that could interbreed — the unit everything here is measured in.</li>
           <li><span class="gloss" data-help="glosPerCapita">Per-capita rate</span> — per individual, per unit of time. Ask of every rate whether it is this or a population total.</li>
@@ -1294,11 +1295,12 @@
           <li><span class="gloss" data-help="glosTrophicCascade">Trophic cascade</span> — an effect that travels down a food chain and changes a level the predator never touches.</li>
           <li><span class="gloss" data-help="glosNiche">Niche</span> — the conditions and resources a population needs to persist. Two species with identical niches cannot coexist.</li>
           <li><span class="gloss" data-help="glosDiversity">Species diversity</span> — how many species a community holds and how evenly its individuals are shared among them. Two communities with the same species can differ enormously in it.</li>
+          <li><span class="gloss" data-help="glosBeta">Alpha, beta and gamma diversity</span> — the diversity of a typical site, how different the sites are from each other, and the diversity of all of them together. Gamma is alpha times beta.</li>
           <li><span class="gloss" data-help="glosMetapopulation">Metapopulation</span> — a population of populations, linked by colonisation. It can persist although every one of its parts goes extinct.</li>
         </ul>
 
       <h2 class="readme-minor">The through-line</h2>
-      <p>The ten rooms fall into <strong>six parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable. <strong>Part V</strong> steps back from the dynamics to the question of description: a community of many species, the two numbers ecologists use to sum it up, the samples those numbers are really computed from, and drift that changes them with no species better than another. <strong>Part VI</strong> stops counting individuals altogether: a population becomes a single occupied dot on a landscape of patches, every one of those local populations is certain to go extinct, and the question becomes how the set of them persists anyway.</p>
+      <p>The eleven rooms fall into <strong>six parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable. <strong>Part V</strong> steps back from the dynamics to the question of description: a community of many species, the two numbers ecologists use to sum it up, the samples those numbers are really computed from, and drift that changes them with no species better than another. <strong>Part VI</strong> spreads life across a landscape of sites. First it asks how a region's diversity is built from its sites' — how much comes from each site being rich, and how much from the sites being different — and what happens when the sites drift apart. Then it stops counting individuals altogether: a population becomes a single occupied dot on a landscape of patches, every one of those local populations is certain to go extinct, and the question becomes how the set of them persists anyway.</p>
       <p>By the end of Part IV the honest answer to "what stops this population from growing?" is that you cannot tell by looking at the population, or even at the pair — you have to look at the whole community. Part V asks how such a community can be described in a number at all, and Part VI asks the question of a scale above it, where the answer turns out not to need the community, or the individuals, at all.</p>
       <p>Working through the rooms in order is recommended, but each one stands on its own.</p>
       <p>One word to watch: in Parts I and II, <em>competition</em> means competition among members of a single species — the crowding that regulates it from within. From Part III on it usually means competition <em>between</em> species. The rooms keep the two apart, and which one dominates decides every coexistence result in the lab.</p>
@@ -1363,10 +1365,15 @@
       <p>Build a community by dragging its bars and watch richness, Shannon's index and Simpson's index disagree about it. Then sample it the way a field ecologist must, and see which of the three numbers a small catch can be trusted with — before letting it drift, with no species better than another, and watching diversity drain away.</p>
       <p class="room-open"><a href="#" onclick="switchTab('diversity');">→ Open the Diversity Room</a></p>
 
-      <h2 class="part-head">Part VI — A population spread across space</h2>
-      <p class="part-blurb">The unit changes. A population becomes one dot on a landscape, and the subject becomes the set of them.</p>
+      <h2 class="part-head">Part VI — Life spread across space</h2>
+      <p class="part-blurb">The landscape arrives. First as a set of sites whose communities can be alike or different; then as a set of patches, where the unit changes and a whole population becomes one dot.</p>
 
-      <h2><span class="room-num">10</span>The Metapopulation Room</h2>
+      <h2><span class="room-num">10</span>The Turnover Room</h2>
+      <p class="room-kicker">Alpha, beta &amp; gamma diversity — and several small or single large</p>
+      <p>A landscape of sites, each with its own community. How diverse is the whole, and how much of that comes from each site being rich rather than from the sites being different? Build the landscape, then let the sites drift apart — beside a single large site holding as many individuals as all of them together.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('turnover');">→ Open the Turnover Room</a></p>
+
+      <h2><span class="room-num">11</span>The Metapopulation Room</h2>
       <p class="room-kicker">Patch occupancy: Levins' model &amp; habitat loss</p>
       <p>Every other room counts individuals; this one counts populations. Each sits on a patch, each is certain to go extinct, and the landscape persists anyway — for as long as colonisation outruns extinction. It is also where habitat loss stops being a vague worry and becomes arithmetic.</p>
       <p class="room-open"><a href="#" onclick="switchTab('metapopulation');">→ Open the Metapopulation Room</a></p>
@@ -3296,7 +3303,7 @@
       <p>Two communities can hold the same species and still differ enormously in diversity, because diversity is richness <em>and</em> evenness. The three effective numbers say so at a glance: they agree only for a perfectly even community, and the gap between them is the unevenness. They also disagree about rare species. Add one, and richness goes up by a whole species, Shannon's number by a little, and Simpson's hardly at all. Choosing an index is choosing how much the rare species should count.</p>
       <p>Then notice what sampling does to each of them. Richness is the worst behaved: a sample can miss a species but never invent one, so it is always too low, and how low depends mostly on how hard you looked. Two samples of different size compared on richness are mostly comparing effort. Shannon's number is biased low too, though less; Simpson's is nearly right from a few dozen individuals, because the commonest species that decide it are the ones a small sample does catch.</p>
       <p>Finally, the drift: with no immigration, diversity drains away with no cause at all. No species is better than any other, yet one after another is lost, and in the end one holds the whole community &mdash; which one is luck. A trickle of immigrants is enough to stop the slide, and the level it settles at depends on <em>J</em> and <em>m</em>, not on any of the species. How diverse a place is depends on how large and how connected it is, as well as on who lives there.</p>
-      <p><strong>Where this comes from.</strong> The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room showed that a predator can decide whether a competitor survives; these are the numbers in which such a change would be reported. And the drift is the Drift Room of the <a href="../evolutionary-laboratories/#drifting" target="_blank" rel="noopener">Evolutionary Laboratories</a> with species in place of alleles: Simpson's &Sigma;<em>p<sub>i</sub></em>&sup2; is exactly the chance that two gene copies are the same allele, so 1 &minus; <em>D</em> is the heterozygosity a population geneticist would calculate. <strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('metapopulation');">Metapopulation</button> room changes the unit again, and counts populations rather than individuals.</p>
+      <p><strong>Where this comes from.</strong> The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room showed that a predator can decide whether a competitor survives; these are the numbers in which such a change would be reported. And the drift is the Drift Room of the <a href="../evolutionary-laboratories/#drifting" target="_blank" rel="noopener">Evolutionary Laboratories</a> with species in place of alleles: Simpson's &Sigma;<em>p<sub>i</sub></em>&sup2; is exactly the chance that two gene copies are the same allele, so 1 &minus; <em>D</em> is the heterozygosity a population geneticist would calculate. <strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('turnover');">Turnover</button> room measures several communities at once, and asks how the diversity of a landscape is made up from the diversity of its sites.</p>
     </div>
 
     <details class="room-methods">
@@ -3304,6 +3311,202 @@
       <p>The community is a list of abundances, one per species, each a whole number from 0 to 100; <em>p<sub>i</sub></em> is each divided by their total. <em>H&prime;</em> = &minus;&Sigma;<em>p<sub>i</sub></em> ln <em>p<sub>i</sub></em> in natural logarithms, <em>D</em> = &Sigma;<em>p<sub>i</sub></em>&sup2;, <em>J&prime;</em> = <em>H&prime;</em>/ln <em>S</em>, and the effective numbers are Hill's of order 0, 1 and 2: <em>S</em>, e<sup><em>H&prime;</em></sup> and 1/<em>D</em>.</p>
       <p>A sample is <em>n</em> individuals drawn independently, each belonging to species <em>i</em> with probability <em>p<sub>i</sub></em> &mdash; sampling with replacement from a community much larger than the sample. Its estimates are the plug-in ones, the formulas above applied to the sample's own shares, which is what is usually done with field data; corrections exist (Miller&ndash;Madow for Shannon, Simpson's own <em>n</em>(<em>n</em> &minus; 1) form for <em>D</em>, Chao1 for richness) and are not applied. The dashed accumulation line is the expected number of species after <em>k</em> individuals, &Sigma;[1 &minus; (1 &minus; <em>p<sub>i</sub></em>)<sup><em>k</em></sup>].</p>
       <p>The drift is a Moran model. The run starts from the community scaled to <em>J</em> individuals, rounded by largest remainder so the total is exactly <em>J</em>. At each step one individual, chosen at random, dies; with probability <em>m</em> it is replaced by an immigrant drawn from the pool's shares, and otherwise by the offspring of another individual of the community, chosen at random. A generation is <em>J</em> such steps, and the community is recorded at 300 evenly spaced moments. With <em>m</em> = 0 the expected time for a species of share <em>p</em> to be lost or to take over is of the order of <em>J</em> generations, which is why the default run is about as long as the community is large. The indices are Shannon (1948), Simpson (1949) and Hill (1973); the case for effective numbers is Jost (2006); the neutral model is Hubbell (2001), here without speciation.</p>
+    </details>
+  </div>
+
+  <div id="tab-turnover" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-turnover" tabindex="0" style="--room: #C06A2B; --room-deep: #643F24;">
+    <header class="masthead">
+      <div>
+        <h1>The Turnover Room</h1>
+        <p class="sub"><span class="sub-label">Alpha, beta &amp; gamma diversity</span> &ndash; How diverse a landscape is depends on the scale you measure it at.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h2>Start here</h2>
+      <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room measured one community. This one measures several at once &mdash; a set of sites, each with its own species &mdash; and asks how the diversity of the whole is made up from the diversity of its parts. <strong>&gamma;</strong> is the diversity of all the sites pooled, <strong>&alpha;</strong> is the diversity of a typical site, and <strong>&beta;</strong> is how different the sites are from each other: how many distinct sites they amount to. In Step 1 you build the landscape; in Step 2 the sites drift, each on its own, while one large site holding as many individuals as all of them together drifts alongside.</p>
+      <p><span class="try-label">Try this.</span> Step through the four presets and watch &alpha; and &gamma; separately: under <em>Identical</em>, &gamma; is no bigger than &alpha; &mdash; the whole landscape holds no more than one site &mdash; while under <em>Complete turnover</em> it is exactly <em>N</em> times bigger. Then run the drift with the defaults: every site starts the same, and watch &beta; climb as they lose different species. Finally, compare the two lines in the middle panel &mdash; the several small sites against the single large one &mdash; and see which holds more species, and for how long.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq"><span class="var">&gamma;</span> = <span class="var">&alpha;</span> &times; <span class="var">&beta;</span></div>
+      <div class="eq-gloss">Whittaker's partition, with every term an effective number. <em>&gamma;</em> and <em>&alpha;</em> are counted in species, exactly as in the Diversity room; <em>&beta;</em> = &gamma;/&alpha; is counted in <strong>sites</strong>, and runs from <strong>1</strong>, when every site holds the same community, to <strong>N</strong>, when no two sites share a species. It answers: if the landscape were split into sites with nothing in common, how many would it take?</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>N</dt>
+          <dd>The number of sites. Every site holds the same number of individuals and counts equally, so a poor site weighs as much as a rich one in every average below.</dd>
+          <dt>&gamma;</dt>
+          <dd>Gamma diversity: the effective number of species in the whole landscape, worked out from the pooled shares &mdash; each species' share averaged over the sites. It is the number you would get by putting every site's individuals in one bucket.</dd>
+          <dt>&alpha;</dt>
+          <dd>Alpha diversity: the effective number of species in a typical site. Not quite the plain average of the sites' own values: for Shannon it is e raised to the mean <em>H&prime;</em>, for Simpson one over the mean <em>D</em>, which is what makes &gamma; = &alpha; &times; &beta; hold exactly.</dd>
+          <dt>&beta;</dt>
+          <dd>Beta diversity, &gamma;/&alpha;: the effective number of completely distinct sites. Between 1 and <em>N</em>. It is the measure of <em>turnover</em> &mdash; how much the species change from one site to the next.</dd>
+          <dt>q</dt>
+          <dd>The order of the effective number, set by <em>Measure by</em>: 0 for richness, which counts every species once; 1 for Shannon; 2 for Simpson, which is set mostly by the common species. The same landscape can have quite different &beta; under each: largest by richness when the sites differ mainly in their rare species, largest by Simpson when they differ in their common ones.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <!-- Step 1. The landscape is a grid of abundances, site by species, and
+         every number in the room is computed from it. -->
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Step 1 &mdash; Build the landscape<span class="deck-kicker-note">two choices &mdash; or a preset &mdash; then drag the bars of any site.</span></div>
+      <div class="field wide no-count">
+        <label>Presets<button class="help-btn" data-help="tovPresets"></button></label>
+        <div class="segmented compact" id="presetSeg_tov">
+          <button data-preset="identical">Identical</button>
+          <button data-preset="nested">Nested</button>
+          <button data-preset="gradient" class="active">Gradient</button>
+          <button data-preset="turnover">Complete turnover</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sites <span class="sym">N</span> <span class="value" id="NVal_tov">4</span><button class="help-btn" data-help="tovSites"></button></label>
+        <input type="range" id="N_tov" min="2" max="6" step="1" value="4">
+      </div>
+      <div class="field">
+        <label>Measure by<button class="help-btn" data-help="tovMeasure"></button></label>
+        <div class="segmented" id="qSeg_tov">
+          <button data-q="0">Richness</button>
+          <button data-q="1" class="active">Shannon</button>
+          <button data-q="2">Simpson</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #C06A2B;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The landscape</span><button class="help-btn" data-help="tovEditor"></button></span>
+          <span class="stat" id="landStat_tov">&mdash;</span>
+        </div>
+        <div class="canvas-wrap tov-editor"><canvas id="editorCanvas_tov" tabindex="0" role="img" aria-label="The landscape: abundance of each species in each site — drag a bar, or use the arrow keys"></canvas></div>
+        <div class="chips">
+          <div class="chip res-2">&alpha; &mdash; a typical site<span id="alphaDisp_tov">&mdash;</span></div>
+          <div class="chip stamp">&beta; &mdash; distinct sites<span id="betaDisp_tov">&mdash;</span></div>
+          <div class="chip res-1">&gamma; &mdash; the landscape<span id="gammaDisp_tov">&mdash;</span></div>
+        </div>
+        <div class="panel-note">One row per site, one column per species. A bar's height within its row is that species' abundance in that site; drag it, and drag it to zero to remove the species from that site only. The figure at the end of each row is the site's own diversity. With the canvas focused, &larr; and &rarr; move between species and sites, &uarr; and &darr; change the abundance.</div>
+      </div>
+      <div class="panel" style="--accent: #C06A2B;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Diversity at each scale</span><button class="help-btn" data-help="tovScales"></button></span>
+        </div>
+        <div class="canvas-wrap"><canvas id="scaleCanvas_tov" role="img" aria-label="Each site's diversity, alpha and gamma"></canvas></div>
+        <div class="panel-note">The grey bars are the sites, one by one; &alpha; is a typical one, and &gamma; is all of them pooled. &beta; is how many times longer the &gamma; bar is than the &alpha; bar &mdash; the gain from adding sites that are different rather than more of the same.</div>
+      </div>
+    </div>
+
+    <!-- Step 2. Each site is a neutral community, like the Diversity room's,
+         all fed by one shared pool; the single large site runs beside them. -->
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Step 2 &mdash; Let the sites drift<span class="deck-kicker-note">four choices, then press Run. Immigrants come from the pooled landscape above.</span></div>
+      <div class="field">
+        <label>Each site starts from<button class="help-btn" data-help="tovStart"></button></label>
+        <div class="segmented" id="startSeg_tov">
+          <button data-start="pool" class="active">The pool</button>
+          <button data-start="own">Its own row</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Individuals per site <span class="sym">J</span> <span class="value" id="JVal_tov">200</span><button class="help-btn" data-help="tovJ"></button></label>
+        <input type="range" id="J_tov" min="50" max="1000" step="50" value="200">
+      </div>
+      <div class="field">
+        <label>Immigration <span class="sym">m</span> <span class="value" id="mVal_tov">0.000</span><button class="help-btn" data-help="tovM"></button></label>
+        <input type="range" id="m_tov" min="0" max="0.1" step="0.001" value="0">
+      </div>
+      <div class="field">
+        <label>Generations <span class="value" id="TVal_tov">300</span><button class="help-btn" data-help="tovT"></button></label>
+        <input type="range" id="T_tov" min="20" max="1000" step="10" value="300">
+      </div>
+      <div class="transport">
+        <button class="btn" id="playBtn_tov" data-results="#driftStage_tov">&#9654; Run</button>
+        <button class="btn secondary" id="endBtn_tov">&#9197; Skip to end</button>
+        <button class="btn secondary" id="resetBtn_tov">&#8634; Reset</button>
+        <span class="status mono" id="status_tov">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" id="driftStage_tov" style="--cols: 3;">
+      <div class="panel" style="--accent: #C06A2B;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Each site now</span><button class="help-btn" data-help="tovNow"></button></span>
+        </div>
+        <div class="canvas-wrap"><canvas id="nowCanvas_tov" role="img" aria-label="The share of each species in each site, and in the single large site"></canvas></div>
+        <div class="panel-note">Each row is one site's community, its species stacked by share in their colours above; the last row is the single large site. Sites that started alike and now look different have lost different species.</div>
+      </div>
+      <div class="panel" style="--accent: #C06A2B;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Several small or single large?</span><button class="help-btn" data-help="tovSloss"></button></span>
+        </div>
+        <div class="canvas-wrap"><canvas id="slossCanvas_tov" role="img" aria-label="Gamma of the several small sites, alpha, and the diversity of the single large site over time"></canvas></div>
+        <div class="chips">
+          <div class="chip res-1">&gamma; of the small sites<span id="gammaNowDisp_tov">&mdash;</span></div>
+          <div class="chip pred">The large site<span id="largeNowDisp_tov">&mdash;</span></div>
+        </div>
+      </div>
+      <div class="panel" style="--accent: #C06A2B;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">&beta; over time</span><button class="help-btn" data-help="tovBetaTime"></button></span>
+          <span class="stat" id="betaStat_tov">&mdash;</span>
+        </div>
+        <div class="canvas-wrap"><canvas id="betaCanvas_tov" role="img" aria-label="Beta diversity over time"></canvas></div>
+        <div class="chips">
+          <div class="chip">Generation<span id="genDisp_tov">0</span></div>
+          <div class="chip res-2">&alpha;<span id="alphaNowDisp_tov">&mdash;</span></div>
+          <div class="chip stamp">&beta;<span id="betaNowDisp_tov">&mdash;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp-deep)">History Scrubber: you are at generation <span class="value" id="scrubVal_tov">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_tov" type="button" aria-label="Back one step">&#9664;</button>
+          <input type="range" id="scrub_tov" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_tov" type="button" aria-label="Forward one step">&#9654;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_tov">Pick a preset, or drag the bars of any site, and watch &alpha;, &beta; and &gamma; beside it. Then let the sites drift in Step 2.</p>
+      <div class="note-line" id="note_tov"></div>
+    </div>
+
+    <div class="room-assumes">
+      <h2>What this model assumes</h2>
+      <ul>
+        <li><strong>Every site is the same size and counts the same.</strong> &gamma; pools the sites with equal weight, and &alpha; averages them equally. Real sites differ in area and in how many individuals they hold, and weighting them by size changes all three numbers &mdash; which is one reason published values of &beta; are so hard to compare.</li>
+        <li><strong>The sites are counted completely.</strong> Every individual in every site is known. A real survey samples each site, and that inflates &beta;: each sample misses a different handful of rare species, so the sites look more different than they are. It is the <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room's lesson about richness, doubled &mdash; and worst of all for &beta; measured by richness, where a single missed individual changes the count.</li>
+        <li><strong>A species is its count, and nothing else.</strong> As in the Diversity room, two closely related species count as much as two unrelated ones, and &beta; says nothing about how different the species that change between sites actually are.</li>
+        <li><strong>In the drift, every species is identical</strong>, and the sites are neutral communities exactly like the Diversity room's: births, deaths and immigration the same for all. Nothing here makes a species belong in one site rather than another, so all the turnover the drift produces is chance. Real turnover is mostly the opposite &mdash; different conditions favouring different species, which is what the <em>Gradient</em> preset draws and the drift cannot make.</li>
+        <li><strong>Sites exchange no individuals with each other.</strong> Every immigrant comes from one regional pool, the pooled landscape you built, which never changes. Sites next door are no more alike than sites far apart, because there is no next door: like the <button type="button" class="room-link" onclick="switchTab('metapopulation');">Metapopulation</button> room's patches, these sites have no positions.</li>
+        <li><strong>Small sites are no more dangerous than large ones, individual for individual.</strong> In the drift a species is lost only by chance, never because a small site has too little habitat for it, harsher edges, or more frequent disasters. Those are the things that make the real answer to "several small or single large?" lean towards large, and none of them is here.</li>
+      </ul>
+    </div>
+
+    <div class="room-payoff">
+      <h2>What to notice</h2>
+      <p>Local diversity and regional diversity are different numbers, and one does not predict the other. A landscape of identical sites holds no more species than any one of them, however many sites there are; a landscape of distinct sites holds <em>N</em> times as many as a typical one. Drag the bars until two landscapes have the same &alpha; and different &gamma; &mdash; it is easy &mdash; and a table of site diversities, however long, says nothing about the region: it takes &beta;. Notice too that the measure matters, and which way it goes says something. Under <em>Nested</em>, &beta; is largest by richness: the sites differ only in their rare species, which Shannon and Simpson discount. Under <em>Gradient</em> it is largest by Simpson: each site's commonest species is its own, while the rare tails overlap from one site to the next.</p>
+      <p>Then watch the drift make turnover out of nothing. Every site starts with the same species in the same proportions; each loses species by chance, and they do not lose the same ones, so &beta; climbs while &alpha; falls. Immigration from a shared pool works against it, pulling every site back towards the same community &mdash; and if the sites start out different, under <em>Its own row</em>, immigration erases that difference too. Mixing makes places locally richer and regionally the same.</p>
+      <p>Finally, the comparison in the middle panel. Splitting the same number of individuals into several isolated sites makes each one lose species faster, but not the same species, so together they usually hold more than one large site. With no immigration they always do in the end: each small site finishes with a species of its own, and the large site with a single one. The large site often leads for a while early on, when the small sites have each lost their rare species and it has not yet lost its own &mdash; but under pure chance, several small comes out ahead. That is not the answer conservation usually reaches, and the difference is the point: what makes small sites risky in reality &mdash; edges, species that need a large area, a single disaster &mdash; is everything this model leaves out.</p>
+      <p><strong>Where this comes from.</strong> Each site is a community from the <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room, measured the same way. The drift apart is the Migration Room of the <a href="../evolutionary-laboratories/#migration" target="_blank" rel="noopener">Evolutionary Laboratories</a> with species in place of alleles: what &beta; measures here, <em>F</em><sub>ST</sub> measures there, and both fall as exchange between places rises. <strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('metapopulation');">Metapopulation</button> room keeps the sites and changes the question: not which species each patch holds, but whether one species holds it at all.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>The landscape is an <em>N</em> &times; 12 grid of whole-number abundances from 0 to 100; each site's shares <em>p<sub>ij</sub></em> are its abundances divided by its own total, so every site counts equally whatever its total. The pooled share of species <em>i</em> is the mean of <em>p<sub>ij</sub></em> over the sites. With equal weights, Jost's (2007) partition gives, for order <em>q</em>: &gamma; = (&Sigma;<sub><em>i</em></sub> <em>p&#772;<sub>i</sub></em><sup><em>q</em></sup>)<sup>1/(1&minus;<em>q</em>)</sup> and &alpha; = (mean<sub><em>j</em></sub> &Sigma;<sub><em>i</em></sub> <em>p<sub>ij</sub></em><sup><em>q</em></sup>)<sup>1/(1&minus;<em>q</em>)</sup>, taken at their limits for <em>q</em> = 1 (&gamma; = e<sup><em>H&prime;</em> of the pooled shares</sup>, &alpha; = e<sup>mean <em>H&prime;</em></sup>) and equal to pooled and mean richness for <em>q</em> = 0. Then &beta; = &gamma;/&alpha;, which lies between 1 and <em>N</em> for every order. The presets use a pool of 12 species with abundances falling by a quarter from one to the next: every site holds all of them (<em>Identical</em>), successively fewer (<em>Nested</em>), a bell of species centred further along for each site (<em>Gradient</em>), or a disjoint share of them in equal numbers (<em>Complete turnover</em>, for which &beta; = <em>N</em> exactly).</p>
+      <p>The drift runs <em>N</em> independent Moran communities of <em>J</em> individuals and one of <em>N</em>&middot;<em>J</em>, all for the same number of generations, a generation being as many deaths as the community has individuals. At each death the replacement is, with probability <em>m</em>, an immigrant drawn from the pooled shares, and otherwise the offspring of another individual of the same community chosen at random. Each small site starts from the pooled shares or from its own row, scaled to <em>J</em> by largest remainder; the large site always starts from the pooled shares, which with equal weights is the same as merging the sites. The communities are recorded at 300 moments, and &alpha;, &beta;, &gamma; and the large site's diversity are recomputed from those records whenever the measure changes. The partition is Whittaker (1960) in Jost's (2007) multiplicative form; the neutral communities are Hubbell's (2001), without speciation; the several-small-or-single-large debate goes back to Diamond (1975) and Simberloff &amp; Abele (1976).</p>
     </details>
   </div>
 
@@ -3524,7 +3727,7 @@
   <script src="js/canvas-utils.js?v=12"></script>
   <script src="js/lab-core.js?v=18"></script>
   <script src="js/plot-core.js?v=18"></script>
-  <script src="js/help.js?v=15"></script>
+  <script src="js/help.js?v=18"></script>
   <script src="js/growth-room.js?v=15"></script>
   <script src="js/crowding-room.js?v=15"></script>
   <script src="js/resource-room.js?v=14"></script>
@@ -3534,6 +3737,7 @@
   <script src="js/predator-room.js?v=16"></script>
   <script src="js/keystone-room.js?v=16"></script>
   <script src="js/diversity-room.js?v=2"></script>
+  <script src="js/turnover-room.js?v=4"></script>
   <script src="js/metapopulation-room.js?v=2"></script>
   <script src="js/consent.js?v=1"></script>
 </body>
