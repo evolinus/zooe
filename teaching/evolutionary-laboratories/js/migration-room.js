@@ -763,6 +763,12 @@
   function updateDerived() {
     const M = migrants();
     DOM.mVal.textContent = String(M);
+    // The slider's value is an index into MIGRANT_STEPS, so without this a
+    // screen reader announces "7" where the label beside it says 1 migrant.
+    // aria-valuetext replaces the number it reads with the setting it means.
+    DOM.sliderM.setAttribute('aria-valuetext',
+      T('mig.sliderText', '{m} {unit} each way per generation, Nm = {m}',
+        { m: String(M), unit: M === 1 ? 'migrant' : 'migrants' }));
     DOM.nmVal.innerHTML = `<var>Nm</var> = ${M.toFixed(2)}`;
     DOM.rateVal.innerHTML = `<var>m</var> = ${(M / state.N).toFixed(4)}`;
   }

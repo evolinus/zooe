@@ -54,6 +54,7 @@
       const btn = document.getElementById('tabbtn-' + tabId) ||
         (evt ? evt.currentTarget : null);
       if (btn) { btn.classList.add('active'); btn.setAttribute('aria-selected', 'true'); }
+      centreActiveTab(btn);
 
       // A room is several screens tall and the tab bar now travels with the
       // reader, so a tab can be pressed from anywhere. Without this you land
@@ -98,6 +99,68 @@
         nav.innerHTML = link(prev, 'prev') + link(next, 'next');
         room.appendChild(nav);
       });
+    }
+
+    /* The tab strip on a narrow window. Below 780px the bar is one row that
+       scrolls sideways instead of three that wrap, and its scrollbar is hidden,
+       because a scrollbar under a row of tabs reads as a stray rule. That left
+       nothing on screen to say there were more rooms: on a phone the strip
+       showed README, Copying and Branching and simply stopped, and a reader who
+       arrived at #drifting could not see the tab of the room they were in.
+
+       So the strip is wrapped in a box that shows a fade and an arrow at
+       whichever end has tabs beyond it, and switching rooms brings the active
+       tab to the middle, where its neighbours show on both sides. The arrows
+       are for a finger or a pointer. They stay out of the tab order and are
+       hidden from screen readers, which reach every tab without them. On a wide
+       window the tabs wrap, nothing overflows and none of this is drawn; with
+       no script the strip still scrolls, only without the cues. */
+    function setUpTabScroller() {
+      const strip = document.querySelector('.tab-nav');
+      if (!strip || strip.parentElement.classList.contains('tab-scroller')) return;
+      const box = document.createElement('div');
+      box.className = 'tab-scroller';
+      strip.parentNode.insertBefore(box, strip);
+      box.appendChild(strip);
+
+      const smooth = !(window.matchMedia
+        && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      ['prev', 'next'].forEach(dir => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'tab-scroll tab-scroll-' + dir;
+        b.tabIndex = -1;
+        b.setAttribute('aria-hidden', 'true');
+        b.textContent = dir === 'prev' ? '‹' : '›';
+        // most of a strip's width, so a press moves on by several rooms but
+        // always leaves one already seen at the edge to keep your place by
+        b.addEventListener('click', () => strip.scrollBy({
+          left: (dir === 'prev' ? -0.7 : 0.7) * strip.clientWidth,
+          behavior: smooth ? 'smooth' : 'auto'
+        }));
+        box.appendChild(b);
+      });
+
+      // switchTab already fires a resize on every room change, so listening for
+      // it covers both the window changing size and the active tab moving
+      const update = () => {
+        const max = strip.scrollWidth - strip.clientWidth;
+        box.classList.toggle('more-before', strip.scrollLeft > 2);
+        box.classList.toggle('more-after', strip.scrollLeft < max - 2);
+      };
+      strip.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    }
+
+    // Measured from the two boxes rather than from offsetLeft, which would
+    // depend on which ancestor happens to be positioned. Only ever moves the
+    // strip sideways, never the page.
+    function centreActiveTab(btn) {
+      const strip = btn && btn.closest('.tab-nav');
+      if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+      const s = strip.getBoundingClientRect(), b = btn.getBoundingClientRect();
+      strip.scrollLeft += (b.left + b.width / 2) - (s.left + s.width / 2);
     }
 
     // Each room's panel belongs to the tab that opens it, so a screen reader
@@ -172,6 +235,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      setUpTabScroller();
       linkPanelsToTabs();
       buildRoomNav();
       syncSegmented();

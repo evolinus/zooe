@@ -182,9 +182,14 @@
         without end. With crowding it is a <strong>hump</strong> that peaks at K/2 and returns to zero at K —
         a nearly empty population grows slowly because there are few parents, and a full one grows slowly
         because there is no room.</p>
-        <p><strong>Why K/2 matters:</strong> that peak is the maximum sustainable yield. A harvested population
-        held near half its carrying capacity produces its largest possible surplus — which is why fisheries
-        management targets it, and why a stock fished far below it recovers so slowly.</p>`
+        <p><strong>Why K/2 matters, in this model:</strong> that peak is the logistic model's maximum
+        sustainable yield. A harvested logistic population held at half its carrying capacity produces its
+        largest possible surplus, and this is where the classic fisheries target of "half of K" comes from.</p>
+        <p><strong>Where the result stops.</strong> The halfway point is a consequence of the straight-line
+        density dependence assumed here, not a property of populations: with curved density dependence the
+        peak sits higher or lower. Real stocks also fluctuate, have age structure, and are estimated with error,
+        so maximum sustainable yield at K/2 is a textbook benchmark rather than a recommendation — and harvests
+        set at a calculated maximum have repeatedly turned out to be too large.</p>`
     },
 
     // ---------- Crowding Room ----------
@@ -227,9 +232,10 @@
         <code>dN/dt = rN(N/A − 1)(1 − N/K)</code>. Below the threshold A the per-capita growth rate is
         <em>negative</em>: the population declines however much empty habitat is available.</p>
         <p><strong>Why it matters:</strong> A is a second equilibrium, but an unstable one — an extinction
-        threshold. It explains why some endangered populations keep falling after the original threat has been
-        removed, and why passenger pigeons, which nested in enormous colonies, could not persist as scattered
-        pairs.</p>`
+        threshold. It is one possible reason a small population can keep falling after the original threat has
+        been removed, and it has been proposed for the passenger pigeon, which nested in enormous colonies and
+        vanished once they were broken up — though how much of that decline an Allee effect explains is still
+        argued. In real populations a threshold like A is hard to measure and rarely a single number.</p>`
     },
 
     // ---------- Resource Room ----------
@@ -838,9 +844,11 @@
         Enrichment moves the hump's peak to the right while N* — a predator property — stays exactly where it
         was. Eventually the predator's vertical nullcline crosses the hump on its <em>rising</em> side, and a
         crossing on a rising stretch is destabilising.</p>
-        <p>Rosenzweig named this in 1971, and it remains a real warning for management: fertilising a lake or
-        feeding a prey population to help a threatened predator can push the pair into oscillations that kill
-        both. It is also why the result is called a paradox — more food, less persistence.</p>`
+        <p>Rosenzweig named this in 1971 — a paradox because more food means less persistence. In the model it
+        is a clear warning: enriching the prey's environment to help a predator can push the pair into
+        oscillations that kill both. In real systems the effect is often weaker or absent, damped by things the
+        model leaves out, such as inedible or hiding prey and predators that switch food, so it is a
+        possibility to check for rather than a rule.</p>`
     },
 
     // ---------- Keystone Room ----------
@@ -1558,6 +1566,9 @@
         bars — for Shannon it is e<sup>mean H′</sup>, for Simpson 1/(mean D) — because that is the definition
         under which γ = α × β holds exactly. <strong>γ</strong> is the diversity of all the sites pooled into
         one.</p>
+        <p>The product γ = α × β is this room's chosen way of splitting diversity by scale, the multiplicative
+        partition. Other conventions split it differently — additively, or with pairwise dissimilarity indices
+        — and give different numbers for β.</p>
         <p><strong>β is the ratio of the two bars:</strong> how many times longer γ is than α. Two landscapes
         can have the same α and very different γ, which is the reason β is needed at all.</p>`
     },
@@ -1685,9 +1696,13 @@
         of a typical site; <strong>gamma</strong> is the diversity of the whole region, all its sites pooled;
         <strong>beta</strong> is how different the sites are from one another — how much the species change, or
         <em>turn over</em>, from site to site.</p>
-        <p>Counted as effective numbers, the three multiply: <strong>γ = α × β</strong>. β is then the effective
-        number of completely distinct sites, from 1 when every site is the same to the number of sites when none
-        share a species.</p>
+        <p>In the convention this lab uses — Whittaker's multiplicative partition, with every term an effective
+        number (Jost 2007) — the three multiply: <strong>γ = α × β</strong>. β is then the effective number of
+        completely distinct sites, from 1 when every site is the same to the number of sites when none share a
+        species.</p>
+        <p><strong>It is a convention, not the definition.</strong> β is also defined additively, as γ − α, and as
+        many dissimilarity indices between pairs of sites, such as Jaccard's and Sørensen's. They measure related
+        but different things, and a β from one cannot be set beside a β from another.</p>
         <p>Why it matters: a region can be species-rich because each site is rich, or because each site is
         different, and the two call for different protection. A set of rich but identical sites can hold far
         fewer species than a set of poorer, distinct ones.</p>`

@@ -301,6 +301,57 @@
     .tab-btn{ flex: 0 0 auto; }
     .tab-sep{ flex: 0 0 auto; }
   }
+  /* The box nav.js wraps round the strip, to hang the scroll cues on. In this
+     bar it is the flex item, so it takes over the strip's licence to shrink. */
+  .tab-scroller{ position: relative; flex: 1 1 auto; min-width: 0; }
+  .tab-scroll{ display: none; }
+  /* A fade and an arrow at whichever end of the swipeable row has more rooms
+     beyond it — the only sign there is, with the scrollbar hidden. The fade
+     stops 2px short of the bottom so the strip's ink rule runs on under it.
+     Above the active tab (z-index 5), which would otherwise poke through. */
+  @media (max-width: 780px){
+    .tab-scroller::before, .tab-scroller::after{
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 2px;
+      width: 48px;
+      z-index: 6;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .tab-scroller::before{ left: 0; background: linear-gradient(to right, var(--paper) 40%, transparent); }
+    .tab-scroller::after{ right: 0; background: linear-gradient(to left, var(--paper) 40%, transparent); }
+    .tab-scroller.more-before::before, .tab-scroller.more-after::after{ opacity: 1; }
+    .tab-scroll{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: calc(50% - 1px);
+      transform: translateY(-50%);
+      z-index: 7;
+      width: 28px;
+      height: 28px;
+      padding: 0 0 2px;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--ink-soft);
+      border-radius: 50%;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+    .tab-scroll-prev{ left: 4px; }
+    .tab-scroll-next{ right: 4px; }
+    .tab-scroller.more-before .tab-scroll-prev,
+    .tab-scroller.more-after .tab-scroll-next{ opacity: 1; pointer-events: auto; }
+  }
   .tab-btn {
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 12.5px;
@@ -1192,6 +1243,59 @@
     margin: 0 0 8px;
   }
   .room-brief .try-label{ font-weight: 700; }
+  /* The last two lines of the brief. Predict first asks for a prediction in
+     writing before the first run, and it comes after Try this rather than
+     before it because it is about the runs Try this has just described. Then
+     the room's printed guide — the same experiments as a timed predict, run,
+     explain worksheet, a BSc path and an MSc extension. The guide sits under a
+     dashed rule, set smaller, because it is a way out of the room rather than
+     one more thing to do in it. Its times are written in by _guides/build.py,
+     which finds them through data-guide, so they cannot drift from the PDF. */
+  .room-brief .room-guide{
+    border-top: 1px dashed var(--rule);
+    padding-top: 9px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    break-inside: avoid;
+  }
+  .room-guide-link{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--stamp-deep);
+    text-underline-offset: 2px;
+    margin-right: 4px;
+  }
+  .room-guide-time{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  /* Questions to discuss, after What to notice: three short questions for a
+     class or for a reader on their own, answered by the run they have just
+     made rather than by the prose above them. The payoff's gold spine, so it
+     reads as part of the same close; no tint, so it stays quieter than the
+     payoff it follows. One column, because three questions do not fill two. */
+  .room-discuss{
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--stamp);
+    border-radius: 6px;
+    padding: 12px 18px 13px;
+    margin: 12px 0 10px;
+  }
+  .room-discuss h2{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--stamp-deep);
+    margin: 0 0 8px;
+  }
+  .room-discuss ol{ margin: 0 0 10px; padding-left: 22px; }
+  .room-discuss li{ font-size: 15px; line-height: 1.6; margin-bottom: 6px; }
+  .room-discuss-more{ margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .room-discuss-more a{ color: var(--stamp-deep); text-underline-offset: 2px; }
   /* Pointers to other rooms, so a student can follow a thread across the set. */
   .room-link{
     background: none; border: none; padding: 0;
@@ -2122,6 +2226,27 @@
     color: var(--ink);
   }
   .spec-verdict.is-speciated .spec-verdict-head{ color: var(--help-red); }
+  /* Names the verdict as the model's, with the thresholds that produced it,
+     above the headline it qualifies. */
+  .spec-verdict-kicker{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .spec-verdict-kicker var{ text-transform: none; }
+  .spec-verdict-caveat{
+    margin: 12px 0 0;
+    padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: var(--prose-width);
+  }
+  .spec-verdict-caveat strong{ color: var(--ink); }
   .spec-criteria{ display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .spec-criterion{
     display: flex;
@@ -2399,6 +2524,7 @@
         <ul>
           <li>The <strong>History Scrubber</strong> beneath the simulation in the Copying, Branching, Drift, Selection, Migration, Adaptation and Speciation rooms lets you drag back through a finished run and replay any generation. Nothing is lost when a run ends.</li>
           <li>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</li>
+          <li>Every room has a printable <strong>room guide</strong> (PDF), linked at the foot of its <em>Start here</em> panel. It turns the room into a worksheet: you predict the outcome before each run and explain it afterwards, along a short core path for BSc students and an extension for MSc students, with times, learning objectives and discussion questions, and a last page for checking your reasoning. <a href="guides/00-overview.pdf" target="_blank" rel="noopener">The overview</a> sets all twelve side by side, with suggested routes for a course or a single session.</li>
         </ul>
         <h2 class="readme-minor">Words worth pinning down</h2>
         <p>These twenty-one come up again and again. Each is underlined wherever it first appears — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
@@ -2468,7 +2594,7 @@
 
         <h2><span class="room-num">07</span>The Migration Room</h2>
         <p class="room-kicker">Gene flow against drift</p>
-        <p>Two populations drifting apart, and a slider that moves individuals between them. Somewhere around one migrant a generation the two stop behaving like two — and what decides it is the <em>number</em> of migrants, not the fraction of the population they are.</p>
+        <p>Two populations drifting apart, and a slider that moves individuals between them. In this model, somewhere around one migrant a generation the two stop behaving like two — and what decides it is the <em>number</em> of migrants, not the fraction of the population they are. The room is careful about how far that rule of thumb travels.</p>
         <p class="room-open"><a href="#" onclick="switchTab('migration'); return false;">→ Open the Migration Room</a></p>
 
         <h2><span class="room-num">08</span>The Adaptation Room</h2>
@@ -2549,6 +2675,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> A single starting figure is copied over and over. Every copy introduces a small random error — no error is large, and none of them is aimed at anything. You can run up to 50 lineages side by side, all starting from the same figure.</p>
       <p><span class="try-label">Try this.</span> Press <em>Start copying</em> and watch a single lineage drift away from the shape it began as. Then switch to 3 lineages and run it again: all three start out identical, and all three end up different from one another. Set the <span class="gloss" data-help="glosMutation">mutation</span> size to its smallest value and run it for many <span class="gloss" data-help="glosGeneration">generations</span>. Finally, switch to 50 lineages to see the whole cloud of possibilities at once.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you switch to three lineages, decide: will three copies of the same figure, following the same rules, still look alike after 100 copies? Write it down, run it, and say whether you were right — and why.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/01-copying-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="01-copying-room">core path 30 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -2620,6 +2748,15 @@
       <p>There is no selection here and no goal — yet the shapes still change, and they change in <em>different directions</em>. The divergence readout (Δ) climbs steadily. This is the base fact all the other rooms build on: copying is imperfect, it introduces mutations, which are not bad or good <em>per se</em>.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('branching');">Branching Room</button> lets these lineages split, which is how one species becomes several. The <button type="button" class="room-link" onclick="switchTab('fate');">Fate Room</button> picks a single one of these copying errors and follows it, in a whole population, to the end — and the <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> zooms in on where such an error comes from in the first place.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Two lineages that began identical are different after 100 copies. What is the only cause of the difference in this model?</li>
+        <li>“Evolution is progress towards better forms.” What does this room say about that claim, and what can it not say?</li>
+        <li>Why does the cloud of 50 lineages spread out while its average shape stays where it started?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/01-copying-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>One lineage — or 3, or 50, every one of them started from the identical figure — copied for up to 400 generations, with no population, no death and nothing competing. A shape is a list of independent parameters: 18 for the polygon, 26 for the fish, 11 for the flower, counting the colours and the stroke width as well as the geometry. Each generation every parameter takes its own Gaussian step of standard deviation <var>σ</var> and is then clipped to the range that keeps the figure drawable, the Mutation size slider setting <var>σ</var> as a fraction of that range — about 0.017 at setting 1, 0.041 at 3, 0.065 at 5. The Δ on each card and the pairwise Δ under the stage are one and the same measure, a root-mean-square over the <var>K</var> parameters:</p>
@@ -2655,6 +2792,8 @@
       <p>Coming from the <button type="button" class="room-link" onclick="switchTab('copying');">Copying Room</button>, where one lineage simply accumulated copying errors.</p>
       <p><strong>What it shows.</strong> The same copying process, but now lineages <em>split</em>. One ancestor becomes two independent lineages, each of which keeps drifting on its own and may split again. You choose when the splits happen by dragging the marks on the little tree diagram.</p>
       <p><span class="try-label">Try this.</span> Run it once with the default splits. When it finishes, scroll to the <em>Tanglegram</em> at the bottom: on the left is the true history you just watched, on the right is the family tree an algorithm reconstructs using <em>only</em> the final shapes. Compare them. Then drag the splits so they all happen close together and run it again.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the first run, use the split times to decide which two of the five final lineages should look most alike. Afterwards, check the tanglegram: did the reconstruction agree with you, and with the truth?</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/02-branching-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="02-branching-room">core path 28 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -2729,6 +2868,15 @@
       <p>The reconstructed tree often disagrees with the real one. Lineages that happened to drift very little can look like close relatives even when they separated long ago, and a fast-changing lineage can look like an outsider. This is the central problem of real phylogenetics: <em>similarity is not the same thing as ancestry</em>.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> builds its founders with a small phylogeny just like this one, then shows the opposite trap: unrelated lineages that come to look alike because they live in the same place.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Two species look almost identical. Does that make them each other’s closest relatives?</li>
+        <li>Why are splits that happen close together the hardest to recover?</li>
+        <li>What would you need, besides final appearances, to be sure of a tree’s branching order?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/02-branching-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Ancestor <var>A</var> splits into <var>B</var> and <var>C</var> at generation 0; where the other three splits fall — <var>B</var>→<var>D</var>,<var>E</var> · <var>E</var>→<var>F</var>,<var>G</var> · <var>F</var>→<var>H</var>,<var>I</var> — is yours to set. The five surviving lineages (<var>C</var>, <var>D</var>, <var>G</var>, <var>H</var>, <var>I</var>) then mutate independently until generation <var>N</var>, every one at the same rate. The step is smaller than in the Copying Room, by design: <var>σ</var> is about 0.007 at Mutation size 1, 0.012 at 3 and 0.017 at 5, against 0.017, 0.041 and 0.065 there — two to four times gentler. A run here is five times as long by default, and at the Copying Room's step the shapes would reach the bounds of their traits, and stop recording anything about the tree, well before the last split.</p>
@@ -2761,6 +2909,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The Copying Room let errors pile up along a single line of descent. Here we follow just <em>one</em> of those errors, in a whole population. A shape is copied once and comes out different — that copy is a <span class="gloss" data-help="glosMutation">mutation</span>, and at the moment it appears it exists in exactly one individual out of <var>N</var>. Two populations then run forward in time until the mutation has either vanished or replaced every other copy. The <span class="gloss" data-help="glosGene">gene</span> for the shape now comes in two <span class="gloss" data-help="glosAllele">alleles</span> — ancestral and mutant — and the graph tracks how common the mutant one is.</p>
       <p><span class="try-label">Try this.</span> Press <em>Mutate</em> and look at the third panel, where the parent shape sits faded behind its copy. Then press <em>Simulate evolution through time</em> and read the tally beneath the two populations: it says how many populations had to be run to find one where the mutation survived at all. Do that again at <var>N</var> = 100 and watch that number grow. Notice how fast the losing population finishes compared with the winning one.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Simulate</em> at <var>N</var> = 20, write down how many populations you think the room will have to run before the mutation survives in one. Then do the same at <var>N</var> = 100.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/03-fate-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="03-fate-room">core path 31 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <h2 class="fate-step">Step 1 — a mutation appears</h2>
@@ -2859,6 +3009,15 @@
       <p>The tally is the part worth remembering. A brand-new <span class="gloss" data-help="glosNeutral">neutral</span> mutation survives with probability 1/<var>N</var>, so in a population of 20 it is lost about 19 times out of 20. Almost everything mutation produces disappears within a few generations, which is why the losing population finishes almost immediately while the winning one grinds on for roughly 2<var>N</var> generations.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> is this same process, named and measured: it starts from a frequency you choose rather than from 1/<var>N</var>, and shows how population size governs the whole thing. The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> then gives the mutation an advantage and asks how much difference that makes — the answer, at small <var>N</var>, is less than you would expect. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> comes at it from the other end: not what happens to a mutation, but which mutations happen in the first place.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Most new mutations are lost. Does that mean most mutations are harmful?</li>
+        <li>Why does the losing population finish so much sooner than the winning one?</li>
+        <li>A population of 15 carries a rare neutral variant. Is it likely to keep it?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/03-fate-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Haploid Wright–Fisher: each generation is <var>N</var> individuals drawn with replacement from the one before it, so a mutation at frequency <var>p</var> is passed on a binomial(<var>N</var>, <var>p</var>) number of times. Every trajectory drawn here is a real run of that model — none is scripted — and the batch behind the tally is re-run each time you press Simulate, which is why the numbers move a little from press to press.</p>
@@ -2893,6 +3052,8 @@
       <p>The <button type="button" class="room-link" onclick="switchTab('fate');">Fate Room</button> followed one new mutation from a frequency of 1/<var>N</var> to its end. This room is the same process, named and measured: it starts from any frequency you choose, and asks what population size does to the whole thing.</p>
       <p><strong>What it shows.</strong> This is where the real <span class="gloss" data-help="glosPopulation">population</span> genetics starts. Imagine the copying errors of the first two rooms have already happened, so a population of <var>N</var> individuals now carries two versions of a locus — two <em>alleles</em>, <var>A</var>₁ and <var>A</var>₂. This room asks what becomes of that existing variation. How much of each there is, is written <var>p</var>: <strong><var>p</var> is always the frequency of <var>A</var>₁</strong> — the share of the population carrying it — so <var>p</var> = 0.5 is an even split, <var>p</var> = 0 means <var>A</var>₁ is gone and <var>p</var> = 1 means it is all that is left. That convention holds in every room from here on. Each <span class="gloss" data-help="glosGeneration">generation</span> is built by <em>randomly sampling</em> the previous one — the spinning wheel makes a single draw of one allele, and a full generation means one draw per gene copy. No allele has an advantage over the other; the only force at work is chance.</p>
       <p><span class="try-label">Try this.</span> Run the default settings and watch the first two generations sample one individual at a time. Then set <var>N</var> = 10 and run, and afterwards set <var>N</var> = 200 and run again with everything else unchanged. Finally press <em>Run 10 Simulations</em> to see ten independent populations at once.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the runs at <var>N</var> = 10 and <var>N</var> = 200, sketch the trajectory you expect for each: which reaches 0 or 1 first, and after roughly how many generations? Afterwards, ask whether you could have predicted <em>which</em> allele would win.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/04-drift-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="04-drift-room">core path 35 min · MSc extension +34 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -3034,6 +3195,15 @@
       <p><strong>Then put the mutation slider up and run it again.</strong> Everything above was about a population with no new alleles arriving, and all of it was true of that population: variation only ever goes down, 0 and 1 are the end, every run finishes there. With <var>μ</var> above 0 none of it holds. An allele at 0 comes back, because mutation keeps remaking it; runs no longer end; and the heterozygosity curve, instead of decaying to nothing, flattens out at the level drift pulling down and mutation pushing up settle on between them (and the summary line reports where it landed against where the arithmetic says it should). At <var>N</var> = 50 and <var>μ</var> = 0.005 that balance sits near <var>H</var> = 0.25 — half of the most that two alleles can give you. Real populations live at a balance of this kind. The run that ends at 0 or 1 is what you get by leaving the supply of new variation out of the model.<button class="help-btn" data-help="recurrentMu"></button></p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> keeps this machinery and gives one allele an advantage, so you can watch selection and drift compete. The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> asks where the two alleles came from to begin with, and the <button type="button" class="room-link" onclick="switchTab('migration');">Migration Room</button> runs two of these populations side by side with a few individuals crossing between them.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>A population of 1,000 and one of 20 both carry two neutral alleles at 50:50. Which is more likely to have lost one after 50 generations, and why?</li>
+        <li>Ten runs disagree about everything, yet their average diversity follows the dashed line. Why?</li>
+        <li>Once an allele has been lost, what would it take to bring it back?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/04-drift-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>The first two generations are sampled one individual at a time on the wheel, in real time, so you can see where a frequency actually comes from. After that each generation is drawn in one go, without the wheel, and the run moves on at about five generations a second: fast enough to watch, slow enough to follow. Nothing is replayed from a script — each frequency is the outcome of its own binomial draw.</p>
@@ -3073,6 +3243,8 @@
       <p>The <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> let chance alone decide. Now one allele is genuinely better — and chance is still in the room.</p>
       <p><strong>What it shows.</strong> Exactly the same sampling machinery as the Drift Room, with one addition: allele <var>A</var>₁ now carries a <span class="gloss" data-help="glosFitness">fitness</span> advantage <em>s</em>. Before each <span class="gloss" data-help="glosGeneration">generation</span> is drawn, the frequency is reweighted by fitness — so selection <em>tilts the odds</em>, and then ordinary random sampling does the drawing. Under diploid settings you can also set dominance <em>h</em>.</p>
       <p><span class="try-label">Try this.</span> Run with <var>s</var> = 0.1 at <var>N</var> = 200, and notice how closely the real trajectory tracks the dashed line (which is what selection would do with no randomness at all). Then run the same <var>s</var> = 0.1 at <var>N</var> = 10. Finally switch to Diploid, set <var>s</var> = 0.2, and compare <var>h</var> = 1 against <var>h</var> = 0.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the runs at <var>N</var> = 10, decide how many of ten populations will fix the favoured allele. Then press <em>Run 10 Simulations</em> and count.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/05-selection-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="05-selection-room">core path 35 min · MSc extension +32 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -3196,6 +3368,15 @@
       <p>What matters is not <em>s</em> by itself but <strong><var>N</var>·<var>s</var></strong> — the product of <span class="gloss" data-help="glosPopulation">population</span> size and advantage. Treat that as a rule of thumb rather than a law: the size that belongs in it is the <em>effective</em> population size, and where exactly the balance tips also depends on ploidy, on dominance and on the details of the life cycle. In this room all of those are pinned down, which is why the plain <var>N</var> on the slider will serve — Wright–Fisher sampling is the very thing effective size is measured against. In a small population, drift regularly overwhelms a genuine fitness advantage and loses it. And a <em>recessive</em> advantageous allele (<var>h</var> = 0) is nearly invisible to selection while it is rare, because it is hiding inside <span class="gloss" data-help="glosZygosity">heterozygotes</span>, so it too can be lost like a <span class="gloss" data-help="glosNeutral">neutral</span> allele.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button> shows the half of the story this room cannot tell: selection decides a <span class="gloss" data-help="glosMutation">mutation</span>'s fate, but has no say in whether it appears. The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> then runs selection and drift on five traits at once.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>How can a genuinely better allele be lost?</li>
+        <li>Is a 5% advantage more likely to spread in 10⁹ bacteria or in 50 birds? Why?</li>
+        <li>Why is a recessive advantage nearly invisible while the allele is rare?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/05-selection-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Each generation the raw frequency <var>p</var> is reweighted to <var>p</var>′ = <var>p</var>(1+<var>s</var>) / (<var>p</var>(1+<var>s</var>) + (1−<var>p</var>)) <em>before</em> the usual binomial sampling — so <var>p</var>′, not <var>p</var>, is what the wheel spins on and what the binomial panel draws from. In Diploid mode the weights are genotypic — <var>w</var>(<var>A</var>₁<var>A</var>₁) = 1+<var>s</var>, <var>w</var>(<var>A</var>₁<var>A</var>₂) = 1+<var>h</var>·<var>s</var>, <var>w</var>(<var>A</var>₂<var>A</var>₂) = 1 — and <var>p</var>′ is the allele frequency computed from those weighted genotypes. The dashed line on the chart is the path that same reweighting would take with no sampling noise at all.</p>
@@ -3233,6 +3414,8 @@
       <p>The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> decided which of two alleles won. This room asks where they came from in the first place.</p>
       <p><strong>What it shows.</strong> The Selection Room let selection decide which of two alleles won. This room asks the prior question: where did those alleles come from, and does selection have any say in that? Four spinning wheels, one per character — body shape, body colour, tail size and fin size. Each wheel's slices are the possible <em>derived</em> states, deliberately different sizes: some <span class="gloss" data-help="glosMutation">mutations</span> are simply more likely than others. Spin, and the four results become a new mutant fish. Each derived state is then an independent allele: a panel plays out all four frequencies in a <span class="gloss" data-help="glosPopulation">population</span> of <var>N</var> over <var>G</var> <span class="gloss" data-help="glosGeneration">generations</span>, and a final panel shows the population's fish at the end.</p>
       <p><span class="try-label">Try this.</span> Press <em>Spin</em> and watch the four alleles enter the population as single copies and drift — usually to loss. Then switch <em>Fate of the alleles</em> from <em>Neutral</em> to <em>Selection</em> — the same selection coefficient <em>s</em> you set in the Selection Room, here shared by all four characters: the stream favours a slender body, blue colour, a long tail and short fins (marked ★). Raise <em>s</em> and watch two things at once — the wheels, and the allele-frequency lines. One run is one roll of the dice, so finish with <em>Run 100 Simulations</em>: the same four mutations, played out a hundred times, and a bar for each showing how often it fixed.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you raise <em>s</em>, decide two things separately: will the ★ slices of the wheels get bigger, and will the favoured alleles do better in the population? Then watch both.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/06-mutation-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="06-mutation-room">core path 33 min · MSc extension +32 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="mut-rate-note">
@@ -3331,6 +3514,15 @@
       <p>Selection bends the frequency lines — favoured alleles climb, the rest are pushed down — and reshapes the fish after <var>G</var> generations. But however hard you push, the ★ wheel slices never change size. That is the whole point, and it is the half of the story the Selection Room could not tell: selection governs a mutation's <em>fate</em>, never its <em>origin</em>. Mutation proposes, blindly; selection disposes.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> puts the two halves together: mutation keeps proposing, blindly, and selection keeps disposing — across five traits and three <span class="gloss" data-help="glosHabitat">habitats</span>.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>“Bacteria mutate to become resistant when they meet an antibiotic.” What is wrong with that sentence?</li>
+        <li>Why does one run tell you so much less than <em>Run 100 Simulations</em>?</li>
+        <li>Put “mutation proposes, selection disposes” in your own words, using what you saw.</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/06-mutation-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>One spin makes four derived alleles at four independent loci, each entering a population of <var>N</var> as a single copy at frequency 1/<var>N</var>. Every run tracks at least <var>G</var> = 2.5·<var>N</var> generations and extends automatically until all four have fixed or been lost, which is when the four lines come to share one axis. With selection on, each allele is reweighted by its fitness exactly as in the Selection Room — and no value of <var>s</var> ever resizes a wheel slice.</p>
@@ -3365,6 +3557,8 @@
       <p><strong>What it shows.</strong> Two <span class="gloss" data-help="glosPopulation">populations</span>, <strong>A</strong> and <strong>B</strong>, each of <var>N</var> individuals, each carrying the same two <span class="gloss" data-help="glosAllele">alleles</span>, <var>A</var>₁ and <var>A</var>₂ — the letters name the populations, the digits name the alleles. Every <span class="gloss" data-help="glosGeneration">generation</span> happens in two steps, in this order.<button class="help-btn" data-help="migOrder"></button> First <strong>each population samples its own next generation</strong>, exactly as in the Drift Room: that is <span class="gloss" data-help="glosDrift">drift</span>, and it is what pulls them apart. Then <strong><var>M</var> individuals cross in each direction</strong>: that is <span class="gloss" data-help="glosMigration">gene flow</span>, and it is what pulls them back together. The whole room is those two forces running against each other, and the question is how much gene flow it takes to win.</p>
       <p><strong>Why the slider counts individuals rather than setting a rate.</strong> The classic result is about a <em>number</em> of migrants, so that is what the control gives you: <var>M</var>, the individuals that cross each way each generation, a number you can count on the screen.<button class="help-btn" data-help="migM"></button> Beside it the deck reports the same setting in the two forms the literature writes it in — the migration rate <var>m</var> = <var>M</var>/<var>N</var>, and the product <var>Nm</var>, which here is just <var>M</var> back again.<button class="help-btn" data-help="migNm"></button> Hold <var>M</var> at 1 and drag <var>N</var> from 20 up to 200: <var>m</var> falls by a factor of ten while the two populations go on behaving the same way. That is the surprise this room is built around. What holds two populations together is the number of migrants they exchange, not the fraction of each that migrates — so a trickle that is negligible <em>as a rate</em> is not negligible at all.</p>
       <p><span class="try-label">Try this.</span> Press Run on the defaults: A starts at <var>p</var> = 0.90, B at <var>p</var> = 0.10, and one individual crosses each way. Watch B climb to meet A — and notice how the run ends. The two do not drift apart and stay apart; they come together and then lose the last of their variation <em>as a pair</em>, usually within the first couple of hundred generations. Now set the migrants to <strong>0</strong> and run again: nothing pulls B up, and a good half of these runs end with the two populations fixed for different alleles instead. Then set <em>both</em> starting frequencies to <var>p</var> = 0.50 and press <em>Run 20 Replicates</em>, first at 0 migrants and then at 1 — around thirteen runs in twenty become strongly differentiated at some point without migrants, and around five with one. Finally press <em>Run the sweep</em>. Runs vary enormously, so nothing above can be seen from any single one of them.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the twenty replicates, guess how many of the twenty will become strongly differentiated with no migrants, and how many with one migrant a generation.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/07-migration-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="07-migration-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -3524,12 +3718,21 @@
 
     <div class="room-payoff">
       <h2>What to notice</h2>
-      <p>With no migrants the two populations are simply two Drift Rooms, and they end up wherever chance sends them — often at opposite edges, which is as different as two populations can be. One migrant a generation changes that: the two lines stay within sight of each other, and the pair behaves far more like a single population of 2<var>N</var> than like two populations of <var>N</var>.</p>
-      <p><strong>The sweep is where that claim gets tested, and it comes back with two different answers.</strong> Mean <var>F</var><sub>ST</sub> — the quantity actually reported in papers — slides down steadily as migrants are added and falls off nothing in particular. The share of runs that ever become <em>strongly</em> differentiated does fall off a cliff, and the cliff is at one migrant a generation: without migrants about two runs in three get there, at half a migrant about one in two, at one migrant about one in four, and at two migrants almost none. The rule of thumb was never a claim about the average. It is a claim about preventing <em>complete</em> differentiation, and it is right about that.<button class="help-btn" data-help="migSweep"></button></p>
+      <p>With no migrants the two populations are simply two Drift Rooms, and they end up wherever chance sends them — often at opposite edges, which is as different as two populations can be. One migrant a generation changes that: the two lines stay within sight of each other, and the pair behaves far more like a single population of 2<var>N</var> than like two populations of <var>N</var>. <strong>That is a result about this model</strong> &mdash; two populations of equal, constant size, migration the same both ways, one neutral locus, generations that do not overlap. The classic &ldquo;one migrant per generation&rdquo; comes from a different model again, Wright's island model of many populations exchanging with a common pool, and in it the same <var>Nm</var> binds populations less tightly than here.<button class="help-btn" data-help="migSweep"></button></p>
+      <p><strong>The sweep is where that claim gets tested, and it comes back with two different answers.</strong> Mean <var>F</var><sub>ST</sub> — the quantity actually reported in papers — slides down steadily as migrants are added and falls off nothing in particular. The share of runs that ever become <em>strongly</em> differentiated does fall off a cliff, and the cliff is at one migrant a generation: without migrants about two runs in three get there, at half a migrant about one in two, at one migrant about one in four, and at two migrants almost none. The rule of thumb was never a claim about the average. It is a claim about preventing <em>complete</em> differentiation, and in this setting it is right about that. Change the setting and the number moves: populations of unequal size, migration that runs mostly one way, selection that differs between the places, or migrants that are not a random sample of their population all shift how much exchange it takes. Read &ldquo;one migrant&rdquo; as the answer for the model on the screen, not as a threshold that holds everywhere.</p>
       <p>Then notice what the cliff is measured against. It is <var>Nm</var> — a <em>number</em> — and not <var>m</var>. Ten migrants into a population of a thousand is a migration rate of 1%, and it keeps that population welded to its neighbour; one migrant into a population of ten is a rate of 10%, ten times larger, and does less. This is why "these populations exchange less than one percent of their individuals" is not, on its own, an argument that they are diverging.</p>
       <p>One thing the equilibrium does <em>not</em> tell you is how long it takes to get there. Raise <var>N</var> with <var>M</var> held at 1 and the two populations end up just as tightly bound — but they take proportionally longer to arrive, because everything about drift is slower in a big population. The end state depends only on the product; the time to reach it depends on <var>N</var>.</p>
       <p><strong>With local adaptation switched on</strong> the same contest is run against selection instead of drift, and the answer changes shape: what matters is now the comparison between <var>m</var> and <var>s</var>. When migration is the weaker of the two each population keeps its own favoured allele and a stable difference between them survives indefinitely; when it is the stronger, gene flow swamps local adaptation and both populations end up carrying the same allele, whichever one the exchange happens to favour. A population can be prevented from adapting to where it lives by immigrants from somewhere else.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button> sets the migrants to zero permanently and asks what accumulates over a thousand generations of that. This room is why it has to: with even a trickle of gene flow, almost none of it would.</p>
+    </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>A corridor would let two butterflies a generation move between two reserves of 50. Is it worth building? And between reserves of 5,000?</li>
+        <li>Why does the number of migrants matter more than the fraction of the population they are?</li>
+        <li>How can gene flow stop a population from adapting to where it lives?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/07-migration-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
     </div>
 
     <details class="room-methods">
@@ -3572,6 +3775,8 @@
       <p>Everything so far, combined.</p>
       <p><strong>What it shows.</strong> Everything so far, combined. Three founder fish — Gigi, Mario and Nani — are produced first by a small branching phylogeny, as in the Branching Room: one ancestor, three splits, and an <strong>outgroup</strong> alongside the three founders. Each founder then splits into two lineages: a <strong><span class="gloss" data-help="glosNeutral">Neutral</span></strong> one where nothing is selected, and a <strong>Habitat</strong> one assigned to a Stream, Pond or River. Five traits (shape, colour, eye size, fin size, tail size) each behave as an independent locus, mutating and then running a full Wright–Fisher trajectory exactly as in the Selection Room. Each <span class="gloss" data-help="glosHabitat">habitat</span> favours a different combination of traits.</p>
       <p><span class="try-label">Try this.</span> Press Run and watch the two lineages of each founder evolve side by side from the same ancestor. When it finishes, read the table under <em>Each lineage against its own founder</em>: a row for Neutral and one for Habitat, a column per founder, and the mean of each row at the end. Then take the three <strong>preset tasks</strong> in turn — each sets the controls and runs, and the status line tells you what to look for: <em>same habitat, different founders</em> for convergence, <em>turn selection off</em> as a control, and <em>small vs large population</em> for what population size does to both.<button class="help-btn" data-help="adaptPresets"></button></p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press Run, decide for each founder which lineage will end up further from the ancestor — Neutral or Habitat — and by how much.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/08-adaptation-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="08-adaptation-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -3772,6 +3977,15 @@
       <p><strong>Where this goes next.</strong> One question is still open. These lineages diverged, but they never stopped being able to interbreed — nothing here would prevent a Neutral fish and a Habitat fish from producing offspring. The <button type="button" class="room-link" onclick="switchTab('speciation');">Speciation Room</button> takes two populations that genuinely cannot exchange genes and asks at what point they stop being one species.</p>
       <p><strong>Looking back.</strong> Every thread meets here: copying error from the <button type="button" class="room-link" onclick="switchTab('copying');">Copying Room</button>, splitting lineages from the <button type="button" class="room-link" onclick="switchTab('branching');">Branching Room</button>, blind mutation from the <button type="button" class="room-link" onclick="switchTab('mutation');">Mutation Room</button>, and the tug-of-war between drift and selection from the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button>.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Dolphins and ichthyosaurs share a streamlined body. How does this room model that, and what does the shape say about their ancestry?</li>
+        <li>Why does the room need a Neutral lineage at all?</li>
+        <li>Do Habitat lineages receive more mutations than Neutral ones? What, then, does selection change?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/08-adaptation-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Each of the five traits is its own independent locus. While it is monomorphic it has a chance <var>μ</var> per generation of producing a new variant, which then runs a real diploid Wright–Fisher trajectory — selection and drift, with the beneficial allele fully dominant (<var>h</var> = 1) — until it fixes or is lost. A mutation's selection coefficient is signed at the moment it arises, positive if the step it makes happens to move the trait the way its habitat prefers and negative if it does not, and it does not change afterwards.</p>
@@ -3810,6 +4024,8 @@
       <p>After <var>G</var> <span class="gloss" data-help="glosGeneration">generations</span>, we ask whether they are still one species. We apply two independent tests: <strong>fixed differences</strong><button class="help-btn" data-help="specFixedDiff"></button>, standing in for the genetic incompatibilities that break hybrids, and <strong>divergence in a mating signal</strong>, standing in for the failure to recognise each other as mates.</p>
       <p><span class="try-label">Try this.</span> Press Run, then send B to <em>another lake</em> and run again, and compare the <em>morphological</em> fixed differences — the gold line. Divergent selection in the stream sorts most of those 13 loci — around <strong>8</strong> of them end up fixed differences. Two lakes manage about <strong>5</strong>: parallel selection is pushing both populations the <em>same</em> way, so what divergence there is has to come from their fixing different mutations to get there rather than from being pulled apart. Then notice how little either choice moves the black line: 960 loci that neither habitat selects on carry the genome-wide count, whatever B does. Then look at the ledger below the strip. The 40 physiological loci collect around <strong>28</strong> fixed differences in the stream and around <strong>22</strong> between two lakes — against about <strong>120</strong> from the 960 neutral ones, which is five times fewer <em>per locus</em>. A mutation at a locus selection can see fixes far more often than one at a locus it cannot.</p>
       <p>Runs differ a great deal, and that is the model being honest rather than noisy — at realistic variation, whether a trait can respond at all depends on which few variants the ancestral population happened to be carrying. At the default settings a move to the <strong>stream</strong> ends in speciation about <strong>four runs in five</strong>, and a move to <strong>another lake</strong> about <strong>one in three</strong>: the habitat shifts the odds without deciding the outcome, so a single run tells you far less than a handful do. Press <em>New Ancestral Population</em> a few times to see the spread — how far a trait can move is decided partly by which variants that particular ancestor happened to carry. Then raise <strong>θ</strong>: a more variable ancestor makes everything faster and more repeatable, and you can watch the polymorphic count on the ancestral card climb as you do it.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you send B to another lake, decide whether the morphological fixed differences — the gold line — will rise or fall compared with the stream, and whether the genome-wide total will move much.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/09-speciation-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="09-speciation-room">core path 37 min · MSc extension +32 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -3928,7 +4144,13 @@
       </div>
     </div>
 
-    <div class="spec-verdict is-one" id="verdict_spec" role="status" aria-live="polite"></div>
+    <!-- The live region is the verdict itself; the caveat beneath it is
+         static, inside the same box so it is read with the verdict, but outside
+         the live region so it is not re-announced on every frame of a run. -->
+    <div class="spec-verdict is-one" id="verdict_spec">
+      <div id="verdictLive_spec" role="status" aria-live="polite"></div>
+      <p class="spec-verdict-caveat"><strong>A model-defined outcome, not evidence of speciation.</strong> The verdict compares two counts with thresholds you chose and calls the populations two species when one is passed. In nature, speciation is shown by reproductive isolation itself &mdash; hybrids that fail, or individuals that will not mate across the divide &mdash; and nothing in this room measures either. Divergence of this kind is a reason to look for isolation, never a demonstration of it.</p>
+    </div>
 
     <div class="reading">
       <div class="time-machine-container" id="scrubberRow_spec" style="margin: 0 0 20px;">
@@ -3981,6 +4203,15 @@
       <p><strong>Looking back.</strong> The <button type="button" class="room-link" onclick="switchTab('branching');">Branching Room</button> showed lineages splitting and diverging in appearance; this room asks the question that one left open — at what point does the split become permanent? The sorting of each locus is the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> running 1,013 times over, and the traits are the ones from the <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button>.</p>
       <p><strong>Where this goes next.</strong> That is the argument complete. What follows in <strong>Part IV</strong> is the machinery underneath it: the <button type="button" class="room-link" onclick="switchTab('reproduction');">Reproduction Room</button> on how a generation is actually made, the <button type="button" class="room-link" onclick="switchTab('hardyweinberg');">Hardy–Weinberg Room</button> on the bookkeeping every population-genetics room here has been using, and the <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> on what changes when two loci travel together.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why is isolation the starting condition of this room rather than its result?</li>
+        <li>Why is a count of fixed differences not, by itself, evidence of two species?</li>
+        <li>How can two populations that look nearly identical have rebuilt their physiology in opposite directions?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/09-speciation-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p><strong>The ancestral population.</strong> 1,013 independent diploid loci. Each locus's minor-allele frequency is drawn from the mutation–drift stationary distribution Beta(<var>θ</var>, <var>θ</var>) and rounded to a whole number of copies out of 2<var>N</var>, so about a third of the loci come out monomorphic and the variation at the rest is mostly rare — a median minor allele of about 7% at the default θ; the polymorphic count and the heterozygosity on the ancestral card are results, not settings. <var>θ</var> is a control of its own rather than 4<var>N</var><var>μ</var> computed from the run, because it describes the ancestor's long-term history and its <var>N</var><sub>e</sub> need not equal the <var>N</var> the daughters get.
@@ -4021,6 +4252,8 @@
       <p>The rooms so far copied a shape, or tracked an allele, without ever asking how a generation is actually made. This one does — and asks what difference it makes that most organisms need two parents.</p>
       <p><strong>What it shows.</strong> The same two founders reproduce in two different ways, side by side for four <span class="gloss" data-help="glosGeneration">generations</span>. On the left, <em>asexually</em>: every individual makes two exact clones of itself, so the <span class="gloss" data-help="glosPopulation">population</span> doubles — 2 → 4 → 8 → 16. Copying errors are switched off in this room — the Copying Room showed that copying is never really exact — so that the <em>only</em> difference between the two sides is how the genes are combined. On the right, <em>sexually</em>: the two parents make two offspring, each carrying one recombined copy from each parent, so the population only replaces itself. Both panels report their head count <em>and</em> their number of genetically distinct individuals.</p>
       <p><span class="try-label">Try this.</span> Press <em>Auto-play</em> and watch the two panels to the end. Then compare the two numbers under each heading. Look closely at a circle on the right where a half changes shade partway down — that is a crossover, a piece of one copy swapped onto the other during meiosis.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Auto-play</em>, write down how many individuals, and how many distinct genotypes, each side will have after four generations.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/10-reproduction-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="10-reproduction-room">core path 25 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -4148,6 +4381,15 @@
       <p>After four generations the asexual side has sixteen individuals but still only the two genotypes it started with; the sexual side has two individuals carrying two genotypes that never existed before. Selection can only act on <em>differences</em>, so sixteen identical individuals offer it no more to work with than one. That is the bargain: numbers on one side, variety on the other — and it is the <span class="gloss" data-help="glosGamete">gametes</span> made here that the next room pairs up at random.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('hardyweinberg');">Hardy–Weinberg Room</button> takes the gametes made here and pairs them at random. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> returns to the point about mixing, and shows in population-genetic terms why two good mutations in different asexual lineages can never be combined.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why is the two-fold cost of sex sometimes called the “cost of males”?</li>
+        <li>A disease that kills one genotype arrives at generation 4. What happens on each side?</li>
+        <li>Why do aphids and water fleas switch between the two ways of reproducing?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/10-reproduction-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Two founders and four generations, run twice from the same start. There is no mutation and no selection here, and an allele is only an ancestry label: each individual is a single chromosome, drawn as its two copies. On the left every individual makes two exact clones of itself. On the right the two parents make two offspring, each receiving one gamete from each parent, and a gamete is built by a single crossover whose position is drawn uniformly from the middle 64% of the chromosome, with a coin deciding which copy contributes the top piece. Two individuals count as the same genotype when they carry the same pair of copies — crossover positions included, which is what the &ldquo;distinct genotypes&rdquo; readout is counting.</p>
@@ -4185,6 +4427,8 @@
       <p>The <button type="button" class="room-link" onclick="switchTab('reproduction');">Reproduction Room</button> made the <span class="gloss" data-help="glosGamete">gametes</span>. This room pairs them up, and works out what that does to the <span class="gloss" data-help="glosGenotype">genotypes</span>.</p>
       <p><strong>What it shows.</strong> A single locus with two alleles — <var>A</var>₁ at frequency <var>p</var>, <var>A</var>₂ at frequency <var>q</var> = 1 − <var>p</var>. Two handles cut the parent <span class="gloss" data-help="glosPopulation">population</span> into any mix of <var>A</var>₁<var>A</var>₁, <var>A</var>₁<var>A</var>₂ and <var>A</var>₂<var>A</var>₂ you like, and three histograms sit side by side: the genotypes the parents actually have (<em>observed</em>), the <var>p</var>²:2<var>pq</var>:<var>q</var>² <em>expected</em> from their allele frequency, and what one round of random mating really produces. Below them, the <em>Hardy–Weinberg square</em> shows where those proportions come from — and how many individuals each one means — while a gamete wheel builds the offspring one gamete at a time.</p>
       <p><span class="try-label">Try this.</span> Collapse the <em>One <span class="gloss" data-help="glosGeneration">generation</span> of random mating</em> panel and slide <var>p</var> from 0.5 down toward 0.1: watch where the rare allele goes — almost every copy ends up inside a heterozygote, not a homozygote. Then open the panel again and drag the two handles on the genotype bar to build a lop-sided population of your own — more <var>A</var>₁<var>A</var>₁ <em>and</em> more <var>A</var>₂<var>A</var>₂, fewer <var>A</var>₁<var>A</var>₂. Press <em>Mate randomly</em> at each setting and see where the offspring land.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Mate randomly</em> on a lop-sided population, work out <var>p</var> and write down the genotype frequencies you expect in the offspring.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/11-hardy-weinberg-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="11-hardy-weinberg-room">core path 32 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="deck deck-setup deck-numbered">
@@ -4307,6 +4551,15 @@
       <p>Genotype frequencies are completely fixed by the allele frequency, and <span class="gloss" data-help="glosZygosity">heterozygotes</span> are most common at <var>p</var> = 0.5. Any starting mix reaches <em>expected</em> genotype frequencies of <var>p</var>²:2<var>pq</var>:<var>q</var>² after a single generation of random mating, and stays there. Exactly so only in an infinite population: draw a real 2<var>N</var> gametes, as this room does, and the realised counts fluctuate around those expectations — which is the gap between the <em>Expected</em> and <em>After one random mating</em> histograms, and the whole of what drift is. That is exactly why the diploid Drift and Selection rooms can draw 2<var>N</var> alleles and pair them: the genotypes follow automatically, so only the allele frequency has to be tracked.</p>
       <p><strong>Where this connects.</strong> This is the licence the earlier rooms were using: because genotype frequency follows from allele frequency, the <button type="button" class="room-link" onclick="switchTab('drifting');">Drift Room</button> and the <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> could track the allele frequency alone and pair gametes as they went — which is what their Diploid setting quietly relies on. The <button type="button" class="room-link" onclick="switchTab('linkage');">Linkage Room</button> shows where this convenient one-locus picture breaks down.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>If 1 birth in 2,500 shows a recessive condition, roughly how common are carriers?</li>
+        <li>Why does a dominant allele not become more common simply because it is dominant?</li>
+        <li>Why do the offspring miss p² : 2pq : q² a little each time, and by more at small <var>N</var>?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/11-hardy-weinberg-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>One autosomal locus with two alleles, in a diploid population of <var>N</var>. G0 is whatever you build: with the random-mating panel closed the slider sets <var>p</var> and the parents are laid out in Hardy–Weinberg proportions at that <var>p</var>; with it open the two handles set the genotype mix directly and the allele frequency becomes a consequence of it, <var>p</var> = <var>f</var>(<var>A</var>₁<var>A</var>₁) + ½·<var>f</var>(<var>A</var>₁<var>A</var>₂). Mating then draws 2<var>N</var> gametes independently from that gene pool — each one <var>A</var>₁ with probability <var>p</var> — and pairs them two at a time. Nothing else happens to them: no selection, no mutation, no migration, and no second generation.</p>
@@ -4342,6 +4595,8 @@
       <p>The <button type="button" class="room-link" onclick="switchTab('hardyweinberg');">Hardy–Weinberg Room</button> followed a single locus. Everything changes once you follow two.</p>
       <p><strong>What it shows.</strong> The previous room follows one locus. This one follows two, sitting a chosen distance apart on the same chromosome. Part 1 builds an association between them — allele <var>A</var>₁ travelling with allele <var>B</var>₁ — and lets <span class="gloss" data-help="glosRecombination">recombination</span> pull it apart, <span class="gloss" data-help="glosGeneration">generation</span> by generation, at the rate <em>r</em> you set. Part 2 drops two beneficial <span class="gloss" data-help="glosMutation">mutations</span> into a finite <span class="gloss" data-help="glosPopulation">population</span>, one in each of two different individuals, and counts how often the population manages to keep both.</p>
       <p><span class="try-label">Try this.</span> In Part 1, set <var>r</var> = 0.5 and press <em>Auto-play</em>: the association is gone almost at once. Now set <var>r</var> = 0.005 and run it again — after sixty generations most of it is still there. Then, in Part 2, press <em>Run all replicates</em> at a low <var>r</var> and compare the two sets of bars.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you auto-play at <var>r</var> = 0.005, guess what fraction of the starting association will be left after sixty generations.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/12-linkage-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="12-linkage-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <!-- ---------- PART 1: linkage disequilibrium and its decay ---------- -->
@@ -4472,6 +4727,15 @@
       <p>Hardy–Weinberg is reached in one generation and stays; linkage equilibrium is only ever approached, at a speed set by how close the two loci sit. And while an association lasts, it has a cost: two good mutations on different chromosomes are rivals rather than allies, because the chromosome carrying both has to be built by recombination before selection can favour it. With little recombination, one of the two is usually thrown away. That is <em>Hill–Robertson interference</em> — and an asexual lineage lives at <var>r</var> = 0 across its whole genome, permanently.</p>
       <p><strong>Where this connects.</strong> Linkage is the reason the one-locus rooms are a simplification, not the whole story. The <button type="button" class="room-link" onclick="switchTab('adaptation');">Adaptation Room</button> treated its five traits as independent loci — worth going back with the knowledge that real traits are not always so obliging.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why might two alleles be found together more often than chance predicts, with no selection favouring the pair?</li>
+        <li>Why are two good mutations on different chromosomes rivals rather than allies?</li>
+        <li>What does Part 2 say about the advantage of sex?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/12-linkage-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
       <p>Gamete frequencies are written <var>x</var>(<var>A</var>₁<var>B</var>₁), <var>x</var>(<var>A</var>₁<var>B</var>₂), <var>x</var>(<var>A</var>₂<var>B</var>₁), <var>x</var>(<var>A</var>₂<var>B</var>₂), and the linkage disequilibrium between the two loci is <var>D</var> = <var>x</var>(<var>A</var>₁<var>B</var>₁)·<var>x</var>(<var>A</var>₂<var>B</var>₂) − <var>x</var>(<var>A</var>₁<var>B</var>₂)·<var>x</var>(<var>A</var>₂<var>B</var>₁), zero when the two are inherited independently. Recombination at rate <var>r</var> per generation erodes it geometrically: <var>D</var>(<var>t</var>) = <var>D</var>₀(1 − <var>r</var>)<sup><var>t</var></sup>. Part 2 runs a two-locus Wright–Fisher model of a diploid population of <var>N</var>, bookkept as its 2<var>N</var> chromosomes. Fitness is multiplicative across the two loci <em>and</em> across an individual’s two chromosomes, which means there is no dominance and the gamete frequencies on their own are enough: selection reweights the four gamete classes, recombination reshuffles them at rate <var>r</var>, and 2<var>N</var> chromosomes are then drawn at random to make the next generation. Both beneficial alleles start at the frequency <var>f</var>₀ you set, on different backgrounds — at the defaults that is five copies of each in 2<var>N</var> = 100, not one — so the chromosome carrying both can only be made by recombination.</p>
@@ -4522,26 +4786,26 @@
     </div>
   </div>
 
-<script src="js/i18n.js?v=1792930427226"></script>
-  <script src="js/nav.js?v=1792930427226"></script>
-  <script src="js/sound.js?v=1792930427226"></script>
-  <script src="js/help.js?v=1792930427226"></script>
-  <script src="js/shapes-engine.js?v=1792930427226"></script>
-  <script src="js/canvas-utils.js?v=1792930427226"></script>
-  <script src="js/phylo.js?v=1792930427226"></script>
-  <script src="js/copying-room.js?v=1792930427226"></script>
-  <script src="js/branching-room.js?v=1792930427226"></script>
-  <script src="js/fate-room.js?v=1792930427226"></script>
-  <script src="js/sex-asex-room.js?v=1792930427226"></script>
-  <script src="js/hardy-weinberg-room.js?v=1792930427226"></script>
-  <script src="js/linkage-room.js?v=1792930427226"></script>
-  <script src="js/wright-fisher-core.js?v=1792930427226"></script>
-  <script src="js/drift-room.js?v=1792930427226"></script>
-  <script src="js/selection-room.js?v=1792930427226"></script>
-  <script src="js/mutation-room.js?v=1792930427226"></script>
-  <script src="js/migration-room.js?v=1792930427226"></script>
-  <script src="js/adaptation-room.js?v=1792930427226"></script>
-  <script src="js/speciation-room.js?v=1792930427226"></script>
-  <script src="js/consent.js?v=1792930427226"></script>
+<script src="js/i18n.js?v=1792953240179"></script>
+  <script src="js/nav.js?v=1792953240179"></script>
+  <script src="js/sound.js?v=1792953240179"></script>
+  <script src="js/help.js?v=1792953240179"></script>
+  <script src="js/shapes-engine.js?v=1792953240179"></script>
+  <script src="js/canvas-utils.js?v=1792953240179"></script>
+  <script src="js/phylo.js?v=1792953240179"></script>
+  <script src="js/copying-room.js?v=1792953240179"></script>
+  <script src="js/branching-room.js?v=1792953240179"></script>
+  <script src="js/fate-room.js?v=1792953240179"></script>
+  <script src="js/sex-asex-room.js?v=1792953240179"></script>
+  <script src="js/hardy-weinberg-room.js?v=1792953240179"></script>
+  <script src="js/linkage-room.js?v=1792953240179"></script>
+  <script src="js/wright-fisher-core.js?v=1792953240179"></script>
+  <script src="js/drift-room.js?v=1792953240179"></script>
+  <script src="js/selection-room.js?v=1792953240179"></script>
+  <script src="js/mutation-room.js?v=1792953240179"></script>
+  <script src="js/migration-room.js?v=1792953240179"></script>
+  <script src="js/adaptation-room.js?v=1792953240179"></script>
+  <script src="js/speciation-room.js?v=1792953240179"></script>
+  <script src="js/consent.js?v=1792953240179"></script>
 </body>
 </html>
