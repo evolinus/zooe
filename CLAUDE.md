@@ -139,11 +139,14 @@ tracks `js/sound.js` plays while a simulation runs. Dropping a track is
 survivable rather than broken — the toggle removes itself from the tab bar when
 the file will not load — so the app still works, just silently.
 
-Every `<script src>` in an app's `index.html` carries the same `?v=` token.
-**Change any of that app's `js/` files and bump the token on all of them
-together** — it is what makes a returning reader's browser fetch the new
-scripts instead of running cached ones against new markup. A local preview
-will happily serve you the cached old script too, so bump before checking.
+Every `<script src>` in an app's `index.html` carries a `?v=` token, and it is
+what makes a returning reader's browser fetch a changed script instead of
+running the cached one against new markup. **Change a `js/` file, bump its
+token.** The two apps keep them differently: Evolutionary Laboratories gives
+every script the same token, so bump them all together; Population
+Laboratories numbers each file on its own (`lab-core.js?v=18`), so bump only
+the files you changed. A local preview will happily serve you the cached old
+script too, so bump before checking.
 
 `index.html` rather than upstream's old `main.html`, so the bare folder URL
 works and is easy to paste into an email. That is also the URL the teaching
