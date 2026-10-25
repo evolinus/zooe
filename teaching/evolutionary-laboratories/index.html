@@ -1803,10 +1803,10 @@
      beside it — spanning four tracks gives 4T + 3 gaps, and four columns with
      three gaps of their own hands back T. */
   .mut-wheel-row{ margin: 0 0 20px; align-items: start; }
-  /* Run evolution sits under the Original fish rather than beside Spin: it
-     replays the fates of the mutations already drawn without spinning again,
-     so it belongs with the fish those mutations start from, not with the
-     controls that make new ones. */
+  /* Run Simulation and Run 100 Simulations sit under the Original fish rather
+     than beside Spin: they replay the fates of the mutations already drawn
+     without spinning again, so they belong with the fish those mutations start
+     from, not with the controls that make new ones. */
   .mut-orig-col{ display: flex; flex-direction: column; gap: 10px; min-width: 0; }
   .mut-orig-col .btn{ width: 100%; }
   .mut-wheel-row .wheel-grid{
@@ -1824,6 +1824,9 @@
      from the Mutant canvas beside it rather than from its own width, or the row
      would stand three times as tall as its neighbours. */
   .mut-derived-card{ grid-column: span 3; }
+  /* The panel's two titles (single run / 100 runs) are spans in a flex head,
+     so [hidden] needs saying again or the head's display would win. */
+  .mut-derived-card [data-fate-view][hidden]{ display: none; }
   .mut-fish-stage .stage-canvas.freq-canvas{
     background: var(--paper);
     /* .stage-canvas makes every panel square, and this is the one that is not:
@@ -3229,7 +3232,7 @@
       <h2>Start here</h2>
       <p>The <button type="button" class="room-link" onclick="switchTab('selection');">Selection Room</button> decided which of two alleles won. This room asks where they came from in the first place.</p>
       <p><strong>What it shows.</strong> The Selection Room let selection decide which of two alleles won. This room asks the prior question: where did those alleles come from, and does selection have any say in that? Four spinning wheels, one per character — body shape, body colour, tail size and fin size. Each wheel's slices are the possible <em>derived</em> states, deliberately different sizes: some <span class="gloss" data-help="glosMutation">mutations</span> are simply more likely than others. Spin, and the four results become a new mutant fish. Each derived state is then an independent allele: a panel plays out all four frequencies in a <span class="gloss" data-help="glosPopulation">population</span> of <var>N</var> over <var>G</var> <span class="gloss" data-help="glosGeneration">generations</span>, and a final panel shows the population's fish at the end.</p>
-      <p><span class="try-label">Try this.</span> Press <em>Spin</em> and watch the four alleles enter the population as single copies and drift — usually to loss. Then switch <em>Fate of the alleles</em> from <em>Neutral</em> to <em>Selection</em> — the same selection coefficient <em>s</em> you set in the Selection Room, here shared by all four characters: the stream favours a slender body, blue colour, a long tail and short fins (marked ★). Raise <em>s</em> and watch two things at once — the wheels, and the allele-frequency lines.</p>
+      <p><span class="try-label">Try this.</span> Press <em>Spin</em> and watch the four alleles enter the population as single copies and drift — usually to loss. Then switch <em>Fate of the alleles</em> from <em>Neutral</em> to <em>Selection</em> — the same selection coefficient <em>s</em> you set in the Selection Room, here shared by all four characters: the stream favours a slender body, blue colour, a long tail and short fins (marked ★). Raise <em>s</em> and watch two things at once — the wheels, and the allele-frequency lines. One run is one roll of the dice, so finish with <em>Run 100 Simulations</em>: the same four mutations, played out a hundred times, and a bar for each showing how often it fixed.</p>
     </div>
 
     <div class="mut-rate-note">
@@ -3273,7 +3276,8 @@
           </div>
           <canvas class="stage-canvas" id="fishOrig_mut" role="img" aria-label="The original fish, in its ancestral state"></canvas>
         </div>
-        <button class="btn" id="rerunBtn_mut" data-sound data-results="#stageTop_mut" disabled>↻ Run evolution</button>
+        <button class="btn" id="rerunBtn_mut" data-sound data-results="#stageTop_mut" disabled>↻ Run Simulation</button>
+        <button class="btn secondary" id="batchBtn_mut" data-sound data-results="#stageTop_mut" disabled>Run 100 Simulations</button>
       </div>
       <div class="wheel-grid" id="wheelGrid_mut"></div>
     </div>
@@ -3290,7 +3294,11 @@
       </div>
       <div class="lineage-card mut-derived-card" style="--accent: var(--lineage-a)">
         <div class="lineage-head">
-          <span class="name" style="color: var(--lineage-a)">Derived alleles<button class="help-btn" data-help="mutDrift"></button></span>
+          <!-- Two titles for the one panel: the single run's trajectories, or the
+               fixation tally of a batch of runs. mutation-room.js shows one and
+               hides the other, each with its own help topic. -->
+          <span class="name" style="color: var(--lineage-a)" data-fate-view="single">Derived alleles<button class="help-btn" data-help="mutDrift"></button></span>
+          <span class="name" style="color: var(--lineage-a)" data-fate-view="batch" hidden>Fixed in 100 runs<button class="help-btn" data-help="mutBatch"></button></span>
           <span class="stat mono" id="freqStat_mut">—</span>
         </div>
         <canvas class="stage-canvas freq-canvas" id="freqCanvas_mut" role="img" aria-label="Frequency of each of the four derived alleles against generation"></canvas>
@@ -3330,6 +3338,7 @@
       <p class="eq"><var>u</var> = 1/<var>N</var> for each · E[number of the four that fix] = 4/<var>N</var><span class="eq-note">at <var>N</var> = 50 that is 0.08 alleles per spin, so most spins end with all four lines on the floor</span></p>
       <p class="eq">E[<var>T</var><sub>fix</sub> | it fixes] ≈ 2<var>N</var> generations<span class="eq-note">where the 2.5·<var>N</var> default for <var>G</var> comes from: long enough for a typical winner to finish, short enough that the chart is not mostly flat line</span></p>
       <p>Switching selection on replaces the first of those with <var>u</var>(1/<var>N</var>) = (1 − e<sup>−2<var>s</var></sup>)/(1 − e<sup>−2<var>Ns</var></sup>) ≈ 2<var>s</var> for a beneficial allele — a different number, arrived at without touching a single wheel. That is the room's whole point written as two equations: the wheel sets how often a variant is <em>made</em>, <var>s</var> sets what becomes of it afterwards, and they are separate parameters of the same run.</p>
+      <p><em>Run 100 Simulations</em> measures <var>u</var> rather than quoting it: the four mutations already drawn are played out 100 times, each run until every allele has fixed or been lost, and each bar is the fraction of runs in which that allele fixed. The dashed line is the neutral 1/<var>N</var>. With 100 runs a bar is good to about ±0.03 near the neutral value at <var>N</var> = 50, so two neutral bars a few runs apart are the same bar.</p>
     </details>
   </div>
 

@@ -12,6 +12,17 @@
     // ---- The mutable characters and their derived-state wheels ----
     // pct values within each wheel sum to 100. `favoured` marks the state the
     // "stream" habitat selects for (revealed only once selection is simulated).
+    // The effects are deliberately large — 25% and 50% for the tail and fins,
+    // 50% for the body shapes. The room is about what "random" means, so the
+    // reader has to be able to see at a glance that the mutant is different
+    // from the ancestor; at 10% and 20% a spin often produced a fish that had
+    // to be compared side by side to tell apart, which buried the point under
+    // a game of spot-the-difference. Rounder and Deep-bodied are the two
+    // exceptions, set against each other rather than to the 50% step: both
+    // make the fish deeper, and at +50% each they came out as the same fish.
+    // The body outline is pointed at both ends, so "rounder" cannot come from
+    // its curve — it is 40% deeper and 15% shorter, a plump compact fish,
+    // against a Deep-bodied that is twice as deep at the same length.
     function scaleTail(g, f){ g.tailLen *= f; g.tailSpread *= f; g.tailNotch *= f; }
     function scaleFins(g, f){ g.dorsLen *= f; g.analLen *= f; }
     function setColour(g, hue, light){ g.bodyHue = hue; g.finHue = hue; g.tailHue = hue; g.bodyLightness = light; }
@@ -20,10 +31,10 @@
       {
         key: 'shape', label: 'Body shape',
         sectors: [
-          { id:'slender',   label:'Slender',     pct:20, favoured:true, apply:g=>{ g.bRy *= 0.66; } },
-          { id:'rounder',   label:'Rounder',     pct:30,                apply:g=>{ g.bRy *= 1.40; } },
-          { id:'elongated', label:'Elongated',   pct:35,                apply:g=>{ g.bRxFront *= 1.18; g.bRxBack *= 1.22; } },
-          { id:'deep',      label:'Deep-bodied', pct:15,                apply:g=>{ g.bRy *= 1.45; g.bRxBack *= 0.85; } },
+          { id:'slender',   label:'Slender',     pct:20, favoured:true, apply:g=>{ g.bRy *= 0.50; } },
+          { id:'rounder',   label:'Rounder',     pct:30,                apply:g=>{ g.bRy *= 1.40; g.bRxFront *= 0.85; g.bRxBack *= 0.85; } },
+          { id:'elongated', label:'Elongated',   pct:35,                apply:g=>{ g.bRxFront *= 1.50; g.bRxBack *= 1.50; } },
+          { id:'deep',      label:'Deep-bodied', pct:15,                apply:g=>{ g.bRy *= 2.00; } },
         ]
       },
       {
@@ -38,19 +49,19 @@
       {
         key: 'tail', label: 'Tail size',
         sectors: [
-          { id:'t20up', label:'20% longer',  pct:15, favoured:true, apply:g=>scaleTail(g,1.20) },
-          { id:'t10up', label:'10% longer',  pct:25, favoured:true, apply:g=>scaleTail(g,1.10) },
-          { id:'t10dn', label:'10% shorter', pct:40,                apply:g=>scaleTail(g,0.90) },
-          { id:'t20dn', label:'20% shorter', pct:20,                apply:g=>scaleTail(g,0.80) },
+          { id:'t50up', label:'50% longer',  pct:15, favoured:true, apply:g=>scaleTail(g,1.50) },
+          { id:'t25up', label:'25% longer',  pct:25, favoured:true, apply:g=>scaleTail(g,1.25) },
+          { id:'t25dn', label:'25% shorter', pct:40,                apply:g=>scaleTail(g,0.75) },
+          { id:'t50dn', label:'50% shorter', pct:20,                apply:g=>scaleTail(g,0.50) },
         ]
       },
       {
         key: 'fin', label: 'Fin size',
         sectors: [
-          { id:'f20up', label:'20% bigger',  pct:20,                apply:g=>scaleFins(g,1.20) },
-          { id:'f10up', label:'10% bigger',  pct:30,                apply:g=>scaleFins(g,1.10) },
-          { id:'f10dn', label:'10% smaller', pct:40, favoured:true, apply:g=>scaleFins(g,0.90) },
-          { id:'f20dn', label:'20% smaller', pct:10, favoured:true, apply:g=>scaleFins(g,0.80) },
+          { id:'f50up', label:'50% bigger',  pct:20,                apply:g=>scaleFins(g,1.50) },
+          { id:'f25up', label:'25% bigger',  pct:30,                apply:g=>scaleFins(g,1.25) },
+          { id:'f25dn', label:'25% smaller', pct:40, favoured:true, apply:g=>scaleFins(g,0.75) },
+          { id:'f50dn', label:'50% smaller', pct:10, favoured:true, apply:g=>scaleFins(g,0.50) },
         ]
       },
     ];
@@ -86,6 +97,8 @@
     const spinBtn     = document.getElementById('spinBtn_mut');
     const resetBtn    = document.getElementById('resetBtn_mut');
     const rerunBtn    = document.getElementById('rerunBtn_mut');
+    const batchBtn    = document.getElementById('batchBtn_mut');
+    const fateTitles  = document.querySelectorAll('[data-fate-view]');
     const scenarioSeg = document.getElementById('scenarioSeg_mut');
     const selPanel    = document.getElementById('selPanel_mut');
     const selSliders  = document.getElementById('selSliders_mut');
@@ -137,6 +150,22 @@
     // that leaving the room can settle it early instead of letting it land in a
     // tab nobody is looking at.
     let spinTimer = null, pendingSpin = null;
+    // The Derived alleles panel shows one of two things: 'single', the four
+    // trajectories of one run, or 'batch', a tally of how often each of the
+    // same four mutations fixed across BATCH_RUNS independent runs. One run is
+    // one roll of the dice — under drift most spins end with four lines on the
+    // floor, and a reader cannot tell from that alone whether a favoured allele
+    // really does better or just got lucky. A hundred runs turn the anecdote
+    // into a fixation probability. The view is sticky: changing N, s or the
+    // scenario while looking at the tally re-runs the tally, not a single run.
+    const BATCH_RUNS = 100;
+    // The batch is cheap enough to compute at once; it is revealed over
+    // BATCH_MS anyway, the bars climbing as runs come in, so the reader sees
+    // the tally being made rather than a chart that was simply there.
+    const BATCH_MS = 2000;
+    let fateView = 'single';
+    let batchRAF = null, batchRunning = false;
+    const batch = { runs: 0, fixed: {} }; // fixed: key -> number of runs in which that allele fixed
 
     // ---- canvas sizing (shared engine) ----
     // Clear any inline size scaleCanvas left behind so the CSS width:100%
@@ -167,7 +196,9 @@
       if(mutant) renderFish(mutCanvas, mutCtx, mutant);
       drawFreqChart();
       // Only show the outcome fish once the run has finished playing out.
-      if(mutant && hasTrajectories() && !animating) renderFish(popCanvas, popCtx, popGenomeFromAlleles());
+      if(!mutant || animating || batchRunning) return;
+      if(fateView === 'batch'){ if(batch.runs) renderFish(popCanvas, popCtx, popGenomeFromBatch()); }
+      else if(hasTrajectories()) renderFish(popCanvas, popCtx, popGenomeFromAlleles());
     }
     function hasTrajectories(){ return WHEELS.some(w => alleleState[w.key].trajectory); }
     function favouredCount(){ return WHEELS.filter(w => { const c = alleleState[w.key].chosen; return c && c.favoured; }).length; }
@@ -222,6 +253,24 @@
       return hist;
     }
 
+    // The same process as simulateAlleleAdaptive, kept to the one fact the
+    // batch needs — did the allele fix? — so a hundred runs need no histories.
+    // A run continues until the allele is fixed or lost, exactly as a single
+    // run does; maxG is the same safety net, and a run that somehow reaches it
+    // counts as not fixed.
+    function fixes(N, sEff, maxG){
+      const w = 1 + sEff;
+      let count = 1;
+      for(let g = 0; g < maxG && count > 0 && count < N; g++){
+        const f = count / N;
+        const fp = (f * w) / (f * w + (1 - f));
+        let next = 0;
+        for(let k = 0; k < N; k++){ if(Math.random() < fp) next++; }
+        count = next;
+      }
+      return count === N;
+    }
+
     // Effective selection coefficient on a trait's derived allele: 0 when
     // natural selection is off; otherwise +s if the spun state is favoured, −s
     // if it is not (the stream sets the sign, the slider the magnitude).
@@ -253,6 +302,7 @@
     }
 
     function drawFreqChart(){
+      if(fateView === 'batch') return drawBatchChart();
       freqCanvas.setAttribute('aria-label', describeFreqChart());
       withSize(freqCanvas, size => {
         // The only panel on the page that is not square: it spans two tracks so
@@ -334,6 +384,8 @@
     function stopAnimation(){
       if(animRAF){ cancelAnimationFrame(animRAF); animRAF = null; }
       animating = false;
+      if(batchRAF){ cancelAnimationFrame(batchRAF); batchRAF = null; }
+      batchRunning = false;
     }
 
     // Draw the outcome fish and final captions once the run has fully played out.
@@ -349,6 +401,7 @@
 
     function runTrajectories(animate){
       stopAnimation();
+      setFateView('single');
       if(!mutant){
         WHEELS.forEach(w => { alleleState[w.key].trajectory = null; alleleState[w.key].finalFreq = null; });
         popG = defaultG(); // preview axis back to the nominal 2.5·N until the next run
@@ -392,13 +445,198 @@
       popStat.textContent = T('mu.running', 'running…');
       const start = performance.now();
       const step = now => {
-        const t = Math.min(1, (now - start) / ANIM_MS);
+        // A frame's timestamp is when the frame began, which can fall a moment
+        // before `start` was read: unclamped, the first frame asked for
+        // generation −1 and the chart's description threw on it.
+        const t = Math.max(0, Math.min(1, (now - start) / ANIM_MS));
         animShownGen = Math.round(t * popG);
         drawFreqChart();
         if(t < 1){ animRAF = requestAnimationFrame(step); }
         else { animRAF = null; animShownGen = popG; drawFreqChart(); finalizeRun(); }
       };
       animRAF = requestAnimationFrame(step);
+    }
+
+    // ---- a hundred runs at once ----
+    function setFateView(view){
+      fateView = view;
+      fateTitles.forEach(el => { el.hidden = el.dataset.fateView !== view; });
+    }
+    // N, s and the scenario replay whichever view the reader is looking at.
+    function replayFates(){
+      if(fateView === 'batch') runBatch(true);
+      else runTrajectories(true);
+    }
+
+    // A fixation probability is easy to misread at three digits, and 1/N runs
+    // from 0.1 at N = 10 to 0.003 at N = 300, so keep two significant places.
+    const fmtFrac = f => f >= 0.01 || f === 0 ? f.toFixed(2) : f.toFixed(3);
+
+    function runBatch(animate){
+      stopAnimation();
+      if(!mutant) return;
+      setFateView('batch');
+      // Everything a run depends on is fixed at the press, so moving a slider
+      // mid-reveal cannot leave the tally half one setting and half another.
+      batch.runs = 0;
+      batch.n = popN;
+      batch.sel = selectionActive;
+      batch.maxG = Math.max(defaultG() * 8, 2000);
+      batch.sEff = {};
+      WHEELS.forEach(w => { batch.fixed[w.key] = 0; batch.sEff[w.key] = effectiveS(w.key); });
+      popCtx.clearRect(0, 0, popCanvas.width, popCanvas.height);
+      if(!animate){ finishBatch(); return; }
+
+      // The buttons are held disabled for the reveal, which is also what tells
+      // sound.js the run is still going.
+      batchRunning = true;
+      rerunBtn.disabled = true;
+      batchBtn.disabled = true;
+      popStat.textContent = T('mu.running', 'running…');
+      const start = performance.now();
+      const step = now => {
+        const t = Math.max(0, Math.min(1, (now - start) / BATCH_MS));
+        advanceBatch(Math.round(t * BATCH_RUNS));
+        freqStat.textContent = T('mu.batchProgress', 'run {k} / {n}', { k: batch.runs, n: BATCH_RUNS });
+        drawBatchChart();
+        if(t < 1){ batchRAF = requestAnimationFrame(step); }
+        else { batchRAF = null; finishBatch(); }
+      };
+      batchRAF = requestAnimationFrame(step);
+    }
+
+    function advanceBatch(upto){
+      while(batch.runs < upto){
+        WHEELS.forEach(w => { if(fixes(batch.n, batch.sEff[w.key], batch.maxG)) batch.fixed[w.key]++; });
+        batch.runs++;
+      }
+    }
+
+    // Completes whatever runs are left at once — the end of the reveal, or the
+    // reader leaving the room, which should find a finished tally on return.
+    function finishBatch(){
+      if(batchRAF){ cancelAnimationFrame(batchRAF); batchRAF = null; }
+      advanceBatch(BATCH_RUNS);
+      batchRunning = false;
+      rerunBtn.disabled = spinning;
+      batchBtn.disabled = spinning;
+      drawBatchChart();
+      freqStat.textContent = batch.sel ? 'drift + selection' : 'neutral drift';
+      renderFish(popCanvas, popCtx, popGenomeFromBatch());
+      const derived = WHEELS.filter(w => batch.fixed[w.key] * 2 >= BATCH_RUNS).length;
+      popStat.textContent = derived === 0 ? T('mu.batchPopNone', 'most runs: all ancestral')
+        : derived === 4 ? T('mu.batchPopAll', 'most runs: fully derived')
+        : T('mu.batchPopSome', 'most runs: {k} / 4 derived', { k: derived });
+      updateReadingAfterBatch();
+    }
+
+    // The "After G gens" panel, for a batch: the fish most runs ended with,
+    // wearing a derived state only where that allele fixed in at least half of
+    // them — the single run's majority rule, applied across runs. Under drift
+    // that is nearly always the ancestral fish, which is the honest answer.
+    function popGenomeFromBatch(){
+      const g = originalGenome();
+      WHEELS.forEach(wheel => {
+        const sec = alleleState[wheel.key].chosen;
+        if(sec && batch.fixed[wheel.key] * 2 >= BATCH_RUNS) sec.apply(g);
+      });
+      return g;
+    }
+
+    function describeBatchChart(){
+      const parts = WHEELS.map(w => `${w.label}: ${fmtFrac(batch.fixed[w.key] / BATCH_RUNS)}`);
+      return T('mu.aria.batch',
+        'Fraction of {n} runs in which each derived allele fixed, after {k} runs. {list}. Neutral expectation 1/N = {u}.',
+        { n: BATCH_RUNS, k: batch.runs, list: parts.join(', '), u: fmtFrac(1 / batch.n) });
+    }
+
+    // One bar per trait, the fraction of the BATCH_RUNS runs in which its
+    // derived allele fixed. The bars grow as the runs come in, so their height
+    // is always out of the full hundred and they never jump down. Same canvas,
+    // sizing and axis as the trajectories, so the panel changes what it says
+    // without changing shape.
+    function drawBatchChart(){
+      freqCanvas.setAttribute('aria-label', describeBatchChart());
+      withSize(freqCanvas, size => {
+        const sibling = Math.round(mutCanvas.getBoundingClientRect().width);
+        const height = sibling > 8 ? sibling : size;
+        scaleCanvas(freqCanvas, freqCtx, size, height);
+        const ctx = freqCtx, W = size, H = height;
+        ctx.clearRect(0, 0, W, H);
+        const padL = 26, padR = 8, padT = 30, padB = 32;
+        const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
+        ctx.font = '9px ui-monospace, Menlo, monospace';
+        ctx.textBaseline = 'middle';
+
+        ctx.strokeStyle = CHART.rule; ctx.fillStyle = CHART.inkSoft; ctx.lineWidth = 1;
+        [0, 0.5, 1].forEach(v => {
+          const y = y1 - v * (y1 - y0);
+          ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+          ctx.textAlign = 'right'; ctx.fillText(v === 0.5 ? '.5' : String(v), x0 - 3, y);
+        });
+
+        const u0 = 1 / batch.n;
+        const yr = y1 - u0 * (y1 - y0);
+        const slot = (x1 - x0) / 4;
+        const barW = Math.min(slot * 0.5, 56);
+        WHEELS.forEach((wheel, i) => {
+          const cx = x0 + slot * (i + 0.5);
+          const frac = batch.fixed[wheel.key] / BATCH_RUNS;
+          const top = y1 - frac * (y1 - y0);
+          ctx.fillStyle = TRAIT_LINE[wheel.key]; ctx.globalAlpha = 0.9;
+          ctx.fillRect(cx - barW / 2, top, barW, y1 - top);
+          ctx.globalAlpha = 1;
+          ctx.textAlign = 'center';
+          ctx.fillStyle = CHART.ink;
+          // Above the dashed line as well as the bar: at the usual neutral
+          // values the two are a pixel or two apart and the line would strike
+          // the number through.
+          ctx.fillText(fmtFrac(frac), cx, Math.min(top, yr) - 7);
+          // Trait, then the state the wheel landed on — the bar is about that
+          // particular mutation, and under selection its star is the reason
+          // the bar stands where it does.
+          const sec = alleleState[wheel.key].chosen;
+          ctx.fillStyle = CHART.inkSoft;
+          ctx.fillText(wheelShort(wheel), cx, y1 + 10);
+          ctx.fillStyle = CHART.ink;
+          ctx.fillText(secLabel(sec) + (batch.sel && sec.favoured ? ' ★' : ''), cx, y1 + 22);
+        });
+
+        // What drift alone gives a single new copy, drawn over the bars so a
+        // bar that reaches it does not hide it. Its key sits in the top margin,
+        // where the trajectories keep theirs: beside the line itself it landed
+        // on whichever bar was nearest the right edge.
+        ctx.strokeStyle = CHART.ink; ctx.lineWidth = 1;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath(); ctx.moveTo(x0, yr); ctx.lineTo(x1, yr); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x0, 12); ctx.lineTo(x0 + 16, 12); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = CHART.inkSoft; ctx.textAlign = 'left';
+        ctx.fillText(T('mu.batchNeutral', 'neutral expectation, 1/N = {u}', { u: fmtFrac(u0) }), x0 + 21, 12);
+      });
+    }
+
+    function updateReadingAfterBatch(){
+      const parts = WHEELS.map(w => T('mu.batchPart', '<strong>{sec}</strong> {trait} in {k}', {
+        sec: secLabel(alleleState[w.key].chosen).toLowerCase(),
+        trait: wheelLabel(w).toLowerCase(),
+        k: batch.fixed[w.key],
+      }));
+      const list = parts.slice(0, 3).join(', ') + T('mu.and', ' and ') + parts[3];
+      const expected = BATCH_RUNS / batch.n;
+      const vars = {
+        list, n: batch.n, runs: BATCH_RUNS, s: sValue.toFixed(2), u: fmtFrac(1 / batch.n),
+        k: expected >= 1 ? String(Math.round(expected)) : T('mu.fewerThanOne', 'fewer than one'),
+      };
+      readingText.innerHTML = batch.sel
+        ? T('mu.batchReadingSel',
+            'Played out {runs} times in a population of <var>N</var> = {n} with <var>s</var> = {s}, the same four mutations fixed: {list} of the runs. ' +
+            'The dashed line is what drift alone would give a single new copy, 1/<var>N</var> = {u}. The <span class="fav-star">★</span> favoured alleles should stand clear above it and the rest at or below it — ' +
+            'the wheels decided which mutations exist; selection decides how often each one wins.', vars)
+        : T('mu.batchReadingNeutral',
+            'Played out {runs} times in a population of <var>N</var> = {n}, the same four mutations fixed: {list} of the runs. ' +
+            'A single new copy of a neutral allele fixes with probability 1/<var>N</var> = {u} — the dashed line — so expect about {k} in {runs} for each. ' +
+            'Every bar should sit near it whichever state its wheel landed on: under drift, which mutation it was makes no difference to its odds.', vars);
     }
 
     // What the spin lands on. Normally called by its own timer with animate
@@ -426,6 +664,7 @@
       spinBtn.disabled = false;
       resetBtn.disabled = false;
       rerunBtn.disabled = false;   // there are mutations to re-run now
+      batchBtn.disabled = false;
       updateReadingAfterSpin(chosen);
     }
 
@@ -557,7 +796,9 @@
       spinning = true;
       spinBtn.disabled = true;
       resetBtn.disabled = true;
+      if(batchRunning) finishBatch();
       rerunBtn.disabled = true;
+      batchBtn.disabled = true;
       mutStat.textContent = T('mu.spinning', 'spinning…');
 
       const chosen = {};
@@ -627,7 +868,7 @@
         val.textContent = sValue.toFixed(2);
         onSelectionSliderMove();
       });
-      slider.addEventListener('change', () => runTrajectories(true));
+      slider.addEventListener('change', replayFates);
     }
 
     function onSelectionSliderMove(){
@@ -666,7 +907,7 @@
       selPanel.classList.toggle('open', selectionActive);
       refreshFavouredHighlight();
       updateMutStat(); // show/hide the favoured-allele count on the Mutant panel
-      runTrajectories(true); // fate now follows selection (or reverts to pure drift)
+      replayFates(); // fate now follows selection (or reverts to pure drift)
       // Through T() like every other string the rooms produce, and worded for
       // the two-way choice these became: the reader picks a scenario now, rather
       // than switching selection on and off.
@@ -684,7 +925,9 @@
     function reset(){
       if(spinning) return;
       stopAnimation();
+      setFateView('single');
       rerunBtn.disabled = true;
+      batchBtn.disabled = true;
       mutant = null;
       animShownGen = 0;
       popG = defaultG(); // preview axis back to the nominal 2.5·N
@@ -725,6 +968,12 @@
       if (spinning || !mutant) return;
       runTrajectories(true);
     });
+    // Same four mutations again, but a hundred fresh draws of their fates,
+    // tallied rather than plotted.
+    batchBtn.addEventListener('click', () => {
+      if (spinning || !mutant) return;
+      runBatch(true);
+    });
     resetBtn.addEventListener('click', reset);
     // Nothing in this room should still be moving once the reader has gone to
     // another one: a spin still on its timer is landed at once, and a trajectory
@@ -739,6 +988,7 @@
         drawFreqChart();
         finalizeRun();
       }
+      if(batchRunning) finishBatch();
     });
 
     scenarioSeg.addEventListener('click', (e) => {
@@ -748,5 +998,5 @@
     // Update the readout live (G is locked at 2.5·N); replay — and re-animate —
     // only when the slider is released.
     nSlider.addEventListener('input', () => { popN = Number(nSlider.value); popG = defaultG(); nVal.textContent = popN; });
-    nSlider.addEventListener('change', () => runTrajectories(true));
+    nSlider.addEventListener('change', replayFates);
   })();

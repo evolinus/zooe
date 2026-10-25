@@ -1441,6 +1441,25 @@
         population's typical fish once every trait has settled — locus by locus, it wears each
         derived state only where that allele reached the majority.</p>`
     },
+    mutBatch: {
+      title: 'A hundred runs of the same four mutations',
+      body: `
+        <p>One run is one roll of the dice. Under drift most spins end with all four lines on the
+        floor, and a single run cannot tell you whether an allele that fixed was favoured or simply
+        lucky. <strong>Run 100 Simulations</strong> keeps the four mutations the wheels just produced
+        and plays out their fates <strong>100 times</strong>, each run from a single copy at
+        <code>1/<var>N</var></code> until the allele has fixed or been lost.</p>
+        <p>Each bar is the <strong>fraction of those runs in which that allele fixed</strong> — a measured
+        fixation probability. The dashed line is what drift alone gives a single new copy,
+        <code>1/<var>N</var></code>. With selection off every bar should sit near it, whichever state
+        its wheel landed on; with selection on, the favoured alleles (<strong>★</strong>) should stand
+        well above it and the rest at or below it.</p>
+        <p>A hundred runs is still a sample: near <code>1/<var>N</var></code> = 0.02 a bar can easily read
+        0.00 or 0.05 by chance. Change <var>N</var>, <var>s</var> or the scenario and the hundred runs are
+        played again under the new setting; <strong>Run Simulation</strong> goes back to a single run.
+        The last panel shows the fish most runs ended with: a derived state only where that allele
+        fixed in at least half of them.</p>`
+    },
 
     mutSelection: {
       title: 'Selection: fate, not origin',
