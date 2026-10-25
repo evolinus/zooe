@@ -36,6 +36,67 @@ function labelInk(color) {
   return color;
 }
 
+/* Panels of equal height along a row.
+
+   A stage lays its panels out as a grid row, and each panel is as tall as its
+   chart and its note make it — so a row of three ends at three different
+   heights, and the ragged bottom edge reads as carelessness. Stretching the
+   boxes alone would leave a blank band at the foot of the shorter ones. So the
+   shorter panels' charts are drawn taller instead, by exactly the difference,
+   and every box in the row ends on one line with its chart filling it.
+
+   A room opts in with equalPanels(stages, redraw), handing over the stages to
+   level and the function that redraws them all. Every plot's begin() asks
+   panelFill() for its canvas's extra height, which also schedules a check of
+   its stage for the next frame. The check works out each panel's natural
+   height (its height now, less the extra its chart was given), takes the
+   tallest of the panels that share a row, and if any extra has to change it
+   redraws — after which the check finds nothing to change, and stops. Panels
+   are matched by the top of their box, so on a narrow window, where the stage
+   collapses to one column, every panel is alone in its row and gets nothing
+   extra. A hidden stage is left alone until it is shown. */
+function panelFill(canvas) {
+  const stage = canvas.closest ? canvas.closest('.stage-area') : null;
+  if (stage && stage._equalise) stage._equalise();
+  return canvas._fill || 0;
+}
+
+function equalPanels(stages, redraw) {
+  let pending = false;
+  function level() {
+    pending = false;
+    let changed = false;
+    stages.forEach(stage => {
+      if (!stage.offsetParent) return;
+      const panels = Array.from(stage.children)
+        .filter(el => el.classList.contains('panel'))
+        .map(el => {
+          const cvs = el.querySelector('.canvas-wrap canvas');
+          const box = el.getBoundingClientRect();
+          return { cvs, top: Math.round(box.top), natural: box.height - ((cvs && cvs._fill) || 0) };
+        });
+      panels.forEach(a => {
+        if (!a.cvs) return;
+        const row = panels.filter(b => Math.abs(b.top - a.top) < 2);
+        // not rounded: boxes are laid out to fractions of a pixel, and a whole
+        // number here leaves one panel a pixel proud of its neighbours
+        const want = row.length > 1
+          ? Math.max(0, Math.max(...row.map(b => b.natural)) - a.natural)
+          : 0;
+        if (Math.abs(want - (a.cvs._fill || 0)) > 0.25) { a.cvs._fill = want; changed = true; }
+      });
+    });
+    if (changed) redraw();
+  }
+  const schedule = () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(level);
+  };
+  stages.forEach(stage => { stage._equalise = schedule; });
+  schedule();
+}
+
 function niceStep(range, targetTicks) {
   if (!(range > 0)) return 1;
   const raw = range / Math.max(1, targetTicks);
@@ -107,7 +168,8 @@ function createPlot(canvas, cfg = {}) {
     begin(opts = {}) {
       const parent = canvas.parentElement;
       S.W = (parent && parent.clientWidth) || base.fallbackW;
-      S.H = opts.height || base.height;
+      // plus whatever a room that levels its panels has given this chart
+      S.H = (opts.height || base.height) + panelFill(canvas);
       S.padL = opts.padL != null ? opts.padL : base.padL;
       S.padR = opts.padR != null ? opts.padR : base.padR;
       S.padT = opts.padT != null ? opts.padT : base.padT;
