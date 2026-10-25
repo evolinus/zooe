@@ -772,5 +772,7 @@
     applyPreset('geometric');
     onReset();
     LAB.onResize(redrawAll);
+    // each of the room's rows of panels ends on one line
+    equalPanels(Array.from(document.querySelectorAll('#tab-diversity .stage-area')), redrawAll);
   });
 })();

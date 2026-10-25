@@ -168,8 +168,11 @@
     const cvs = plots.editorCvs;
     const W = cvs.parentElement.clientWidth || 600;
     const padL = 58, padR = 64, padT = 10, padB = 24;
-    const rowH = Math.max(34, Math.min(52, 300 / N));
-    const H = padT + rowH * N + padB;
+    // Any height the row asks for beyond the editor's own (see equalPanels in
+    // plot-core.js) is shared among the site rows, so the bars grow into it
+    // rather than leaving a gap beneath the last site.
+    const H = padT + Math.max(34, Math.min(52, 300 / N)) * N + padB + panelFill(cvs);
+    const rowH = (H - padT - padB) / N;
     return { W, H, padL, padR, padT, padB, rowH, colW: (W - padL - padR) / M };
   }
 
@@ -594,6 +597,9 @@
     LAB.bindSteps('tov', player, ensureSim);
     applyPreset('gradient');
     onReset();
-    LAB.onResize(() => { drawEditor(); drawScales(); player.redraw(); });
+    const redrawAll = () => { drawEditor(); drawScales(); player.redraw(); };
+    LAB.onResize(redrawAll);
+    // the landscape beside its scales, and the three drift panels, each one row
+    equalPanels(Array.from(document.querySelectorAll('#tab-turnover .stage-area')), redrawAll);
   });
 })();

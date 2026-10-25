@@ -36,7 +36,7 @@ explain: Both communities hold the same eight species. Why are they so different
 # step core 8 | Add a rare species
 set: Preset **One dominant**.
 predict: You add one rare species. Which of the three numbers will change most, and which least?
-run: Press **Add a rare species**. Then drag its bar down to almost nothing.
+run: Press **Add a rare species** (it arrives with just 2 individuals). Then drag its bar up to about 20 and watch the three numbers again.
 explain: Choosing an index is choosing how much the rare species should count. Which index would you use to report a conservation success for a rare species, and which to describe the community's common core?
 
 # step core 12 | Sampling the community
@@ -82,7 +82,7 @@ explain: The room says diversity depends on how large and how connected a place 
 
 # check
 - **Step 1.** Even: all three equal 8. One dominant: richness 8, Shannon's about 2.9, Simpson's about 1.8 — Simpson's falls furthest because it is set by the commonest species.
-- **Step 2.** Richness rises by one; Shannon's by a little (about 0.8 when the new species has 20 individuals, less when it is dragged down); Simpson's least of all. Richness suits rare-species reporting; Simpson's describes the common core.
+- **Step 2.** Richness rises by a whole species; Shannon's by about 0.2; Simpson's barely moves (about 0.05). Dragged up to 20 individuals the new species counts for more in both (about +0.8 and +0.5). Richness suits rare-species reporting; Simpson's describes the common core.
 - **Step 3.** A sample of 20 usually finds 4–6 of the 8. Richness is the most biased low, Shannon's less so, Simpson's is nearly right.
 - **Step 4.** With $m$ = 0 species are lost one after another and eventually one takes over. A little immigration halts the slide. It is the Drift Room with species in place of alleles.
 - **Step 5.** $p$ = 0.4, 0.3, 0.2, 0.1; $H$′ ≈ 1.28, e<sup>$H$′</sup> ≈ 3.6; $D$ = 0.30, 1/$D$ ≈ 3.3; $J$′ ≈ 0.92.
