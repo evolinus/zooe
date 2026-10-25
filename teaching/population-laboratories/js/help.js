@@ -1315,6 +1315,176 @@
         exactly this reason — something that needs both a stock and a vacancy is slow when either is scarce.</p>`
     },
 
+    // ---------- Diversity Room ----------
+
+    divPresets: {
+      title: 'Community presets',
+      body: `
+        <p><strong>Four shapes of community to start from.</strong> Each sets every bar at once; drag any
+        bar afterwards and the preset lets go.</p>
+        <ul>
+          <li><strong>Even</strong> — every species equally common. The only community in which richness,
+          Shannon's number and Simpson's number all agree.</li>
+          <li><strong>Geometric</strong> — each species a little over half as common as the one before. The
+          commonest textbook shape of a real community, and already well short of even.</li>
+          <li><strong>One dominant</strong> — one species holds most of the individuals. Every species is
+          still present, so richness has not moved; watch what happens to the other two numbers.</li>
+          <li><strong>Two common, many rare</strong> — the shape a field sample usually has: a couple of
+          species everywhere and a long tail met once or twice.</li>
+        </ul>`
+    },
+
+    divPool: {
+      title: 'Species in the pool (S)',
+      body: `
+        <p><strong>How many species the community can contain</strong> — the number of bars. A species
+        joining the pool arrives moderately common; one dragged to zero stays in the pool, as an empty
+        slot, but is no longer present, and richness counts only the species present.</p>
+        <p>To see how each number treats a <em>rare</em> species, use <strong>Add a rare species</strong>
+        instead: it adds one at about 1% of the individuals, and is the quickest way to tell the three
+        effective numbers apart.</p>`
+    },
+
+    divEditor: {
+      title: 'The community',
+      body: `
+        <p><strong>One bar per species; its height is its number of individuals.</strong> Drag a bar up or
+        down to change it. The percentage above each bar is that species' share <em>p<sub>i</sub></em> of
+        all the individuals — the only thing any of the indices here is computed from — so moving one bar
+        changes every other species' share too, without touching its height.</p>
+        <p>The keyboard works as well: click the panel, then use ← and → to choose a species and ↑ and ↓ to
+        change it (hold Shift for single steps).</p>
+        <p>The four figures underneath are the raw indices. <strong>S</strong> counts species;
+        <strong>H′</strong> is Shannon's index in natural logs; <strong>D</strong> is Simpson's, the chance
+        that two individuals drawn at random are the same species, so it <em>falls</em> as diversity rises;
+        <strong>J′</strong> is evenness, H′ as a fraction of the most it could be with this many species.</p>`
+    },
+
+    hillNumbers: {
+      title: 'Effective number of species',
+      body: `
+        <p><strong>Each index turned back into a number of species:</strong> the number of <em>equally
+        common</em> species that would give the same value. Richness is already one (⁰D = S); Shannon's
+        becomes ¹D = e<sup>H′</sup>, and Simpson's becomes ²D = 1/D. They are Hill's numbers of order 0, 1
+        and 2.</p>
+        <p>Why bother: H′ = 1.6 nats and D = 0.29 mean very little on their own, and they do not scale
+        sensibly — doubling the number of equally common species adds a fixed amount to H′ rather than
+        doubling it. The effective numbers do double, so a community with ¹D = 6 really is twice as diverse
+        as one with ¹D = 3.</p>
+        <p><strong>Always ⁰D ≥ ¹D ≥ ²D</strong>, with equality only when every species is equally common.
+        The order is the order in which rare species stop counting: richness counts every species as one,
+        Shannon's discounts the rare ones, and Simpson's is set almost entirely by the commonest few.</p>`
+    },
+
+    sampleSize: {
+      title: 'Individuals in a sample (n)',
+      body: `
+        <p><strong>How many individuals one sample catches.</strong> Each is drawn at random from the
+        community, in proportion to each species' share, as if the community were too large for the
+        sampling to make a dent in it.</p>
+        <p>This is the room's most important control. A species with a 1% share turns up in fewer than one
+        sample of 20 in five; in a sample of 200 it is nearly certain. So small samples miss the rare
+        species, and every index that cares about rare species is underestimated from them.</p>
+        <p><strong>Try this:</strong> take 100 samples of 10, then of 50, then of 400, and watch which row of
+        the histogram moves.</p>`
+    },
+
+    sampleOnce: {
+      title: 'Your sample',
+      body: `
+        <p><strong>The individuals the last sample caught, by species.</strong> A letter in grey is a species
+        the sample missed: it is in the community, it simply was not caught.</p>
+        <p>The three figures are the effective numbers computed from the sample's own shares — exactly what
+        an ecologist does with a field sample, because the true shares are the one thing they never have.
+        Compare them with the panel above: richness can come out too low but never too high, since a sample
+        cannot catch a species that is not there.</p>`
+    },
+
+    accumulation: {
+      title: 'Species found as you count',
+      body: `
+        <p><strong>A species-accumulation curve.</strong> Count the sample's individuals one at a time and
+        keep a running total of how many species you have met. Each new species steps the line up; each
+        repeat leaves it flat. Early on almost every individual is a new species; later, almost none is.</p>
+        <p>The <strong>dashed line</strong> is the average curve for samples from this community, worked out
+        exactly; after a hundred samples, every one of them is drawn faintly behind it. The
+        <strong>purple line</strong> is the true richness.</p>
+        <p><strong>What to look for:</strong> whether the curve has flattened by the end of the sample. If it
+        is still climbing, the sample has not seen the community's richness, and the number of species found
+        says as much about the effort as about the place — the trap in comparing two surveys of different
+        size.</p>`
+    },
+
+    sampleHist: {
+      title: 'A hundred samples against the truth',
+      body: `
+        <p><strong>The same sample taken a hundred times,</strong> and each of the three effective numbers
+        estimated from every one of them. Each row is a histogram of those hundred estimates, all on the same
+        axis of species. The purple tick is the true value; the black triangle is the average estimate.</p>
+        <p>Two different things can go wrong, and this panel shows them apart. <strong>Spread</strong> is
+        luck — one sample may be well off while the average is right. <strong>Bias</strong> is a habit — the
+        average itself sits away from the truth, and taking more samples of the same size never fixes it.</p>
+        <p>Richness is biased low, and how low depends on sample size. Shannon's number is biased low too,
+        less badly. Simpson's is nearly unbiased even from small samples, because it depends on the common
+        species, and those are the ones a small sample does catch.</p>`
+    },
+
+    neutralJ: {
+      title: 'Individuals in the community (J)',
+      body: `
+        <p><strong>How many individuals the drifting community holds.</strong> It never changes: every death
+        is replaced at once, so a species can only grow by taking space from another.</p>
+        <p>J sets the pace of drift. A species' share wanders by an amount that shrinks as J grows, so the
+        time it takes drift to remove a species is of the order of J generations. Halve J and the losses come
+        twice as fast; this is the same rule as population size in the companion lab's Drift Room.</p>`
+    },
+
+    neutralM: {
+      title: 'Immigration (m)',
+      body: `
+        <p><strong>The chance that a death is replaced by an immigrant</strong> rather than by the offspring
+        of a local individual. Immigrants come from the community you built in Step 1, in its proportions,
+        so a species lost locally can come back.</p>
+        <p>At <strong>m = 0</strong> the community is closed and every loss is permanent: given long enough,
+        one species holds every individual. Any m above zero stops that, and the community settles where
+        drift removing species and immigration returning them balance — below the pool's diversity, by an
+        amount that depends on J and m together.</p>
+        <p><strong>Try this:</strong> m = 0.001 and m = 0.01 at the same J. One immigrant in a thousand
+        replacements already makes a difference.</p>`
+    },
+
+    neutralT: {
+      title: 'Generations',
+      body: `
+        <p><strong>How long the drift runs, in generations.</strong> A generation is J deaths and J
+        replacements, so on average every individual has been replaced once.</p>
+        <p>Without immigration, rare species are typically lost within a few dozen generations and the
+        common ones much later; reaching a single species can take several times J generations. With
+        immigration the community settles, and running longer adds turnover rather than change.</p>`
+    },
+
+    compositionChart: {
+      title: 'Who holds the community',
+      body: `
+        <p><strong>The share of the community held by each species, stacked,</strong> over the run. Each band
+        is one species in its colour from Step 1; the bands always fill the panel, because the community never
+        changes size.</p>
+        <p>Without immigration, watch the thin bands pinch out one by one, and never come back. Then look at
+        which species grow: it is not always the ones that started commonest, because in a neutral community
+        nothing but chance decides — though a common species has more tickets in that lottery.</p>`
+    },
+
+    diversityTime: {
+      title: 'Diversity over time',
+      body: `
+        <p><strong>The three effective numbers of the drifting community,</strong> generation by generation,
+        in the colours of the panel in Step 1. The dashed lines are the same numbers for the pool — where the
+        run started, and what immigration keeps offering back.</p>
+        <p>Richness falls in steps, one species at a time; Shannon's and Simpson's numbers wander continuously,
+        because they respond to shares changing, not only to species vanishing. With no immigration all three
+        head for 1. With immigration they settle below the dashed lines and stay there, fluctuating.</p>`
+    },
+
     glosMetapopulation: {
       title: 'Metapopulation',
       body: `
@@ -1333,6 +1503,21 @@
           <li>An empty patch is not a worthless one. It is a colonisation target, and the model stops working
           without it — which is why counting occupied sites understates what a network needs.</li>
         </ul>`
+    },
+
+    glosDiversity: {
+      title: 'Species diversity',
+      body: `
+        <p><strong>Two things at once:</strong> how many species a community holds (its
+        <em>richness</em>) and how evenly its individuals are shared among them (its <em>evenness</em>). A
+        wood with ten tree species in equal numbers is more diverse than one with the same ten species where
+        one makes up nine trees in ten — though a list of species would not tell them apart.</p>
+        <p>The indices that combine the two — Shannon's and Simpson's above all — differ in how much weight they
+        give the rare species, which is why they can rank the same communities differently. Read as
+        <em>effective numbers of species</em> they can be compared directly with richness and with each
+        other.</p>
+        <p>Every number of this kind is estimated from a sample, and richness most of all depends on how big
+        that sample was.</p>`
     }
   };
 

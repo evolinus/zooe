@@ -634,6 +634,12 @@
     overflow: hidden;
   }
   .canvas-wrap canvas{ width: 100%; display: block; }
+  /* The Diversity Room's community editor is the one canvas in the lab that is
+     dragged rather than clicked, and dragged vertically: the cursor says so,
+     and touch-action keeps a finger on a bar from scrolling the page instead.
+     It also takes the keyboard, so it needs a visible focus ring. */
+  .div-editor canvas{ cursor: ns-resize; touch-action: none; }
+  .div-editor canvas:focus-visible{ outline: 2px solid var(--ink); outline-offset: -2px; }
 
   /* Numeric readout chips */
   .chips{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
@@ -1229,6 +1235,7 @@
     <button class="tab-btn" role="tab" id="tabbtn-coexistence" aria-controls="tab-coexistence" aria-selected="false" tabindex="-1" style="--tab: #7A5C99" onclick="switchTab('coexistence', event)">Coexistence</button>
     <button class="tab-btn" role="tab" id="tabbtn-predator" aria-controls="tab-predator" aria-selected="false" tabindex="-1" style="--tab: #8C3F5D" onclick="switchTab('predator', event)">Predator</button>
     <button class="tab-btn" role="tab" id="tabbtn-keystone" aria-controls="tab-keystone" aria-selected="false" tabindex="-1" style="--tab: #5E6B21" onclick="switchTab('keystone', event)">Keystone</button>
+    <button class="tab-btn" role="tab" id="tabbtn-diversity" aria-controls="tab-diversity" aria-selected="false" tabindex="-1" style="--tab: #1F7A8C" onclick="switchTab('diversity', event)">Diversity</button>
     <button class="tab-btn" role="tab" id="tabbtn-metapopulation" aria-controls="tab-metapopulation" aria-selected="false" tabindex="-1" style="--tab: #454B96" onclick="switchTab('metapopulation', event)">Metapopulation</button>
   </div>
   </div>
@@ -1256,18 +1263,18 @@
     </header>
 
     <div class="readme-content">
-      <p class="lead">Welcome to the Population Laboratories. Nine rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The next four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious. The last changes the unit the question is asked in, and counts populations instead of individuals.</p>
+      <p class="lead">Welcome to the Population Laboratories. Ten rooms of interactive simulations about a single question: <strong>what stops a population from growing?</strong> The first four answer it from inside the species — crowding, resources, and time lags. The next four answer it from outside: two rooms where another species eats the same food, one where another species eats <em>you</em>, and one where both things happen at once and the answer stops being obvious. The ninth stands back from the question to ask how a community of many species is described and measured at all. The last changes the unit the question is asked in, and counts populations instead of individuals.</p>
 
       <h2 class="readme-minor">How to use the rooms</h2>
       <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong>, and <strong>read the panels</strong> that fill in below. The whole trajectory is computed the moment you press Run and then played back to you, so you can pause anywhere, drag the <strong>History Scrubber</strong> at the bottom of most rooms back and forth, and replay any moment you like. In the Overshoot Room it is worth using deliberately: stepping one generation at a time is what turns the cobweb diagram from a tangle into an explanation.</p>
-      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the nine rooms read as one argument rather than nine separate toys.</p>
+      <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the ten rooms read as one argument rather than ten separate toys.</p>
       <p>Between the run and the payoff sits <strong>What this model assumes</strong>: the things the room is quietly taking for granted, and — where there is one — the room that stops taking them for granted. This is worth reading. Most of these laboratories exist precisely to relax an assumption an earlier one made, so what looks like a convenient simplification in one room turns out to be the whole subject of another. It is also the honest answer to "but real populations are not like that", which is true of every model here and is the point rather than an objection.</p>
       <p>Between the two sits the equation the room is running. Underneath it is a collapsible <strong>What each symbol means</strong> key: open it and every letter in the equation above is named, said plainly, and placed against what the earlier rooms called it. Nothing in a room requires reading the algebra — but nothing in the algebra is left unexplained either.</p>
       <p>Some rooms are deterministic: the same settings always give exactly the same curve, because the equations contain no chance. Others draw births and deaths at random, so running twice will not give the same answer twice — the parameters set tendencies, never outcomes. Each room says which kind it is.</p>
       <p>The small red <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> buttons beside a control or a panel explain what it does, what the numbers mean, and what to look for. If something on screen is unclear, there is usually a <strong><span style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;background:var(--help-red);color:#fff;font-family:ui-monospace,monospace;font-size:10px;font-weight:700;vertical-align:middle;">?</span></strong> next to it.</p>
 
         <h2 class="readme-minor">Words worth pinning down</h2>
-        <p>These eighteen come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
+        <p>These nineteen come up again and again. Each one is underlined wherever it appears in a room — click it, anywhere in the tool, for a short explanation. They are gathered here too:</p>
         <ul>
           <li><span class="gloss" data-help="glosPopulation">Population</span> — a group of the same species, in one place, that could interbreed — the unit everything here is measured in.</li>
           <li><span class="gloss" data-help="glosPerCapita">Per-capita rate</span> — per individual, per unit of time. Ask of every rate whether it is this or a population total.</li>
@@ -1286,12 +1293,13 @@
           <li><span class="gloss" data-help="glosLimitCycle">Limit cycle</span> — a permanent oscillation whose size belongs to the parameters, not to where the run started.</li>
           <li><span class="gloss" data-help="glosTrophicCascade">Trophic cascade</span> — an effect that travels down a food chain and changes a level the predator never touches.</li>
           <li><span class="gloss" data-help="glosNiche">Niche</span> — the conditions and resources a population needs to persist. Two species with identical niches cannot coexist.</li>
+          <li><span class="gloss" data-help="glosDiversity">Species diversity</span> — how many species a community holds and how evenly its individuals are shared among them. Two communities with the same species can differ enormously in it.</li>
           <li><span class="gloss" data-help="glosMetapopulation">Metapopulation</span> — a population of populations, linked by colonisation. It can persist although every one of its parts goes extinct.</li>
         </ul>
 
       <h2 class="readme-minor">The through-line</h2>
-      <p>The nine rooms fall into <strong>five parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable. <strong>Part V</strong> stops counting individuals altogether: a population becomes a single occupied dot on a landscape of patches, every one of those local populations is certain to go extinct, and the question becomes how the set of them persists anyway.</p>
-      <p>By the end of Part IV the honest answer to "what stops this population from growing?" is that you cannot tell by looking at the population, or even at the pair — you have to look at the whole community. Part V then asks the question of a scale above that one, where the answer turns out not to need the community, or the individuals, at all.</p>
+      <p>The ten rooms fall into <strong>six parts</strong>, and each part dismantles an assumption the one before it was allowed to make. <strong>Part I</strong> takes a single population on its own: first with nothing in its way, which turns out to be impossible for long, and then with individuals getting under each other's feet, which bends the curve into the familiar S. <strong>Part II</strong> asks where that ceiling actually comes from — not a number belonging to the species, but the resource the environment can supply — and then shows that even a perfectly self-limiting population need not settle down quietly: delay the feedback by one generation and it can cycle forever, or become genuinely unpredictable while obeying a perfectly deterministic rule. <strong>Part III</strong> adds a second species that wants the same food, first as a bare coefficient that produces the four classic outcomes of competition theory, then mechanistically, with explicit food on the table: with one resource, whoever survives on less of it wins; with two, the species can divide the world between them. <strong>Part IV</strong> changes the relationship — the second species is now the diner, not a rival — and then puts competition and predation in the same community, where everything learned separately stops being reliable. <strong>Part V</strong> steps back from the dynamics to the question of description: a community of many species, the two numbers ecologists use to sum it up, the samples those numbers are really computed from, and drift that changes them with no species better than another. <strong>Part VI</strong> stops counting individuals altogether: a population becomes a single occupied dot on a landscape of patches, every one of those local populations is certain to go extinct, and the question becomes how the set of them persists anyway.</p>
+      <p>By the end of Part IV the honest answer to "what stops this population from growing?" is that you cannot tell by looking at the population, or even at the pair — you have to look at the whole community. Part V asks how such a community can be described in a number at all, and Part VI asks the question of a scale above it, where the answer turns out not to need the community, or the individuals, at all.</p>
       <p>Working through the rooms in order is recommended, but each one stands on its own.</p>
       <p>One word to watch: in Parts I and II, <em>competition</em> means competition among members of a single species — the crowding that regulates it from within. From Part III on it usually means competition <em>between</em> species. The rooms keep the two apart, and which one dominates decides every coexistence result in the lab.</p>
 
@@ -1347,10 +1355,18 @@
       <p>Competition and predation in one community. A predator can be the reason a competitor survives rather than the reason it dies, and two species that compete for nothing at all can still drive each other out.</p>
       <p class="room-open"><a href="#" onclick="switchTab('keystone');">→ Open the Keystone Room</a></p>
 
-      <h2 class="part-head">Part V — A population spread across space</h2>
+      <h2 class="part-head">Part V — Many species at once</h2>
+      <p class="part-blurb">No new interaction, but a new question: with dozens of species in one place, what does it mean for a community to be diverse, and how much of that can a sample tell you?</p>
+
+      <h2><span class="room-num">09</span>The Diversity Room</h2>
+      <p class="room-kicker">Richness, evenness, Shannon &amp; Simpson — and sampling</p>
+      <p>Build a community by dragging its bars and watch richness, Shannon's index and Simpson's index disagree about it. Then sample it the way a field ecologist must, and see which of the three numbers a small catch can be trusted with — before letting it drift, with no species better than another, and watching diversity drain away.</p>
+      <p class="room-open"><a href="#" onclick="switchTab('diversity');">→ Open the Diversity Room</a></p>
+
+      <h2 class="part-head">Part VI — A population spread across space</h2>
       <p class="part-blurb">The unit changes. A population becomes one dot on a landscape, and the subject becomes the set of them.</p>
 
-      <h2><span class="room-num">09</span>The Metapopulation Room</h2>
+      <h2><span class="room-num">10</span>The Metapopulation Room</h2>
       <p class="room-kicker">Patch occupancy: Levins' model &amp; habitat loss</p>
       <p>Every other room counts individuals; this one counts populations. Each sits on a patch, each is certain to go extinct, and the landscape persists anyway — for as long as colonisation outruns extinction. It is also where habitat loss stops being a vague worry and becomes arithmetic.</p>
       <p class="room-open"><a href="#" onclick="switchTab('metapopulation');">→ Open the Metapopulation Room</a></p>
@@ -3050,6 +3066,7 @@
       <h2>What to notice</h2>
       <p>A predator is neither automatically destructive nor automatically a keystone: it restructures a community only when it presses hardest on the species that was <em>winning</em>. Drag the History Scrubber slowly through the start of a keystone run and watch the phase plane — the competitors' <span class="gloss" data-help="glosNullcline">isoclines</span> slide inward at different speeds, cross, and a coexistence appears where none existed. Notice too what apparent competition does to fieldwork: two species whose abundances move in opposite directions look exactly like competitors, and need not be competing for anything at all. Both results here are <em>indirect</em> effects — one species changing another's fate along a path it never walks directly, which is what a <span class="gloss" data-help="glosTrophicCascade">trophic cascade</span> does between trophic levels and apparent competition does within one.</p>
       <p><strong>Where this comes from.</strong> This room only makes sense against the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room, whose outcome it overturns, and the <button type="button" class="room-link" onclick="switchTab('predator');">Predator</button> room, whose predator it borrows. It is also the lab's last word on the opening question: by this point, "what stops this population from growing?" cannot be answered by looking at the population, or even at the pair — only at the whole community.</p>
+      <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room takes a whole community of many species and asks how it can be described in a single number &mdash; the number a removal experiment like this one would be reported in.</p>
     </div>
 
     <details class="room-methods">
@@ -3061,6 +3078,235 @@
   <!-- ========================================== -->
   <!-- ROOM 9: METAPOPULATION                     -->
   <!-- ========================================== -->
+  <div id="tab-diversity" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-diversity" tabindex="0" style="--room: #1F7A8C; --room-deep: #23454B;">
+    <header class="masthead">
+      <div>
+        <h1>The Diversity Room</h1>
+        <p class="sub"><span class="sub-label">Measuring a community</span> &ndash; Richness, evenness, and the sample you count them from.</p>
+      </div>
+      <div class="masthead-brand">
+        <a class="brand-link" href="https://evolinus.github.io/zooe/" target="_blank" rel="noopener">
+          <img class="brand-logo" src="img/logo.svg" alt="zoo_e lab logo">
+          <span class="brand-text"><span class="c-black">zoo</span><span class="c-red">_</span><span class="c-yellow">e</span><span class="c-black"> lab</span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="room-brief">
+      <h2>Start here</h2>
+      <p><strong>What it shows.</strong> Every room so far has had one, two or three species. A real community has dozens, and ecologists sum it up in a single number &mdash; most often Shannon's or Simpson's index. This room is about what those numbers measure, and what they cannot tell you. It comes in three steps: <strong>build</strong> a community by dragging its bars, <strong>sample</strong> it the way a field ecologist has to, and then let it <strong>drift</strong>, with no species any better than another. The first step is deterministic arithmetic; the second and third draw individuals at random, so no two runs agree.</p>
+      <p><span class="try-label">Try this.</span> Start from <em>Even</em> and look at the three effective numbers: all equal to the number of species. Now choose <em>One dominant</em> &mdash; the species are all still there, but both indices fall a long way. Press <em>Add a rare species</em> and see which number notices. Then take a sample of 20 individuals, then 100 such samples, and compare each estimate with the truth. Finally, run the drift with no immigration, and again with a little.</p>
+    </div>
+
+    <div class="equation">
+      <div class="eq">H&prime; = &minus;&Sigma; <span class="var">p<sub>i</sub></span> ln <span class="var">p<sub>i</sub></span> &nbsp;&nbsp;&middot;&nbsp;&nbsp; D = &Sigma; <span class="var">p<sub>i</sub></span>&sup2;</div>
+      <div class="eq-gloss">Two ways of boiling a whole community down to one number, from the share <em>p<sub>i</sub></em> of individuals that belong to each species. Shannon's <em>H&prime;</em> measures how hard it is to guess the species of the next individual you catch; Simpson's <em>D</em> is the chance that two individuals caught at random belong to the same species. Both read more easily as an <strong>effective number of species</strong> &mdash; <strong>&sup1;D = e<sup>H&prime;</sup></strong> and <strong>&sup2;D = 1/D</strong> &mdash; the number of equally common species that would give the same value.</div>
+      <details class="eq-key">
+        <summary>What each symbol means</summary>
+        <dl>
+          <dt>S</dt>
+          <dd>Species richness: how many species are present, however rare. Also written &#8304;D, the effective number of order zero, because it counts every species as one whatever its share.</dd>
+          <dt>p<sub>i</sub></dt>
+          <dd>The proportion of all individuals that belong to species <em>i</em>. The shares add up to 1. Every index in this room is computed from these shares and nothing else &mdash; not from body size, biomass, or how different the species are from one another.</dd>
+          <dt>H&prime;</dt>
+          <dd>Shannon's index, in natural logarithms (nats). It is 0 when one species holds everything and ln <em>S</em> when all <em>S</em> are equally common. It gives rare species more weight than Simpson's does.</dd>
+          <dt>D</dt>
+          <dd>Simpson's index, &Sigma;<em>p<sub>i</sub></em>&sup2;: the probability that two individuals drawn at random are the same species. Larger means <em>less</em> diverse, which is why it is often reported as 1 &minus; <em>D</em> or 1/<em>D</em> instead &mdash; three numbers under one name. This room keeps <em>D</em> for the probability and uses 1/<em>D</em> as the effective number.</dd>
+          <dt>&sup1;D, &sup2;D</dt>
+          <dd>Effective numbers of species (Hill numbers): e<sup>H&prime;</sup> and 1/<em>D</em>. Both equal <em>S</em> when every species is equally common and fall below it as the community becomes uneven, Simpson's faster than Shannon's. Unlike the raw indices, they are on the same scale as richness, so the three can be compared directly.</dd>
+          <dt>J&prime;</dt>
+          <dd>Pielou's evenness, <em>H&prime;</em>/ln <em>S</em>: Shannon's index as a fraction of the largest value it could take with this many species. 1 is perfectly even.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <!-- Step 1. The community is the room's one piece of state: the sample and
+         the drift both read it, so it is set first and on its own. -->
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Step 1 &mdash; Build the community<span class="deck-kicker-note">drag the bars, or start from a preset.</span></div>
+      <div class="field wide no-count">
+        <label>Presets<button class="help-btn" data-help="divPresets"></button></label>
+        <div class="segmented compact" id="presetSeg_div">
+          <button data-preset="even">Even</button>
+          <button data-preset="geometric" class="active">Geometric</button>
+          <button data-preset="dominant">One dominant</button>
+          <button data-preset="tworare">Two common, many rare</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Species in the pool <span class="sym">S</span> <span class="value" id="SVal_div">8</span><button class="help-btn" data-help="divPool"></button></label>
+        <input type="range" id="S_div" min="2" max="12" step="1" value="8">
+      </div>
+      <div class="transport">
+        <button class="btn secondary" id="addRareBtn_div">+ Add a rare species</button>
+        <span class="status mono" id="status1_div">Drag a bar up or down to change that species' abundance.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 3;">
+      <div class="panel span2" style="--accent: #1F7A8C;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">The community</span><button class="help-btn" data-help="divEditor"></button></span>
+          <span class="stat" id="commStat_div">&mdash;</span>
+        </div>
+        <div class="canvas-wrap div-editor"><canvas id="editorCanvas_div" tabindex="0" role="img" aria-label="The community: abundance of each species — drag a bar, or use the arrow keys"></canvas></div>
+        <div class="chips">
+          <div class="chip">Species <i>S</i><span id="SDisp_div">8</span></div>
+          <div class="chip res-1">Shannon <i>H&prime;</i><span id="HDisp_div">&mdash;</span></div>
+          <div class="chip sp-b">Simpson <i>D</i><span id="DDisp_div">&mdash;</span></div>
+          <div class="chip cap">Evenness <i>J&prime;</i><span id="JDisp_div">&mdash;</span></div>
+        </div>
+        <div class="panel-note">Each bar is one species, and its height is how many individuals it has; the percentage above it is its share <em>p<sub>i</sub></em>. Drag a bar to zero and the species is gone. With the canvas focused, &larr; and &rarr; pick a species and &uarr; and &darr; change it.</div>
+      </div>
+      <div class="panel" style="--accent: #1F7A8C;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Effective number of species</span><button class="help-btn" data-help="hillNumbers"></button></span>
+        </div>
+        <div class="canvas-wrap"><canvas id="hillCanvas_div" role="img" aria-label="Effective number of species: richness, Shannon and Simpson"></canvas></div>
+        <div class="panel-note">All three are counts of species. They agree only when every species is equally common; the further apart they are, the more uneven the community. Richness ignores abundance entirely, Simpson's is set almost wholly by the commonest species, and Shannon's lies between.</div>
+      </div>
+    </div>
+
+    <!-- Step 2. Sampling never changes the community; it only shows how much
+         of it a finite catch can see. -->
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Step 2 &mdash; Sample it<span class="deck-kicker-note">one choice, then take one sample or a hundred.</span></div>
+      <div class="field">
+        <label>Individuals in a sample <span class="sym">n</span> <span class="value" id="nVal_div">20</span><button class="help-btn" data-help="sampleSize"></button></label>
+        <input type="range" id="n_div" min="5" max="400" step="5" value="20">
+      </div>
+      <div class="transport">
+        <button class="btn" id="sampleBtn_div" data-results="#sampleStage_div">Take a sample</button>
+        <button class="btn secondary" id="sample100Btn_div" data-results="#sampleStage_div">Take 100 samples</button>
+        <span class="status mono" id="status2_div">No sample taken yet.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" id="sampleStage_div" style="--cols: 3;">
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Your sample</span><button class="help-btn" data-help="sampleOnce"></button></span>
+        </div>
+        <div class="canvas-wrap"><canvas id="sampleCanvas_div" role="img" aria-label="The individuals caught in the last sample, by species"></canvas></div>
+        <div class="chips">
+          <div class="chip">Species seen<span id="sSeenDisp_div">&mdash;</span></div>
+          <div class="chip res-1">&sup1;D estimate<span id="d1SampDisp_div">&mdash;</span></div>
+          <div class="chip sp-b">&sup2;D estimate<span id="d2SampDisp_div">&mdash;</span></div>
+        </div>
+      </div>
+      <div class="panel span2" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Species found as you count</span><button class="help-btn" data-help="accumulation"></button></span>
+          <span class="stat" id="accStat_div">&mdash;</span>
+        </div>
+        <div class="canvas-wrap"><canvas id="accCanvas_div" role="img" aria-label="Species found against individuals counted"></canvas></div>
+        <div class="panel-note">Each line follows one sample as its individuals are counted one by one: every new species steps it up, every repeat leaves it flat. The dashed line is the average such a count would give; the purple line is the true richness, which a sample can approach but never pass.</div>
+      </div>
+    </div>
+
+    <div class="stage-area" style="--cols: 1;">
+      <div class="panel" style="--accent: #6b6258;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">A hundred samples against the truth</span><button class="help-btn" data-help="sampleHist"></button></span>
+          <span class="stat" id="histStat_div">&mdash;</span>
+        </div>
+        <div class="canvas-wrap"><canvas id="histCanvas_div" role="img" aria-label="Estimates of the three effective numbers from 100 samples"></canvas></div>
+        <div class="panel-note">One row per number, all three on the same axis of effective species. Each sample adds one to the bar its estimate falls in; the purple tick is the true value, the black triangle the average of the hundred estimates. A number whose estimates pile up on its tick can be trusted from a sample this size; one whose estimates sit to the left of it is biased low.</div>
+      </div>
+    </div>
+
+    <!-- Step 3. A neutral community: the one you built is both where the run
+         starts and the regional pool its immigrants come from. -->
+    <div class="deck deck-setup deck-numbered">
+      <div class="deck-kicker">Step 3 &mdash; Let it drift<span class="deck-kicker-note">three choices, then press Run. The community you built is where the run starts, and where immigrants come from.</span></div>
+      <div class="field">
+        <label>Individuals in the community <span class="sym">J</span> <span class="value" id="JVal_div">500</span><button class="help-btn" data-help="neutralJ"></button></label>
+        <input type="range" id="J_div" min="50" max="2000" step="50" value="500">
+      </div>
+      <div class="field">
+        <label>Immigration <span class="sym">m</span> <span class="value" id="mVal_div">0.000</span><button class="help-btn" data-help="neutralM"></button></label>
+        <input type="range" id="m_div" min="0" max="0.1" step="0.001" value="0">
+      </div>
+      <div class="field">
+        <label>Generations <span class="value" id="TVal_div">400</span><button class="help-btn" data-help="neutralT"></button></label>
+        <input type="range" id="T_div" min="20" max="1000" step="10" value="400">
+      </div>
+      <div class="transport">
+        <button class="btn" id="playBtn_div" data-results="#driftStage_div">&#9654; Run</button>
+        <button class="btn secondary" id="endBtn_div">&#9197; Skip to end</button>
+        <button class="btn secondary" id="resetBtn_div">&#8634; Reset</button>
+        <span class="status mono" id="status3_div">Set the parameters and press Run.</span>
+      </div>
+    </div>
+
+    <div class="stage-area" id="driftStage_div" style="--cols: 2;">
+      <div class="panel" style="--accent: #1F7A8C;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Who holds the community</span><button class="help-btn" data-help="compositionChart"></button></span>
+        </div>
+        <div class="canvas-wrap"><canvas id="compCanvas_div" role="img" aria-label="Share of the community held by each species over time"></canvas></div>
+        <div class="panel-note">Each band is one species, in its colour above, and its thickness is that species' share of the community. A band that pinches out is a species lost; with immigration it can return.</div>
+      </div>
+      <div class="panel" style="--accent: #1F7A8C;">
+        <div class="panel-head">
+          <span class="name-group"><span class="name">Diversity over time</span><button class="help-btn" data-help="diversityTime"></button></span>
+          <span class="stat" id="divStat_div">&mdash;</span>
+        </div>
+        <div class="canvas-wrap"><canvas id="divCanvas_div" role="img" aria-label="Effective numbers of species over time"></canvas></div>
+        <div class="chips">
+          <div class="chip">Generation<span id="genDisp_div">0</span></div>
+          <div class="chip">Species <i>S</i><span id="SNowDisp_div">&mdash;</span></div>
+          <div class="chip res-1">&sup1;D<span id="d1NowDisp_div">&mdash;</span></div>
+          <div class="chip sp-b">&sup2;D<span id="d2NowDisp_div">&mdash;</span></div>
+        </div>
+        <div class="panel-note">The dashed lines are the same three numbers for the pool you built &mdash; where the run started, and what immigration keeps offering back.</div>
+      </div>
+    </div>
+
+    <div class="time-machine-container">
+      <div class="field">
+        <label style="color: var(--stamp-deep)">History Scrubber: you are at generation <span class="value" id="scrubVal_div">0</span></label>
+        <div class="scrub-row">
+          <button class="btn secondary step" id="stepBack_div" type="button" aria-label="Back one step">&#9664;</button>
+          <input type="range" id="scrub_div" min="0" max="0" value="0" disabled>
+          <button class="btn secondary step" id="stepFwd_div" type="button" aria-label="Forward one step">&#9654;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="reading">
+      <p id="reading_div">Drag the bars to build a community &mdash; or pick a preset &mdash; and watch the numbers beside it. Then sample it in Step 2, and let it drift in Step 3.</p>
+      <div class="note-line" id="note_div"></div>
+    </div>
+
+    <div class="room-assumes">
+      <h2>What this model assumes</h2>
+      <ul>
+        <li><strong>A species is its count, and nothing else.</strong> Every index here is computed from the shares of individuals alone: a whale counts the same as a minnow, and two near-identical species count as much as two unrelated ones. Biomass, body size and how different the species are from each other are all invisible to <em>H&prime;</em> and <em>D</em>.</li>
+        <li><strong>Every species is identified correctly.</strong> A real sample has individuals nobody can name, species split or lumped by mistake, and juveniles that look like nothing in the key.</li>
+        <li><strong>Every individual is equally likely to be caught.</strong> Samples are drawn at random, with replacement, from a community far larger than the sample. Real nets, traps and quadrats catch some species much more readily than others, and that bias adds to the sampling error shown here rather than averaging out.</li>
+        <li><strong>In the drift, every species is identical.</strong> Births, deaths and immigration are the same for all of them, so no species is better than another and nothing regulates any of them: this is Hubbell's neutral model. It is the opposite assumption to the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> and <button type="button" class="room-link" onclick="switchTab('coexistence');">Coexistence</button> rooms, where the differences between species decide everything.</li>
+        <li><strong>The community is a fixed number of individuals.</strong> Every death is replaced at once, so <em>J</em> never changes. No species can grow by finding unused space, only by taking it from another.</li>
+        <li><strong>The pool never changes, and nothing new evolves.</strong> Immigrants come from the community you built, in its proportions, for ever. Hubbell's full model also lets new species arise; without that, a closed community can only ever lose species.</li>
+      </ul>
+    </div>
+
+    <div class="room-payoff">
+      <h2>What to notice</h2>
+      <p>Two communities can hold the same species and still differ enormously in diversity, because diversity is richness <em>and</em> evenness. The three effective numbers say so at a glance: they agree only for a perfectly even community, and the gap between them is the unevenness. They also disagree about rare species. Add one, and richness goes up by a whole species, Shannon's number by a little, and Simpson's hardly at all. Choosing an index is choosing how much the rare species should count.</p>
+      <p>Then notice what sampling does to each of them. Richness is the worst behaved: a sample can miss a species but never invent one, so it is always too low, and how low depends mostly on how hard you looked. Two samples of different size compared on richness are mostly comparing effort. Shannon's number is biased low too, though less; Simpson's is nearly right from a few dozen individuals, because the commonest species that decide it are the ones a small sample does catch.</p>
+      <p>Finally, the drift: with no immigration, diversity drains away with no cause at all. No species is better than any other, yet one after another is lost, and in the end one holds the whole community &mdash; which one is luck. A trickle of immigrants is enough to stop the slide, and the level it settles at depends on <em>J</em> and <em>m</em>, not on any of the species. How diverse a place is depends on how large and how connected it is, as well as on who lives there.</p>
+      <p><strong>Where this comes from.</strong> The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room showed that a predator can decide whether a competitor survives; these are the numbers in which such a change would be reported. And the drift is the Drift Room of the <a href="../evolutionary-laboratories/#drifting" target="_blank" rel="noopener">Evolutionary Laboratories</a> with species in place of alleles: Simpson's &Sigma;<em>p<sub>i</sub></em>&sup2; is exactly the chance that two gene copies are the same allele, so 1 &minus; <em>D</em> is the heterozygosity a population geneticist would calculate. <strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('metapopulation');">Metapopulation</button> room changes the unit again, and counts populations rather than individuals.</p>
+    </div>
+
+    <details class="room-methods">
+      <summary>Exactly what this room simulates</summary>
+      <p>The community is a list of abundances, one per species, each a whole number from 0 to 100; <em>p<sub>i</sub></em> is each divided by their total. <em>H&prime;</em> = &minus;&Sigma;<em>p<sub>i</sub></em> ln <em>p<sub>i</sub></em> in natural logarithms, <em>D</em> = &Sigma;<em>p<sub>i</sub></em>&sup2;, <em>J&prime;</em> = <em>H&prime;</em>/ln <em>S</em>, and the effective numbers are Hill's of order 0, 1 and 2: <em>S</em>, e<sup><em>H&prime;</em></sup> and 1/<em>D</em>.</p>
+      <p>A sample is <em>n</em> individuals drawn independently, each belonging to species <em>i</em> with probability <em>p<sub>i</sub></em> &mdash; sampling with replacement from a community much larger than the sample. Its estimates are the plug-in ones, the formulas above applied to the sample's own shares, which is what is usually done with field data; corrections exist (Miller&ndash;Madow for Shannon, Simpson's own <em>n</em>(<em>n</em> &minus; 1) form for <em>D</em>, Chao1 for richness) and are not applied. The dashed accumulation line is the expected number of species after <em>k</em> individuals, &Sigma;[1 &minus; (1 &minus; <em>p<sub>i</sub></em>)<sup><em>k</em></sup>].</p>
+      <p>The drift is a Moran model. The run starts from the community scaled to <em>J</em> individuals, rounded by largest remainder so the total is exactly <em>J</em>. At each step one individual, chosen at random, dies; with probability <em>m</em> it is replaced by an immigrant drawn from the pool's shares, and otherwise by the offspring of another individual of the community, chosen at random. A generation is <em>J</em> such steps, and the community is recorded at 300 evenly spaced moments. With <em>m</em> = 0 the expected time for a species of share <em>p</em> to be lost or to take over is of the order of <em>J</em> generations, which is why the default run is about as long as the community is large. The indices are Shannon (1948), Simpson (1949) and Hill (1973); the case for effective numbers is Jost (2006); the neutral model is Hubbell (2001), here without speciation.</p>
+    </details>
+  </div>
+
   <div id="tab-metapopulation" class="tab-content page" role="tabpanel" aria-labelledby="tabbtn-metapopulation" tabindex="0" style="--room: #454B96; --room-deep: #32324F;">
     <header class="masthead">
       <div>
@@ -3278,7 +3524,7 @@
   <script src="js/canvas-utils.js?v=12"></script>
   <script src="js/lab-core.js?v=18"></script>
   <script src="js/plot-core.js?v=18"></script>
-  <script src="js/help.js?v=14"></script>
+  <script src="js/help.js?v=15"></script>
   <script src="js/growth-room.js?v=15"></script>
   <script src="js/crowding-room.js?v=15"></script>
   <script src="js/resource-room.js?v=14"></script>
@@ -3287,6 +3533,7 @@
   <script src="js/coexistence-room.js?v=16"></script>
   <script src="js/predator-room.js?v=16"></script>
   <script src="js/keystone-room.js?v=16"></script>
+  <script src="js/diversity-room.js?v=2"></script>
   <script src="js/metapopulation-room.js?v=2"></script>
   <script src="js/consent.js?v=1"></script>
 </body>
