@@ -481,6 +481,7 @@
       batch.runs = 0;
       batch.n = popN;
       batch.sel = selectionActive;
+      batch.s = sValue;
       batch.maxG = Math.max(defaultG() * 8, 2000);
       batch.sEff = {};
       WHEELS.forEach(w => { batch.fixed[w.key] = 0; batch.sEff[w.key] = effectiveS(w.key); });
@@ -550,6 +551,20 @@
         { n: BATCH_RUNS, k: batch.runs, list: parts.join(', '), u: fmtFrac(1 / batch.n) });
     }
 
+    // Splits text into at most two lines no wider than maxW, breaking at the
+    // last space that lets the first line fit. A single word too long for
+    // either is left whole: better a word that touches its neighbour than one
+    // cut in half.
+    function fitLines(ctx, text, maxW){
+      if(ctx.measureText(text).width <= maxW) return [text];
+      const words = text.split(' ');
+      for(let k = words.length - 1; k > 0; k--){
+        const first = words.slice(0, k).join(' ');
+        if(ctx.measureText(first).width <= maxW) return [first, words.slice(k).join(' ')];
+      }
+      return [text];
+    }
+
     // One bar per trait, the fraction of the BATCH_RUNS runs in which its
     // derived allele fixed. The bars grow as the runs come in, so their height
     // is always out of the full hundred and they never jump down. Same canvas,
@@ -563,10 +578,20 @@
         scaleCanvas(freqCanvas, freqCtx, size, height);
         const ctx = freqCtx, W = size, H = height;
         ctx.clearRect(0, 0, W, H);
-        const padL = 26, padR = 8, padT = 30, padB = 32;
-        const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
         ctx.font = '9px ui-monospace, Menlo, monospace';
         ctx.textBaseline = 'middle';
+        // Each bar's slice name gets one slot's width. On a phone that is under
+        // 70px, and "50% più piccole ★" is 92 — so a name that does not fit
+        // breaks onto a second line rather than printing over its neighbour,
+        // and the bottom margin grows a line to hold it.
+        const padL = 26, padR = 8, padT = 30;
+        const slot = (W - padL - padR) / 4;
+        const names = WHEELS.map(wheel => {
+          const sec = alleleState[wheel.key].chosen;
+          return fitLines(ctx, secLabel(sec) + (batch.sel && sec.favoured ? ' ★' : ''), slot - 6);
+        });
+        const padB = 32 + 11 * (Math.max(...names.map(n => n.length)) - 1);
+        const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
 
         ctx.strokeStyle = CHART.rule; ctx.fillStyle = CHART.inkSoft; ctx.lineWidth = 1;
         [0, 0.5, 1].forEach(v => {
@@ -577,7 +602,6 @@
 
         const u0 = 1 / batch.n;
         const yr = y1 - u0 * (y1 - y0);
-        const slot = (x1 - x0) / 4;
         const barW = Math.min(slot * 0.5, 56);
         WHEELS.forEach((wheel, i) => {
           const cx = x0 + slot * (i + 0.5);
@@ -595,11 +619,10 @@
           // Trait, then the state the wheel landed on — the bar is about that
           // particular mutation, and under selection its star is the reason
           // the bar stands where it does.
-          const sec = alleleState[wheel.key].chosen;
           ctx.fillStyle = CHART.inkSoft;
           ctx.fillText(wheelShort(wheel), cx, y1 + 10);
           ctx.fillStyle = CHART.ink;
-          ctx.fillText(secLabel(sec) + (batch.sel && sec.favoured ? ' ★' : ''), cx, y1 + 22);
+          names[i].forEach((line, k) => ctx.fillText(line, cx, y1 + 22 + 11 * k));
         });
 
         // What drift alone gives a single new copy, drawn over the bars so a
@@ -625,7 +648,7 @@
       const list = parts.slice(0, 3).join(', ') + T('mu.and', ' and ') + parts[3];
       const expected = BATCH_RUNS / batch.n;
       const vars = {
-        list, n: batch.n, runs: BATCH_RUNS, s: sValue.toFixed(2), u: fmtFrac(1 / batch.n),
+        list, n: batch.n, runs: BATCH_RUNS, s: batch.s.toFixed(2), u: fmtFrac(1 / batch.n),
         k: expected >= 1 ? String(Math.round(expected)) : T('mu.fewerThanOne', 'fewer than one'),
       };
       readingText.innerHTML = batch.sel
