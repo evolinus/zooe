@@ -1485,6 +1485,164 @@
         head for 1. With immigration they settle below the dashed lines and stay there, fluctuating.</p>`
     },
 
+    // ---------- Turnover Room ----------
+
+    tovPresets: {
+      title: 'Landscape presets',
+      body: `
+        <p><strong>Four ways of sharing one pool of twelve species among the sites.</strong> The pool is the
+        same in all four; what changes is which site holds which species.</p>
+        <ul>
+          <li><strong>Identical</strong> — every site holds the whole pool in the same proportions. β = 1:
+          the landscape is no more diverse than any one site.</li>
+          <li><strong>Nested</strong> — each site holds the first few species of the pool, fewer and fewer from
+          site to site, so every poorer site is a subset of every richer one. β is small: the poor sites add
+          nothing the rich one lacks.</li>
+          <li><strong>Gradient</strong> — each site has its own bell of species, shifted along the pool, as
+          communities change along a slope, a river or a climate gradient. Neighbouring sites share species;
+          distant ones share few.</li>
+          <li><strong>Complete turnover</strong> — each site has species of its own and shares none. β = N
+          exactly.</li>
+        </ul>
+        <p>Drag any bar and the preset lets go. Changing the number of sites re-deals the active preset.</p>`
+    },
+
+    tovSites: {
+      title: 'Sites (N)',
+      body: `
+        <p><strong>How many sites the landscape is divided into.</strong> Every site holds the same number of
+        individuals and counts equally in every average, so a species-poor site weighs as much as a rich one.</p>
+        <p>N is also the ceiling on β: N sites can amount to at most N completely distinct ones. Under
+        <em>Identical</em>, adding sites changes nothing; under <em>Complete turnover</em>, every site added
+        adds its own species, and γ grows with N.</p>`
+    },
+
+    tovMeasure: {
+      title: 'Measure by',
+      body: `
+        <p><strong>Which effective number α, β and γ are counted in</strong> — the three of the Diversity room.
+        <strong>Richness</strong> counts every species once however rare (Whittaker's original β was in
+        richness); <strong>Shannon</strong> discounts the rare ones; <strong>Simpson</strong> is set mostly by
+        the common ones.</p>
+        <p>The same landscape can have a very different β under each, and which way it goes is informative.
+        Where the sites differ mainly in their <em>rare</em> species — the common ones found everywhere, as in
+        <em>Nested</em> — β is largest by richness. Where each site's <em>commonest</em> species is its own,
+        as along the <em>Gradient</em>, β is largest by Simpson. A reported β means little until you know which
+        measure it was taken in.</p>
+        <p><strong>The catch with richness:</strong> it is also the measure most damaged by sampling. See the
+        help for <em>The landscape</em>.</p>`
+    },
+
+    tovEditor: {
+      title: 'The landscape',
+      body: `
+        <p><strong>One row per site, one column per species</strong>, the twelve species of the pool in the
+        same colours as the Diversity room. A bar's height within its row is that species' abundance in that
+        site. Drag it up or down; drag it to zero and the species is gone from that site only. The figure at
+        the end of each row is the site's own effective number, in the measure chosen.</p>
+        <p>With the canvas focused, ← and → step through the grid — past the last species of a site to the
+        first of the next — and ↑ and ↓ change the abundance (Shift for single steps).</p>
+        <p><strong>A warning that belongs here.</strong> These sites are counted completely, every individual
+        known. A real survey samples each site, and every sample misses a different handful of rare species —
+        so the sites look more different than they are, and β comes out too high. The Diversity room showed
+        richness falling short in one sample; across several samples the shortfalls do not cancel, they add up
+        to false turnover. It is worst for β by richness, and smallest by Simpson.</p>`
+    },
+
+    tovScales: {
+      title: 'Diversity at each scale',
+      body: `
+        <p><strong>Every site's own effective number</strong>, as thin grey bars, then α and γ on the same
+        axis.</p>
+        <p><strong>α</strong> is the diversity of a typical site. It is not quite the plain average of the grey
+        bars — for Shannon it is e<sup>mean H′</sup>, for Simpson 1/(mean D) — because that is the definition
+        under which γ = α × β holds exactly. <strong>γ</strong> is the diversity of all the sites pooled into
+        one.</p>
+        <p><strong>β is the ratio of the two bars:</strong> how many times longer γ is than α. Two landscapes
+        can have the same α and very different γ, which is the reason β is needed at all.</p>`
+    },
+
+    tovStart: {
+      title: 'Each site starts from',
+      body: `
+        <p><strong>The pool</strong> — every site starts as the same community, the pooled landscape from Step
+        1, so β starts at exactly 1 and every bit of turnover the run produces is made by drift.</p>
+        <p><strong>Its own row</strong> — each site starts as you built it in Step 1, so the run starts at the
+        β you built. With immigration, watch that β fall: every site receives immigrants from the same pool,
+        and the differences between them wear away. Ecologists call the real version of this <em>biotic
+        homogenisation</em> — places becoming more alike as species are moved among them.</p>
+        <p>Either way, immigrants come from the pooled landscape, and the single large site starts from it.</p>`
+    },
+
+    tovJ: {
+      title: 'Individuals per site (J)',
+      body: `
+        <p><strong>How many individuals each small site holds.</strong> The single large site holds N × J, so
+        the two sides of the comparison always have the same total.</p>
+        <p>J sets how fast each site drifts: a species is lost in a time of the order of J generations, so small
+        sites lose species quickly — and lose different ones, which is what drives β up.</p>`
+    },
+
+    tovM: {
+      title: 'Immigration (m)',
+      body: `
+        <p><strong>The chance that a death is replaced by an immigrant from the regional pool</strong> rather
+        than by a local birth. Every site, and the large one, draws from the same pool: the pooled landscape of
+        Step 1.</p>
+        <p>Immigration is the force against turnover. With <strong>m = 0</strong> the sites drift apart
+        unchecked and β climbs towards N; with any immigration the shared pool keeps pulling every site back
+        towards the same community, and β settles low. It is the role migration plays against
+        differentiation in the companion lab's Migration Room.</p>`
+    },
+
+    tovT: {
+      title: 'Generations',
+      body: `
+        <p><strong>How long the sites drift.</strong> A generation is as many deaths as a site has individuals —
+        J for a small site, N × J for the large one — so all of them have been replaced about the same number
+        of times.</p>
+        <p>Time matters more here than in most rooms, because the comparison in the middle panel can change
+        hands along the way: scrub back through a long run and look for the moments the plum line is on top.</p>`
+    },
+
+    tovNow: {
+      title: 'Each site now',
+      body: `
+        <p><strong>Each site's community at the moment on the scrubber</strong>, as a bar of its species
+        stacked by share, in their colours from Step 1. The bottom row is the single large site. The figure at
+        the end of each row is that community's effective number.</p>
+        <p>Watch the rows that started identical become different: each has lost a different set of species,
+        and in each a different species has drifted up. That difference is β.</p>`
+    },
+
+    tovSloss: {
+      title: 'Several small or single large?',
+      body: `
+        <p><strong>The same number of individuals, divided two ways.</strong> The blue line is γ of the
+        N small sites together; the plum line is the diversity of one site holding as many individuals as all
+        of them. The green line is α, a typical small site alone.</p>
+        <p>This is the shape of a real argument in conservation — SLOSS, whether a fixed area of reserve is
+        better as one large block or several small ones. Under neutral drift each small site loses species
+        faster than the large one, so α falls below the plum line; but the small sites lose <em>different</em>
+        species, so together they usually hold more than the large one. With no immigration they always do in
+        the end: each small site finishes with one species of its own, the large site with a single one. The
+        large site often leads for a while early on, before the small sites have finished losing species.</p>
+        <p><strong>Read it as arithmetic, not advice.</strong> Nothing here makes small sites riskier: no edge
+        effects, no species that need a large area, no disasters that wipe out a small site. Those are why the
+        real answer usually favours large, and they are all left out.</p>`
+    },
+
+    tovBetaTime: {
+      title: 'β over time',
+      body: `
+        <p><strong>How many distinct sites the landscape amounts to, generation by generation</strong> —
+        between 1 and N, the dotted line at the top.</p>
+        <p>Started from the pool, β begins at exactly 1 and rises as the sites drift apart; with no immigration
+        it heads towards N as each site ends with a species of its own (it may never reach it: two sites can
+        end with the same species). Immigration holds it down. Started from your own rows, the dashed line is
+        the β you built, and immigration pulls the run below it.</p>`
+    },
+
     glosMetapopulation: {
       title: 'Metapopulation',
       body: `
@@ -1518,6 +1676,21 @@
         other.</p>
         <p>Every number of this kind is estimated from a sample, and richness most of all depends on how big
         that sample was.</p>`
+    },
+
+    glosBeta: {
+      title: 'Alpha, beta and gamma diversity',
+      body: `
+        <p><strong>Diversity at three scales</strong> (Whittaker 1960). <strong>Alpha</strong> is the diversity
+        of a typical site; <strong>gamma</strong> is the diversity of the whole region, all its sites pooled;
+        <strong>beta</strong> is how different the sites are from one another — how much the species change, or
+        <em>turn over</em>, from site to site.</p>
+        <p>Counted as effective numbers, the three multiply: <strong>γ = α × β</strong>. β is then the effective
+        number of completely distinct sites, from 1 when every site is the same to the number of sites when none
+        share a species.</p>
+        <p>Why it matters: a region can be species-rich because each site is rich, or because each site is
+        different, and the two call for different protection. A set of rich but identical sites can hold far
+        fewer species than a set of poorer, distinct ones.</p>`
     }
   };
 
