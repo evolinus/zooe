@@ -1,0 +1,90 @@
+id: diversity
+num: 09
+title: The Diversity Room
+kicker: Measuring a community
+part: Part V — Many species at once
+focus: Diversity is richness and evenness; indices weigh rare species differently, samples underestimate richness, and neutral drift drains diversity unless immigration replaces it.
+colour: #1F7A8C
+before: Nothing essential. The Keystone Room (08) shows the kind of change these numbers are used to report.
+
+# intro
+A real community has dozens of species, and ecologists sum it up in a number. This room builds a community, samples it the way a field ecologist must, and lets it drift with no species better than another. This guide asks what each number measures, how far a sample can be trusted, and what keeps a community diverse.
+
+# objectives core
+- Distinguish richness from evenness, and explain why both make up diversity.
+- Compare richness, Shannon's and Simpson's effective numbers, and say how each weighs rare species.
+- Explain why richness estimated from a sample is biased low, and why comparing samples of different size is unsafe.
+- Show that neutral drift removes species and that immigration can stop the loss.
+
+# objectives ext
+- Calculate $H$′, $D$ and the Hill numbers by hand and check them.
+- Read a species-accumulation curve and relate it to sampling effort.
+- Explain how community size $J$ and immigration $m$ set the diversity a neutral community settles at.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Field-course preparation:** steps 3 and 6 before students collect their own samples.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 8 | Same species, different diversity
+set: Step 1 of the room, $S$ = 8. Preset **Even**, then **One dominant**.
+predict: In the even community, what will richness, Shannon's and Simpson's effective numbers be? In the one-dominant community, which of the three will fall furthest?
+run: Choose each preset and read the panels.
+look: *Effective number of species*: richness, ¹$D$ = e<sup>$H$′</sup> and ²$D$ = 1/$D$.
+explain: Both communities hold the same eight species. Why are they so different in diversity?
+
+# step core 8 | Add a rare species
+set: Preset **One dominant**.
+predict: You add one rare species. Which of the three numbers will change most, and which least?
+run: Press **Add a rare species**. Then drag its bar down to almost nothing.
+explain: Choosing an index is choosing how much the rare species should count. Which index would you use to report a conservation success for a rare species, and which to describe the community's common core?
+
+# step core 12 | Sampling the community
+set: Step 2 of the room. Preset **Geometric** ($S$ = 8). Sample size $n$ = 20.
+predict: In a sample of 20 individuals, how many of the 8 species will you find? Over 100 such samples, which estimate (richness, Shannon, Simpson) will be furthest below the truth on average?
+run: Press **Take a sample**, then **Take 100 samples**.
+look: *Species found as you count* and *A hundred samples against the truth*.
+explain: Why can a sample miss a species but never invent one? What does that mean for richness comparisons between surveys of different effort?
+
+# step core 8 | Drift, with and without immigrants
+set: Step 3 of the room: $J$ = 500, 400 generations. Immigration $m$ = **0**, then $m$ = **0.01**.
+predict: No species is better than any other. Will the community keep all its species? What will a trickle of immigration change?
+run: Run each.
+look: *Who holds the community* and *Diversity over time*.
+explain: Why does diversity drain away with no cause? Which room in the Evolutionary Laboratories does this mirror?
+
+# step ext 10 | By hand
+set: Drag the bars to build a four-species community with abundances 40, 30, 20, 10.
+predict: Calculate the shares $p$<sub>$i$</sub>, Shannon's $H$′ = −Σ$p$<sub>$i$</sub> ln $p$<sub>$i$</sub>, Simpson's $D$ = Σ$p$<sub>$i$</sub>², and the two effective numbers e<sup>$H$′</sup> and 1/$D$, and Pielou's $J$′.
+plines 4
+run: Read the room's values.
+explain: Why are effective numbers easier to compare than the raw indices?
+
+# step ext 10 | Effort and accumulation
+set: Geometric preset. Sample size $n$ = 20, then 100, then 400.
+predict: How will the average richness estimate change with $n$? Will Simpson's estimate change much?
+run: **Take 100 samples** at each $n$.
+explain: Use the accumulation curve to explain why richness is so sensitive to effort. Name an estimator that tries to correct for unseen species.
+
+# step ext 10 | Size and connection
+set: Step 3 with $m$ = 0.005. $J$ = 200, then $J$ = 2000.
+predict: Which community will hold more species at the end?
+run: Run each.
+explain: The room says diversity depends on how large and how connected a place is, as well as on who lives there. Explain why, using the balance between drift and immigration.
+
+# questions
+- [core] Two meadows each have 20 plant species. In one, a single grass makes up 90% of the plants. Which is more diverse, and by which measure?
+- [core] A student reports that site A has more species than site B. Site A was sampled for twice as long. What should you ask before accepting the conclusion?
+- [core] Why might a manager care about Shannon's number rather than raw richness?
+- [ext] Hubbell's neutral theory assumes all species are equivalent. What evidence would you look for to test it?
+- [ext] Explain why Simpson's Σ$p$<sub>$i$</sub>² is the probability that two individuals belong to the same species, and connect it to heterozygosity.
+- [ext] Rarefaction is used to compare samples of different size. Explain its logic in terms of the accumulation curve.
+
+# check
+- **Step 1.** Even: all three equal 8. One dominant: richness 8, Shannon's about 2.9, Simpson's about 1.8 — Simpson's falls furthest because it is set by the commonest species.
+- **Step 2.** Richness rises by one; Shannon's by a little (about 0.8 when the new species has 20 individuals, less when it is dragged down); Simpson's least of all. Richness suits rare-species reporting; Simpson's describes the common core.
+- **Step 3.** A sample of 20 usually finds 4–6 of the 8. Richness is the most biased low, Shannon's less so, Simpson's is nearly right.
+- **Step 4.** With $m$ = 0 species are lost one after another and eventually one takes over. A little immigration halts the slide. It is the Drift Room with species in place of alleles.
+- **Step 5.** $p$ = 0.4, 0.3, 0.2, 0.1; $H$′ ≈ 1.28, e<sup>$H$′</sup> ≈ 3.6; $D$ = 0.30, 1/$D$ ≈ 3.3; $J$′ ≈ 0.92.
+- **Step 6.** Richness climbs towards 8 as $n$ grows; Simpson's barely moves. Chao1 is one estimator of unseen species.
+- **Step 7.** $J$ = 2000 holds more species: drift is slower in a larger community, so immigration keeps up with the losses.

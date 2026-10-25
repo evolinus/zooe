@@ -26,12 +26,10 @@ function switchTab(tabId, evt) {
   }
 
   // On a narrow window the bar is one swipeable row rather than three wrapped
-  // ones, so the tab just chosen can be off the end of the strip. Bring it back
-  // — 'nearest' so that on a wide window, where the whole bar is visible, this
-  // is a no-op rather than a sideways jolt.
-  if (btn && btn.scrollIntoView) {
-    btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-  }
+  // ones, so the tab just chosen can be off the end of the strip. Bring it to
+  // the middle, where its neighbours show on both sides; on a wide window,
+  // where nothing overflows, this does nothing at all.
+  centreActiveTab(btn);
 
   // Land at the top of the room. Every caller used to do this itself — the
   // twenty-nine "Where this goes next" links each carried their own
@@ -45,6 +43,72 @@ function switchTab(tabId, evt) {
   // away rather than playing on in a hidden tab. LAB.createPlayer subscribes on
   // behalf of all nine, so a room has to do nothing.
   document.dispatchEvent(new CustomEvent('lab:tabchange', { detail: { tabId: tabId } }));
+}
+
+/* The tab strip on a narrow window. Below 780px the bar is one row that scrolls
+   sideways, and its scrollbar is hidden, because a scrollbar under a row of
+   tabs reads as a stray rule. That left nothing on screen to say there were
+   more rooms: on a phone the strip showed the first three or four tabs and
+   simply stopped.
+
+   So the strip is wrapped in a box that shows a fade and an arrow at whichever
+   end has tabs beyond it. The arrows are for a finger or a pointer: they stay
+   out of the tab order and are hidden from screen readers, which reach every
+   tab, and the arrow keys along it, without them. On a wide window the tabs
+   wrap, nothing overflows and none of this is drawn; with no script the strip
+   still scrolls, only without the cues. The Evolutionary Laboratories do the
+   same in their own nav.js. */
+function setUpTabScroller() {
+  const strip = document.querySelector('.tab-nav');
+  if (!strip || strip.parentElement.classList.contains('tab-scroller')) return;
+  const box = document.createElement('div');
+  box.className = 'tab-scroller';
+  strip.parentNode.insertBefore(box, strip);
+  box.appendChild(strip);
+
+  const smooth = !(window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  ['prev', 'next'].forEach(dir => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tab-scroll tab-scroll-' + dir;
+    b.tabIndex = -1;
+    b.setAttribute('aria-hidden', 'true');
+    b.textContent = dir === 'prev' ? '‹' : '›';
+    // most of a strip's width, so a press moves on by several rooms but always
+    // leaves one already seen at the edge to keep your place by
+    b.addEventListener('click', () => strip.scrollBy({
+      left: (dir === 'prev' ? -0.7 : 0.7) * strip.clientWidth,
+      behavior: smooth ? 'smooth' : 'auto'
+    }));
+    box.appendChild(b);
+  });
+
+  // switchTab fires a resize on every room change, so this one listener covers
+  // the window changing size and the active tab moving alike
+  const update = () => {
+    const max = strip.scrollWidth - strip.clientWidth;
+    box.classList.toggle('more-before', strip.scrollLeft > 2);
+    box.classList.toggle('more-after', strip.scrollLeft < max - 2);
+  };
+  strip.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setUpTabScroller);
+} else {
+  setUpTabScroller();
+}
+
+// Measured from the two boxes rather than from offsetLeft, which would depend
+// on which ancestor happens to be positioned. Only ever moves the strip
+// sideways, never the page.
+function centreActiveTab(btn) {
+  const strip = btn && btn.closest('.tab-nav');
+  if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+  const s = strip.getBoundingClientRect(), b = btn.getBoundingClientRect();
+  strip.scrollLeft += (b.left + b.width / 2) - (s.left + s.width / 2);
 }
 
 // The tab bar is sticky, so anything scrolled into view has to clear it.

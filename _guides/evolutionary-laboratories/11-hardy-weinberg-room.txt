@@ -1,0 +1,91 @@
+id: hardyweinberg
+num: 11
+title: The Hardy–Weinberg Room
+kicker: From alleles to genotypes
+part: Part IV — The machinery underneath
+focus: Under random mating one allele frequency fixes all three genotype frequencies in a single generation; drawing real gametes adds drift.
+colour: #8B3E62
+before: The Reproduction Room (10) made the gametes this room pairs up.
+
+# intro
+A single locus with two alleles, A₁ at frequency $p$ and A₂ at $q$ = 1 − $p$. You build a parent population, pair its gametes at random, and compare the offspring with the p² : 2pq : q² that Hardy–Weinberg predicts. This guide asks what the theorem promises, and what it cannot.
+
+# objectives core
+- Calculate expected genotype frequencies p², 2pq and q² from an allele frequency.
+- Show that any starting mix of genotypes reaches Hardy–Weinberg proportions after one generation of random mating.
+- Explain why a rare allele is found almost entirely in heterozygotes.
+- Explain why a finite population misses the expected proportions by a little each generation.
+
+# objectives ext
+- Predict the sampling error of offspring genotype frequencies from √($f$(1 − $f$)/$N$).
+- Test a population for departure from Hardy–Weinberg with a χ² test.
+- Connect the rare-allele result to why dominance ($h$) matters so much in the Selection Room.
+
+# routes
+- **35-minute practical (BSc):** steps 1–4 and questions 1–3. Students need a calculator.
+- **Problem class:** steps 2 and 6 on the board, with the class building the population together.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 8 | Where the rare allele hides
+set: Close the panel *One generation of random mating* so the $p$ slider is active. $N$ = 50.
+predict: At $p$ = 0.1, calculate the three genotype frequencies. Of all the A₁ copies in the population, what fraction sit in heterozygotes?
+plines 3
+run: Slide $p$ from 0.5 down to 0.1, watching the Hardy–Weinberg square and the *Genotype frequencies as p varies* chart.
+look: the three readouts f(A₁A₁) = p², f(A₁A₂) = 2pq and f(A₂A₂) = q².
+explain: Why does a rare allele almost never appear in a homozygote? At what $p$ are heterozygotes most common, and how common can they be?
+
+# step core 10 | Any population, one generation
+set: Open the panel again. Drag the two handles to build a lop-sided population with few heterozygotes — for example 40% A₁A₁, 20% A₁A₂, 40% A₂A₂.
+predict: What is $p$ in this population? What genotype frequencies will the offspring have after one round of random mating?
+plines 3
+run: Press **Mate randomly**.
+look: the three histograms: G0 observed, expected, and G1 after one random mating.
+explain: How could a population with so few heterozygotes produce so many in one generation? What does random mating "forget" about the parents?
+
+# step core 8 | Small populations miss the target
+set: Keep your lop-sided parents. $N$ = **10**, then $N$ = **200**.
+predict: How closely will the offspring match p² : 2pq : q² at each population size?
+run: Press **Mate randomly** five times at each $N$, noting the heterozygote frequency each time.
+explain: The genotypes still follow the allele frequency within a generation. What is causing the misses, and which room is entirely about that?
+
+# step core 6 | Gamete by gamete
+set: $N$ = 10, any population.
+predict: When you build the offspring one gamete at a time, how is each offspring's genotype decided?
+run: Press **Build G1 gamete by gamete** and watch the gamete wheel.
+explain: Why does drawing two independent gametes give exactly p², 2pq and q² as probabilities?
+
+# step ext 10 | How big should the misses be?
+set: $p$ = 0.5 in Hardy–Weinberg proportions; $N$ = 10, then 200.
+predict: The offspring heterozygote frequency is a sample of $N$ with expected value $f$ = 0.5. Calculate √($f$(1 − $f$)/$N$) at both sizes.
+run: Press **Mate randomly** ten times at each $N$ and estimate the spread of the heterozygote frequency.
+explain: Does your measured spread match? Why do the realised allele frequencies drift too, by about √($pq$/2$N$)?
+
+# step ext 10 | Testing for Hardy–Weinberg
+set: Build a population with the handles, for example 30% A₁A₁, 10% A₁A₂, 60% A₂A₂, at $N$ = 100.
+predict: Calculate $p$, the expected counts, and χ² = Σ(observed − expected)²/expected with one degree of freedom. Is the departure significant at 5% (χ² > 3.84)?
+plines 4
+run: Press **Mate randomly** and calculate χ² for the offspring.
+explain: What biological processes could make a real population depart from Hardy–Weinberg? Which of them does one generation of random mating remove, and which would persist?
+
+# step ext 8 | Recessive alleles and selection
+set: Close the panel. $p$ = **0.05**.
+predict: What fraction of individuals are A₁A₁? What fraction of A₁ copies are in heterozygotes?
+run: Read the square and the readouts.
+explain: If A₁ carried a recessive advantage, how much of it could selection see? Connect this to step 6 of the Selection Room guide.
+
+# questions
+- [core] Cystic fibrosis affects about 1 in 2,500 births in some European populations. Assuming Hardy–Weinberg, estimate the frequency of carriers.
+- [core] "Dominant alleles become more common over time because they are dominant." Use the room to show why this is wrong.
+- [core] Which of the theorem's assumptions are you most confident fails in a real human population, and does it matter for the locus in question?
+- [ext] Inbreeding increases homozygosity without changing allele frequencies. Explain how, and how $F$ modifies the Hardy–Weinberg proportions.
+- [ext] The Drift and Selection rooms track only the allele frequency in diploid mode. Explain why this room licenses that shortcut, and when it would fail.
+- [ext] Why can a population be in Hardy–Weinberg proportions at one locus and far from them at another?
+
+# check
+- **Step 1.** At $p$ = 0.1: 0.01 A₁A₁, 0.18 A₁A₂, 0.81 A₂A₂. Nine A₁ copies in ten sit in heterozygotes (the fraction is $q$). Heterozygotes peak at 50%, at $p$ = 0.5.
+- **Step 2.** The parents have $p$ = 0.5; the offspring come out near 25 : 50 : 25. Random mating forgets the parents' genotypes and keeps only their allele frequency.
+- **Step 3.** At $N$ = 10 the offspring scatter widely around the expectation; at $N$ = 200 they land close. The misses are sampling — drift — which is the Drift Room's subject.
+- **Step 4.** Each offspring gets two gametes drawn independently, each A₁ with probability $p$: both A₁ with p², one of each with 2pq, both A₂ with q².
+- **Step 5.** About 0.16 at $N$ = 10 and 0.035 at $N$ = 200.
+- **Step 6.** $p$ = 0.35; expected 12.25 : 45.5 : 42.25, so χ² ≈ 25.7 + 27.7 + 7.5 ≈ 61 — a large departure. After one random mating it is typically below 3.84. Inbreeding, selection, assortative mating and population structure can all cause departures.
+- **Step 7.** p² = 0.0025, so 1 individual in 400; 95% of A₁ copies are in heterozygotes, where a recessive advantage is invisible.

@@ -310,6 +310,7 @@
     ancMean: DOMg('ancMean'), ancIndividuals: DOMg('ancIndividuals'), ancStats: DOMg('ancStats'),
     ancSub: DOMg('ancSub'),
     verdict: DOMg('verdict'),
+    verdictLive: DOMg('verdictLive'),
     strip: DOMg('strip'),
     chartD: DOMg('chartD'), chartHue: DOMg('chartHue'),
     divTableWrap: DOMg('divTableWrap'), subTableWrap: DOMg('subTableWrap')
@@ -1210,32 +1211,44 @@
         ? T('sp.crossedAt', 'First met at generation {g}.', { g })
         : T('sp.lapsed', 'It was met at generation {g}, and has since fallen back.', { g }));
 
+    // Each criterion is named as what it stands in for, not as what it is:
+    // the counts are proxies chosen by the room, and the labels must not let a
+    // reader mistake a threshold crossed for a barrier demonstrated.
     let rows = criterion(post,
-      T('sp.crit.post', 'Post-zygotic — genetic incompatibility'),
+      T('sp.crit.post', 'Fixed differences — stand-in for post-zygotic isolation'),
       cp.d, params.X,
       T('sp.crit.postNote', '{m} of them at the {n} loci that build the fish and {p} at the {q} that adapt its physiology; the rest at loci nothing selects on.',
         { m: cp.dm, n: N_MORPH, p: cp.dp || 0, q: N_PHYS }) + firstAt(crossings && crossings.fixedAt, post));
 
     rows += params.mating
       ? criterion(pre,
-          T('sp.crit.pre', 'Pre-zygotic — mate recognition'),
+          T('sp.crit.pre', 'Mating-signal divergence — stand-in for pre-zygotic isolation'),
           cp.dh.toFixed(0) + '°', params.Y + '°',
           T('sp.crit.preNote', 'Divergence in the body hue used to choose a mate.') + firstAt(crossings && crossings.hueAt, pre))
       : `<div class="spec-criterion is-off">
            <div class="spec-crit-icon">–</div>
-           <div class="spec-crit-body"><strong>${T('sp.crit.pre', 'Pre-zygotic — mate recognition')}</strong>
+           <div class="spec-crit-body"><strong>${T('sp.crit.pre', 'Mating-signal divergence — stand-in for pre-zygotic isolation')}</strong>
            <em>${T('sp.crit.preOff', 'Switched off: no trait is acting as a mating signal, so colour divergence has no effect on who mates with whom.')}</em></div>
          </div>`;
 
+    // The verdict is the model's definition applied to the reader's
+    // thresholds, and it says so where it is read rather than three panels
+    // further down: a student who sees "Two species" in red has to see, in the
+    // same box, that it is a threshold crossed and not a test passed.
     const headline = speciated
-      ? (post && pre ? T('sp.verdict.both', 'Two species — both barriers are up')
-        : post ? T('sp.verdict.post', 'Two species — post-zygotic isolation')
-        : T('sp.verdict.pre', 'Two species — pre-zygotic isolation'))
-      : T('sp.verdict.one', 'Still one species — two diverging populations');
+      ? (post && pre ? T('sp.verdict.both', "Two species, by this room's definition — both thresholds passed")
+        : post ? T('sp.verdict.post', "Two species, by this room's definition — the fixed-difference threshold is passed")
+        : T('sp.verdict.pre', "Two species, by this room's definition — the mating-signal threshold is passed"))
+      : T('sp.verdict.one', "Still one species, by this room's definition — two diverging populations");
+    const kicker = params.mating
+      ? T('sp.verdict.kickerBoth', 'Model verdict · from the thresholds you set: <var>X</var> = {x} fixed differences, <var>Y</var> = {y}°',
+          { x: params.X, y: params.Y })
+      : T('sp.verdict.kicker', 'Model verdict · from the threshold you set: <var>X</var> = {x} fixed differences', { x: params.X });
 
     DOM.verdict.className = 'spec-verdict ' + (speciated ? 'is-speciated' : 'is-one');
-    DOM.verdict.innerHTML =
-      `<div class="spec-verdict-head">${headline}</div>
+    DOM.verdictLive.innerHTML =
+      `<div class="spec-verdict-kicker">${kicker}</div>
+       <div class="spec-verdict-head">${headline}</div>
        <div class="spec-criteria">${rows}</div>`;
   }
 

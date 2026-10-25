@@ -1,0 +1,80 @@
+id: branching
+num: 02
+title: The Branching Room
+kicker: Divergence &amp; speciation
+part: Part I — What a mutation is
+focus: Lineages split and diverge; a tree rebuilt from final appearances alone often gets the history wrong.
+colour: #A8442A
+before: The Copying Room (01): this room uses the same copying, with splits added.
+
+# intro
+One ancestor becomes several lineages, each copying on its own after it splits. At the end an algorithm rebuilds the family tree from the final shapes alone. This guide asks when that reconstruction can be trusted.
+
+# objectives core
+- Read a true tree of lineage splits and say which lineages are most closely related.
+- Predict which lineages should look most alike, and explain why appearance can mislead.
+- Compare a true tree with a reconstructed one in a tanglegram, and describe where they disagree.
+- Explain why splits that happen close together are hard to resolve.
+
+# objectives ext
+- Use E[($x$₁ − $x$₂)²] = 2$σ$²$t$ to separate an expected distance from a single draw of it.
+- Explain saturation, and why more characters improve a reconstruction.
+
+# routes
+- **40-minute practical (BSc):** steps 1–3 and questions 1–3.
+- **Pair work:** one student sets the splits, the other predicts the reconstructed tree before the run.
+- **MSc:** core path as preparation, then steps 4–6 and questions 4–6 (about 30 minutes).
+
+# step core 8 | Watch the tree grow
+set: The defaults: Polygon, Mutation size 3, 500 generations, splits at 200, 350 and 450.
+predict: Five lineages survive to the end: C, D, G, H and I. Which two should look most alike at generation 500, and which one should look most different from the rest? Use the split times to decide.
+run: Press **Start copying** and watch the lineages split. Use the History Scrubber to look at the shapes at each split.
+look: the lineage colours, and the snapshots of the shapes at each split.
+explain: Did the pair that split last actually end up the most similar? If not, what could have made two more distant relatives look alike?
+
+# step core 10 | The tanglegram
+set: The run you just made.
+predict: The reconstructed tree is built from the five final shapes only. Will it put H and I together? Will it place C, the earliest branch, outside the others?
+run: Scroll to the *Tanglegram* at the bottom. Then press **New starting shape** and run twice more, checking the tanglegram each time.
+look: the dotted lines between the true tree (left) and the reconstruction (right); every crossing marks a lineage that has been moved.
+explain: In how many of your three runs did the reconstruction get the whole branching order right? What is the reconstruction assuming that the true history does not have to obey?
+
+# step core 10 | Splits close together
+set: Drag the three split marks so they fall close together — for example at 200, 220 and 240.
+predict: Will the reconstruction get this tree right more often or less often than the default one? Why?
+run: Run three times with **New starting shape** between runs.
+explain: Short internal branches leave little time for distinguishing changes to build up. Use that to explain your result, and say why real phylogenies often have unresolved bursts of splitting.
+
+# step ext 10 | Does more time help?
+set: Mutation size **5**, total generations **2000**, splits back near their default proportions (for example 800, 1400, 1800).
+predict: With four times as long and larger steps, will the reconstruction become more reliable, less reliable, or about the same?
+run: Run twice and read the tanglegram.
+explain: Use the idea of saturation from the Copying Room: what happens to the information in a trait once it reaches its bound?
+
+# step ext 10 | Expectation against a single draw
+set: The default settings.
+predict: The room says the expected squared distance between two lineages is 2$σ$²$t$, but any one pair is a single draw whose spread is as large as its mean. Out of five runs, in how many do you expect H and I to be placed together?
+run: Run five times with **New starting shape** in between, and record each time whether the reconstruction pairs H with I.
+explain: Relate the fraction you found to the gap between an expectation and a single draw. What does this imply about drawing a tree from one set of characters?
+
+# step ext 8 | More characters
+set: Defaults, then switch the shape: Flower (11 parameters), Polygon (18), Fish (26).
+predict: Which shape should give the most reliable reconstruction, and why?
+run: Run each shape three times, counting the runs in which the tree was recovered exactly.
+explain: Why do more independent characters help? What does that suggest about morphological against genome-scale data?
+
+# questions
+- [core] Two species look almost identical. Does that make them each other's closest relatives? Use this room to explain.
+- [core] Why does a lineage that happened to change little look "primitive", and why is that a trap?
+- [core] What would you need, besides final appearances, to be sure of a tree's branching order?
+- [ext] Explain long-branch attraction in terms of what you saw here.
+- [ext] The room gives every lineage the same mutation rate. What would a lineage-specific clock add to the problem?
+- [ext] Why is a burst of rapid splitting (an adaptive radiation) hard to resolve however many characters you score?
+
+# check
+- **Step 1.** H and I, the last split, *should* be most alike and C most different; often they are, but chance can make a more distant pair look closer.
+- **Step 2.** The reconstruction often gets part of the tree wrong. It assumes that similarity reflects relatedness, which the random walks do not guarantee.
+- **Step 3.** Closely spaced splits are recovered less often: the internal branches are too short to accumulate distinguishing changes.
+- **Step 4.** More time does not help much and can make things worse: traits saturate at their bounds and stop recording the history.
+- **Step 5.** H and I are paired in most runs but not all. Each distance is a single draw from a wide distribution, so a tree from one set of characters carries real uncertainty.
+- **Step 6.** On average more parameters should give a more reliable tree, because many independent walks average out the chance in any one of them. Three runs per shape is too few to show it cleanly; pool the results of a whole class before drawing a conclusion.

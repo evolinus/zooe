@@ -1,0 +1,93 @@
+id: drifting
+num: 04
+title: The Drift Room
+kicker: The Wright–Fisher model
+part: Part II — What becomes of one mutation
+focus: Chance alone moves an allele frequency, fastest in small populations; drift is unpredictable at one locus and predictable on average.
+colour: #2E5C8A
+before: The Fate Room (03) is the natural lead-in: it followed one new mutation, this room starts from any frequency.
+
+# intro
+A population of $N$ carries two alleles, A₁ and A₂, and neither is better than the other. Every generation is drawn at random from the one before. This guide takes you from a single run to the one thing drift is reliable about: how fast it removes variation.
+
+# objectives core
+- Explain why an allele frequency changes in a finite population even when no allele has an advantage.
+- Predict how population size $N$ changes the size and speed of those changes, and test the prediction.
+- State the neutral probability of fixation, $u(p) = p$, and check it against a batch of runs.
+- Explain why fixation and loss are permanent when there is no mutation.
+
+# objectives ext
+- Use Var(Δ$p$) = $p$(1 − $p$)/$M$ and $H_t$ = $H$<sub>0</sub>(1 − 1/$M$)<sup>$t$</sup> to predict a run before making it.
+- Separate what drift does unpredictably (which allele wins, and when) from what it does predictably (how fast heterozygosity falls).
+- Explain how recurrent mutation turns decay into a mutation–drift balance.
+
+# routes
+- **45-minute practical (BSc):** steps 1–4, then questions 1–3 as a group discussion.
+- **Self-study:** the core path, then the *Checking your reasoning* page. Allow 40 minutes.
+- **MSc seminar:** the core path as preparation; class time on steps 5–7 and questions 4–6.
+- **15-minute demonstration:** step 2 projected, with the class voting on the prediction before each run.
+
+# step core 8 | Watch one generation being made
+set: The defaults: $N$ = 50, initial $p$ = 0.50, Haploid, mutation rate $μ$ = 0.
+predict: The wheel will draw 50 alleles from a population that is exactly half A₁. Will the next generation be exactly half A₁ again? If not, how far from 0.50 could it plausibly land?
+run: Press **Run Simulation**. The first two generations are drawn on the Sampling Wheel one individual at a time; press **Pause after gen** if you want to stop and look.
+look: the *p = freq. A₁* readout after generation 1, and the Binomial Distribution panel beneath the chart.
+explain: Neither allele is better. Where, then, did the change in $p$ come from? Use the binomial panel to say what range of outcomes was likely.
+
+# step core 10 | Small against large
+set: $p$ = 0.50, Haploid. First $N$ = 10, then $N$ = 200. Leave Generations $G$ alone: it follows $N$ until you move it.
+predict: Sketch the trajectory you expect at $N$ = 10 and at $N$ = 200. Which reaches 0 or 1 first, and after roughly how many generations?
+run: Run at $N$ = 10, then at $N$ = 200, changing nothing else. Run each one twice more.
+look: the *Allele Frequency (p) over Generations* chart and the *Fixation & loss* readout.
+explain: Why does the small population lurch and the large one barely move? Which allele ended up fixed — and could you have predicted *which* from the settings?
+
+# step core 10 | Ten populations at once
+set: $N$ = 50, $p$ = 0.50, Haploid.
+predict: Of ten independent populations starting at $p$ = 0.5, how many will end with A₁ fixed? Now the same question for $p$ = 0.2.
+run: Press **Run 10 Simulations** at $p$ = 0.5 and count how many runs fixed A₁, lost it, or were still polymorphic at the end. Repeat at $p$ = 0.2.
+look: where the ten lines end, and how many of them have finished.
+explain: Compare your counts with $u(p) = p$. Why does one batch of ten match it only roughly? If you are in a class, pool everyone's counts and compare again.
+
+# step core 7 | Can a lost allele come back?
+set: $N$ = 20, $p$ = 0.50, $μ$ = 0.
+predict: Once a run reaches $p$ = 0, what will $p$ do in the generations that follow?
+run: Run until A₁ is fixed or lost, and let the run carry on. Then drag the History Scrubber back to the generation where it happened.
+explain: Why is fixation permanent here? Which line of *What this model assumes* makes it so — and what would have to change for A₁ to reappear?
+
+# step ext 12 | Drift is predictable on average
+set: $N$ = 50, $p$ = 0.50, Haploid; then the same in Diploid.
+predict: With $M$ gene copies ($M$ = $N$ haploid, 2$N$ diploid), $H_t$ = $H$<sub>0</sub>(1 − 1/$M$)<sup>$t$</sup>. Starting from $H$<sub>0</sub> = 0.5, calculate the heterozygosity left after 35 generations in each case.
+run: Press **Run 10 Simulations** and read the *Genetic Diversity* chart: measured mean $H$ (solid) against expected (dashed). Repeat in Diploid.
+look: the generation at which the measured curve has fallen to half its starting value.
+explain: The ten trajectories disagree about everything, yet the diversity curve follows the dashed line. Why is an average over loci so much more predictable than any one locus? What does that imply for how real studies measure genetic diversity?
+
+# step ext 10 | What the starting frequency changes, and what it does not
+set: $N$ = 50, Haploid. **Run 10 Simulations** at $p$ = 0.5, then at $p$ = 0.1.
+predict: Will heterozygosity fall at the same *proportional* rate in the two cases? Will A₁ fix equally often?
+run: Run both batches, twice each.
+look: the starting height of the diversity curve, how steeply it falls relative to that height, and how many runs fix A₁.
+explain: Sort the quantities you looked at into those that depend on $p$ and those that depend only on $M$.
+
+# step ext 12 | Mutation against drift
+set: $N$ = 50, Haploid, $p$ = 0.50, **Mutation rate $μ$ = 0.005**, and move $G$ up to about 400.
+predict: Will the diversity curve still fall to zero? If not, where will it settle? (MSc: set $H$<sub>$t$+1</sub> = $H_t$ in E[$H$<sub>$t$+1</sub>] = (1 − 1/$M$)[(1 − 2$μ$)²$H_t$ + 2$μ$(1 − $μ$)] and solve.)
+run: Press **Run 10 Simulations**. Then double $N$ to 100 and run again.
+look: the level the diversity curve flattens at, and the summary line that compares it with the arithmetic.
+explain: Why does the curve flatten instead of falling to nothing? Why does mutation between just two alleles pull $p$ towards 0.5? What does this tell you about the runs in steps 1–4, which all ended at 0 or 1?
+
+# questions
+- [core] A population of 1,000 and a population of 20 both carry two neutral alleles at 50:50. Which is more likely to have lost one of them after 50 generations, and why?
+- [core] "Drift is just noise; selection is what really drives evolution." Use what you saw in this room to argue for or against.
+- [core] The room says evolutionary time is measured in generations, not years. Give an example of two species for which that distinction changes how fast drift acts.
+- [ext] A population of 10,000 adults is refounded every spring by about 50 breeders. Which number belongs in $M$, and why does the room call its $N$ an *effective* size?
+- [ext] Explain why the expected heterozygosity curve is the same for every starting frequency, while the probability of fixing A₁ is not.
+- [ext] At $N$ = 50 and $μ$ = 0.005 the balance sits near $H$ = 0.25. What happened when you doubled $N$? Relate your answer to the product $Nμ$.
+
+# check
+- **Step 1.** The next generation is rarely exactly 0.50. Fifty draws at $p$ = 0.5 have a standard deviation of √(0.25/50) ≈ 0.07, so anything from about 0.36 to 0.64 is unremarkable. The change is sampling and nothing else.
+- **Step 2.** At $N$ = 10 a run usually reaches 0 or 1 within a few tens of generations; at $N$ = 200 it wanders slowly and may still be unfinished after a few hundred. Which allele wins cannot be predicted: at $p$ = 0.5 each is equally likely.
+- **Step 3.** Expect about 5 of 10 to fix A₁ at $p$ = 0.5 and about 2 of 10 at $p$ = 0.2, with a batch-to-batch spread of one or two either way. Pooled over many batches the fraction approaches $p$.
+- **Step 4.** Nothing happens: with $μ$ = 0 there is no way to remake A₁, so 0 and 1 are absorbing. A mutation, or a migrant (the Migration Room), would be needed to bring it back.
+- **Step 5.** Haploid: 0.5 × 0.98³⁵ ≈ 0.25, so about half is gone after 0.69$M$ ≈ 35 generations. Diploid: 0.5 × 0.99³⁵ ≈ 0.35. The measured mean tracks the dashed line; single loci do not.
+- **Step 6.** Starting $H$ differs (0.50 against 0.18), and A₁ fixes about half the time against about one time in ten. The proportional decay, 1/$M$ per generation, is the same in both.
+- **Step 7.** $H$ settles near 0.25 instead of falling to 0; the equilibrium of the recursion is 0.247 at $M$ = 50. At $N$ = 100 it rises to about 0.33: more gene copies, slower loss, so the same mutation rate holds more variation.

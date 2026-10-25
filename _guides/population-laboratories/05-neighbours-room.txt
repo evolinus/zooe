@@ -1,0 +1,88 @@
+id: neighbours
+num: 05
+title: The Neighbours Room
+kicker: Interspecific competition: Lotka–Volterra
+part: Part III — A second species at the same table
+focus: Two competitors give four outcomes; coexistence needs each species to limit itself more than its rival, and growth rates never decide who wins.
+colour: #2E5C8A
+before: The Crowding Room (02): each species here is logistic on its own.
+
+# intro
+Two species, each self-limiting as in the Crowding Room, now also feel each other. One coefficient per species, $α$, says how much a competitor counts in the currency of one's own crowding. This guide uses the phase plane to predict the outcome before the run, and the invasion criteria to explain it.
+
+# objectives core
+- Describe the four outcomes of Lotka–Volterra competition.
+- Read a phase plane with two isoclines, and predict the outcome from their arrangement.
+- Explain why growth rates change how fast the outcome arrives but not what it is.
+- Explain founder control: why whoever arrives first can keep the site.
+
+# objectives ext
+- Use the invasion criteria to predict outcomes from parameters alone.
+- Calculate the coexistence equilibrium and check it against a run.
+- Show that coexistence requires $α$<sub>AB</sub>$α$<sub>BA</sub> < 1 when the $K$s are equal, and explain what that means biologically.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Problem class:** step 5 on paper, then each group designs a parameter set for a given outcome and tests it.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 8 | Stable coexistence
+set: Preset **Stable coexistence**: both $r$ = 0.5, both $K$ = 500, both $α$ = 0.60, both starting at 50.
+predict: Will both species persist? Will each reach its own $K$, or settle below it?
+run: Press **Run**.
+look: the dashed $K$ lines, and the *Phase plane & isoclines*: where the trajectory ends.
+explain: What is the gap between each curve and its dashed line? Why does a competitor that counts for only 0.6 of one's own kind allow both to persist?
+
+# step core 10 | Exclusion
+set: Preset **A excludes B**: $K$<sub>A</sub> = 700, $K$<sub>B</sub> = 400, $α$<sub>AB</sub> = 0.5, $α$<sub>BA</sub> = 1.8.
+predict: Look at the isoclines in the phase plane before running. Which species will win?
+run: Run, then try **B excludes A**.
+explain: How does the arrangement of the two isoclines tell you the outcome?
+
+# step core 10 | Founder control
+set: Preset **Founder control**: both $α$ = 1.6, both $K$ = 500.
+predict: Who will win? Does it depend on the starting numbers?
+run: Run. Then click at several points in the phase plane to restart from different pairs of abundances.
+explain: Why can neither species invade the other here? What does this suggest about the order in which species arrive at a site?
+
+# step core 6 | Speed against outcome
+set: Back to **A excludes B**. Change only $r$<sub>B</sub>: make it 1.5 and $r$<sub>A</sub> 0.1.
+predict: Will the faster-growing B now win?
+run: Run.
+explain: What do the growth rates change, and what do they not change?
+
+# step ext 12 | Invasion criteria
+set: Preset **A excludes B**.
+predict: Species $i$ can invade a world holding $j$ at its carrying capacity if 1 − $α$<sub>$ij$</sub>$K_j$/$K_i$ > 0. Calculate this for A invading B, and for B invading A. Then design a set of $K$ and $α$ values with $α$<sub>AB</sub> = **1.2** for which both species coexist.
+plines 4
+run: Read the *Invasion criteria* panel to check your calculation, then enter your design and run it.
+explain: Coexistence requires $α$<sub>AB</sub> < $K$<sub>A</sub>/$K$<sub>B</sub> and $α$<sub>BA</sub> < $K$<sub>B</sub>/$K$<sub>A</sub>. Why does that force $α$<sub>AB</sub>$α$<sub>BA</sub> < 1?
+
+# step ext 10 | The equilibrium
+set: Preset **Stable coexistence**.
+predict: Solve for $N$<sub>A</sub>* = ($K$<sub>A</sub> − $α$<sub>AB</sub>$K$<sub>B</sub>)/(1 − $α$<sub>AB</sub>$α$<sub>BA</sub>), and the same for B.
+run: Run to the end and read the populations.
+explain: What happens to the equilibrium as $α$ approaches 1 from below?
+
+# step ext 8 | On the knife edge
+set: Preset **Founder control**.
+predict: Somewhere in the phase plane is a line separating starts that end with A from starts that end with B. Where would you expect it to run, given the symmetric parameters?
+run: Click points close to the diagonal $N$<sub>A</sub> = $N$<sub>B</sub> to find the boundary.
+explain: What is a saddle point, and what does it mean for a real community to sit near one?
+
+# questions
+- [core] Two species of barnacle share a rocky shore. What observations would tell you whether their interaction resembles the "stable coexistence" or the "founder control" preset?
+- [core] Why does $α$ < 1 mean the two species occupy different niches?
+- [core] An invasive species grows faster than the native one. Does that mean it will replace it? Use step 4.
+- [ext] Lotka–Volterra competition is phenomenological. What does that mean, and which room replaces it with a mechanism?
+- [ext] Gause's experiments with *Paramecium* are often cited as evidence of competitive exclusion. Summarise them and say what this model adds.
+- [ext] How might environmental variation through time allow a species that "should" be excluded to persist?
+
+# check
+- **Step 1.** Both persist, each below its own $K$, at about 312 individuals each: the cost of having a neighbour.
+- **Step 2.** A wins and settles at $K$<sub>A</sub> = 700. When one species' isocline lies entirely outside the other's, that species wins.
+- **Step 3.** Whoever starts ahead wins (A, from 60 against 50); clicking elsewhere can flip the result. Each species suppresses the other more than itself, so neither can invade.
+- **Step 4.** A still wins, just more slowly: rates change the speed, not the outcome.
+- **Step 5.** A invading B: 1 − 0.5 × 400/700 ≈ 0.71 > 0, yes. B invading A: 1 − 1.8 × 700/400 = −2.15, no. With $α$<sub>AB</sub> = 1.2, coexistence needs $K$<sub>A</sub>/$K$<sub>B</sub> > 1.2 and $α$<sub>BA</sub> < $K$<sub>B</sub>/$K$<sub>A</sub> — for example $K$<sub>A</sub> = 600, $K$<sub>B</sub> = 400, $α$<sub>BA</sub> = 0.5.
+- **Step 6.** (500 − 300)/(1 − 0.36) = 312.5 for each. As $α$ approaches 1 the equilibrium becomes ever more sensitive and coexistence ever more fragile.
+- **Step 7.** By symmetry the boundary runs along the diagonal, with a saddle point at the coexistence equilibrium; a community near a saddle can tip either way from a small disturbance.

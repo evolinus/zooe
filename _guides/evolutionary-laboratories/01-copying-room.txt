@@ -1,0 +1,90 @@
+id: copying
+num: 01
+title: The Copying Room
+kicker: Mutation &amp; accumulated change
+part: Part I — What a mutation is
+focus: Copying is imperfect and undirected: lineages change, and change in different directions, with no selection at all.
+colour: #3D6E6E
+before: Nothing. This is the first room, and the place to start.
+
+# intro
+One figure is copied, the copy is copied, and so on. Every copy carries a small random error, and nothing in the room is aiming at anything. This guide asks what accumulates, how fast, and in which direction.
+
+# objectives core
+- Describe mutation as a copying error that is random with respect to any goal.
+- Explain why lineages that start identical end up different from one another, with no selection involved.
+- Predict how the size of each copying error changes the rate of divergence.
+- Explain why a cloud of 50 lineages spreads out without its average moving anywhere.
+
+# objectives ext
+- Use Δ ≈ $σ$√$t$ to predict divergence from the origin, and the √2 factor between pairs of lineages.
+- Explain why bounded traits make divergence saturate, and what that does to divergence as a clock.
+
+# routes
+- **30-minute practical (BSc):** steps 1–4, then questions 1–2.
+- **Lecture warm-up (10 minutes):** step 2 on a projector, the class predicting before each run.
+- **Self-study:** core path and the *Checking your reasoning* page, about 35 minutes.
+- **MSc:** steps 5–7 and questions 4–6, best paired with the Branching Room guide.
+
+# step core 6 | One lineage, copied a hundred times
+set: The defaults: Polygon, 1 lineage, Mutation size 3, Stop after 100 copies.
+predict: After 100 copies, will the shape have changed a lot, a little, or not at all? Will the changes have pushed it consistently in one direction (bigger, rounder, more pointed…)?
+run: Press **Start copying**. When it finishes, drag the History Scrubber slowly from 0 to 100.
+look: the card's *Δ from origin*, and how the shape changes generation by generation.
+explain: Was there a direction to the change? What in the model could have given it one, and does the model contain any such thing?
+
+# step core 8 | Three lineages from the same start
+set: Lineages in parallel: **3**. Everything else as before.
+predict: All three start from the identical figure and follow identical rules. After 100 copies, will they still look alike?
+run: Press **Start copying**. Then press **New starting shape** and run again, and once more with the Fish.
+look: the three cards side by side, and the *pairwise divergence* line under the stage.
+explain: The three lineages had the same start and the same rules. What is the only thing that made them different?
+
+# step core 8 | Small errors, large errors
+set: 3 lineages. Mutation size **1**, then Mutation size **5**.
+predict: Write down roughly how different the three lineages will be after 100 copies at each setting. Will size 5 give five times the divergence of size 1?
+run: Run at size 1, then at size 5. Use the History Scrubber to compare both runs at generation 25.
+look: Δ from origin on each card, and the pairwise divergence.
+explain: Larger errors produce faster divergence — but did divergence keep climbing steadily, or did it start to level off at size 5? Note what you saw; step 7 explains it.
+
+# step core 8 | The whole cloud of possibilities
+set: Lineages in parallel: **50**. Mutation size 3.
+predict: Fifty lineages from one starting shape. After 100 copies, will the *average* shape have moved away from the start? Will the cloud of shapes be wider, narrower, or the same width as at generation 10?
+run: Press **Start copying** and watch the cloud form. Scrub back to generation 10, then forward to 100.
+explain: Why does the spread of the cloud grow while its centre stays put? Relate your answer to the room's statement that mutation is unbiased.
+
+# step ext 10 | The square-root law
+set: 1 lineage, Mutation size 3 ($σ$ ≈ 0.041 of each trait's range), Stop after 100.
+predict: If every trait takes an independent random step of size $σ$ each generation, Δ from origin should grow as $σ$√$t$. Calculate Δ at $t$ = 25 and $t$ = 100. How many generations should it take to double the Δ you have at $t$ = 25?
+run: Run five times (press **New starting shape** between runs). For each, scrub to generation 25 and 100 and write down Δ from origin.
+look: the average of your five values at each time, against your prediction.
+explain: Why does doubling the difference take four times as long? Did the fit hold as well at 100 as at 25?
+
+# step ext 10 | Two lineages diverge faster than one drifts from its origin
+set: 3 lineages, Mutation size 3, Stop after 50.
+predict: The pairwise divergence line compares lineages with each other rather than with the origin. Should it read the same as the cards' Δ from origin, or larger? By what factor?
+run: Run three times and record both numbers at the end of each run.
+explain: Account for the factor you found, using the idea of two independent random walks.
+
+# step ext 8 | The ceiling
+set: 3 lineages, Mutation size **5**, Stop after **400** copies.
+predict: If you run four times longer, will the lineages end up four times as different, twice as different, or something else?
+run: Run, then scrub through to watch Δ over time.
+explain: The room clips each trait at the edge of its drawable range. What does that do to Δ late in a run, and why would it make two very old lineages look no older than two moderately old ones? (The Branching Room runs into exactly this.)
+
+# questions
+- [core] "Evolution is progress towards better forms." What does this room say about that claim, and what can it *not* say?
+- [core] Two lineages that began identical are different after 100 copies. List every cause of the difference that this model contains.
+- [core] The room says mutations "are not bad or good *per se*". What would have to be added to the model before *good* and *bad* meant anything?
+- [ext] Divergence grows as √$t$, not as $t$. What does that imply for anyone trying to date a split from how different two forms look?
+- [ext] In a real organism, traits are linked by development (a longer body usually means longer fins). How would correlated mutations change the cloud of 50 lineages?
+- [ext] Why does clipping at a boundary, rather than reflecting from it, still let the cloud spread evenly at first but not later?
+
+# check
+- **Step 1.** The shape changes visibly but wanders: some features grow, others shrink, and the direction keeps changing. Nothing in the model favours any direction, because there is no selection and the mutation is unbiased.
+- **Step 2.** The three lineages end up different from one another. The only cause is that each copying error is drawn independently in each lineage.
+- **Step 3.** Size 5 diverges much faster than size 1 at first, but not five times as far by generation 100: the traits run into their bounds and Δ flattens.
+- **Step 4.** The cloud widens steadily while its centre stays roughly where it started — the signature of unbiased change. The variance grows with time; the mean does not.
+- **Step 5.** $σ$√25 ≈ 0.21 and $σ$√100 ≈ 0.41. Doubling Δ takes four times as long. At 25 generations the fit is good to a few per cent; by 100 the measured value runs about a quarter low because of the bounds.
+- **Step 6.** Pairwise divergence should be about √2 ≈ 1.41 times Δ from origin: each lineage has walked independently, so the variances add.
+- **Step 7.** Δ rises and then flattens a little under 0.5. Once traits sit at their bounds, more time adds no more difference, so a very old split cannot be told from a moderately old one.

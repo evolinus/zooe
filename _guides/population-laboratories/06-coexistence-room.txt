@@ -1,0 +1,88 @@
+id: coexistence
+num: 06
+title: The Coexistence Room
+kicker: Competitive exclusion &amp; niche partitioning
+part: Part III — A second species at the same table
+focus: On one resource the lower R* wins whatever the starting numbers; with two resources species coexist when each is limited by what it eats most.
+colour: #7A5C99
+before: The Resource Room (03) for $R$*, and the Neighbours Room (05) for the outcomes.
+
+# intro
+Two consumers eat the same tracked food, so competition happens for a reason rather than through a coefficient. In one-resource mode there is a single supply; in two-resource mode each species can specialise. This guide uses the $R$* table to predict the winner before the run.
+
+# objectives core
+- Use $R$* = $m$/($ea$) to predict the winner of competition for a single resource.
+- Show that starting abundance does not change that outcome.
+- Explain how two resources make coexistence possible (niche partitioning).
+- Explain why coexistence collapses when both species are limited by the same resource.
+
+# objectives ext
+- Calculate a full $R$* table and use it to design a reversal of the outcome.
+- Read the *Who is limited by what* panel as a Tilman diagram.
+- Predict how the ratio of resource supply decides which species persist.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Paired with the Neighbours Room:** the core paths of both, compared through question 3.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 10 | One resource, two consumers
+set: **One resource**. The defaults: A has $a$ = 0.020, $m$ = 0.08; B has $a$ = 0.030, $m$ = 0.30; $e$ = 0.40; both start at 10.
+predict: B eats faster. Calculate $R$* for each species. Which will win?
+run: Press **Run**.
+look: the *Break-even table (R*)* and the dashed $R$* lines on *Resources over time*.
+explain: Why does a species that eats faster still lose?
+
+# step core 8 | A head start
+set: As before, but B starts at **100** and A at 10.
+predict: Will a tenfold head start save B?
+run: Run.
+explain: Why does starting abundance not matter here? Compare with founder control in the Neighbours Room.
+
+# step core 10 | Two resources
+set: **Two resources**, defaults: A attacks R₁ at 0.020 and R₂ at 0.005; B attacks R₁ at 0.030 and R₂ at 0.050.
+predict: Each species is better on a different resource relative to the other. Will both persist?
+run: Run.
+look: both resource curves and the *Who is limited by what* panel.
+explain: Explain the coexistence in terms of which resource each species depletes and which limits it.
+
+# step core 7 | Both want the same thing
+set: Two resources; set B's attack on R₂ to **0.005**, so that both species now do best on R₁.
+predict: Will they still coexist?
+run: Run.
+explain: Why does coexistence need each species to be limited by a different resource?
+
+# step ext 10 | Reversing the outcome
+set: One resource, defaults.
+predict: How low must B's mortality be for B to win? Calculate, then choose a value.
+run: Set $m$<sub>B</sub> and run.
+explain: Which three parameters could each, alone, reverse the outcome? Why is the starting abundance not one of them?
+
+# step ext 12 | Reading the Tilman diagram
+set: Two resources, defaults.
+predict: In the *Who is limited by what* panel each species' break-even condition is a line in resource space. Predict where the two lines cross and where the resources will settle.
+run: Run and compare.
+explain: State the two conditions for stable coexistence on two substitutable resources: the lines must cross, and each species must consume relatively more of the resource that limits it more.
+
+# step ext 8 | Supply decides
+set: Two resources, defaults; then $S$₁ = **30**, $S$₂ = **4**; then $S$₁ = **4**, $S$₂ = **30**.
+predict: Which species will persist in each case?
+run: Run all three.
+explain: Why can the same two species coexist in one environment and not in another? What does this predict about diversity along a gradient of nutrient ratios?
+
+# questions
+- [core] Why is $R$* sometimes called "how hungry a species can stay alive"?
+- [core] Phytoplankton species in a lake compete for nitrogen and phosphorus. Using this room, explain how many species could coexist at equilibrium on two resources.
+- [core] Compare how this room and the Neighbours Room explain coexistence. Which one tells you *why*?
+- [ext] Hutchinson's "paradox of the plankton" asks how so many species coexist on few resources. Give two resolutions, and say which this room excludes.
+- [ext] The resources here are substitutable. How would essential resources (both needed) change the geometry?
+- [ext] Tilman's experiments with diatoms tested $R$* predictions. Summarise the design and result.
+
+# check
+- **Step 1.** $R$*<sub>A</sub> = 0.08/(0.4 × 0.02) = 10; $R$*<sub>B</sub> = 0.3/(0.4 × 0.03) = 25. A wins by drawing the resource below what B needs.
+- **Step 2.** A still wins: B drives the resource down quickly at first, but once it falls below 25 B can only decline.
+- **Step 3.** Both persist (A near 54, B near 15): each is held back mainly by the resource it uses relatively more.
+- **Step 4.** B is excluded and A takes over: with both limited by R₁, the species with the lower $R$* on it wins.
+- **Step 5.** B wins if $m$<sub>B</sub> < 0.4 × 0.03 × 10 = 0.12. Mortality, attack rate or efficiency can reverse it; starting abundance cannot.
+- **Step 6.** The lines cross, and the resources settle near the crossing; the consumption ratios meet the coexistence condition.
+- **Step 7.** Defaults: both persist. $S$₁ = 30, $S$₂ = 4: only A. $S$₁ = 4, $S$₂ = 30: only B. The supply ratio picks the winner, so a gradient of ratios can hold more species than any one site.

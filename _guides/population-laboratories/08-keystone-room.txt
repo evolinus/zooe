@@ -1,0 +1,89 @@
+id: keystone
+num: 08
+title: The Keystone Room
+kicker: Predation meets competition
+part: Part IV — Being eaten
+focus: A predator that presses hardest on the competitive winner lets the loser persist (keystone predation); a shared predator can exclude a species with no competition at all (apparent competition).
+colour: #5E6B21
+before: The Neighbours (05) and Predator (07) rooms, whose competitors and predator this room combines.
+
+# intro
+The Neighbours Room's two competitors and the Predator Room's predator in one community. Every run is simulated twice — as you set it and with the predator deleted — so a removal experiment is always on screen. This guide asks when a predator changes who survives, and why.
+
+# objectives core
+- Explain keystone predation: a predator that maintains coexistence by feeding on the dominant competitor.
+- Use the predator-free counterfactual to measure a predator's effect on each species.
+- Explain apparent competition, and why it can look exactly like resource competition.
+- Show that a predator only acts as a keystone when it prefers the species that would otherwise win.
+
+# objectives ext
+- Apply the three-species invasion criterion and check it against the room.
+- Find how unequal the attack rates must be for keystone predation to work.
+- Read the *Tolerance of predation* panel, $r$/$a$.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Field-ecology seminar:** step 1 and 2 with Paine's *Pisaster* experiment (question 4).
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 10 | Keystone predation
+set: Preset **Keystone predation**.
+predict: Without the predator, A would exclude B (as in the Neighbours Room). With a predator that attacks A four times as hard as B, what happens?
+run: Run.
+look: the solid lines against their pale dashed predator-free twins, and the *Outcome* panel.
+explain: Which species does the predator help, and how?
+
+# step core 8 | Remove the keystone
+set: Preset **Remove the keystone**: identical parameters, predator absent.
+predict: What will happen to B?
+run: Run.
+explain: What would a field ecologist conclude from this removal experiment, if they had not seen step 1?
+
+# step core 10 | Apparent competition
+set: Preset **Apparent competition**. Check that both competition coefficients really are 0.
+predict: The two prey do not compete at all. Can one still eliminate the other?
+run: Run.
+look: *What the predator is eating*, and the predator's numbers.
+explain: How does B suffer from A's presence, through the predator? Why would field data make this look like competition?
+
+# step core 7 | Eating the wrong one
+set: Preset **Eating the wrong one**: the predator now prefers B, the weaker competitor.
+predict: Will the predator still maintain coexistence?
+run: Run and compare with the dashed counterfactual.
+explain: Why is a predator not automatically a keystone? What must its preference be?
+
+# step ext 12 | The invasion criterion
+set: Preset **Keystone predation** ($r$ = 0.5, $K$<sub>A</sub> = 700, $K$<sub>B</sub> = 400, $α$<sub>AB</sub> = 0.5, $α$<sub>BA</sub> = 1.5, $a$<sub>A</sub> = 0.008, $a$<sub>B</sub> = 0.002, $e$ = 0.4, $m$ = 0.6).
+predict: In a world of A and the predator, $N$<sub>A</sub>* = $m$/($ea$<sub>A</sub>) and $P$* = ($r$<sub>A</sub>/$a$<sub>A</sub>)(1 − $N$<sub>A</sub>*/$K$<sub>A</sub>). Calculate both, then B's growth rate when rare: $r$<sub>B</sub>(1 − $α$<sub>BA</sub>$N$<sub>A</sub>*/$K$<sub>B</sub>) − $a$<sub>B</sub>$P$*. Can B invade?
+plines 4
+run: Compare with the *Invasion criteria* panel.
+explain: Explain in words why the predator holding A at 187.5 is what lets B in.
+
+# step ext 10 | How lopsided must the plate be?
+set: Keystone predation; leave $a$<sub>B</sub> = 0.002 and lower $a$<sub>A</sub> step by step: 0.008, 0.007, 0.006, 0.005.
+predict: At what attack rate on A will B stop being able to invade?
+run: Run each and watch the *Outcome* panel.
+explain: Why does the effect collapse well before the two attack rates are equal?
+
+# step ext 8 | Tolerance of predation
+set: Keystone predation.
+predict: Each competitor can withstand at most $r$/$a$ predators when rare. Calculate it for A and B.
+run: Read the *Tolerance of predation* panel and the vertical marks.
+explain: How does the comparison of these tolerances with the predator densities each competitor supports decide the outcome?
+
+# questions
+- [core] Paine removed the starfish *Pisaster* from rocky shores and diversity collapsed. Explain his result using this room.
+- [core] Two snail species show opposite trends in abundance. Give two explanations, one involving competition and one not, and suggest a field test to tell them apart.
+- [core] Why might removing a predator to "protect" a prey species backfire?
+- [ext] Holt (1977) introduced apparent competition. Give a real example, for instance from biological control or invasive species.
+- [ext] The predator here never switches to the commoner prey. How would prey switching change keystone effects?
+- [ext] Explain how indirect effects make it hard to predict the consequences of removing one species from a food web.
+
+# check
+- **Step 1.** All three persist; without the predator (dashed lines) A excludes B. The predator helps B by holding A down.
+- **Step 2.** B disappears. A removal experiment reveals the predator's role only because it was compared with the intact community.
+- **Step 3.** A eliminates B, with zero competition: A feeds the predator, and the predator, attacking B harder, drives B out.
+- **Step 4.** No: preferring B, the predator hastens B's exclusion. A keystone must prefer the species that would otherwise win.
+- **Step 5.** $N$<sub>A</sub>* = 0.6/(0.4 × 0.008) = 187.5, $P$* ≈ 45.8, and B's growth when rare ≈ 0.148 − 0.092 ≈ +0.06: B can invade.
+- **Step 6.** B's invasion rate turns negative between about 0.007 and 0.006, well before the attack rates are equal: the predator must press much harder on A.
+- **Step 7.** A tolerates at most 0.5/0.008 ≈ 62 predators, B 0.5/0.002 = 250. A on its own supports about 46 predators — close to its own limit, so A is held well below its carrying capacity, while B barely notices that many predators. That is what opens the door for B.

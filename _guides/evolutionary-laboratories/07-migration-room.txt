@@ -1,0 +1,89 @@
+id: migration
+num: 07
+title: The Migration Room
+kicker: Gene flow against drift
+part: Part III — Neutral or selected
+focus: Drift pulls two populations apart, gene flow pulls them together; what decides it is the number of migrants Nm, not the fraction m.
+colour: #2F7A8C
+before: The Drift Room (04). The Selection Room (05) helps for step 6.
+
+# intro
+Two populations, A and B, each of $N$, drift on their own each generation and then exchange $M$ individuals in each direction. This guide asks how much exchange it takes to stop two populations becoming different, and what *different* should mean.
+
+# objectives core
+- Explain why two isolated populations drift apart and often fix different alleles.
+- Show that a small, steady exchange of migrants holds two populations together.
+- Use $F$<sub>ST</sub> as a measure of differentiation, and read it from the room.
+- Explain why the number of migrants, $Nm$, matters more than the migration rate $m$.
+
+# objectives ext
+- Interpret the sweep: the mean $F$<sub>ST</sub> against the share of runs that ever become strongly differentiated.
+- Compare the room's results with $F$<sub>ST</sub> ≈ 1/(1 + 4$Nm$) and the two-population 1/(1 + 16$Nm$), and say why neither fits exactly.
+- Explain migration–selection balance: why local adaptation survives when $m$ < $s$ and is swamped when $m$ > $s$.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Conservation-themed session:** steps 2–4 with question 3, as an argument about corridors between reserves.
+- **MSc:** steps 5–7 and questions 4–6 (about 35 minutes; the sweep takes a little while to run).
+
+# step core 8 | One migrant a generation
+set: The defaults: $N$ = 50, A starts at $p$<sub>A</sub> = 0.90, B at $p$<sub>B</sub> = 0.10, 1 migrant each way, $G$ = 200.
+predict: Population B starts with A₁ rare. With one migrant crossing each way per generation, what will happen to the two frequencies?
+run: Press **Run Simulation**. Watch the chart, and the *Crossed this gen.* readout.
+look: the two lines on *Frequency of A₁ in each population*, and how the run ends.
+explain: Why do the two populations come together rather than drifting apart? How do they end up?
+
+# step core 8 | No migrants
+set: Migrants each way: **0**. Everything else as in step 1.
+predict: What will the two lines do now? In how many of three runs will the two populations end up fixed for different alleles?
+run: Run three times.
+explain: With no gene flow, each population is a separate Drift Room. Why does that so often end in A and B being completely different?
+
+# step core 12 | Twenty replicates
+set: Both starting frequencies $p$ = **0.50**. Migrants 0, then 1.
+predict: Out of twenty runs, how many will at some point become strongly differentiated ($F$<sub>ST</sub> ≥ 0.5) with no migrants? With one migrant?
+run: Press **Run 20 Replicates** at 0 migrants, then at 1.
+look: the *Twenty replicates* panel and its count of differentiated runs.
+explain: How big a difference did one migrant a generation make? Why does the room insist you look at many runs and not one?
+
+# step core 7 | Count, not fraction
+set: Migrants: 1. $N$ = **20**, then $N$ = **200** (both starting at $p$ = 0.5).
+predict: At $N$ = 20, one migrant is 5% of the population; at $N$ = 200 it is 0.5%. Will the larger populations, with ten times less migration as a *rate*, become more differentiated?
+run: **Run 20 Replicates** at each $N$ and note the count of differentiated runs, and the readouts of $m$ and $Nm$ in the deck.
+explain: What stayed the same between the two settings? Why does a smaller rate in a larger population hold it together just as well?
+
+# step ext 12 | The sweep
+set: $N$ = 50, $G$ = 200. Nothing else matters: the sweep starts every run at $p$ = 0.5.
+predict: Sketch two curves against $Nm$ from 0 to 10: the mean $F$<sub>ST</sub>, and the share of runs that ever reach $F$<sub>ST</sub> = 0.5. Where, if anywhere, do you expect a sharp drop?
+run: Press **Run the sweep** and wait for the panel to fill.
+look: the teal mean and the gold share.
+explain: Which curve has the cliff, and where? Calculate 1/(1 + 4$Nm$) and 1/(1 + 16$Nm$) at $Nm$ = 1 and compare with the mean you measured. Why does a model of two populations bind them more tightly than the many-island model behind the textbook formula?
+
+# step ext 10 | Local adaptation against gene flow
+set: Selection: **Opposite in A and B**, $s$ = 0.10, $N$ = 50, both starting at $p$ = 0.5. Migrants 1 ($m$ = 0.02), then 10 ($m$ = 0.2).
+predict: In which setting will each population keep its own favoured allele? Use the comparison of $m$ with $s$.
+run: Run each setting twice.
+explain: Explain *gene swamping*. Why can immigrants from elsewhere prevent a population from adapting to where it lives?
+
+# step ext 8 | Mutation between two alleles
+set: Selection: None, $p$ = 0.5 in both, 0 migrants, Mutation rate $μ$ = **0.005**, $G$ = 1000.
+predict: Will mutation keep the populations differentiated for longer, or make them more alike?
+run: **Run 20 Replicates** with $μ$ = 0 and then with $μ$ = 0.005, and compare the mean $F$<sub>ST</sub>.
+explain: With only two alleles, why does mutation work *against* differentiation? Which assumption of the textbook formula does that break?
+
+# questions
+- [core] Two nature reserves hold the same butterfly. A corridor would let about two butterflies a generation move between them. Is that worth building, if the populations are 50 each? If they are 5,000 each?
+- [core] "These populations exchange less than 1% of their individuals, so they must be diverging." Use the room to criticise this argument.
+- [core] Why does the room report $F$<sub>ST</sub> rather than just the difference in $p$ between the populations?
+- [ext] The rule "one migrant per generation" comes from a model with assumptions. List three of them, and say in which direction breaking each would move the threshold.
+- [ext] Migrants in nature are rarely a random sample of their population. Give an example and say how it would change step 6.
+- [ext] Why does the time to reach equilibrium grow with $N$, even though the equilibrium itself depends only on $Nm$?
+
+# check
+- **Step 1.** B climbs towards A, the two lines stay together, and the pair then loses its variation *as a pair*, usually within the first couple of hundred generations.
+- **Step 2.** Without migrants each population drifts on its own; about half the runs end with A and B fixed for different alleles.
+- **Step 3.** Expect around thirteen of twenty strongly differentiated with no migrants, and around five with one.
+- **Step 4.** The counts are similar: $Nm$ = 1 in both, even though $m$ differs tenfold. Larger populations drift more slowly, so they need fewer migrants as a fraction.
+- **Step 5.** The mean $F$<sub>ST</sub> slides smoothly; the share reaching 0.5 falls off a cliff near $Nm$ = 1. At $Nm$ = 1 the room measures a mean near 0.09, against 0.2 for the island formula and 0.06 for the two-population one.
+- **Step 6.** At $m$ = 0.02 < $s$ each population keeps its own allele; at $m$ = 0.2 > $s$ gene flow swamps local adaptation and both end up with the same allele.
+- **Step 7.** Mutation lowers the mean $F$<sub>ST</sub>: symmetric mutation between two alleles pulls both populations towards 0.5. The textbook formula assumes infinitely many alleles, where mutation never makes two populations alike.

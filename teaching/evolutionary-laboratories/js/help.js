@@ -1615,7 +1615,12 @@
         off a cliff, and the cliff is at about one migrant a generation — roughly two runs in three get there with no
         migrants, one in two at half a migrant, one in four at one, and almost none at two. "One migrant per
         generation is enough" was never a claim about the average. It is a claim about preventing complete
-        differentiation, and on that it is right.</p>
+        differentiation, and in this room's model it is right.</p>
+        <p><strong>Where the number stops.</strong> That cliff belongs to this model: two equal populations,
+        symmetric migration, one neutral locus. The textbook statement comes from Wright's island model, where the
+        same <var>Nm</var> holds populations together less tightly. Unequal population sizes, one-way migration,
+        selection that differs between places, or migrants that are not a random sample all move it. It is a rule
+        of thumb for a family of models, not a universal threshold.</p>
         <p><strong>Why no theoretical curve is drawn over the points.</strong> The formula usually quoted,
         <var>F</var><sub>ST</sub> ≈ 1/(1 + 4<var>Nm</var>), is derived for <em>many</em> populations exchanging with a
         common pool; with only two, each one's immigrants all come from the only other place there is, and the same

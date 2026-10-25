@@ -1,0 +1,87 @@
+id: metapopulation
+num: 11
+title: The Metapopulation Room
+kicker: Patch occupancy
+part: Part VI — Life spread across space
+focus: A network of patches persists although every local population goes extinct; occupancy settles at p* = 1 − h − e/c, and habitat loss lowers it one for one.
+colour: #454B96
+before: The Crowding Room (02), whose equilibrium this room's p* is compared with.
+
+# intro
+Every other room counts individuals; this one counts populations. Each patch is occupied or empty, occupied patches go extinct, and empty ones are colonised from occupied ones. This guide asks how the whole can persist when every part dies, and what habitat loss does to it.
+
+# objectives core
+- Explain how a metapopulation persists through a balance of colonisation and extinction.
+- Predict the equilibrium occupancy $p$* = 1 − $e$/$c$ and check it.
+- Show that a steady occupancy hides continual turnover of individual patches.
+- Explain how destroying habitat lowers $p$*, and why extinction can happen with habitat still standing.
+
+# objectives ext
+- Show that only the ratio $e$/$c$ sets $p$*, while the rates set the turnover.
+- Explain why small networks are at risk even when $p$* > 0.
+- Calculate the extinction threshold for habitat loss, $h$ = 1 − $e$/$c$.
+
+# routes
+- **35-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Landscape conservation session:** steps 4 and 7 with question 3.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 10 | Occupancy settles
+set: The defaults: 100 patches, $p$<sub>0</sub> = 0.10, $c$ = 0.50, $e$ = 0.20, time span 80, 1 replicate.
+predict: Calculate $p$* = 1 − $e$/$c$. Will the landscape settle there?
+run: Press **Run**.
+look: the solid line against the dashed equation and the purple $p$* line, and the *Colonisation and extinction vs. occupancy* panel.
+explain: Why is colonisation a hump and extinction a straight line? Where do they cross?
+
+# step core 8 | Nothing steady underneath
+set: The same run.
+predict: Once occupancy has flattened, will the grid stop changing?
+run: Park the History Scrubber after the curve flattens and step forward one frame at a time. Watch the two turnover counters.
+explain: "Persistence at the landscape scale is not the absence of extinction — it is extinction being outrun." Explain with what you saw.
+
+# step core 8 | Extinction faster than colonisation
+set: $e$ = **0.60**, $c$ = 0.50.
+predict: Every patch is just as good as before. What will happen to the metapopulation?
+run: Run, with 5 replicates.
+explain: Nothing is wrong with any individual patch. Why does the whole thing still empty?
+
+# step core 8 | Destroying habitat
+set: Back to $e$ = 0.20. Open *More parameters*: habitat destroyed $h$ = 0.20, then 0.40, then 0.60.
+predict: Calculate $p$* = 1 − $h$ − $e$/$c$ for each. At which $h$ will the species disappear?
+run: Run each.
+explain: The species occupied only 60% of the landscape before any habitat was lost. Why, then, is destroying 60% of the patches fatal, with patches still standing empty?
+
+# step ext 10 | Only the ratio
+set: $h$ = 0. $c$ = 0.50, $e$ = 0.20; then $c$ = **1.00**, $e$ = **0.40**.
+predict: Will $p$* change? Will the turnover counters?
+run: Run both and compare the counters at the end.
+explain: What is it that the ratio fixes, and what do the rates themselves fix?
+
+# step ext 10 | Small networks
+set: $c$ = 0.50, $e$ = **0.40** ($p$* = 0.2), 20 replicates. Number of patches $H$ = **16**, then $H$ = **400**.
+predict: In which network will replicates go extinct, although $p$* is the same?
+run: Run each.
+explain: Why does the equation's prediction mislead for small networks?
+
+# step ext 8 | The threshold
+set: $c$ = 0.50, $e$ = 0.20.
+predict: Calculate the largest $h$ the species can survive. If 10% of patches are lost each decade, how many decades until the metapopulation fails?
+run: Check with $h$ just below and just above your threshold.
+explain: The room destroys habitat before the run starts. What would an *extinction debt* look like if habitat were lost gradually during the run?
+
+# questions
+- [core] The Glanville fritillary butterfly in Åland lives in hundreds of meadows, most of which lose their population every few years. Explain how the species persists.
+- [core] Why is it possible for a species to vanish from a landscape where plenty of suitable habitat remains?
+- [core] Compare $p$* with the carrying capacity $K$ of the Crowding Room. What is similar, and what is different?
+- [ext] The rescue effect makes extinction less likely in a well-occupied landscape. How would it change the shape of the extinction line and the outcome?
+- [ext] Levins' patches have no positions. How would distance-limited colonisation change the room's conclusions?
+- [ext] Explain why protecting only currently occupied patches might fail to protect a metapopulation.
+
+# check
+- **Step 1.** $p$* = 1 − 0.2/0.5 = 0.6, and the run settles there. Colonisation needs both occupied senders and empty receivers, so it is a hump; extinction is a constant risk per occupied patch, so a straight line.
+- **Step 2.** The grid keeps changing every frame and both counters keep climbing, while the fraction barely moves.
+- **Step 3.** With $e$ > $c$ the landscape empties: there is no occupancy at which colonisation outpaces extinction.
+- **Step 4.** $p$* = 0.4, 0.2 and 0. At $h$ = 0.6 the colonisation term can no longer keep up, and the species is lost although 40% of the patches are still habitat.
+- **Step 5.** $p$* stays at 0.6; turnover doubles. The ratio fixes the equilibrium; the rates fix how fast patches change hands.
+- **Step 6.** With 16 patches, $p$* = 0.2 means about three occupied patches, and chance often takes them all; with 400 the network persists.
+- **Step 7.** $h$ = 1 − $e$/$c$ = 0.6. Losing 10% a decade, the network fails after about six decades — and with gradual loss, occupancy lags above what the landscape can support, so the decline continues after the loss stops.

@@ -1,0 +1,254 @@
+/* The printed room guides. The rooms' own language — Georgia for prose, the
+   system monospace for labels, a coloured spine in the room's accent, rules
+   rather than boxes — on white rather than the rooms' paper, because this is
+   meant to be printed, and a tinted page costs a toner cartridge a class. */
+
+@page{
+  size: A4;
+  margin: 15mm 16mm 17mm;
+  @bottom-left{
+    font: 7.5pt Menlo, monospace;
+    letter-spacing: 0.4pt;
+    color: #5A5249;
+  }
+  @bottom-right{
+    content: counter(page) " / " counter(pages);
+    font: 7.5pt Menlo, monospace;
+    color: #5A5249;
+  }
+}
+
+:root{
+  --ink: #262220;
+  --ink-soft: #5A5249;
+  --rule: #cabfa8;
+  --wash: #F4EFE4;
+  --stamp: #C08A2E;
+  --stamp-deep: #7A4D00;
+  --mono: Menlo, Consolas, monospace;
+}
+*{ box-sizing: border-box; }
+html{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body{
+  margin: 0;
+  color: var(--ink);
+  font: 10pt/1.48 Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+}
+var{ font-style: italic; }
+sub, sup{ line-height: 0; }
+strong{ font-weight: 700; }
+
+.lbl{
+  display: block;
+  font: 700 6.8pt var(--mono);
+  letter-spacing: 1.1pt;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 1.5pt;
+}
+
+/* ---- masthead ---- */
+.mast{
+  border-left: 5pt solid var(--room);
+  padding: 0 0 0 11pt;
+  margin-bottom: 10pt;
+}
+.mast-top{
+  display: flex;
+  justify-content: space-between;
+  font: 7pt var(--mono);
+  letter-spacing: 1.2pt;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.mast h1{
+  font-size: 23pt;
+  line-height: 1.12;
+  margin: 3pt 0 2pt;
+}
+.mast .num{
+  font: 700 11pt var(--mono);
+  color: var(--room);
+  margin-right: 8pt;
+  vertical-align: 4pt;
+}
+.kicker{
+  margin: 0;
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--room);
+}
+
+/* ---- at a glance ---- */
+.glance{
+  display: grid;
+  grid-template-columns: 1fr 1fr 2.2fr;
+  grid-template-rows: auto auto;
+  border-top: 1.5pt solid var(--ink);
+  border-bottom: 0.6pt solid var(--rule);
+  margin: 0 0 9pt;
+}
+.glance > div{ padding: 5pt 8pt 5pt 0; }
+.glance > div + div{ padding-left: 8pt; border-left: 0.6pt solid var(--rule); }
+.glance strong{ display: block; font-size: 12.5pt; }
+.glance .sub{ font-size: 8.6pt; color: var(--ink-soft); }
+.glance .wide:nth-child(3){ grid-column: 3; grid-row: 1; }
+.glance .wide:nth-child(4){
+  grid-column: 1 / -1; grid-row: 2;
+  border-left: none; padding-left: 0;
+  border-top: 0.6pt solid var(--rule);
+}
+.glance .url{ font: 8pt var(--mono); color: var(--ink); }
+
+.intro{ margin: 0 0 8pt; }
+
+/* ---- objectives and routes ---- */
+.two{
+  display: grid;
+  grid-template-columns: 1.08fr 1fr;
+  gap: 14pt;
+  margin: 4pt 0 6pt;
+}
+h2{
+  font: 700 7.6pt var(--mono);
+  letter-spacing: 1.4pt;
+  text-transform: uppercase;
+  color: var(--stamp-deep);
+  margin: 0 0 4pt;
+}
+.obj-head{ margin: 0 0 2pt; font-style: italic; color: var(--ink-soft); font-size: 9pt; }
+ul, ol{ margin: 0 0 6pt; padding-left: 13pt; }
+li{ margin-bottom: 2.2pt; font-size: 9.4pt; }
+.routes li{ font-size: 9pt; }
+
+.how{
+  font-size: 9pt;
+  color: var(--ink-soft);
+  border-top: 0.6pt solid var(--rule);
+  padding-top: 5pt;
+  margin: 2pt 0 8pt;
+}
+.how strong{ color: var(--ink); }
+
+/* ---- the steps ---- */
+h2.band{
+  font-size: 7.6pt;
+  color: var(--room);
+  border-bottom: 1.5pt solid var(--room);
+  padding-bottom: 2pt;
+  margin: 10pt 0 6pt;
+  break-after: avoid;
+}
+h2.band.ext{ color: var(--stamp-deep); border-bottom-color: var(--stamp); }
+
+.step{
+  border-left: 3pt solid var(--room);
+  padding: 0 0 0 9pt;
+  margin: 0 0 9pt;
+  break-inside: avoid;
+}
+.step-ext{ border-left-color: var(--stamp); }
+.step header{
+  display: flex;
+  align-items: baseline;
+  gap: 7pt;
+  margin-bottom: 3pt;
+}
+.step-num{
+  font: 700 9pt var(--mono);
+  color: #fff;
+  background: var(--room);
+  min-width: 15pt;
+  height: 15pt;
+  line-height: 15pt;
+  text-align: center;
+  border-radius: 50%;
+  align-self: center;
+}
+.step-ext .step-num{ background: var(--stamp-deep); }
+.step h3{ font-size: 11pt; margin: 0; flex: 1; }
+.step-time{
+  font: 7.5pt var(--mono);
+  color: var(--ink-soft);
+  border: 0.6pt solid var(--rule);
+  padding: 0.5pt 5pt;
+  white-space: nowrap;
+}
+.step p{ margin: 0 0 4pt; font-size: 9.6pt; }
+.step .set{
+  font-size: 9pt;
+  background: var(--wash);
+  padding: 3pt 6pt;
+}
+.ask{ margin: 4pt 0 5pt; }
+.ask p{ margin-bottom: 1pt; }
+.ask .lbl{ color: var(--room); }
+.step-ext .ask .lbl{ color: var(--stamp-deep); }
+.lines span{
+  display: block;
+  height: 17pt;
+  border-bottom: 0.6pt solid #b9ad95;
+}
+.note{ font-size: 8.6pt !important; color: var(--ink-soft); font-style: italic; }
+
+/* ---- questions and the check ---- */
+.questions{ break-inside: auto; margin-top: 10pt; }
+.questions h2, .check h2{ break-after: avoid; }
+.questions ol{ padding-left: 15pt; }
+.questions li{ margin-bottom: 5pt; font-size: 9.6pt; break-inside: avoid; }
+.qtag{
+  font: 700 6.4pt var(--mono);
+  letter-spacing: 0.8pt;
+  border: 0.6pt solid currentColor;
+  padding: 0 3pt;
+  margin-right: 5pt;
+  vertical-align: 1pt;
+}
+.q-core{ color: var(--room); }
+.q-ext{ color: var(--stamp-deep); }
+
+.check{
+  break-before: page;
+  border-top: 1.5pt solid var(--ink);
+  padding-top: 5pt;
+}
+.check-sub{ font-size: 8.8pt; color: var(--ink-soft); font-style: italic; margin: 0 0 6pt; }
+.check li{ font-size: 9.2pt; margin-bottom: 4pt; }
+
+/* ---- the overview ---- */
+.map{
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6pt 0 12pt;
+  font-size: 9pt;
+}
+.map th{
+  font: 700 6.8pt var(--mono);
+  letter-spacing: 1pt;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: left;
+  border-bottom: 1.5pt solid var(--ink);
+  padding: 3pt 4pt;
+}
+.map td{
+  border-bottom: 0.6pt solid var(--rule);
+  padding: 4pt 4pt;
+  vertical-align: top;
+}
+.map .t{ text-align: right; white-space: nowrap; font-family: var(--mono); font-size: 8.4pt; }
+.map .room{ border-left: 3pt solid var(--room); padding-left: 6pt; width: 30%; font-weight: 700; }
+.map .room .num{ font: 700 8pt var(--mono); color: var(--room); margin-right: 5pt; }
+.map .room .file{ display: block; font: 400 7pt var(--mono); color: var(--ink-soft); }
+.map tr.part td{
+  font: 700 7pt var(--mono);
+  letter-spacing: 1pt;
+  text-transform: uppercase;
+  color: var(--stamp-deep);
+  padding-top: 8pt;
+  border-bottom: none;
+}
+.map tr.total td{ font-weight: 700; border-bottom: 1.5pt solid var(--ink); }
+.map tr{ break-inside: avoid; }
+.routes.wide, .prose{ margin-top: 8pt; break-inside: avoid; }
+.prose p{ margin: 0 0 5pt; }

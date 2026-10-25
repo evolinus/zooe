@@ -1,0 +1,90 @@
+id: adaptation
+num: 08
+title: The Adaptation Room
+kicker: Multi-trait selection vs. drift
+part: Part III — Neutral or selected
+focus: Selection adds directed change on top of drift; unrelated lineages in one habitat converge, and population size decides how well mutations are sorted.
+colour: #7A5C99
+before: The Drift (04), Selection (05) and Mutation (06) rooms. The Branching Room (02) explains the tanglegram.
+
+# intro
+Three related founder fish each split into a Neutral lineage, where nothing is selected, and a Habitat lineage living in a Stream, Pond or River. Five traits mutate and are sorted by drift and selection over thousands of generations. Because every Habitat lineage has a Neutral twin from the same ancestor, you can see exactly what selection adds.
+
+# objectives core
+- Use a Neutral control to measure what selection contributes beyond drift.
+- Explain convergent evolution: unrelated lineages becoming alike in the same habitat.
+- Show that mutations arise at the same rate whatever the habitat; selection changes which ones fix.
+- Explain why convergence can mislead a tree built from appearance.
+
+# objectives ext
+- Use the waiting times 1/$μ$ and 1/($μs$) to predict the pace of adaptation.
+- Explain, using 4$Ns$, why small populations fix more changes but sort them worse.
+- Design and interpret a controlled comparison using the room's presets.
+
+# routes
+- **45-minute practical (BSc):** steps 1–4 and questions 1–3. Runs take a few seconds each.
+- **Revision session for Part III:** this room after Selection and Mutation, using step 3 as the control-experiment discussion.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 12 | Neutral against Habitat
+set: The defaults: $G$ = 5000; Gigi in the Stream, Mario in the Pond, Nani in the River; every $s$ = 0.20, every $μ$ = 0.010, every $N$ = 50.
+predict: For each founder, which lineage will have travelled further from the ancestor by the end: the Neutral one or the Habitat one? By a little, or by a lot?
+run: Press **Run Simulation** and watch the two lineages of each founder evolve side by side.
+look: the table *Each lineage against its own founder*: a row for Neutral, one for Habitat, and the mean of each row.
+explain: Both lineages had the same mutation rate and the same population size. What made the difference?
+
+# step core 10 | Same habitat, different founders
+set: Press the preset **Same habitat, different founders** (all three Habitat lineages in the Stream). It runs by itself.
+predict: The three founders started different. Will their three Habitat lineages end up more alike than their three Neutral lineages, or less?
+run: Let the preset run, and read the status line.
+look: the *Final divergence matrix*, comparing the three Habitat fish with one another and the three Neutral fish with one another.
+explain: Name the pattern you see. Why does a shared habitat make unrelated lineages converge?
+
+# step core 8 | The control experiment
+set: Press the preset **Turn selection off** (every $s$ = 0).
+predict: Each Habitat lineage is now a second Neutral lineage. How big will the gap between the two rows of the table be?
+run: Let it run. Then run it once more with **Run Simulation**.
+explain: Why is this the right control for step 1? What does any gap that remains tell you about a single run?
+
+# step core 5 | Does the tree see through convergence?
+set: Run the **Same habitat, different founders** preset again.
+predict: Will the reconstructed tree group the Habitat lineages by ancestry (each with its own Neutral twin) or by habitat (the three Stream fish together)?
+run: Scroll to the *Tanglegram Comparison*.
+explain: Why is a tree built from final appearance at risk when unrelated lineages share an environment?
+
+# step ext 12 | Small against large populations
+set: Press the preset **Small vs large population**: three identical founders, all in the Stream, $N$ = 10, 50 and 200, $s$ = 0.05.
+predict: Which population will fix the most changes? Which will end up best adapted?
+run: Let the preset run, then run it twice more.
+look: the *Sel. −* row of the trait tables and the *Habitat adapted* row of the table, not the Habitat Δ row.
+explain: Use the ratio of selected to neutral fixation, 4$Ns$ (2 at $N$ = 10, 40 at $N$ = 200), to explain why the small population travels as far but less of its journey goes the way the habitat prefers.
+
+# step ext 10 | Supply against fate
+set: **Restore defaults**, then run once.
+predict: With $μ$ = 0.010 per trait per generation, how long should a locus wait for a new mutation? About half of mutations step the way the habitat prefers and fix with $u$ ≈ 2$s$; how long should it wait for an *adaptive* substitution? Will Habitat lineages receive more mutations than Neutral ones?
+plines 3
+run: Open the trait tables and compare the counts of new mutations in Neutral and Habitat lineages.
+explain: Mutations arrive at the same rate in both. Where, then, does the difference between the lineages come from?
+
+# step ext 8 | Starve it of mutations
+set: Open *More parameters* and set every $μ$ to **0.002**, keeping $G$ = 5000.
+predict: Using 1/($μs$), how long is the wait for one adaptive substitution per trait now? Will the Habitat lineages reach their habitat's optimum by generation 5000?
+run: Run twice.
+explain: When is adaptation limited by the supply of mutations rather than by selection? How would standing variation (present before the run started) change that?
+
+# questions
+- [core] Dolphins and ichthyosaurs share a streamlined body. Explain how this room models that, and why their shape says little about their ancestry.
+- [core] Why does the room need a Neutral lineage at all? What would you be unable to conclude without it?
+- [core] "The stream causes slender-bodied mutations." Correct this statement using what you saw in step 6.
+- [ext] Real traits are polygenic, with many loci of small effect. How would that change the speed and repeatability of adaptation in this room?
+- [ext] A small island population shows unusual traits. How would you test whether they are adaptations or the products of drift?
+- [ext] Explain why a larger population "buys no extra mutations" in this room. Under what definition of mutation rate would a larger population get more?
+
+# check
+- **Step 1.** The Habitat lineages travel much further from their founders than the Neutral ones. The gap is what selection adds on top of drift.
+- **Step 2.** The three Habitat fish end up much more alike than the three Neutral fish: convergent evolution, produced by shared selection rather than shared ancestry.
+- **Step 3.** The two rows come out similar; any remaining gap is the size of one run's chance difference, which is why a control is needed.
+- **Step 4.** The reconstruction tends to pull the Habitat lineages together, misplacing them away from their own Neutral twins.
+- **Step 5.** The small population fixes many changes, many of them in directions the habitat does not prefer; the large one adapts most faithfully. Measured over many runs about 1.9, 3.3 and 3.5 of 4 traits end adapted at $N$ = 10, 50 and 200.
+- **Step 6.** A new mutation every 1/$μ$ = 100 generations per locus; an adaptive substitution about every 1/($μs$) = 500. Neutral and Habitat lineages receive mutations at the same rate; what differs is which ones fix.
+- **Step 7.** At $μ$ = 0.002 the wait for an adaptive substitution is about 2,500 generations per trait, so by 5000 the lineages are only partly adapted: adaptation becomes limited by supply.

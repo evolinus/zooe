@@ -1,0 +1,30 @@
+title: Teaching with the Evolutionary Laboratories
+kicker: Routes, timings and objectives for all twelve rooms
+
+# intro
+Every room has a printable guide of its own, linked from the room's *Start here* panel. Each guide opens with learning objectives and suggested routes, then gives a **core path** sized for a BSc practical and an **extension** for MSc students. Every step asks for a prediction before the run and an explanation after it, and every guide ends with discussion questions and a page of notes for checking the reasoning. The table below is the whole set at a glance; times are minutes of active work, not counting a class discussion.
+
+# section How the guides are meant to be used
+Students write a prediction before they press anything, then explain whether the run matched. A wrong prediction they can account for is worth more than a right one they guessed, and is the most useful thing to mark.
+- **In class:** print the core-path pages; hold back the last page (*Checking your reasoning*) until the discussion, or print without it.
+- **Independently:** the whole guide works as self-study, with the last page as the check.
+- **For assessment:** the prediction–explanation pairs and the worksheet questions (tagged BSc or MSc) make short written tasks; the extension steps make good MSc problem-sheet questions.
+
+# routes A BSc course in six practicals of about two hours
+- **Practical 1 — mutation and divergence:** Copying (01) and Branching (02).
+- **Practical 2 — the fate of a mutation:** Fate (03) and Drift (04).
+- **Practical 3 — selection and its limits:** Selection (05) and Mutation (06).
+- **Practical 4 — populations in contact:** Migration (07) and Hardy–Weinberg (11).
+- **Practical 5 — adaptation:** Adaptation (08), with Linkage (12) part 1 if time allows.
+- **Practical 6 — speciation:** Speciation (09), with Reproduction (10) as the opening demonstration.
+
+# routes An MSc module
+- Set each room's core path as preparation before class, with the *Checking your reasoning* page.
+- Spend contact time on the extension steps, which ask for calculations to be made before the run and checked against it.
+- The MSc questions of Selection, Migration, Speciation and Linkage make a good written assignment on the interplay of drift, selection and gene flow.
+
+# routes Single sessions
+- **Drift and selection in 90 minutes:** Drift (04) and Selection (05) core paths.
+- **Evolution is not progress (one hour, first-year):** Copying (01) steps 1–4 and Mutation (06) steps 1–4.
+- **Population genetics revision (two hours):** Hardy–Weinberg (11), Drift (04) and Migration (07) core paths.
+- **Why sex? (one hour):** Reproduction (10) and Linkage (12) steps 3 and 7.

@@ -1,0 +1,87 @@
+id: predator
+num: 07
+title: The Predator Room
+kicker: Predator–prey cycles
+part: Part IV — Being eaten
+focus: Predator and prey cycle with the predator lagging; a prey ceiling damps the cycles, a saturating predator can destabilise them, and enrichment feeds the level above.
+colour: #8C3F5D
+before: The Crowding (02) and Resource (03) rooms. The Overshoot Room (04) gives a second kind of cycle to compare.
+
+# intro
+Two species, one of which eats the other. Three versions of the same pair of equations each repair an assumption of the one before: classic Lotka–Volterra, prey with a carrying capacity, and a predator that takes time to handle each prey. This guide asks why the pair cycles, and what makes the cycles grow, shrink or settle.
+
+# objectives core
+- Explain why predator peaks lag behind prey peaks.
+- Distinguish neutral cycles (size set by the starting point) from a stable equilibrium and from a limit cycle.
+- Show how giving the prey a carrying capacity damps the cycles.
+- Describe the paradox of enrichment.
+
+# objectives ext
+- Use $N$* = $m$/($a$($e$ − $mh$)) to show that the prey equilibrium contains no prey parameters.
+- Predict the critical $K$ above which a saturating predator destabilises the system.
+- Explain why large classic cycles can drive a population to extinction.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Two-room comparison:** this room with the Overshoot Room, through question 3.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 10 | Neutral cycles
+set: Preset **Neutral cycles** (classic Lotka–Volterra).
+predict: Will the cycles grow, shrink, or stay the same size? If you start from a different point, will you get the same cycle?
+run: Run. Then click several different points on the phase plane.
+look: the orbits on *Phase plane & nullclines*.
+explain: Why is the cycle you get the cycle you started with? Why is that biologically implausible?
+
+# step core 8 | The lag
+set: The same preset.
+predict: Which peaks first, prey or predator? By how much of a cycle?
+run: Run and look at the small dots that mark the peaks.
+explain: Explain the lag step by step: what happens to each species during one turn of the cycle?
+
+# step core 10 | Prey with a ceiling
+set: Preset **Damped to equilibrium** (prey with a ceiling, $K$ = 300).
+predict: Click the same starting points as in step 1. Will the runs still keep their own cycles?
+run: Run, then click several points on the phase plane.
+explain: Why does prey self-limitation pull every run to the same equilibrium?
+
+# step core 8 | The paradox of enrichment
+set: Preset **Paradox of enrichment** (predator that gets full, $K$ = 400).
+predict: Will enriching the prey's environment (raising $K$) make the system more stable or less? Drag $K$ down slowly: when will the cycling stop?
+run: Run, then lower $K$ step by step, running each time.
+explain: Why can enrichment destabilise a predator–prey pair?
+
+# step ext 10 | Who controls whom
+set: Prey with a ceiling. Change the prey's $r$ and $K$; then change the predator's $m$.
+predict: Which of these changes will move the prey equilibrium $N$*? Which will move the predator equilibrium $P$*? Calculate $N$* from $N$* = $m$/($a$($e$ − $mh$)) for the predator that gets full, with the default parameters.
+run: Run after each change and read *Predicted vs. measured*.
+explain: Why is the prey's abundance set by the predator's biology? What does that imply for a trophic cascade?
+
+# step ext 10 | The critical K
+set: Predator that gets full, defaults ($a$ = 0.02, $h$ = 0.20, $e$ = 0.40, $m$ = 0.30).
+predict: The equilibrium is stable when it lies to the right of the hump of the prey nullcline, which peaks at ($K$ − 1/($ah$))/2. Calculate the $K$ at which stability is lost.
+run: Run at $K$ just below and just above your value.
+explain: Explain the result graphically, using where the predator nullcline crosses the hump.
+
+# step ext 8 | Cycles that crash
+set: Preset **Cycles that crash** (classic, prey start at 250, predators at 8).
+predict: Which species will fall below half an individual and be lost, and why?
+run: Run, using a logarithmic axis.
+explain: Why are large neutral cycles dangerous for a real population? What does the room's half-individual floor stand for?
+
+# questions
+- [core] The Canadian lynx and snowshoe hare records show regular cycles. List two assumptions of this room that the real system breaks.
+- [core] Why would a predator with alternative prey be less likely to drive its prey to extinction?
+- [core] Compare the cycles here with those of the Overshoot Room. What causes each?
+- [ext] Rosenzweig (1971) named the paradox of enrichment. Why has it been hard to demonstrate in the field?
+- [ext] Explain the difference between a neutral cycle and a limit cycle in terms of what happens after a small perturbation.
+- [ext] How could prey refuges stabilise a predator–prey system?
+
+# check
+- **Step 1.** The cycles stay the same size; each starting point has its own orbit. Real populations are constantly perturbed, so this would make their cycles wander without limit.
+- **Step 2.** Prey peak first; predators peak about a quarter of a cycle later. Prey grow while predators are few; predators then build up, eat the prey down, and starve.
+- **Step 3.** Every start spirals into the same equilibrium: prey self-limitation damps the oscillation.
+- **Step 4.** At $K$ = 400 the system settles into a limit cycle; lowering $K$ below about 340 brings it back to a stable equilibrium. Enrichment destabilises.
+- **Step 5.** Prey $r$ and $K$ move only $P$*; predator parameters move $N$*. With handling, $N$* = 0.3/(0.02 × (0.4 − 0.06)) ≈ 44.
+- **Step 6.** The hump peaks at ($K$ − 250)/2; stability is lost when that exceeds 44, so at $K$ ≈ 338.
+- **Step 7.** The orbit is so large that the prey are eaten down below half an individual within the first few time units and are lost; with nothing to eat, the predators then dwindle to extinction too. The floor stands for the fact that real populations come in whole individuals.

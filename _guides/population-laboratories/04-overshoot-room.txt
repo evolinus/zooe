@@ -1,0 +1,87 @@
+id: overshoot
+num: 04
+title: The Overshoot Room
+kicker: Delayed density dependence: cycles &amp; chaos
+part: Part II — Where the ceiling comes from
+focus: One generation of delay turns self-regulation into overshoot: damped oscillations, cycles and deterministic chaos, depending on r and on the shape of competition.
+colour: #A8442A
+before: The Crowding Room (02).
+
+# intro
+Many organisms breed once a year, so this year's crowding sets next year's numbers. That one-generation lag is enough to break the tidy approach to $K$. Nothing random is ever added in this room: every wobble comes from the density dependence itself.
+
+# objectives core
+- Explain how a time lag in density dependence causes overshoot.
+- Describe the sequence from smooth approach to damped oscillation, cycles and chaos as $r$ rises.
+- Contrast scramble (Ricker) with contest (Beverton–Holt) competition.
+- Explain sensitivity to initial conditions in a deterministic system.
+
+# objectives ext
+- Use the slope of the map at $K$ (1 − $r$ for the Ricker) to predict where stability is lost.
+- Read a cobweb diagram and a bifurcation diagram.
+- Estimate a prediction horizon under chaos.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Lecture on chaos (20 minutes):** steps 2 and 4 projected.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 8 | From glide to wobble
+set: Ricker (scramble), $K$ = 500, $N$<sub>0</sub> = 30, 80 generations. $r$ = **0.5**, then $r$ = **1.8**.
+predict: Sketch both runs. Which approaches $K$ smoothly, and which overshoots?
+run: Run both.
+look: the generation-by-generation dots and the *Long-run behaviour* panel.
+explain: Why does a faster-growing population overshoot $K$?
+
+# step core 12 | Cycles, then chaos
+set: Ricker. $r$ = **2.1**, then **2.6**, then **2.8**.
+predict: For each, will the population settle, cycle, or never repeat?
+run: Run each, reading the *Long-run behaviour* panel and the gold line on the bifurcation diagram.
+explain: Describe the sequence you saw. Where on the bifurcation diagram does each run sit?
+
+# step core 8 | Contest competition
+set: **Beverton–Holt** (contest), $r$ = 2.8.
+predict: Will this population cycle or become chaotic at the same high rate?
+run: Run.
+explain: In contest competition some individuals get enough and others get nothing; in scramble everyone gets a share. Why does that difference decide whether the population can overshoot?
+
+# step core 7 | Two populations, one thousandth apart
+set: Ricker, $r$ = 2.8. **Sensitivity test**: On.
+predict: The second population differs by one thousandth of an individual. Will the two stay together?
+run: Run. Then repeat at $r$ = 1.8.
+explain: How can a system with no randomness be unpredictable? Why does the same tiny difference not matter at $r$ = 1.8?
+
+# step ext 10 | Where stability is lost
+set: Ricker; use the History Scrubber to step one generation at a time and watch the cobweb.
+predict: For $N$′ = $N$e<sup>$r$(1 − $N$/$K$)</sup>, the slope at $N$ = $K$ is 1 − $r$. The equilibrium is stable when |1 − $r$| < 1. At what $r$ does the approach start to oscillate, and at what $r$ does the equilibrium become unstable?
+run: Check with runs at $r$ = 0.9, 1.1, 1.9 and 2.1, and on the bifurcation diagram.
+explain: Explain, using the cobweb, why a slope between 0 and −1 gives damped oscillation and a slope below −1 gives growing ones.
+
+# step ext 10 | The discrete logistic
+set: **Discrete logistic**, $r$ = 1.8, 2.2, 2.5 and 2.7.
+predict: Will this map follow the same sequence as the Ricker at the same $r$? What could go wrong at high $r$ that cannot happen with the Ricker?
+run: Run each, and watch the bifurcation diagram.
+explain: Compare the shapes of the two maps on the cobweb. Why can the discrete logistic send $N$ below zero?
+
+# step ext 10 | A prediction horizon
+set: Ricker, sensitivity test on. $r$ = 2.8, then $r$ = 3.4.
+predict: How many generations until the two populations are visibly different, at each $r$?
+run: Run and step through with the scrubber to find the generation where they part.
+explain: If you could measure a real population to within 0.1%, how far ahead could you forecast it under chaos? What does this mean for interpreting irregular census data?
+
+# questions
+- [core] Why might a long-lived animal with overlapping generations be less prone to these cycles than an annual insect?
+- [core] Lemming and vole numbers fluctuate dramatically. Is this room's explanation the only possible one? Name another room that offers an alternative.
+- [core] "Chaotic" in everyday speech means random. Why is that not what it means here?
+- [ext] Robert May's 1976 paper showed this behaviour in a simple map. Why was that result so surprising to ecologists at the time?
+- [ext] Real census data contain noise. How could you tell deterministic chaos from random fluctuation in a time series?
+- [ext] Explain why Beverton–Holt competition is monotone for every $r$, using the shape of the map.
+
+# check
+- **Step 1.** At $r$ = 0.5 the population glides into $K$; at 1.8 it overshoots and oscillates with shrinking swings.
+- **Step 2.** About $r$ = 2.1: a two-generation cycle. About 2.6: a four-cycle (it splits again near 2.53). About 2.8: chaos, never repeating.
+- **Step 3.** Beverton–Holt approaches $K$ smoothly at any $r$: contest competition cannot overcompensate, so there is nothing to overshoot.
+- **Step 4.** At $r$ = 2.8 the two runs part within a few dozen generations; at 1.8 they stay together, because small differences shrink at a stable equilibrium.
+- **Step 5.** Oscillation begins above $r$ = 1 (the slope turns negative) and the equilibrium becomes unstable above $r$ = 2.
+- **Step 6.** The discrete logistic follows a similar sequence, a little faster (two-cycle above 2, four-cycle near 2.45, chaos near 2.57), and at high $r$ it can produce negative $N$, which stops the run.
+- **Step 7.** The higher the $r$, the faster the two diverge. A 0.1% measurement error grows to the size of the population within a few tens of generations under chaos.

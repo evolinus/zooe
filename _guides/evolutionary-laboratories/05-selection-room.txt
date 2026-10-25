@@ -1,0 +1,89 @@
+id: selection
+num: 05
+title: The Selection Room
+kicker: Wright–Fisher + selection
+part: Part III — Neutral or selected
+focus: Selection tilts the odds, drift still draws the sample; what matters is N·s, and a rare recessive advantage is nearly invisible.
+colour: #388047
+before: The Drift Room (04): this room is the same sampling with one allele favoured.
+
+# intro
+Allele A₁ now carries a fitness advantage $s$. Each generation the frequency is reweighted by fitness, and then sampled at random exactly as in the Drift Room. This guide asks when selection wins that contest, and when chance does.
+
+# objectives core
+- Explain how a selective advantage changes the expected allele frequency each generation, and why the realised path still wanders.
+- Predict how population size changes how reliably a favoured allele is fixed.
+- Compare dominant, additive and recessive advantages in a diploid population.
+- State the rule of thumb that the product $Ns$, not $s$ alone, decides whether selection or drift dominates.
+
+# objectives ext
+- Use Kimura's $u(p)$ to predict fixation probabilities and test them against batches of runs.
+- Explain, using Hardy–Weinberg proportions, why a rare recessive allele is nearly invisible to selection.
+- Use E[$T$<sub>fix</sub>] ≈ (2/$s$) ln $M$ to predict how long a sweep takes.
+
+# routes
+- **45-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Two-room session (90 minutes):** the Drift Room core path, then this one.
+- **MSc:** steps 5–7 and questions 4–6. Step 6 pairs well with the Hardy–Weinberg Room.
+
+# step core 10 | Selection in a large population
+set: Haploid, $N$ = **200**, $p$ = 0.50, $s$ = **0.10**.
+predict: The dashed line shows what selection alone would do. Will the real run follow it closely or wander far from it? About how many generations until A₁ is nearly fixed?
+run: Press **Run Simulation**. Then run again.
+look: the solid trajectory against the dashed line, and the *Δp (selection shift)* readout.
+explain: Why does a large population track the deterministic line so closely?
+
+# step core 10 | The same advantage in a small population
+set: Haploid, $N$ = **10**, $p$ = 0.50, $s$ = 0.10.
+predict: A₁ is still 10% better. Out of ten runs, how many will end with A₁ fixed?
+run: Press **Run 10 Simulations**, twice, and count the runs in which A₁ was lost.
+look: how far the ten trajectories stray from the dashed line.
+explain: How can a genuinely better allele be lost? Use the words *sampling* and *population size* in your answer.
+
+# step core 10 | Dominance
+set: **Diploid**, $N$ = 50, $p$ = 0.50, $s$ = **0.20**. Compare $h$ = **1** (A₁ dominant) with $h$ = **0** (A₁ recessive).
+predict: Sketch both trajectories. Which rises faster at the start? Which takes longer to finish the job?
+run: Run each setting twice, and compare the shapes of the curves.
+explain: When A₁ is common, most A₂ copies sit in heterozygotes. Use that to explain why the dominant allele slows down near fixation — and why the recessive one is slow at the start.
+
+# step core 5 | Switch selection off
+set: $s$ = **0**.
+predict: Which room is this now, and what will the dashed line do?
+run: Run once.
+explain: Why is it useful to have the neutral case available inside the same room?
+
+# step ext 12 | Kimura's prediction
+set: Haploid, $s$ = 0.10, starting from a single copy: $N$ = 10 with $p$ = 0.10, then $N$ = 100 with $p$ = 0.01.
+predict: Use $u(p)$ = (1 − e<sup>−2$Nsp$</sup>)/(1 − e<sup>−2$Ns$</sup>) to calculate the fixation probability in each case, and the neutral value $p$ for comparison. By what factor does the advantage multiply the chance of fixation in each population?
+plines 3
+run: Press **Run 10 Simulations** three times at each setting and count fixations.
+explain: Your counts are small samples; are they consistent with your predictions? Why does the same $s$ multiply the chance by so much more in the larger population?
+
+# step ext 12 | A rare recessive advantage
+set: Diploid, $N$ = 100, $p$ = **0.05**, $s$ = 0.20. Run with $h$ = 1, then $h$ = 0.5, then $h$ = 0.
+predict: Rank the three in how often A₁ will be fixed. Roughly what fraction of runs will fix the recessive allele?
+run: **Run 10 Simulations** twice at each $h$ and record fixations out of 20.
+explain: At $p$ = 0.05, what fraction of A₁ copies sit in heterozygotes? Why does that make $h$ matter so much while the allele is rare?
+
+# step ext 8 | How long does a sweep take?
+set: Haploid, $N$ = 200, $p$ = 0.01; $s$ = 0.05, then $s$ = 0.20.
+predict: Use E[$T$<sub>fix</sub>] ≈ (2/$s$) ln $M$ to predict the time a successful sweep takes at each $s$.
+run: Run single simulations until you have one fixation at each $s$; note the generation it fixed.
+explain: Why does the time depend on 1/$s$ but only on the logarithm of $M$?
+
+# questions
+- [core] A new antibiotic-resistance mutation gives a 5% advantage. Is it more likely to spread in a population of 10⁹ bacteria or in a population of 50 birds? Explain.
+- [core] "Natural selection always picks the best allele." Give two reasons from this room why that is not quite true.
+- [core] Why does the room say the $N$ in $Ns$ should really be an effective population size?
+- [ext] Derive why $u$ ≈ 2$s$ for a single new beneficial copy when $Ns$ ≫ 1, and why $u$ ≈ 1/$N$ when $|Ns|$ ≪ 1.
+- [ext] Many human disease alleles are recessive and rare. Explain why selection against them is so slow, using step 6.
+- [ext] How would you expect a slightly *harmful* allele ($s$ = −0.01) to behave at $N$ = 20? At $N$ = 2000?
+
+# check
+- **Step 1.** At $N$ = 200 the run hugs the dashed line; A₁ is close to fixation after about 50 generations (its odds grow by 10% a generation, and ln 99/ln 1.1 ≈ 48).
+- **Step 2.** At $N$ = 10, A₁ is lost in roughly a quarter of runs from $p$ = 0.5 (Kimura's formula gives fixation 0.73). Sampling noise is as large as the selective push.
+- **Step 3.** $h$ = 1 rises fast early but crawls at the end, because the last A₂ copies hide in heterozygotes where they cost nothing. $h$ = 0 starts slowly and finishes fast.
+- **Step 4.** With $s$ = 0 the room is the Drift Room; the dashed line is flat at the starting $p$.
+- **Step 5.** $N$ = 10, $p$ = 0.1: $u$ ≈ 0.21 against 0.10 neutral — the advantage only doubles the chance. $N$ = 100, $p$ = 0.01: $u$ ≈ 0.18 against 0.01 neutral — eighteen times. In a larger population drift is weaker, so the same $s$ counts for more; three batches of ten (30 runs) will match only roughly.
+- **Step 6.** In 20 runs expect nearly all to fix at $h$ = 1, most at $h$ = 0.5, and only about a third at $h$ = 0. At $p$ = 0.05, 95% of A₁ copies are in heterozygotes, where a recessive advantage is invisible.
+- **Step 7.** With $M$ = 200: about 210 generations at $s$ = 0.05 and about 53 at $s$ = 0.2, give or take a lot for single runs.

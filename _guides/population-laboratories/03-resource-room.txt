@@ -1,0 +1,88 @@
+id: resource
+num: 03
+title: The Resource Room
+kicker: Where carrying capacity actually comes from
+part: Part II — Where the ceiling comes from
+focus: K emerges from a resource budget; consumers draw the resource down to R* = m/(e·a), which no amount of supply can change.
+colour: #B8862E
+before: The Crowding Room (02), where $K$ was simply given.
+
+# intro
+A resource is supplied at rate $S$, decays at rate $l$ and is eaten by consumers, whose births depend on how much they eat. Nothing in the equations is a carrying capacity — and yet one appears. This guide asks where it comes from and what sets it.
+
+# objectives core
+- Explain how a carrying capacity emerges from a supplied and consumed resource.
+- Define $R$* as the resource level at which a consumer breaks even, and read it from the room.
+- Predict that richer supply raises the number of consumers but not $R$*.
+- Explain why carrying capacity is a property of a species *in an environment*, not of the species alone.
+
+# objectives ext
+- Calculate $R$* = $m$/($ea$) and $N$* = ($S$ − $lR$*)/($aR$*) by hand and check them.
+- Predict when the approach to equilibrium is a damped spiral and when it is smooth.
+- State the condition $S$/$l$ > $R$* for the consumer to persist.
+
+# routes
+- **35-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Problem class:** steps 5 and 7 on paper first, then checked in the room.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 10 | The ceiling nobody typed in
+set: The defaults: $S$ = 15, $l$ = 0.02, $R$<sub>0</sub> = 70, $a$ = 0.008, $e$ = 0.80, $m$ = 0.32, $N$<sub>0</sub> = 5, time span 120.
+predict: As consumers build up, what will happen to the resource? Will the consumers keep growing, crash, or settle?
+run: Press **Run**.
+look: the dashed $R$* line on *Resource over time*, the dashed $N$* line on *Consumers over time*, and the readouts in *The emergent ceiling*.
+explain: Every time the consumer curve turns over, where is the resource? Why?
+
+# step core 8 | Double the supply
+set: $S$ = **30**.
+predict: What will happen to $R$*? To $N$*?
+run: Run.
+explain: Why does enriching the environment change how many consumers it holds but not the resource level they leave behind?
+
+# step core 8 | The environment shifts
+set: $S$ back to 15. Open *More parameters*, **Environment shift**: On, multiplier 0.50.
+predict: Halfway through, supply halves. What will happen to the consumers, and to the resource, after the shift?
+run: Run and use the History Scrubber around the halfway point.
+explain: The consumers have no new traits and get no warning. What do they "track"?
+
+# step core 7 | A tougher consumer
+set: Shift off. $m$ = **0.16** (half the default mortality).
+predict: What will $R$* be now? Will there be more consumers or fewer?
+run: Run.
+explain: What does a lower $R$* mean in terms of what a consumer can survive on? (Keep this in mind for the Coexistence Room.)
+
+# step ext 12 | By hand, then by machine
+set: Defaults, but $e$ = **0.40**.
+predict: Calculate $R$* = $m$/($ea$) and $N$* = ($S$ − $lR$*)/($aR$*).
+plines 3
+run: Run and compare with *The emergent ceiling*.
+explain: Which parameters appear in $R$*, and which only in $N$*? What does that tell you about which parts of the system each one is controlled by?
+
+# step ext 10 | Spiral or slide?
+set: Defaults; then $S$ = **40** and resource loss $l$ = **0.40**, so that the resource now decays faster than the consumers die ($l$ > $m$).
+predict: The room's methods say a spiral needs $m$ > $l$ and $S$² < 4$mR$*($S$ − $lR$*). Which setting should spiral into equilibrium?
+run: Run both and compare the *Resource–consumer phase plane*.
+explain: Why does a quickly decaying resource damp out the oscillation?
+
+# step ext 8 | A supply too poor to live on
+set: $S$ = **1.0**, $l$ = **0.05**, others at defaults.
+predict: Compare $S$/$l$ with $R$*. Can the consumer persist?
+run: Run.
+explain: State the persistence condition in words. Why is it the resource the environment can maintain *without* consumers that matters?
+
+# questions
+- [core] A lake receives twice as much phosphorus after farming intensifies upstream. According to this room, what happens to the algae-grazing zooplankton, and to the phosphorus level?
+- [core] Why is it misleading to say "the carrying capacity of a cow is 1 hectare"?
+- [core] Which consumer is the better competitor: one that eats a lot, or one with a low $R$*? Explain.
+- [ext] The resource here is abiotic, like a nutrient in a chemostat. What changes if the resource is itself a population that grows?
+- [ext] The functional response is linear. What would a saturating response do to $R$* and to the stability of the equilibrium?
+- [ext] Explain how this model relates to the logistic: under what conditions does the consumer's dynamics look logistic?
+
+# check
+- **Step 1.** The resource crashes as consumers build up, then both settle in damped oscillations: $R$* = 50 and $N$* = 35. Each turn of the consumer curve coincides with the resource crossing $R$*.
+- **Step 2.** $R$* stays at 50; $N$* rises to about 72.5. Supply does not appear in $R$*.
+- **Step 3.** After the shift the consumers fall to about 16 while the resource returns to 50: the consumers track the supply, the resource is held at $R$*.
+- **Step 4.** $R$* halves to 25; $N$* rises to about 73. A low $R$* means surviving on less.
+- **Step 5.** $R$* = 0.32/(0.4 × 0.008) = 100; $N$* = (15 − 2)/(0.008 × 100) ≈ 16. $R$* depends only on the consumer; $N$* also on the supply.
+- **Step 6.** The default spirals in ($m$ > $l$, and 225 < 896). With $l$ = 0.4 > $m$ there is no spiral: the consumers settle at $N$* = 50 without circling. (Supply was raised so that $S$/$l$ stays above $R$*.)
+- **Step 7.** $S$/$l$ = 20 < $R$* = 50, so the consumer cannot persist and dies out.

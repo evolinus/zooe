@@ -1,0 +1,85 @@
+id: reproduction
+num: 10
+title: The Reproduction Room
+kicker: Two ways to make the next generation
+part: Part IV — The machinery underneath
+focus: Asexual reproduction doubles numbers but copies genotypes; sex pays a two-fold cost and makes genotypes that never existed before.
+colour: #4F7CAC
+before: Nothing beyond the README. The Copying Room (01) explains why copying errors are switched off here.
+
+# intro
+Two founders reproduce side by side for four generations. On the left, every individual makes two exact clones; on the right, two parents make two offspring, each with one recombined copy from each parent. This guide asks what each way of reproducing buys, and what it costs.
+
+# objectives core
+- Describe how asexual and sexual reproduction make the next generation.
+- Predict head counts and numbers of distinct genotypes on each side.
+- Identify a crossover and explain how recombination creates new combinations.
+- State the two-fold cost of sex and the advantage it buys.
+
+# objectives ext
+- Calculate how the cost of sex compounds over generations.
+- Compare the variation created by crossing over with that from independent assortment (2<sup>$n$</sup> gametes).
+- Use the full-sib recursion to explain why this sexual line understates what sex generates.
+
+# routes
+- **25-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Lecture demonstration (10 minutes):** steps 1 and 2 with the class predicting the two numbers.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes), ideally followed by the Linkage Room's Part 2.
+
+# step core 5 | Numbers
+set: Nothing to set. Press **Reset** if a run is already on screen.
+predict: Both sides start with two individuals. How many individuals will each side have after four generations?
+run: Press **Auto-play** and watch both panels to the end.
+look: *Population now* under each heading.
+explain: Why does one side double each generation while the other only replaces itself?
+
+# step core 8 | Variety
+set: The run you just made.
+predict: How many genetically *distinct* individuals will each side have at the end?
+run: Read *distinct genotypes* under each heading. Press **Reset** and **Auto-play** again.
+explain: The asexual side has many more individuals. Why does it not have more genotypes? Why does the sexual side keep producing genotypes that have never existed before?
+
+# step core 7 | Find a crossover
+set: Any finished run.
+predict: In a sexual offspring, what will a chromosome copy look like if a crossover happened during meiosis in its parent?
+run: Look for a circle on the right where one half changes shade partway down. Step through with **Next generation** if that is easier.
+explain: Describe in your own words what happened at that point in meiosis, and why the asexual circles never show it.
+
+# step core 5 | The trade-off
+set: Nothing to change.
+predict: In a stable environment, which strategy will leave more descendants? In a changing one?
+explain: Use the room's example of aphids and water fleas to explain why many species do both.
+
+# step ext 10 | The cost compounds
+set: Nothing to set; this step is a calculation checked against the run.
+predict: Asexual $N(t)$ = 2<sup>$t$+1</sup>, sexual $N(t)$ = 2. Calculate the ratio after 3, 10 and 20 generations.
+run: Check the first value against the panels at generation 3.
+explain: The room assumes males contribute nothing but genes. How would paternal care change the size of the cost? Give an example.
+
+# step ext 10 | How much variety does the drawing leave out?
+set: Any run.
+predict: Each individual here has one chromosome pair and one crossover. Independent assortment alone gives 2<sup>$n$</sup> gametes from $n$ chromosome pairs. How many is that for a human ($n$ = 23)? For this room?
+run: Reset and auto-play three times. Does the sexual side ever produce the same genotype twice?
+explain: Where does the variety on the right-hand side come from in this room, and where does most of it come from in a real genome?
+
+# step ext 8 | Sibling mating
+set: Look at the sexual side from generation 2.
+predict: The only mates available are siblings. Using $H_t$ = ½$H$<sub>$t$−1</sub> + ¼$H$<sub>$t$−2</sub> and $H$<sub>0</sub> = $H$<sub>1</sub> = 1, calculate $H$ for generations 2, 3 and 4.
+explain: What does this inbreeding do to the variety a sexual line can generate over many generations? Why does the room say its sexual panel *understates* what sex does in a real population?
+
+# questions
+- [core] Why is the two-fold cost of sex sometimes called the "cost of males"?
+- [core] A disease that kills one genotype arrives at generation 4. What happens to each side?
+- [core] Bdelloid rotifers have reproduced asexually for millions of years. Why is that considered a puzzle?
+- [ext] Explain Muller's ratchet and why it bites hardest in small asexual populations.
+- [ext] Summarise the Red Queen hypothesis for the maintenance of sex. What kind of evidence supports it?
+- [ext] Why does recombination need genetic variation to be useful? What would sex do in a population where every individual was identical?
+
+# check
+- **Step 1.** Asexual: 2 → 4 → 8 → 16. Sexual: 2 throughout. Each asexual individual reproduces alone; a sexual pair must share its offspring.
+- **Step 2.** Asexual: still only the 2 founding genotypes. Sexual: 2 individuals, but both new genotypes that never existed before, because crossover positions vary continuously.
+- **Step 3.** The half that changes shade is one chromosome copy built from pieces of both of its parent's copies; asexual copies are never broken and rejoined.
+- **Step 4.** Stable environments favour sheer numbers (asexual); changing ones favour variety (sexual). Facultative switching takes both advantages.
+- **Step 5.** Ratios 8, 1,024 and about a million. With paternal care the cost falls, because a male's investment raises the number of offspring that survive.
+- **Step 6.** 2²³ ≈ 8.4 million gametes from assortment alone in a human, and 2 here. Here almost all variety comes from where the crossover falls; in a real genome it comes from both.
+- **Step 7.** $H$ = 0.75, 0.625, 0.5. Heterozygosity falls by about a fifth each generation in a full-sib line, so the variety recombination can work with drains away.

@@ -1,0 +1,87 @@
+id: speciation
+num: 09
+title: The Speciation Room
+kicker: Divergence in isolation
+part: Part III — Neutral or selected
+focus: Two isolated populations accumulate fixed differences, mostly by drift at loci nobody selects; selection sorts its loci faster but they are few.
+colour: #1F6E5E
+before: The Drift (04), Selection (05) and Migration (07) rooms. The Adaptation Room (08) supplies the traits.
+
+# intro
+An ancestral lake population carrying 1,013 loci of standing variation splits in two. Population A stays; population B moves to another lake or to a stream, and nothing passes between them again. After $G$ generations the room counts fixed differences and the divergence of a mating signal, and gives a verdict. This guide asks what accumulates, where in the genome, and how much a verdict of this kind really says.
+
+# objectives core
+- Explain why populations that never exchange genes accumulate fixed differences, even with no selection.
+- Compare divergent selection (a stream) with parallel selection (another lake) at the loci each habitat can see.
+- Show that mutations arrive in proportion to the number of loci, while selection changes which of them fix.
+- Explain why a count of fixed differences is a model-defined outcome, not evidence of reproductive isolation.
+
+# objectives ext
+- Explain the two regimes of divergence: sorting of standing variation, then new mutation.
+- Use E[$H$] = $θ$/(2$θ$ + 1) and the ratio 4$Ns$ to explain the numbers on the cards.
+- Explain why a trait that is both under selection and used as a mating signal is a fast route to speciation.
+
+# routes
+- **50-minute practical (BSc):** steps 1–4 and questions 1–3. Each run takes several seconds.
+- **Capstone for Part III:** this room as the last practical of a course on population genetics, with question 3 as an essay prompt.
+- **MSc:** steps 5–7 and questions 4–6 (about 35 minutes).
+
+# step core 12 | A move to the stream
+set: The defaults: $N$ = 200, $N$₂ = 50, $G$ = 1000, B moves to **a stream**, $θ$ = 0.16, $s$ = 0.20, $μ$ = 0.005, $X$ = 154, colour as a mating signal **Yes**, $Y$ = 75°.
+predict: Will A and B be declared two species after 1000 generations? If so, which barrier will be crossed first: the fixed-difference count or the colour divergence?
+run: Press **Run Simulation**.
+look: the verdict, the two criteria charts (with their dashed red thresholds), and the three mean fish.
+explain: Which barrier went up first, and why might a trait that is under selection *and* used to choose mates be the faster one?
+
+# step core 10 | Another lake instead
+set: B moves to **another lake**. Everything else as before.
+predict: Will there be more or fewer fixed differences at the 13 morphological loci (the gold line) than in the stream? Will the genome-wide total (the black line) change much?
+run: Run, then compare with your stream run.
+look: the gold, grey and black lines in the left criteria chart.
+explain: Why does the same habitat on both sides reduce divergence at the loci selection can see, but hardly move the total?
+
+# step core 10 | Where the new mutations went
+set: Either of your runs.
+predict: There are 13 morphological, 40 physiological and 960 neutral loci. In what proportions will *new* mutations land on them? Which class will turn the largest share of its mutations into substitutions?
+run: Read the ledger *Where the new mutations went*, below the locus strip.
+explain: What does the ledger say about whether selection can make a useful mutation happen?
+
+# step core 5 | What the verdict does and does not mean
+set: Read the caveat beneath the populations.
+predict: If you ran two isolated populations in identical lakes for long enough, would the verdict eventually say *two species*?
+explain: Why is a count of fixed differences not proof of reproductive isolation? What would you need to measure in real animals?
+
+# step ext 12 | How repeatable is it?
+set: Defaults, stream; then another lake. Press **New Ancestral Population** between runs.
+predict: Out of five runs in each habitat, how many will end in a verdict of speciation?
+run: Five runs in each habitat, recording the verdict and the morphological fixed differences each time.
+explain: Why do runs differ so much? Relate your answer to which variants each ancestor happened to carry.
+
+# step ext 10 | A more variable ancestor
+set: Open *More parameters* and raise $θ$ from 0.16 to **0.5**.
+predict: Calculate the ancestral heterozygosity E[$H$] = $θ$/(2$θ$ + 1) at both values. Will raising $θ$ increase the fixed-difference count, the speed, or both?
+run: Press **New Ancestral Population**, read the ancestral card, then run.
+explain: Why is standing variation a ceiling on how much divergence sorting alone can produce? What carries the count past that ceiling?
+
+# step ext 10 | Small founding populations
+set: Back to $θ$ = 0.16. Set $N$₂ to **10**, then to **200**.
+predict: In which setting will B fix more new mutations of its own, and why? Which will exhaust its standing variation faster?
+run: Run each, and compare the fixed-difference curves and the ledger.
+explain: Using the neutral fixation probability 1/(2$N$), explain why some of what separates A and B is drift in the smaller population rather than adaptation in either.
+
+# questions
+- [core] Isolation is the *starting condition* of this room, not its result. Why does it have to be? Refer to the Migration Room.
+- [core] Two cichlid populations look almost identical but have rebuilt their physiology for different water. How does this room let that happen, and why would a photograph miss it?
+- [core] Write a short paragraph explaining to a non-biologist why "they have 150 genetic differences" does not by itself mean "they are different species".
+- [ext] Explain Dobzhansky–Muller incompatibilities, and why the room can only count them by proxy.
+- [ext] The room has no linkage. How would a real genome, which sorts in blocks, change the pattern of divergence along the locus strip?
+- [ext] Using the ratio 4$Ns$, explain why a locus the habitat can see substitutes about 160 times as readily as one it cannot at the default settings.
+
+# check
+- **Step 1.** In the stream, speciation is declared in about four runs in five at the defaults. Colour is under selection there *and* is the mating signal, so the colour criterion is often the faster of the two barriers; the fixed-difference count needs many loci to sort and is slow.
+- **Step 2.** The gold line reaches about 8 in the stream against about 5 between two lakes; the black total moves by only about nine of roughly 150, because 960 loci no habitat selects carry most of it.
+- **Step 3.** New mutations land in proportion 13 : 40 : 960. The physiological loci collect around 28 fixed differences in the stream and 22 between lakes, five times more per locus than the neutral ones: selection changes fate, not supply.
+- **Step 4.** Yes: drift alone accumulates fixed differences in isolated populations. Proof of speciation needs reproductive isolation itself — hybrids that fail, or individuals that will not mate.
+- **Step 5.** Roughly four of five stream runs and one in three lake runs end in speciation; the spread comes from which few variants each ancestor carried.
+- **Step 6.** E[$H$] rises from about 0.12 to 0.25. More standing variation means more loci available to sort, so more fixed differences, sooner. New mutation is what carries the count past that ceiling.
+- **Step 7.** A small B fixes many more new mutations, mostly neutral ones, and exhausts its standing variation within a few dozen generations. Neutral fixation (1/2$N$) is far likelier in the small population.

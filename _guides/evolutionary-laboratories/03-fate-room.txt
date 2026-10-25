@@ -1,0 +1,89 @@
+id: fate
+num: 03
+title: The Fate Room
+kicker: The fate of a single new mutation
+part: Part II — What becomes of one mutation
+focus: A new neutral mutation starts as one copy in N and is usually lost within a few generations; it survives with probability 1/N.
+colour: #6E7B3F
+before: The Copying Room (01) helps but is not needed.
+
+# intro
+A shape is copied once with an error. That copy is a new mutation, carried by one individual among $N$. Two populations then run it forward until it is lost or has replaced every other copy. This guide is about how rarely the second ending happens.
+
+# objectives core
+- Explain that every new mutation starts as a single copy, at frequency 1/$N$.
+- Predict that a new neutral mutation is usually lost, and quickly.
+- Use the tally to estimate the probability of survival, and relate it to 1/$N$.
+- Explain why a lost mutation is not evidence that it was harmful.
+
+# objectives ext
+- Use $u$ = 1/$N$, E[$T$<sub>fix</sub>] ≈ 2$N$ and E[$T$<sub>loss</sub>] ≈ 2 ln $N$ to predict the room's numbers.
+- Explain why the tally is so variable from one press to the next.
+- Predict how much a selective advantage would change the survival chance, and test it in the Selection Room.
+
+# routes
+- **35-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Lecture demonstration (10 minutes):** step 2, asking the class to guess the tally before pressing.
+- **MSc:** steps 5–7 and questions 4–6; step 7 leads straight into the Selection Room.
+
+# step core 5 | A mutation appears
+set: Step 1 of the room. Any starting shape.
+predict: The shape will be copied once with one random error. Will you be able to see the difference easily?
+run: Press **Mutate** a few times, looking at the third panel where the parent sits faded behind its copy.
+explain: In what sense is the copy a *mutant*? Is the change good, bad, or neither?
+
+# step core 10 | One in twenty
+set: Step 2 of the room. Population size $N$ = **20**.
+predict: The mutant is one individual among 20, and is neutral. What is the chance it ends up carried by everyone? How many populations do you think the room will need to run before it finds one where the mutation survives?
+plines 3
+run: Press **Simulate evolution through time**. Read the tally beneath the two populations. Do it three times and write down each tally.
+look: the tally, the two populations, and the allele-frequency graph.
+explain: Compare your three tallies with your prediction. Why do they differ from one press to the next?
+
+# step core 10 | One in a hundred
+set: $N$ = **100**.
+predict: How will the tally change? Write a number.
+run: Simulate three times and record the tallies.
+explain: How does the tally scale with $N$? State the rule in one sentence.
+
+# step core 6 | Quick losses, slow wins
+set: Any $N$; 50 is a good choice.
+predict: Which population will finish first: the one where the mutation is lost, or the one where it takes over?
+run: Simulate and watch the generation counters of the two populations.
+explain: Why is the losing population over almost at once, while the winner grinds on? What does this say about how much new variation is present in a population at any moment?
+
+# step ext 12 | Check the theory
+set: $N$ = 12, 20, 50 and 100 in turn.
+predict: Fill in a table before you run: for each $N$, the survival probability 1/$N$, the expected time to fixation for a winner (≈ 2$N$ generations) and the expected time to loss for a loser (≈ 2 ln $N$).
+plines 4
+run: Simulate twice at each $N$, recording the tally and the two finishing times.
+explain: Which of the three predictions is matched most closely by single runs, and which least? Why?
+
+# step ext 10 | Why the tally jumps around
+set: $N$ = 20.
+predict: If each population has a 1-in-20 chance of a win, the tally follows a geometric distribution with mean 20. Roughly how spread out will five tallies be?
+run: Simulate five times and record the tallies. Compute their mean and range.
+explain: The standard deviation of a geometric distribution is nearly as large as its mean. How should that change the way you read any single tally?
+
+# step ext 8 | Give it an advantage
+set: Go to the **Selection Room**: Haploid, $N$ = 100, initial $p$ = 0.01 (one copy), $s$ = 0.10.
+predict: Neutral, the mutation would survive one time in a hundred. With a 10% advantage, how many of 10 runs will fix it?
+run: Press **Run 10 Simulations** there, twice, and count the runs that fix A₁.
+explain: Compare with the approximation $u$ ≈ 2$s$. Why is a clearly beneficial mutation still lost most of the time?
+
+# questions
+- [core] Most new mutations are lost. Does that mean most mutations are harmful? Explain using this room.
+- [core] Every allele in every population began as a single copy in a single individual. Why does that make the allele frequencies we see today so remarkable?
+- [core] A conservation population of 15 individuals carries a rare neutral variant. Is it likely to keep it? Why?
+- [ext] Show that the expected number of new neutral mutations that eventually fix per generation is independent of $N$ (the rate of neutral substitution equals the mutation rate). Use the room's numbers.
+- [ext] Why is the time a winner takes (≈ 2$N$) so much longer than the time a loser takes (≈ 2 ln $N$)?
+- [ext] What changes if the population is diploid rather than haploid?
+
+# check
+- **Step 1.** The copy differs in one small, random way. It is neither good nor bad: there is no environment here to judge it.
+- **Step 2.** Survival probability is 1/20. The tally is often near 20 but varies widely — anything from a handful to fifty or more is normal.
+- **Step 3.** At $N$ = 100 the tally is typically around 100. The rule: the number of populations needed is about $N$, because the chance of survival is 1/$N$.
+- **Step 4.** The losing population usually finishes within a few generations; the winner takes many tens. Most of the new variation in a population at any time is about to vanish.
+- **Step 5.** At $N$ = 20: $u$ = 0.05, $T$<sub>fix</sub> ≈ 40, $T$<sub>loss</sub> ≈ 6. At $N$ = 100: 0.01, about 200 and about 9. Single runs scatter widely around all three, least for the loss time.
+- **Step 6.** Five tallies at $N$ = 20 typically range from under 10 to over 40, with a mean near 20.
+- **Step 7.** With $s$ = 0.1, $u$ ≈ 1 − e<sup>−0.2</sup> ≈ 0.18: about 2 of 10 runs fix it, against 0.1 expected without the advantage. The advantage is real but drift still decides most outcomes while the mutation is rare.

@@ -1,0 +1,88 @@
+id: growth
+num: 01
+title: The Growth Room
+kicker: Unlimited growth &amp; its impossibility
+part: Part I — A population on its own
+focus: With nothing pushing back, growth is exponential; chance still drives small populations extinct.
+colour: #388047
+before: Nothing. This is the first room.
+
+# intro
+Every individual gives birth at rate $b$ and dies at rate $d$, however crowded the world becomes. The dashed line is the textbook $N$<sub>0</sub>e<sup>$rt$</sup>; the solid lines are populations in which every birth and death is a random event. This guide asks what such a population does, and why it cannot exist for long.
+
+# objectives core
+- Explain exponential growth as a constant per-capita rate $r$ = $b$ − $d$.
+- Recognise exponential growth as a straight line on a logarithmic axis, and read a doubling time.
+- Explain why a small population can go extinct even when $r$ > 0.
+- Explain why the per-capita growth rate is flat against density in this model, and why that is the room's key assumption.
+
+# objectives ext
+- Use the extinction probability ($d$/$b$)<sup>$N$₀</sup> to predict how many replicates are lost.
+- Show that two populations with the same $r$ but different turnover ($b$ and $d$) behave differently.
+- Use the doubling time ln 2/$r$ to make quantitative predictions.
+
+# routes
+- **35-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **First session of a population ecology course:** this room and the Crowding Room core paths together, about 70 minutes.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 8 | The exponential curve
+set: The defaults: $N$<sub>0</sub> = 10, $b$ = 0.50, $d$ = 0.30, time span 40, 1 replicate, linear axis.
+predict: What is $r$? Roughly how long does it take the population to double? Sketch the curve you expect.
+run: Press **Run**. Then switch the vertical axis to **Logarithmic**.
+look: the readouts *r = b − d* and *Doubling time*, and the shape of the curve on each axis.
+explain: Why does the curve become a straight line on the log axis? What does its slope represent?
+
+# step core 10 | Barely growing
+set: $b$ = **0.31**, $d$ = 0.30, $N$<sub>0</sub> = **5**, **20** replicates.
+predict: The average population should grow very slowly. Out of 20 replicates, how many do you expect to go extinct?
+run: Press **Run**.
+look: the solid lines that fall to zero, against the dashed prediction.
+explain: How can a population whose expected growth is positive go extinct? Which kind of population is most at risk?
+
+# step core 8 | Two populations, one difference
+set: Back to the defaults. *Compare two populations*: **On**. Population 2 has $d$ = 0.40.
+predict: Population 2's $r$ is half of population 1's. How will the two compare after 40 time units: half as many, or far fewer than half?
+run: Press **Run** on a linear axis, then on a log axis.
+explain: Why does a small difference in rate turn into a huge difference in numbers?
+
+# step core 5 | The flat line
+set: The run you just made.
+predict: What will the per-capita growth rate look like plotted against density?
+look: *Per-capita growth rate vs. density* and *Total growth rate vs. density*.
+explain: What would have to change about that flat line for the population to stop growing? (This is the question every other room answers.)
+
+# step ext 10 | Predicting extinction
+set: One population, 20 replicates, $d$ = 0.30. $b$ = 0.35 with $N$<sub>0</sub> = 5, then $N$<sub>0</sub> = 20.
+predict: For a birth–death process the chance of eventual extinction is ($d$/$b$)<sup>$N$₀</sup>. Calculate it for both starting sizes, and the number of the 20 replicates you expect to lose.
+run: Run each setting twice and count the extinctions.
+explain: Why does the starting size matter so much, and what does that imply for reintroductions?
+
+# step ext 10 | Same r, different turnover
+set: Compare two populations, 20 replicates, $N$<sub>0</sub> = 10 in both. Population 1: $b$ = 0.50, $d$ = 0.30. Population 2: $b$ = **0.90**, $d$ = **0.70**.
+predict: Both have $r$ = 0.2. Will they behave the same? Calculate the extinction probability for each.
+run: Run twice.
+explain: Why does the population with faster turnover show more scatter and more extinctions, even with the same expected growth?
+
+# step ext 8 | How long until it runs off the chart?
+set: The defaults, linear axis, time span **60**.
+predict: The linear chart is drawn up to 200,000 individuals. Using $N$<sub>0</sub>e<sup>$rt$</sup>, when should the population pass that line?
+run: Run and note when the line leaves the top of the panel.
+explain: Calculate how many individuals the model predicts after 200 time units. Why is that answer absurd, and what does that tell you about exponential growth in nature?
+
+# questions
+- [core] A population of rats on an island grows from 10 to 160 in four years. If growth is exponential, what is the doubling time and what is $r$?
+- [core] Why is exponential growth the right description of a population at the start of an invasion, but never for long?
+- [core] Explain to a conservation manager why a reintroduced population of five animals with a positive growth rate might still fail.
+- [ext] Demographic stochasticity is distinct from environmental stochasticity. Define both and say which this room includes.
+- [ext] Two populations have the same $r$ but different $b$ and $d$. Which would you rather manage as an endangered species, and why?
+- [ext] Human population growth is sometimes described as "faster than exponential". What would that mean in terms of $r$?
+
+# check
+- **Step 1.** $r$ = 0.2, doubling time ln 2/0.2 ≈ 3.5 time units. On a log axis the curve is a straight line with slope $r$.
+- **Step 2.** Most replicates go extinct: the chance for each is (0.30/0.31)⁵ ≈ 0.85. Small populations are at the mercy of individual births and deaths.
+- **Step 3.** Population 2 ends far below half of population 1: the gap grows as e<sup>(0.2 − 0.1)$t$</sup>, about 55-fold after 40 time units.
+- **Step 4.** A flat line: an individual does equally well at any density. Only a per-capita rate that falls with density can stop growth.
+- **Step 5.** (0.30/0.35)⁵ ≈ 0.46, so about 9 of 20; (0.30/0.35)²⁰ ≈ 0.05, so about 1 of 20.
+- **Step 6.** Extinction probability is (0.3/0.5)¹⁰ ≈ 0.006 against (0.7/0.9)¹⁰ ≈ 0.08: more turnover means more randomness for the same $r$.
+- **Step 7.** About 50 time units ($t$ = ln 20,000/0.2 ≈ 49.5). After 200 time units the model predicts about 2.4 × 10¹⁸ individuals: no real environment allows it.

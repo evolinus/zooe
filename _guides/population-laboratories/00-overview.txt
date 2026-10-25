@@ -1,0 +1,30 @@
+title: Teaching with the Population Laboratories
+kicker: Routes, timings and objectives for all eleven rooms
+
+# intro
+Every room has a printable guide of its own, linked from the room's *Start here* panel. Each guide opens with learning objectives and suggested routes, then gives a **core path** sized for a BSc practical and an **extension** for MSc students. Every step asks for a prediction before the run and an explanation after it, and every guide ends with discussion questions and a page of notes for checking the reasoning. The table below is the whole set at a glance; times are minutes of active work, not counting a class discussion.
+
+# section How the guides are meant to be used
+Students write a prediction before they press anything, then explain whether the run matched. Several rooms are deterministic — the same settings always give the same curve — so a wrong prediction cannot be blamed on chance, which makes them especially good for this.
+- **In class:** print the core-path pages; hold back the last page (*Checking your reasoning*) until the discussion, or print without it.
+- **Independently:** the whole guide works as self-study, with the last page as the check.
+- **For assessment:** the prediction–explanation pairs and the worksheet questions (tagged BSc or MSc) make short written tasks; the extension steps, most of which ask for a calculation before the run, make good MSc problem-sheet questions.
+
+# routes A BSc course in six practicals of about two hours
+- **Practical 1 — a population on its own:** Growth (01) and Crowding (02).
+- **Practical 2 — where the ceiling comes from:** Resource (03) and Overshoot (04).
+- **Practical 3 — competition:** Neighbours (05) and Coexistence (06).
+- **Practical 4 — predation:** Predator (07) and Keystone (08).
+- **Practical 5 — describing communities:** Diversity (09), with a short field sample if the timetable allows.
+- **Practical 6 — landscapes:** Turnover (10) and Metapopulation (11).
+
+# routes An MSc module
+- Set each room's core path as preparation before class, with the *Checking your reasoning* page.
+- Spend contact time on the extension steps: most ask for an equilibrium or threshold to be calculated before the run and checked against it.
+- The MSc questions of Coexistence, Keystone and Metapopulation make a good written assignment on what regulates populations and communities.
+
+# routes Single sessions
+- **What stops a population growing? (90 minutes):** Growth (01), Crowding (02) and Resource (03) steps 1–2.
+- **Cycles two ways (one hour):** Overshoot (04) steps 1–4 and Predator (07) steps 1–3, then question 3 of either.
+- **Coexistence (two hours):** Neighbours (05), Coexistence (06) and Keystone (08) core paths.
+- **Conservation in landscapes (90 minutes):** Turnover (10) step 4 and Metapopulation (11) core path.

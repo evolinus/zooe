@@ -1,0 +1,89 @@
+id: turnover
+num: 10
+title: The Turnover Room
+kicker: Alpha, beta &amp; gamma diversity
+part: Part VI — Life spread across space
+focus: Regional diversity is local diversity times turnover (γ = α × β); drift between isolated sites creates turnover, immigration erases it.
+colour: #C06A2B
+before: The Diversity Room (09), which measures one community the same way.
+
+# intro
+Several sites, each with its own community. $γ$ is the diversity of all of them pooled, $α$ that of a typical site, and $β$ = $γ$/$α$ how many completely distinct sites they amount to. This guide asks how a landscape's diversity is built from its parts, and what happens when the sites drift apart.
+
+# objectives core
+- Define $α$, $β$ and $γ$ diversity and use $γ$ = $α$ × $β$.
+- Show that local diversity does not predict regional diversity.
+- Explain how the choice of measure (richness, Shannon, Simpson) changes $β$.
+- Show that neutral drift in isolated sites creates turnover, and that immigration from a shared pool removes it.
+
+# objectives ext
+- Calculate $α$, $β$ and $γ$ for a small landscape by hand.
+- Connect $β$ to $F$<sub>ST</sub> in the Migration Room.
+- Discuss the several-small-or-single-large question, and what the model leaves out of it.
+
+# routes
+- **40-minute practical (BSc):** steps 1–4 and questions 1–3.
+- **Conservation planning seminar:** step 4 with questions 3 and 6.
+- **MSc:** steps 5–7 and questions 4–6 (about 30 minutes).
+
+# step core 10 | Identical sites and distinct sites
+set: Step 1 of the room, $N$ = 4 sites, measure by Shannon. Preset **Identical**, then **Complete turnover**.
+predict: In each landscape, how will $γ$ compare with $α$? What will $β$ be?
+run: Choose each preset and read the three numbers.
+look: *Diversity at each scale*: the site bars, $α$ and $γ$.
+explain: Why does adding identical sites add no diversity to the landscape?
+
+# step core 8 | The measure matters
+set: Preset **Nested**, then **Gradient**. For each, switch the measure between Richness, Shannon and Simpson.
+predict: Nested sites differ only in their rare species. By which measure will their $β$ be largest? And for the gradient, where each site has its own commonest species?
+run: Read $β$ under each measure for both presets.
+explain: What does the direction of the difference tell you about *which* species turn over?
+
+# step core 10 | Drift makes turnover
+set: Step 2 of the room. Each site starts from **The pool**, $J$ = 200, immigration $m$ = 0, 300 generations.
+predict: Every site starts with the same community. What will happen to $α$ and to $β$ as the sites drift?
+run: Press **Run**.
+look: *Each site now* and *β over time*.
+explain: Why do sites that start alike lose *different* species?
+
+# step core 7 | Several small or single large?
+set: The run you just made.
+predict: The large site holds as many individuals as all the small sites together. After 300 generations, which will hold more species: the small sites together ($γ$) or the large site?
+run: Read *Several small or single large?* and the middle panel's two lines through time.
+explain: Under pure chance, which wins in the end, and why? What real risks to small sites does the model leave out?
+
+# step ext 10 | By hand
+set: Build two sites with $N$ = 2: site 1 holds species 1 and 2 equally; site 2 holds species 2 and 3 equally.
+predict: Calculate $γ$, $α$ and $β$ by richness, by Shannon and by Simpson.
+plines 4
+run: Drag the bars to make this landscape and read the numbers.
+explain: Why do the three measures give different $β$ for the same landscape?
+
+# step ext 10 | Immigration erases turnover
+set: Step 2. Each site starts from **Its own row** with the Gradient preset; immigration $m$ = **0.01**.
+predict: Each site starts different. What will a shared stream of immigrants do to $β$?
+run: Run, and then again with $m$ = 0.
+explain: "Mixing makes places locally richer and regionally the same." Explain, with your two runs.
+
+# step ext 8 | β and F<sub>ST</sub>
+set: Step 2 from the pool, $m$ = 0, 0.002 and 0.02.
+predict: How will $β$ at the end change with $m$?
+run: Run each.
+explain: Compare with the Migration Room, where $F$<sub>ST</sub> falls as migration rises. Why do the two measure the same thing at different levels of organisation?
+
+# questions
+- [core] Two regions each have an average of 10 species per site. Can one region have far more species overall? Explain with $β$.
+- [core] Why is $β$ in this room counted in "sites" rather than in species?
+- [core] A conservation agency must choose between one large reserve and four small ones of the same total area. What does this room say, and what does it leave out?
+- [ext] Additive partitions ($β$ = $γ$ − $α$) and pairwise indices (Jaccard, Sørensen) also measure turnover. Why can't values from different conventions be compared?
+- [ext] Sampling inflates $β$. Explain why, using the Diversity Room's lesson about richness.
+- [ext] Real turnover is mostly driven by environmental differences rather than drift. How would you distinguish the two in field data?
+
+# check
+- **Step 1.** Identical: $γ$ = $α$, $β$ = 1. Complete turnover: $γ$ = 4$α$, $β$ = $N$ = 4.
+- **Step 2.** Nested: $β$ largest by richness (the sites differ only in rare species, which Shannon and Simpson discount). Gradient: largest by Simpson (each site's commonest species is its own).
+- **Step 3.** $α$ falls as each site loses species; $β$ climbs because the sites lose different species by chance.
+- **Step 4.** The large site often leads early, but with no immigration the small sites together end up holding more: each ends with a species of its own, the large site with one. Edge effects, area-demanding species and single disasters are all missing.
+- **Step 5.** Richness: $γ$ = 3, $α$ = 2, $β$ = 1.5. Shannon: $γ$ ≈ 2.83, $α$ = 2, $β$ ≈ 1.41. Simpson: $γ$ ≈ 2.67, $α$ = 2, $β$ ≈ 1.33.
+- **Step 6.** Immigration from the pooled landscape pulls every site towards the same community, so $β$ falls towards 1.
+- **Step 7.** $β$ falls as $m$ rises, just as $F$<sub>ST</sub> falls with migration: both measure how different places are, for species and for alleles.

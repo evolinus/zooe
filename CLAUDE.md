@@ -139,6 +139,17 @@ tracks `js/sound.js` plays while a simulation runs. Dropping a track is
 survivable rather than broken — the toggle removes itself from the tab bar when
 the file will not load — so the app still works, just silently.
 
+Each app also has a `guides/` folder of printable PDFs: one step-by-step guide
+per room (a BSc core path and an MSc extension, every step predict–run–explain,
+with times, objectives, worksheet questions and a last page for checking) and a
+`00-overview.pdf` of the whole set. **They are generated — edit the sources in
+`_guides/`, run `python3 _guides/build.py`, and commit the PDFs.** CI does not
+build them. Every room links its guide from the foot of its *Start here*
+panel, beside a *Predict first* prompt, and closes with a hand-written
+*Questions to discuss* block after *What to notice*; the build rewrites the
+times shown beside each link, so those never need typing. `_guides/README.md`
+has the source format.
+
 Every `<script src>` in an app's `index.html` carries a `?v=` token, and it is
 what makes a returning reader's browser fetch a changed script instead of
 running the cached one against new markup. **Change a `js/` file, bump its

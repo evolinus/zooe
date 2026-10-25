@@ -233,6 +233,58 @@
     .tab-btn{ flex: 0 0 auto; }
   }
 
+  /* The box nav.js wraps round the strip, to hang the scroll cues on. The
+     flex lines only matter in the Evolutionary Laboratories' bar, which is a
+     flex row; here they are inert but keep the two apps' rules the same. */
+  .tab-scroller{ position: relative; flex: 1 1 auto; min-width: 0; }
+  .tab-scroll{ display: none; }
+  /* A fade and an arrow at whichever end of the swipeable row has more rooms
+     beyond it — the only sign there is, with the scrollbar hidden. The fade
+     stops 2px short of the bottom so the strip's ink rule runs on under it.
+     Above the active tab (z-index 5), which would otherwise poke through. */
+  @media (max-width: 780px){
+    .tab-scroller::before, .tab-scroller::after{
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 2px;
+      width: 48px;
+      z-index: 6;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .tab-scroller::before{ left: 0; background: linear-gradient(to right, var(--paper) 40%, transparent); }
+    .tab-scroller::after{ right: 0; background: linear-gradient(to left, var(--paper) 40%, transparent); }
+    .tab-scroller.more-before::before, .tab-scroller.more-after::after{ opacity: 1; }
+    .tab-scroll{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: calc(50% - 1px);
+      transform: translateY(-50%);
+      z-index: 7;
+      width: 28px;
+      height: 28px;
+      padding: 0 0 2px;
+      font-size: 20px;
+      line-height: 1;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--ink-soft);
+      border-radius: 50%;
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
+    }
+    .tab-scroll-prev{ left: 4px; }
+    .tab-scroll-next{ right: 4px; }
+    .tab-scroller.more-before .tab-scroll-prev,
+    .tab-scroller.more-after .tab-scroll-next{ opacity: 1; pointer-events: auto; }
+  }
   .tab-btn {
     font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     font-size: 12.5px;
@@ -1022,6 +1074,59 @@
     margin: 0 0 8px;
   }
   .room-brief .try-label{ font-weight: 700; }
+  /* The last two lines of the brief. Predict first asks for a prediction in
+     writing before the first run, and it comes after Try this rather than
+     before it because it is about the runs Try this has just described. Then
+     the room's printed guide — the same experiments as a timed predict, run,
+     explain worksheet, a BSc path and an MSc extension. The guide sits under a
+     dashed rule, set smaller, because it is a way out of the room rather than
+     one more thing to do in it. Its times are written in by _guides/build.py,
+     which finds them through data-guide, so they cannot drift from the PDF. */
+  .room-brief .room-guide{
+    border-top: 1px dashed var(--rule);
+    padding-top: 9px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    break-inside: avoid;
+  }
+  .room-guide-link{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--stamp-deep);
+    text-underline-offset: 2px;
+    margin-right: 4px;
+  }
+  .room-guide-time{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  /* Questions to discuss, after What to notice: three short questions for a
+     class or for a reader on their own, answered by the run they have just
+     made rather than by the prose above them. The payoff's gold spine, so it
+     reads as part of the same close; no tint, so it stays quieter than the
+     payoff it follows. One column, because three questions do not fill two. */
+  .room-discuss{
+    border: 1px solid var(--rule);
+    border-left: 5px solid var(--stamp);
+    border-radius: 6px;
+    padding: 12px 18px 13px;
+    margin: 12px 0 10px;
+  }
+  .room-discuss h2{
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--stamp-deep);
+    margin: 0 0 8px;
+  }
+  .room-discuss ol{ margin: 0 0 10px; padding-left: 22px; }
+  .room-discuss li{ font-size: 15px; line-height: 1.6; margin-bottom: 6px; }
+  .room-discuss-more{ margin: 0; font-size: 13.5px; color: var(--ink-soft); }
+  .room-discuss-more a{ color: var(--stamp-deep); text-underline-offset: 2px; }
   /* Pointers to other rooms, so a student can follow a thread across the set. */
   .room-link{
     background: none; border: none; padding: 0;
@@ -1269,6 +1374,7 @@
       <h2 class="readme-minor">How to use the rooms</h2>
       <p>Every room follows the same pattern: <strong>set the parameters</strong> with the sliders and buttons at the top, <strong>press Run</strong>, and <strong>read the panels</strong> that fill in below. The whole trajectory is computed the moment you press Run and then played back to you, so you can pause anywhere, drag the <strong>History Scrubber</strong> at the bottom of most rooms back and forth, and replay any moment you like. In the Overshoot Room it is worth using deliberately: stepping one generation at a time is what turns the cobweb diagram from a tangle into an explanation.</p>
       <p>Each room carries its own guidance, so this page stays short. A <strong>Start here</strong> panel — the first thing in the room, above everything else — says what the room shows and suggests what to try first; a <strong>What to notice</strong> panel below the simulation says what the run was for, and points to the other rooms that take the idea further. <strong>Previous</strong> and <strong>Next</strong> at the foot of each room walk them in order. Follow those and the eleven rooms read as one argument rather than eleven separate toys.</p>
+      <p>Every room also has a printable <strong>room guide</strong> (PDF), linked at the foot of its Start here panel. It turns the room into a worksheet: you predict the outcome before each run and explain it afterwards, along a short core path for BSc students and an extension for MSc students, with times, learning objectives and discussion questions, and a last page for checking your reasoning. <a href="guides/00-overview.pdf" target="_blank" rel="noopener">The overview</a> sets all eleven side by side, with suggested routes for a course or a single session.</p>
       <p>Between the run and the payoff sits <strong>What this model assumes</strong>: the things the room is quietly taking for granted, and — where there is one — the room that stops taking them for granted. This is worth reading. Most of these laboratories exist precisely to relax an assumption an earlier one made, so what looks like a convenient simplification in one room turns out to be the whole subject of another. It is also the honest answer to "but real populations are not like that", which is true of every model here and is the point rather than an objection.</p>
       <p>Between the two sits the equation the room is running. Underneath it is a collapsible <strong>What each symbol means</strong> key: open it and every letter in the equation above is named, said plainly, and placed against what the earlier rooms called it. Nothing in a room requires reading the algebra — but nothing in the algebra is left unexplained either.</p>
       <p>Some rooms are deterministic: the same settings always give exactly the same curve, because the equations contain no chance. Others draw births and deaths at random, so running twice will not give the same answer twice — the parameters set tendencies, never outcomes. Each room says which kind it is.</p>
@@ -1416,6 +1522,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> A <span class="gloss" data-help="glosPopulation">population</span> in which nothing interferes: every individual has the same chance of giving birth and the same chance of dying, however crowded the world becomes. Births and deaths are drawn at random for each individual, so you see both the smooth exponential prediction and the noisy reality around it.</p>
       <p><span class="try-label">Try this.</span> Run the defaults and switch the vertical axis from linear to logarithmic — the curve becomes a straight line, which is the signature of exponential growth. Then set the birth rate just barely above the death rate and run 20 replicate populations starting from 5 individuals. Finally, switch <em>Compare two populations</em> on and give population 2 a slightly higher death rate: two runs, identical in every other respect, on the same chart.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you run twenty replicates with the birth rate just above the death rate, decide how many of the twenty will go extinct.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/01-growth-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="01-growth-room">core path 31 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -1575,6 +1683,15 @@
       <p>The <span class="gloss" data-help="glosPerCapita">per-capita</span> growth rate is a flat line: an individual in a crowd of ten thousand does exactly as well as one in a crowd of ten. That is the assumption this room rests on, and it is the assumption every later room breaks. Notice too that with a small starting population some replicates go extinct even though the average is growing — a positive growth rate is not a guarantee, because <span class="gloss" data-help="noise">chance</span> acts on individuals rather than on averages.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> room makes individuals get in each other's way, which is the smallest possible repair to this model. Every other room in the lab is a different answer to the question this one leaves open: what actually stops the curve?</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why can a population with a positive growth rate still go extinct?</li>
+        <li>Why does exponential growth become a straight line on a logarithmic axis?</li>
+        <li>What would have to change about the flat per-capita line for the population to stop growing?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/01-growth-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -1604,6 +1721,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The same population, but now individuals get in each other's way — <span class="gloss" data-help="glosCompetitionKinds">intraspecific competition</span>. The birth rate falls and the death rate rises as the population grows; where the two lines cross, births exactly balance deaths and the population stops changing. That crossing point is the <span class="gloss" data-help="carryingK">carrying capacity</span>, <em>K</em>.</p>
       <p><span class="try-label">Try this.</span> Run the defaults and watch the S-shaped curve level off at K. Then start the population <em>above</em> K and run again. Finally, open <em>More parameters</em>, switch on the Allee effect, and start with a very small population. To see one parameter's effect on its own, switch <em>Compare two populations</em> on and change nothing but K between them.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you run the defaults, decide where the curve will level off, and at what population size it will be growing fastest.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/02-crowding-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="02-crowding-room">core path 32 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -1804,7 +1923,7 @@
         <li><strong>Crowding acts instantly.</strong> The rates at any moment depend on <em>N</em> at that same moment, so the population feels the crowd the instant it forms. Nothing in nature is that prompt. <span class="lifted">Lifted in the <button type="button" class="room-link" onclick="switchTab('overshoot');">Overshoot</button> room, where the feedback is delayed by exactly one generation.</span></li>
         <li><strong><em>K</em> belongs to the species.</strong> <span class="gloss" data-help="carryingK">Carrying capacity</span> is a number you set on a slider rather than something produced by anything, which makes it a description of the outcome and not an explanation of it. <span class="lifted">Lifted in the <button type="button" class="room-link" onclick="switchTab('resource');">Resource</button> room, where <em>K</em> falls out of the bookkeeping instead.</span></li>
         <li><strong>Every individual competes equally with every other.</strong> Competition is a mean field: no territories, no neighbourhoods, nobody better at it than anybody else. Real competition is local, and local competition is weaker than this.</li>
-        <li><strong>The <span class="gloss" data-help="glosDensityDependence">density dependence</span> is a straight line.</strong> <span class="gloss" data-help="glosPerCapita">Per-capita</span> growth falls linearly from <em>r</em> at <em>N</em> = 0 to zero at <em>K</em>. Nothing obliges nature to be linear, and the shape matters: the Overshoot Room's three maps are three different shapes of this same idea, and they do not behave alike.</li>
+        <li><strong>The <span class="gloss" data-help="glosDensityDependence">density dependence</span> is a straight line.</strong> <span class="gloss" data-help="glosPerCapita">Per-capita</span> growth falls linearly from <em>r</em> at <em>N</em> = 0 to zero at <em>K</em>. Nothing obliges nature to be linear, and the shape matters: the Overshoot Room's three maps are three different shapes of this same idea, and they do not behave alike. It is also the only reason the fastest growth falls exactly at <em>K</em>/2 &mdash; bend the line and the peak moves with it.</li>
         <li><strong>Only this species counts against <em>K</em>.</strong> Nothing else is eating the same food or taking up the same room. <span class="lifted">Lifted in the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> and <button type="button" class="room-link" onclick="switchTab('coexistence');">Coexistence</button> rooms.</span></li>
         <li><strong>Nothing eats them.</strong> Every death here is a death from crowding. <span class="lifted">Lifted in the <button type="button" class="room-link" onclick="switchTab('predator');">Predator</button> room.</span></li>
       </ul>
@@ -1812,8 +1931,17 @@
 
     <div class="room-payoff">
       <h2>What to notice</h2>
-      <p>Growth is fastest not when the population is small and not when it is large, but exactly halfway, at K/2 — that hump in the <em>dN/dt</em> panel is why fisheries aim to hold stocks near half of carrying capacity. Notice also that K is an attractor: the population converges on it from above as readily as from below. And with an Allee effect, a population that falls below the threshold does not merely grow slowly — it goes extinct.</p>
+      <p>Growth is fastest not when the population is small and not when it is large, but exactly halfway, at K/2 — the peak of the hump in the <em>dN/dt</em> panel. In this model that peak is the largest surplus a harvest could take forever, and it is the origin of the textbook idea of holding a fish stock near half its carrying capacity. But the halfway point belongs to the logistic model, not to populations: it follows from crowding that bites in a straight line, and with any other shape the peak moves. Read it as what this model predicts, not as a management rule — real stocks fluctuate, age, and are counted with error, and fishing at a calculated maximum has repeatedly proved too much. Notice also that K is an attractor: the population converges on it from above as readily as from below. And with an Allee effect, a population that falls below the threshold does not merely grow slowly — it goes extinct.</p>
       <p><strong>Where this goes next.</strong> This room treats K as a given number belonging to the species. The <button type="button" class="room-link" onclick="switchTab('resource');">Resource</button> room takes that apart and shows where K actually comes from; the <button type="button" class="room-link" onclick="switchTab('overshoot');">Overshoot</button> room keeps the same <span class="gloss" data-help="glosDensityDependence">density dependence</span> but delays it by one generation; and the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room adds a second species that also counts against K.</p>
+    </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>A deer population is held at half its carrying capacity by hunting. Is it growing fastest, slowest, or in between?</li>
+        <li>Why is <var>K</var> called an attractor?</li>
+        <li>Why is being rare dangerous for a species with an Allee effect?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/02-crowding-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
     </div>
 
     <details class="room-methods">
@@ -1844,6 +1972,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> room treated K as a given. Here it is not: the environment supplies a resource at a fixed rate, consumers eat it, and their births depend on how much they ate. Both the resource and the consumer are tracked over time, and the population's ceiling emerges from the arithmetic rather than being imposed.</p>
       <p><span class="try-label">Try this.</span> Run the defaults and watch the resource crash as the consumers build up, then settle. Read off <em>R*</em> — the resource level the consumers grind the environment down to. Now double the supply rate and run again. Finally, switch on <em>Environment shift</em> to cut the supply halfway through a run.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you double the supply, decide what will happen to <var>R</var>* and to the number of consumers.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/03-resource-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="03-resource-room">core path 33 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -2017,6 +2147,15 @@
       <p>Doubling the supply roughly doubles the number of consumers but leaves <em>R*</em> exactly where it was: R* depends only on the consumer's own mortality and efficiency, not on how rich the environment is. This is the single most useful fact in the whole lab. Notice too that "carrying capacity" is not a property of a species at all — the same consumer has a different K in every environment.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('coexistence');">Coexistence</button> room turns <span class="gloss" data-help="rStarRule">R*</span> into a rule for predicting who wins a competition. If you have not yet met that competition in its simpler, phenomenological form, visit the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room first.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why does enriching the environment change how many consumers it holds but not the resource level they leave behind?</li>
+        <li>Why is carrying capacity not a property of a species on its own?</li>
+        <li>Which consumer wins a competition: one that eats a lot, or one with a low <var>R</var>*?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/03-resource-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -2045,6 +2184,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Many organisms breed once a year: this year's crowding sets next year's numbers, and nothing can respond in between. That one-generation lag is enough to break the tidy approach to K. Three classic discrete-time models are offered — scramble competition (Ricker), contest competition (Beverton–Holt) and the discrete logistic — along with a cobweb diagram and a live bifurcation diagram.</p>
       <p><span class="try-label">Try this.</span> Start with Ricker at a low growth rate and watch it glide into K. Raise the rate slowly and watch the approach start to wobble, then split into a two-year cycle, then four, then dissolve. Switch to Beverton–Holt at the same high rate. Then turn on <em>Sensitivity test</em>, which runs a second population differing by one thousandth of an individual.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before each increase in the growth rate, decide whether the population will settle, cycle, or never repeat itself.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/04-overshoot-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="04-overshoot-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -2169,6 +2310,15 @@
       <p>Nothing random has been added anywhere: these equations are perfectly deterministic, and the wild fluctuations at high growth rates are generated by the <span class="gloss" data-help="glosDensityDependence">density dependence</span> itself. Yet under chaos the two nearly identical populations diverge completely within a few dozen generations — so a population can be both entirely rule-governed and entirely unpredictable. Contest competition never does this, because no amount of crowding can make it overshoot.</p>
       <p><strong>Where this goes next.</strong> This is the lab's first source of permanent cycles, and it is an internal one: a single species arguing with its own past. The <button type="button" class="room-link" onclick="switchTab('predator');">Predator</button> room produces cycles a second way, out of two species arguing with each other — comparing the two is worth the trip.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>How can a population that obeys a rule with no randomness in it be unpredictable?</li>
+        <li>Why does contest competition never overshoot?</li>
+        <li>Why might an annual insect be more prone to these cycles than a long-lived mammal?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/04-overshoot-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -2198,6 +2348,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Two species, each self-limiting exactly as in the <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> room, now also feel each other — <span class="gloss" data-help="glosCompetitionKinds">interspecific competition</span>. One coefficient per species says how much a competitor counts in the currency of one's own crowding: <em>α</em> = 2 means one individual of the other species is as suppressive as two of your own.</p>
       <p><span class="try-label">Try this.</span> Step through the four presets — <em>A wins</em>, <em>B wins</em>, <em>Coexistence</em>, <em>Founder control</em> — and after each one look at the <span class="gloss" data-help="glosPhasePlane">phase plane</span> rather than the time series. Then, in the founder-control preset, click at different points in the phase plane to start the run from a different pair of abundances and see the outcome flip.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before each preset, look at the two isoclines on the phase plane and decide who will win. Then run it.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/05-neighbours-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="05-neighbours-room">core path 34 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -2362,6 +2514,15 @@
       <p>Which species wins does not depend on who grows faster: the <em>r</em> sliders change how quickly the outcome arrives but never what it is. What matters is the balance between each species' effect on itself and its effect on the other. Coexistence requires each species to limit itself more than it limits its rival — an α below 1 is this model's way of saying the two occupy a different <span class="gloss" data-help="glosNiche">niche</span>. When the reverse is true, both are stable alone and neither can invade, so whoever arrives first keeps the site.</p>
       <p><strong>Where this goes next.</strong> The α values here are descriptive — they say <em>that</em> a species suppresses another, not <em>how</em>. The <button type="button" class="room-link" onclick="switchTab('coexistence');">Coexistence</button> room replaces them with an explicit shared food supply and derives the same outcomes from a mechanism. The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room keeps these equations exactly as they are and adds a predator that eats both competitors, which can reverse every answer this room gives.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why do the growth rates never change who wins?</li>
+        <li>Why does <var>α</var> &lt; 1 mean the two species occupy different niches?</li>
+        <li>What decides the outcome under founder control?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/05-neighbours-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -2391,6 +2552,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room's competition coefficients are descriptive: they say <em>that</em> a species suppresses another, not <em>how</em>. Here both species eat explicit, tracked resources, so competition happens for a reason. In <em>one resource</em> mode there is a single food supply; in <em>two resources</em> mode there are two, and each species can specialise.</p>
       <p><span class="try-label">Try this.</span> In one-resource mode, run two species with different mortality rates and read the R* table — then start the eventual loser at ten times the winner's abundance and run again. Switch to two resources and give each species the higher attack rate on a different one. Then make both species prefer the <em>same</em> resource and watch coexistence collapse.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the first run, work out <var>R</var>* for each species and decide who will win. Then decide whether starting the loser at ten times the winner’s abundance will save it.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/06-coexistence-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="06-coexistence-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -2579,6 +2742,15 @@
       <p>With one resource the species with the lower <span class="gloss" data-help="rStarRule">R*</span> always wins, no matter how abundant the other starts, how fast it grows, or how hungrily it eats: it simply drives the resource below the level its rival needs to break even. This is the <span class="gloss" data-help="exclusion">competitive exclusion</span> principle, and R* explains it. With two resources, coexistence appears the moment each species is held back mainly by the resource it is <em>better</em> at using — which is what ecologists mean by partitioning a <span class="gloss" data-help="glosNiche">niche</span>.</p>
       <p><strong>Where this goes next.</strong> This room and the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room both reach coexistence through what the competitors do to <em>each other</em>. The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room reaches it a third way — through something that eats them both.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why does a species that eats faster still lose?</li>
+        <li>How do two resources make coexistence possible?</li>
+        <li>This room and the Neighbours room both predict outcomes. Which one tells you <em>why</em> a species wins?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/06-coexistence-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -2607,6 +2779,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Two species, one of which eats the other. Three versions of the same pair of equations are offered, and each repairs an assumption in the one before it: the classic Lotka–Volterra model, then a version in which the prey have a <span class="gloss" data-help="carryingK">carrying capacity</span> of their own, then one in which the predator takes time to handle each prey it catches and so cannot eat without limit.</p>
       <p><span class="try-label">Try this.</span> Step through the four presets. Under <em>Neutral cycles</em>, click at several different points on the <span class="gloss" data-help="glosPhasePlane">phase plane</span> and watch the cycle change size while the parameters stay put. Then switch to <em>Prey with a ceiling</em> and click the same points — every one of them now ends at the same place. Finally load <em>Paradox of enrichment</em> and drag the prey's carrying capacity K downwards until the cycling stops.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you click a new starting point under <em>Neutral cycles</em>, decide whether the cycle you get will be the same size as before. Then decide again for <em>Prey with a ceiling</em>.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/07-predator-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="07-predator-room">core path 36 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -2821,6 +2995,15 @@
       <p>The predator's peaks trail the prey's by a quarter of a cycle, always and for a reason: predators can only build up after their food has, and prey can only recover after the predators have starved. Look hard at the <span class="gloss" data-help="glosEquilibrium">equilibrium</span> too — the prey's equilibrium abundance N* = m/(a(e − m·h)) contains no prey parameters whatsoever. Feeding the prey population better cannot make it commoner; it makes predators commoner instead, and past a threshold it destabilises the pair entirely. Enrichment passing straight through one level to the one above it is the arithmetic behind a <span class="gloss" data-help="glosTrophicCascade">trophic cascade</span>.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('overshoot');">Overshoot</button> room made cycles out of one species and a time lag; this room makes them out of two species and a feedback, and the <span class="gloss" data-help="glosLimitCycle">limit cycle</span> you get from an enriched environment is a third kind again. The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room drops this predator into the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room's competition, where its effect on who survives is the opposite of what you would guess.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Why do the predator’s peaks always trail the prey’s?</li>
+        <li>Why can enriching the prey’s environment destabilise the pair?</li>
+        <li>Why would a predator with other prey to eat be less likely to drive this one extinct?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/07-predator-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -2849,6 +3032,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room's two competitors and the <button type="button" class="room-link" onclick="switchTab('predator');">Predator</button> room's predator in a single community — a predator that eats both rivals. The only genuinely new parameters are the two attack rates, which say how hard the predator presses on each competitor, and nearly everything this room demonstrates follows from which of the two is larger. Every run is simulated twice, once as you set it up and once with the predator deleted, so a removal experiment is always on screen.</p>
       <p><span class="try-label">Try this.</span> Run <em>Keystone predation</em>, then <em>Remove the keystone</em> — identical parameters, predator switched off — and watch a species that was coexisting disappear. Then load <em>Apparent competition</em>, check that both competition coefficients really are zero, and watch one species eliminate the other anyway. Finally take the keystone settings and drag the two attack rates towards each other until the effect collapses.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Remove the keystone</em>, decide what will happen to the species that was coexisting.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/08-keystone-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="08-keystone-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -3075,6 +3260,15 @@
       <p><strong>Where this comes from.</strong> This room only makes sense against the <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room, whose outcome it overturns, and the <button type="button" class="room-link" onclick="switchTab('predator');">Predator</button> room, whose predator it borrows. It is also the lab's last word on the opening question: by this point, "what stops this population from growing?" cannot be answered by looking at the population, or even at the pair — only at the whole community.</p>
       <p><strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room takes a whole community of many species and asks how it can be described in a single number &mdash; the number a removal experiment like this one would be reported in.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Which competitor must a predator prefer to act as a keystone?</li>
+        <li>How can a shared predator eliminate a species that competes with nothing?</li>
+        <li>Why might removing a predator to protect its prey backfire?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/08-keystone-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -3103,6 +3297,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Every room so far has had one, two or three species. A real community has dozens, and ecologists sum it up in a single number &mdash; most often Shannon's or Simpson's index. This room is about what those numbers measure, and what they cannot tell you. It comes in three steps: <strong>build</strong> a community by dragging its bars, <strong>sample</strong> it the way a field ecologist has to, and then let it <strong>drift</strong>, with no species any better than another. The first step is deterministic arithmetic; the second and third draw individuals at random, so no two runs agree.</p>
       <p><span class="try-label">Try this.</span> Start from <em>Even</em> and look at the three effective numbers: all equal to the number of species. Now choose <em>One dominant</em> &mdash; the species are all still there, but both indices fall a long way. Press <em>Add a rare species</em> and see which number notices. Then take a sample of 20 individuals, then 100 such samples, and compare each estimate with the truth. Finally, run the drift with no immigration, and again with a little.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Add a rare species</em>, decide which of the three effective numbers will change most, and which least.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/09-diversity-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="09-diversity-room">core path 36 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -3305,6 +3501,15 @@
       <p>Finally, the drift: with no immigration, diversity drains away with no cause at all. No species is better than any other, yet one after another is lost, and in the end one holds the whole community &mdash; which one is luck. A trickle of immigrants is enough to stop the slide, and the level it settles at depends on <em>J</em> and <em>m</em>, not on any of the species. How diverse a place is depends on how large and how connected it is, as well as on who lives there.</p>
       <p><strong>Where this comes from.</strong> The <button type="button" class="room-link" onclick="switchTab('keystone');">Keystone</button> room showed that a predator can decide whether a competitor survives; these are the numbers in which such a change would be reported. And the drift is the Drift Room of the <a href="../evolutionary-laboratories/#drifting" target="_blank" rel="noopener">Evolutionary Laboratories</a> with species in place of alleles: Simpson's &Sigma;<em>p<sub>i</sub></em>&sup2; is exactly the chance that two gene copies are the same allele, so 1 &minus; <em>D</em> is the heterozygosity a population geneticist would calculate. <strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('turnover');">Turnover</button> room measures several communities at once, and asks how the diversity of a landscape is made up from the diversity of its sites.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Two meadows hold the same 20 species. How can one be far more diverse than the other?</li>
+        <li>Why is richness from a sample always too low, and why does that make surveys of different effort hard to compare?</li>
+        <li>With no species better than another, why does diversity still drain away?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/09-diversity-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -3332,11 +3537,13 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room measured one community. This one measures several at once &mdash; a set of sites, each with its own species &mdash; and asks how the diversity of the whole is made up from the diversity of its parts. <strong>&gamma;</strong> is the diversity of all the sites pooled, <strong>&alpha;</strong> is the diversity of a typical site, and <strong>&beta;</strong> is how different the sites are from each other: how many distinct sites they amount to. In Step 1 you build the landscape; in Step 2 the sites drift, each on its own, while one large site holding as many individuals as all of them together drifts alongside.</p>
       <p><span class="try-label">Try this.</span> Step through the four presets and watch &alpha; and &gamma; separately: under <em>Identical</em>, &gamma; is no bigger than &alpha; &mdash; the whole landscape holds no more than one site &mdash; while under <em>Complete turnover</em> it is exactly <em>N</em> times bigger. Then run the drift with the defaults: every site starts the same, and watch &beta; climb as they lose different species. Finally, compare the two lines in the middle panel &mdash; the several small sites against the single large one &mdash; and see which holds more species, and for how long.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the drift, decide what will happen to <var>α</var> and to <var>β</var> as sites that start identical lose species by chance.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/10-turnover-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="10-turnover-room">core path 35 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
       <div class="eq"><span class="var">&gamma;</span> = <span class="var">&alpha;</span> &times; <span class="var">&beta;</span></div>
-      <div class="eq-gloss">Whittaker's partition, with every term an effective number. <em>&gamma;</em> and <em>&alpha;</em> are counted in species, exactly as in the Diversity room; <em>&beta;</em> = &gamma;/&alpha; is counted in <strong>sites</strong>, and runs from <strong>1</strong>, when every site holds the same community, to <strong>N</strong>, when no two sites share a species. It answers: if the landscape were split into sites with nothing in common, how many would it take?</div>
+      <div class="eq-gloss">The partition this room uses: Whittaker's multiplicative one, in the form Jost (2007) gave it, with every term an effective number. It is a convention, not the only definition &mdash; see <em>What this model assumes</em>. In it, <em>&gamma;</em> and <em>&alpha;</em> are counted in species, exactly as in the Diversity room; <em>&beta;</em> = &gamma;/&alpha; is counted in <strong>sites</strong>, and runs from <strong>1</strong>, when every site holds the same community, to <strong>N</strong>, when no two sites share a species. It answers: if the landscape were split into sites with nothing in common, how many would it take?</div>
       <details class="eq-key">
         <summary>What each symbol means</summary>
         <dl>
@@ -3347,7 +3554,7 @@
           <dt>&alpha;</dt>
           <dd>Alpha diversity: the effective number of species in a typical site. Not quite the plain average of the sites' own values: for Shannon it is e raised to the mean <em>H&prime;</em>, for Simpson one over the mean <em>D</em>, which is what makes &gamma; = &alpha; &times; &beta; hold exactly.</dd>
           <dt>&beta;</dt>
-          <dd>Beta diversity, &gamma;/&alpha;: the effective number of completely distinct sites. Between 1 and <em>N</em>. It is the measure of <em>turnover</em> &mdash; how much the species change from one site to the next.</dd>
+          <dd>Beta diversity, defined in this room as &gamma;/&alpha;: the effective number of completely distinct sites. Between 1 and <em>N</em>. It is the measure of <em>turnover</em> &mdash; how much the species change from one site to the next.</dd>
           <dt>q</dt>
           <dd>The order of the effective number, set by <em>Measure by</em>: 0 for richness, which counts every species once; 1 for Shannon; 2 for Simpson, which is set mostly by the common species. The same landscape can have quite different &beta; under each: largest by richness when the sites differ mainly in their rare species, largest by Simpson when they differ in their common ones.</dd>
         </dl>
@@ -3486,6 +3693,7 @@
     <div class="room-assumes">
       <h2>What this model assumes</h2>
       <ul>
+        <li><strong>&beta; means one thing here: &gamma;/&alpha;, in effective numbers.</strong> That is one convention for partitioning diversity, chosen because its three terms share a scale and &beta; reads as a number of sites. It is not the only one. &beta; is also defined additively, as &gamma; &minus; &alpha;, and as any of dozens of dissimilarity indices between pairs of sites &mdash; Jaccard's, Sørensen's, Bray&ndash;Curtis &mdash; which measure related but different things. A &beta; from one convention cannot be compared with a &beta; from another, and even within this one it differs between richness, Shannon and Simpson.</li>
         <li><strong>Every site is the same size and counts the same.</strong> &gamma; pools the sites with equal weight, and &alpha; averages them equally. Real sites differ in area and in how many individuals they hold, and weighting them by size changes all three numbers &mdash; which is one reason published values of &beta; are so hard to compare.</li>
         <li><strong>The sites are counted completely.</strong> Every individual in every site is known. A real survey samples each site, and that inflates &beta;: each sample misses a different handful of rare species, so the sites look more different than they are. It is the <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room's lesson about richness, doubled &mdash; and worst of all for &beta; measured by richness, where a single missed individual changes the count.</li>
         <li><strong>A species is its count, and nothing else.</strong> As in the Diversity room, two closely related species count as much as two unrelated ones, and &beta; says nothing about how different the species that change between sites actually are.</li>
@@ -3502,10 +3710,19 @@
       <p>Finally, the comparison in the middle panel. Splitting the same number of individuals into several isolated sites makes each one lose species faster, but not the same species, so together they usually hold more than one large site. With no immigration they always do in the end: each small site finishes with a species of its own, and the large site with a single one. The large site often leads for a while early on, when the small sites have each lost their rare species and it has not yet lost its own &mdash; but under pure chance, several small comes out ahead. That is not the answer conservation usually reaches, and the difference is the point: what makes small sites risky in reality &mdash; edges, species that need a large area, a single disaster &mdash; is everything this model leaves out.</p>
       <p><strong>Where this comes from.</strong> Each site is a community from the <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room, measured the same way. The drift apart is the Migration Room of the <a href="../evolutionary-laboratories/#migration" target="_blank" rel="noopener">Evolutionary Laboratories</a> with species in place of alleles: what &beta; measures here, <em>F</em><sub>ST</sub> measures there, and both fall as exchange between places rises. <strong>Where this goes next.</strong> The <button type="button" class="room-link" onclick="switchTab('metapopulation');">Metapopulation</button> room keeps the sites and changes the question: not which species each patch holds, but whether one species holds it at all.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>Two regions both average ten species per site. How can one hold far more species overall?</li>
+        <li>Why does immigration from a shared pool make sites locally richer and regionally the same?</li>
+        <li>Several small sites or a single large one: what does this room say, and what does it leave out?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/10-turnover-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
-      <p>The landscape is an <em>N</em> &times; 12 grid of whole-number abundances from 0 to 100; each site's shares <em>p<sub>ij</sub></em> are its abundances divided by its own total, so every site counts equally whatever its total. The pooled share of species <em>i</em> is the mean of <em>p<sub>ij</sub></em> over the sites. With equal weights, Jost's (2007) partition gives, for order <em>q</em>: &gamma; = (&Sigma;<sub><em>i</em></sub> <em>p&#772;<sub>i</sub></em><sup><em>q</em></sup>)<sup>1/(1&minus;<em>q</em>)</sup> and &alpha; = (mean<sub><em>j</em></sub> &Sigma;<sub><em>i</em></sub> <em>p<sub>ij</sub></em><sup><em>q</em></sup>)<sup>1/(1&minus;<em>q</em>)</sup>, taken at their limits for <em>q</em> = 1 (&gamma; = e<sup><em>H&prime;</em> of the pooled shares</sup>, &alpha; = e<sup>mean <em>H&prime;</em></sup>) and equal to pooled and mean richness for <em>q</em> = 0. Then &beta; = &gamma;/&alpha;, which lies between 1 and <em>N</em> for every order. The presets use a pool of 12 species with abundances falling by a quarter from one to the next: every site holds all of them (<em>Identical</em>), successively fewer (<em>Nested</em>), a bell of species centred further along for each site (<em>Gradient</em>), or a disjoint share of them in equal numbers (<em>Complete turnover</em>, for which &beta; = <em>N</em> exactly).</p>
+      <p>The landscape is an <em>N</em> &times; 12 grid of whole-number abundances from 0 to 100; each site's shares <em>p<sub>ij</sub></em> are its abundances divided by its own total, so every site counts equally whatever its total. The pooled share of species <em>i</em> is the mean of <em>p<sub>ij</sub></em> over the sites. The room uses one partitioning convention, the multiplicative one in effective numbers; additive partitions (&beta; = &gamma; &minus; &alpha;) and pairwise dissimilarity indices are others, and give different values. With equal weights, Jost's (2007) multiplicative partition gives, for order <em>q</em>: &gamma; = (&Sigma;<sub><em>i</em></sub> <em>p&#772;<sub>i</sub></em><sup><em>q</em></sup>)<sup>1/(1&minus;<em>q</em>)</sup> and &alpha; = (mean<sub><em>j</em></sub> &Sigma;<sub><em>i</em></sub> <em>p<sub>ij</sub></em><sup><em>q</em></sup>)<sup>1/(1&minus;<em>q</em>)</sup>, taken at their limits for <em>q</em> = 1 (&gamma; = e<sup><em>H&prime;</em> of the pooled shares</sup>, &alpha; = e<sup>mean <em>H&prime;</em></sup>) and equal to pooled and mean richness for <em>q</em> = 0. Then &beta; = &gamma;/&alpha;, which lies between 1 and <em>N</em> for every order. The presets use a pool of 12 species with abundances falling by a quarter from one to the next: every site holds all of them (<em>Identical</em>), successively fewer (<em>Nested</em>), a bell of species centred further along for each site (<em>Gradient</em>), or a disjoint share of them in equal numbers (<em>Complete turnover</em>, for which &beta; = <em>N</em> exactly).</p>
       <p>The drift runs <em>N</em> independent Moran communities of <em>J</em> individuals and one of <em>N</em>&middot;<em>J</em>, all for the same number of generations, a generation being as many deaths as the community has individuals. At each death the replacement is, with probability <em>m</em>, an immigrant drawn from the pooled shares, and otherwise the offspring of another individual of the same community chosen at random. Each small site starts from the pooled shares or from its own row, scaled to <em>J</em> by largest remainder; the large site always starts from the pooled shares, which with equal weights is the same as merging the sites. The communities are recorded at 300 moments, and &alpha;, &beta;, &gamma; and the large site's diversity are recomputed from those records whenever the measure changes. The partition is Whittaker (1960) in Jost's (2007) multiplicative form; the neutral communities are Hubbell's (2001), without speciation; the several-small-or-single-large debate goes back to Diamond (1975) and Simberloff &amp; Abele (1976).</p>
     </details>
   </div>
@@ -3528,6 +3745,8 @@
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Every other room counts individuals. This one counts <em>populations</em>. The landscape is a set of patches; each patch holds a local population or stands empty; occupied patches go extinct and empty ones get colonised from the occupied ones. Nothing here asks how many individuals a patch holds &mdash; a patch is occupied or it is not. What survives is the <span class="gloss" data-help="glosMetapopulation">metapopulation</span>, and it survives something that kills every one of its parts.</p>
       <p><span class="try-label">Try this.</span> Run the defaults and watch occupancy climb and then level off &mdash; then keep watching the grid, which never stops changing. Set <em>e</em> above <em>c</em> and run again: nothing is wrong with any individual patch, and the whole thing still empties. Finally open <em>More parameters</em> and destroy some habitat, a little at a time, watching what <em>p*</em> does compared with how much you took.</p>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before the first run, work out <var>p</var>* = 1 − <var>e</var>/<var>c</var> and decide whether the landscape will settle there — and whether the grid will stop changing once it does.</p>
+      <p class="room-guide"><a class="room-guide-link" href="guides/11-metapopulation-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="11-metapopulation-room">core path 34 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
     <div class="equation">
@@ -3685,6 +3904,15 @@
       <p>Notice what <em>p*</em> is made of, too. Only the ratio <em>e</em>/<em>c</em> appears in it: double both rates and the equilibrium does not move, though the turnover beneath it doubles. And a species can be driven out of a landscape in which every patch remains perfectly habitable and every local population is exactly as robust as it ever was &mdash; set <em>e</em> just above <em>c</em> and nothing is wrong anywhere except in the arithmetic of the whole.</p>
       <p><strong>Where this comes from.</strong> This room inverts the lab's unit. The <button type="button" class="room-link" onclick="switchTab('growth');">Growth</button> and <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> rooms asked what happens inside one population; here each of those is reduced to a single bit, and the question becomes what happens to a population of them. The <button type="button" class="room-link" onclick="switchTab('resource');">Resource</button> room's lesson returns in a new form: as there, the ceiling is not a property of the species but of what the environment supplies &mdash; and taking habitat away lowers it one for one.</p>
     </div>
+    <div class="room-discuss">
+      <h2>Questions to discuss</h2>
+      <ol>
+        <li>How can a set of populations persist when every one of them goes extinct?</li>
+        <li>Why can a species vanish from a landscape with plenty of habitat left?</li>
+        <li>Destroying 60% of the patches is fatal here, though the species occupied only 60% of them to begin with. Why?</li>
+      </ol>
+      <p class="room-discuss-more">More questions, a timed path for BSc and MSc, and notes for checking your answers are in the <a href="guides/11-metapopulation-room.pdf" target="_blank" rel="noopener">room guide (PDF)</a>.</p>
+    </div>
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
@@ -3723,11 +3951,11 @@
     </div>
   </div>
 
-<script src="js/nav.js?v=16"></script>
+<script src="js/nav.js?v=17"></script>
   <script src="js/canvas-utils.js?v=12"></script>
   <script src="js/lab-core.js?v=18"></script>
   <script src="js/plot-core.js?v=18"></script>
-  <script src="js/help.js?v=18"></script>
+  <script src="js/help.js?v=19"></script>
   <script src="js/growth-room.js?v=15"></script>
   <script src="js/crowding-room.js?v=15"></script>
   <script src="js/resource-room.js?v=14"></script>
