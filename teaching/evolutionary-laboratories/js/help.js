@@ -43,15 +43,26 @@
           <li><strong>locus</strong> — its address on the chromosome.</li>
           <li><strong>allele</strong> — one particular version of it.</li>
         </ul>
+        <p>The words do not map one to one, though: every gene sits at a locus, but not every
+        locus holds a gene. Non-coding DNA, repeats and genetic markers have loci and alleles
+        too.</p>
         <p>In these rooms we usually say <em>locus</em>, because what is being followed is a
-        position that different alleles can occupy.</p>`
+        position that different alleles can occupy — whether or not a gene sits there.</p>`
     },
 
     glosLocus: {
       title: 'Locus (plural: loci)',
       body: `
-        <p>A <strong>position</strong> on a chromosome — the address of a gene, not the gene
-        itself. Latin for "place"; the plural is <em>loci</em>.</p>
+        <p>A <strong>position</strong> in the genome — an address on a chromosome, not what
+        lives there. Latin for "place"; the plural is <em>loci</em>.</p>
+        <p>A locus need not hold a gene. Most of a genome codes for no protein at all, and a
+        locus is just as often a stretch of non-coding DNA, a repetitive sequence such as a
+        microsatellite, or a single site used as a genetic <em>marker</em>. What makes a
+        position a locus is only that it can vary: it is <strong>any place where a mutation
+        of any kind</strong> — one base swapped for another, a piece inserted or deleted, a
+        repeat gained or lost — <strong>can give rise to an alternative allele</strong>. The
+        960 loci in the Speciation Room that neither habitat has any use for could be any of
+        these.</p>
         <p>The distinction matters as soon as you start counting. A population does not have
         "more or fewer genes" at a locus; it has different <strong>alleles</strong> present at
         that one locus, in some proportion. So a locus can be <em>polymorphic</em> (more than
@@ -64,8 +75,9 @@
     glosAllele: {
       title: 'Allele',
       body: `
-        <p>One of the alternative versions of a gene that can sit at a locus. If the locus is
-        the address, the allele is who lives there.</p>
+        <p>One of the alternative versions of the DNA that can sit at a locus — of a gene, if
+        the locus holds one, but just as well of a marker or a stretch of non-coding sequence.
+        If the locus is the address, the allele is who lives there.</p>
         <p>Throughout these rooms the two alleles at a locus are written <strong><var>A</var>₁</strong>
         and <strong><var>A</var>₂</strong>. A diploid individual carries two copies, so it is one of three
         <strong>genotypes</strong>: <var>A</var>₁<var>A</var>₁, <var>A</var>₁<var>A</var>₂ (the heterozygote) or <var>A</var>₂<var>A</var>₂.</p>
