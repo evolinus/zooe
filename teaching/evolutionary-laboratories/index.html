@@ -1613,10 +1613,24 @@
      bottleneck is easier to draw than to type. It spans the deck, and so do the
      presets above it, whose five words do not fit a 220px column. */
   .ne-preset-field{ grid-column: 1 / -1; max-width: 640px; }
-  .ne-sched-field{ grid-column: 1 / -1; }
   /* touch-action: none so a finger drawing on it is not taken for a scroll. It
      is the one canvas on the page that has to claim the gesture. */
-  .canvas-wrap.ne-sched{ height: 190px; touch-action: none; cursor: ns-resize; }
+  .canvas-wrap.ne-sched{ height: 135px; touch-action: none; cursor: ns-resize; }
+  /* Part 1: three panels at one width over a column of readouts. Short enough,
+     with the tighter cards, that all three fit a laptop window under the tab
+     bar when Run scrolls them into view. */
+  .ne-p1{ display: grid; grid-template-columns: minmax(0, 1fr) 168px; gap: 16px; align-items: start; }
+  .ne-p1-panels{ display: grid; gap: 10px; min-width: 0; }
+  .ne-p1 .lineage-card{ padding: 9px 14px 8px; }
+  .ne-p1 .lineage-head{ margin-bottom: 5px; }
+  .canvas-wrap.ne-traj{ height: 115px; }
+  .canvas-wrap.ne-het1{ height: 155px; }
+  .ne-p1 .ne-key{ margin-top: 5px; }
+  .ne-p1-stats{ flex-direction: column; justify-content: flex-start; margin-top: 0; }
+  @media (max-width: 900px){
+    .ne-p1{ grid-template-columns: minmax(0, 1fr); }
+    .ne-p1-stats{ flex-direction: row; justify-content: center; }
+  }
   .canvas-wrap.ne-sched canvas:focus-visible{ outline: 2px solid var(--room-deep); outline-offset: -2px; }
   /* The formula under Parts 2 and 3's sliders: what the two settings add up to,
      restated as the room's arithmetic. Larger than a .mix-scale caption, because
@@ -1633,14 +1647,11 @@
     margin-top: 8px; font-size: 11px; color: var(--ink-soft);
   }
   .ne-key > span{ white-space: nowrap; }
-  /* Line swatches drawn as the lines are drawn — solid, dashed, dotted — so a
-     key can be matched to its curve by pattern as well as by colour. */
-  .ne-sw{
-    display: inline-block; width: 18px; height: 0; margin-right: 4px; vertical-align: middle;
-    border-top: 2.5px solid var(--c);
-  }
-  .ne-sw-dash{ border-top-width: 2px; border-top-style: dashed; }
-  .ne-sw-dot{ border-top-width: 2px; border-top-style: dotted; }
+  /* Line swatches drawn with the very dash patterns the canvas uses, at the same
+     scale, so a key can be matched to its curve by pattern as well as by colour.
+     CSS dashed and dotted borders could not do that: at this size the two came
+     out looking alike. */
+  .ne-sw{ width: 24px; height: 6px; margin-right: 4px; vertical-align: middle; }
   /* The key sits at the foot of its card, so cards side by side end level. */
   .card-fill > .ne-key{ margin-top: auto; padding-top: 8px; }
   /* Five presets do not fit a phone's width in one row; they go three and two,
@@ -3312,7 +3323,7 @@
     </p>
 
     <div class="deck deck-setup deck-numbered">
-      <div class="deck-kicker">Set up part 1<span class="deck-kicker-note">start from a preset, reshape it if you like, then press Run.</span></div>
+      <div class="deck-kicker">Set up part 1<span class="deck-kicker-note">start from a preset, reshape it in the first panel below if you like, then press Run.</span></div>
       <div class="field ne-preset-field">
         <label id="lbl-presetSeg_ne">Start from<button class="help-btn" data-help="nePresets"></button></label>
         <div role="group" aria-labelledby="lbl-presetSeg_ne" class="segmented" id="presetSeg_ne">
@@ -3323,11 +3334,6 @@
           <button data-preset="cycles">Boom &amp; bust</button>
         </div>
       </div>
-      <div class="field ne-sched-field">
-        <label id="lbl-schedCanvas_ne"><span>Census size <var>N</var>, generation by generation</span><button class="help-btn" data-help="neSchedule"></button></label>
-        <div class="canvas-wrap ne-sched"><canvas id="schedCanvas_ne" tabindex="0" role="slider" aria-labelledby="lbl-schedCanvas_ne" aria-valuemin="5" aria-valuemax="1000" aria-valuenow="10"></canvas></div>
-        <div class="mix-scale">Drag across the bars to set each block's size, from 5 to 1,000. On a keyboard: ← → choose a block, ↑ ↓ change its size.</div>
-      </div>
 
       <div class="transport">
         <button class="btn" id="btnRun1_ne" data-sound data-results="#stage1_ne">▶ Run Simulation</button>
@@ -3336,29 +3342,43 @@
       </div>
     </div>
 
-    <div class="stage-area ne-stage" id="stage1_ne" style="--cols: 2;">
-      <div class="lineage-card card-fill">
-        <div class="lineage-head"><span class="name-group"><span class="name">Twenty of the loci</span><button class="help-btn" data-help="neTraj"></button></span><span class="stat mono">frequency of <var>A</var>₁</span></div>
-        <div class="canvas-wrap ne-chart"><canvas id="trajCanvas_ne" role="img" aria-label="Allele frequency at twenty of the loci against generation"></canvas></div>
-      </div>
-      <div class="lineage-card card-fill">
-        <div class="lineage-head"><span class="name-group"><span class="name">Genetic diversity — mean <var>H</var> over 200 loci</span><button class="help-btn" data-help="neHet1"></button></span></div>
-        <div class="canvas-wrap ne-chart"><canvas id="het1Canvas_ne" role="img" aria-label="Mean heterozygosity against generation"></canvas></div>
-        <div class="ne-key mono">
-          <span><i class="ne-sw" style="--c:#7A5C99"></i> measured</span>
-          <span><i class="ne-sw ne-sw-dash" style="--c:#262220"></i> expected, this schedule</span>
-          <span><i class="ne-sw ne-sw-dash" style="--c:#4B4F94"></i> constant <var>N</var> = harmonic mean</span>
-          <span><i class="ne-sw ne-sw-dot" style="--c:#A8442A"></i> constant <var>N</var> = arithmetic mean</span>
+    <!-- The three panels share one generation axis, so they are stacked at one
+         width with their plot areas aligned: a crash in the schedule sits
+         directly above the lurch in the loci and the drop in diversity it
+         causes. The readouts take a column to the right rather than a row
+         beneath, so that pressing Run can bring all three panels on screen at
+         once. The schedule is the run's main setting, but it lives here rather
+         than in the deck, because a deck's padding would shift its axis out of
+         line with the other two. -->
+    <div class="ne-p1" id="stage1_ne">
+      <div class="ne-p1-panels">
+        <div class="lineage-card">
+          <div class="lineage-head"><span class="name-group"><span class="name" id="lbl-schedCanvas_ne">Census size <var>N</var>, generation by generation</span><button class="help-btn" data-help="neSchedule"></button></span><span class="stat mono">drag the bars · or ← → ↑ ↓</span></div>
+          <div class="canvas-wrap ne-sched"><canvas id="schedCanvas_ne" tabindex="0" role="slider" aria-labelledby="lbl-schedCanvas_ne" aria-valuemin="5" aria-valuemax="1000" aria-valuenow="10"></canvas></div>
+        </div>
+        <div class="lineage-card">
+          <div class="lineage-head"><span class="name-group"><span class="name">Twenty of the 200 loci — frequency of <var>A</var>₁</span><button class="help-btn" data-help="neTraj"></button></span></div>
+          <div class="canvas-wrap ne-traj"><canvas id="trajCanvas_ne" role="img" aria-label="Allele frequency at twenty of the loci against generation"></canvas></div>
+        </div>
+        <div class="lineage-card">
+          <div class="lineage-head"><span class="name-group"><span class="name">Genetic diversity — mean <var>H</var> over 200 loci</span><button class="help-btn" data-help="neHet1"></button></span></div>
+          <div class="canvas-wrap ne-het1"><canvas id="het1Canvas_ne" role="img" aria-label="Mean heterozygosity against generation"></canvas></div>
+          <div class="ne-key mono">
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> measured</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#262220" stroke-width="1.75" stroke-dasharray="5 4"/></svg> expected, this schedule</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#4B4F94" stroke-width="1.75" stroke-dasharray="8 3 2 3"/></svg> constant <var>N</var> = harmonic mean</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> constant <var>N</var> = arithmetic mean</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="drift-stats">
-      <div class="drift-chip">Arithmetic mean <var>N</var><span id="amVal_ne">—</span></div>
-      <div class="drift-chip">Harmonic mean <var>N</var><span id="hmVal_ne">—</span></div>
-      <div class="drift-chip">Smallest <var>N</var><span id="minVal_ne">—</span></div>
-      <div class="drift-chip"><var>H</var> now<span id="hLeft1Val_ne">—</span></div>
-      <div class="drift-chip"><var>N</var><sub>e</sub> from the run<button class="help-btn" data-help="neFromRun"></button><span id="neHat1Val_ne">—</span></div>
+      <div class="drift-stats ne-p1-stats">
+        <div class="drift-chip">Arithmetic mean <var>N</var><span id="amVal_ne">—</span></div>
+        <div class="drift-chip">Harmonic mean <var>N</var><span id="hmVal_ne">—</span></div>
+        <div class="drift-chip">Smallest <var>N</var><span id="minVal_ne">—</span></div>
+        <div class="drift-chip"><var>H</var> now<span id="hLeft1Val_ne">—</span></div>
+        <div class="drift-chip"><var>N</var><sub>e</sub> from the run<button class="help-btn" data-help="neFromRun"></button><span id="neHat1Val_ne">—</span></div>
+      </div>
     </div>
 
     <div class="reading">
@@ -3410,9 +3430,9 @@
         <div class="lineage-head"><span class="name-group"><span class="name">Genetic diversity — mean <var>H</var> over 200 loci</span><button class="help-btn" data-help="neHet2"></button></span></div>
         <div class="canvas-wrap ne-chart"><canvas id="het2Canvas_ne" role="img" aria-label="Mean heterozygosity against generation"></canvas></div>
         <div class="ne-key mono">
-          <span><i class="ne-sw" style="--c:#7A5C99"></i> measured</span>
-          <span><i class="ne-sw ne-sw-dash" style="--c:#262220"></i> expected from <var>N</var><sub>e</sub></span>
-          <span><i class="ne-sw ne-sw-dot" style="--c:#A8442A"></i> expected from the census <var>N</var></span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> measured</span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#262220" stroke-width="1.75" stroke-dasharray="5 4"/></svg> expected from <var>N</var><sub>e</sub></span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> expected from the census <var>N</var></span>
         </div>
       </div>
     </div>
@@ -3472,19 +3492,19 @@
         <div class="lineage-head"><span class="name-group"><span class="name">Inbreeding coefficient <var>F</var></span><button class="help-btn" data-help="neFChart"></button></span></div>
         <div class="canvas-wrap ne-genomes"><canvas id="fCanvas_ne" role="img" aria-label="Inbreeding coefficient against generation"></canvas></div>
         <div class="ne-key mono">
-          <span><i class="ne-sw" style="--c:#4B4F94"></i> within the population, <var>F</var><sub>IS</sub></span>
-          <span><i class="ne-sw" style="--c:#C08A2E"></i> against the founders</span>
-          <span><i class="ne-sw ne-sw-dash" style="--c:#262220"></i> expected</span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#4B4F94" stroke-width="2.5"/></svg> within the population, <var>F</var><sub>IS</sub></span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#C08A2E" stroke-width="2.5"/></svg> against the founders</span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#5A5249" stroke-width="1.5" stroke-dasharray="5 4"/></svg> dashed: expected, same colour</span>
         </div>
       </div>
       <div class="lineage-card card-fill" style="grid-column: 1 / -1;">
         <div class="lineage-head"><span class="name-group"><span class="name">Heterozygosity — expected and observed, over 100 loci</span><button class="help-btn" data-help="neHet3"></button></span></div>
         <div class="canvas-wrap ne-chart"><canvas id="het3Canvas_ne" role="img" aria-label="Heterozygosity against generation"></canvas></div>
         <div class="ne-key mono">
-          <span><i class="ne-sw" style="--c:#7A5C99"></i> gene diversity 2<var>pq</var>, the gene pool</span>
-          <span><i class="ne-sw" style="--c:#C08A2E"></i> observed heterozygotes</span>
-          <span><i class="ne-sw ne-sw-dash" style="--c:#262220"></i> their expectations</span>
-          <span><i class="ne-sw ne-sw-dot" style="--c:#A8442A"></i> random mating, same <var>N</var></span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> gene diversity 2<var>pq</var>, the gene pool</span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#C08A2E" stroke-width="2.5"/></svg> observed heterozygotes</span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#5A5249" stroke-width="1.5" stroke-dasharray="5 4"/></svg> dashed: their expectations</span>
+          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> random mating, same <var>N</var></span>
         </div>
       </div>
     </div>
@@ -5112,27 +5132,27 @@
     </div>
   </div>
 
-<script src="js/i18n.js?v=1793613418148"></script>
-  <script src="js/nav.js?v=1793613418148"></script>
-  <script src="js/sound.js?v=1793613418148"></script>
-  <script src="js/help.js?v=1793613418148"></script>
-  <script src="js/shapes-engine.js?v=1793613418148"></script>
-  <script src="js/canvas-utils.js?v=1793613418148"></script>
-  <script src="js/phylo.js?v=1793613418148"></script>
-  <script src="js/copying-room.js?v=1793613418148"></script>
-  <script src="js/branching-room.js?v=1793613418148"></script>
-  <script src="js/fate-room.js?v=1793613418148"></script>
-  <script src="js/sex-asex-room.js?v=1793613418148"></script>
-  <script src="js/hardy-weinberg-room.js?v=1793613418148"></script>
-  <script src="js/linkage-room.js?v=1793613418148"></script>
-  <script src="js/wright-fisher-core.js?v=1793613418148"></script>
-  <script src="js/drift-room.js?v=1793613418148"></script>
-  <script src="js/effective-size-room.js?v=1793613418148"></script>
-  <script src="js/selection-room.js?v=1793613418148"></script>
-  <script src="js/mutation-room.js?v=1793613418148"></script>
-  <script src="js/migration-room.js?v=1793613418148"></script>
-  <script src="js/adaptation-room.js?v=1793613418148"></script>
-  <script src="js/speciation-room.js?v=1793613418148"></script>
-  <script src="js/consent.js?v=1793613418148"></script>
+<script src="js/i18n.js?v=1793627518572"></script>
+  <script src="js/nav.js?v=1793627518572"></script>
+  <script src="js/sound.js?v=1793627518572"></script>
+  <script src="js/help.js?v=1793627518572"></script>
+  <script src="js/shapes-engine.js?v=1793627518572"></script>
+  <script src="js/canvas-utils.js?v=1793627518572"></script>
+  <script src="js/phylo.js?v=1793627518572"></script>
+  <script src="js/copying-room.js?v=1793627518572"></script>
+  <script src="js/branching-room.js?v=1793627518572"></script>
+  <script src="js/fate-room.js?v=1793627518572"></script>
+  <script src="js/sex-asex-room.js?v=1793627518572"></script>
+  <script src="js/hardy-weinberg-room.js?v=1793627518572"></script>
+  <script src="js/linkage-room.js?v=1793627518572"></script>
+  <script src="js/wright-fisher-core.js?v=1793627518572"></script>
+  <script src="js/drift-room.js?v=1793627518572"></script>
+  <script src="js/effective-size-room.js?v=1793627518572"></script>
+  <script src="js/selection-room.js?v=1793627518572"></script>
+  <script src="js/mutation-room.js?v=1793627518572"></script>
+  <script src="js/migration-room.js?v=1793627518572"></script>
+  <script src="js/adaptation-room.js?v=1793627518572"></script>
+  <script src="js/speciation-room.js?v=1793627518572"></script>
+  <script src="js/consent.js?v=1793627518572"></script>
 </body>
 </html>
