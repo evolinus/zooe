@@ -1616,21 +1616,25 @@
   /* touch-action: none so a finger drawing on it is not taken for a scroll. It
      is the one canvas on the page that has to claim the gesture. */
   .canvas-wrap.ne-sched{ height: 149px; touch-action: none; cursor: ns-resize; }
-  /* Part 1: three panels at one width over a column of readouts. Short enough,
-     with the tighter cards, that all three fit a laptop window under the tab
-     bar when Run scrolls them into view — about 730px of window. */
-  .ne-p1{ display: grid; grid-template-columns: minmax(0, 1fr) 168px; gap: 16px; align-items: start; }
+  /* Every part sets its panels beside a column of readouts rather than above a
+     row of them, so the numbers sit next to the curves they summarise and the
+     panels keep the full height of the window. One column below 900px, with
+     the readouts back in a row underneath. */
+  .ne-split{ display: grid; grid-template-columns: minmax(0, 1fr) 168px; gap: 16px; align-items: start; }
+  .ne-split-stats{ flex-direction: column; justify-content: flex-start; margin-top: 0; }
+  @media (max-width: 900px){
+    .ne-split{ grid-template-columns: minmax(0, 1fr); }
+    .ne-split-stats{ flex-direction: row; justify-content: center; }
+  }
+  /* Part 1: three panels at one width, stacked. Short enough, with the tighter
+     cards, that all three fit a laptop window under the tab bar when Run
+     scrolls them into view — about 730px of window. */
   .ne-p1-panels{ display: grid; gap: 10px; min-width: 0; }
   .ne-p1 .lineage-card{ padding: 9px 14px 8px; }
   .ne-p1 .lineage-head{ margin-bottom: 5px; }
   .canvas-wrap.ne-traj{ height: 127px; }
   .canvas-wrap.ne-het1{ height: 171px; }
   .ne-p1 .ne-key{ margin-top: 5px; }
-  .ne-p1-stats{ flex-direction: column; justify-content: flex-start; margin-top: 0; }
-  @media (max-width: 900px){
-    .ne-p1{ grid-template-columns: minmax(0, 1fr); }
-    .ne-p1-stats{ flex-direction: row; justify-content: center; }
-  }
   .canvas-wrap.ne-sched canvas:focus-visible{ outline: 2px solid var(--room-deep); outline-offset: -2px; }
   /* The formula under Parts 2 and 3's sliders: what the two settings add up to,
      restated as the room's arithmetic. Larger than a .mix-scale caption, because
@@ -1641,7 +1645,6 @@
   .canvas-wrap.ne-chart{ height: 260px; min-height: 260px; }
   .canvas-wrap.ne-breed{ height: 240px; min-height: 240px; }
   .canvas-wrap.ne-genomes{ height: 300px; min-height: 300px; }
-  .ne-stage + .drift-stats{ margin-top: 16px; }
   .ne-key{
     display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 14px;
     margin-top: 8px; font-size: 11px; color: var(--ink-soft);
@@ -3358,7 +3361,7 @@
          once. The schedule is the run's main setting, but it lives here rather
          than in the deck, because a deck's padding would shift its axis out of
          line with the other two. -->
-    <div class="ne-p1" id="stage1_ne">
+    <div class="ne-split ne-p1" id="stage1_ne">
       <div class="ne-p1-panels">
         <div class="lineage-card">
           <div class="lineage-head"><span class="name-group"><span class="name" id="lbl-schedCanvas_ne">Census size <var>N</var>, generation by generation</span><button class="help-btn" data-help="neSchedule"></button></span><span class="stat mono">drag the bars · or ← → ↑ ↓</span></div>
@@ -3380,7 +3383,7 @@
         </div>
       </div>
 
-      <div class="drift-stats ne-p1-stats">
+      <div class="drift-stats ne-split-stats">
         <div class="drift-chip">Arithmetic mean <var>N</var><span id="amVal_ne">—</span></div>
         <div class="drift-chip">Harmonic mean <var>N</var><span id="hmVal_ne">—</span></div>
         <div class="drift-chip">Smallest <var>N</var><span id="minVal_ne">—</span></div>
@@ -3420,37 +3423,39 @@
       </div>
     </div>
 
-    <div class="stage-area ne-stage" id="stage2_ne" style="--cols: 2;">
-      <div class="lineage-card card-fill">
-        <div class="lineage-head"><span class="name-group"><span class="name">One generation of breeding</span><button class="help-btn" data-help="neBreeding"></button></span><span class="stat mono" id="breedLabel_ne">—</span></div>
-        <div class="canvas-wrap ne-breed"><canvas id="breedCanvas_ne" role="img" aria-label="One generation of breeding"></canvas></div>
-        <div class="ne-key mono">
-          <span><span style="color:#2F7A8C;">■</span> male</span>
-          <span><span style="color:#C08A2E;">●</span> female</span>
-          <span>hollow: left no offspring</span>
+    <div class="ne-split" id="stage2_ne">
+      <div class="stage-area" style="--cols: 2;">
+        <div class="lineage-card card-fill">
+          <div class="lineage-head"><span class="name-group"><span class="name">One generation of breeding</span><button class="help-btn" data-help="neBreeding"></button></span><span class="stat mono" id="breedLabel_ne">—</span></div>
+          <div class="canvas-wrap ne-breed"><canvas id="breedCanvas_ne" role="img" aria-label="One generation of breeding"></canvas></div>
+          <div class="ne-key mono">
+            <span><span style="color:#2F7A8C;">■</span> male</span>
+            <span><span style="color:#C08A2E;">●</span> female</span>
+            <span>hollow: left no offspring</span>
+          </div>
+        </div>
+        <div class="lineage-card card-fill">
+          <div class="lineage-head"><span class="name-group"><span class="name"><var>N</var><sub>e</sub> as a share of the census</span><button class="help-btn" data-help="neSexCurve"></button></span><span class="stat mono"><var>N</var><sub>e</sub>/<var>N</var> = 4<var>x</var>(1 − <var>x</var>)</span></div>
+          <div class="canvas-wrap ne-breed"><canvas id="curveCanvas_ne" role="img" aria-label="Effective size as a share of the census against the share of breeders that are male"></canvas></div>
+        </div>
+        <div class="lineage-card card-fill" style="grid-column: 1 / -1;">
+          <div class="lineage-head"><span class="name-group"><span class="name">Genetic diversity — mean <var>H</var> over 200 loci</span><button class="help-btn" data-help="neHet2"></button></span></div>
+          <div class="canvas-wrap ne-chart"><canvas id="het2Canvas_ne" role="img" aria-label="Mean heterozygosity against generation"></canvas></div>
+          <div class="ne-key mono">
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> measured</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#262220" stroke-width="1.75" stroke-dasharray="5 4"/></svg> expected from <var>N</var><sub>e</sub></span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> expected from the census <var>N</var></span>
+          </div>
         </div>
       </div>
-      <div class="lineage-card card-fill">
-        <div class="lineage-head"><span class="name-group"><span class="name"><var>N</var><sub>e</sub> as a share of the census</span><button class="help-btn" data-help="neSexCurve"></button></span><span class="stat mono"><var>N</var><sub>e</sub>/<var>N</var> = 4<var>x</var>(1 − <var>x</var>)</span></div>
-        <div class="canvas-wrap ne-breed"><canvas id="curveCanvas_ne" role="img" aria-label="Effective size as a share of the census against the share of breeders that are male"></canvas></div>
-      </div>
-      <div class="lineage-card card-fill" style="grid-column: 1 / -1;">
-        <div class="lineage-head"><span class="name-group"><span class="name">Genetic diversity — mean <var>H</var> over 200 loci</span><button class="help-btn" data-help="neHet2"></button></span></div>
-        <div class="canvas-wrap ne-chart"><canvas id="het2Canvas_ne" role="img" aria-label="Mean heterozygosity against generation"></canvas></div>
-        <div class="ne-key mono">
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> measured</span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#262220" stroke-width="1.75" stroke-dasharray="5 4"/></svg> expected from <var>N</var><sub>e</sub></span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> expected from the census <var>N</var></span>
-        </div>
-      </div>
-    </div>
 
-    <div class="drift-stats">
-      <div class="drift-chip">Census <var>N</var><span id="census2Val_ne">—</span></div>
-      <div class="drift-chip"><var>N</var><sub>e</sub><span id="ne2Val_ne">—</span></div>
-      <div class="drift-chip"><var>N</var><sub>e</sub>/<var>N</var><span id="ratio2Val_ne">—</span></div>
-      <div class="drift-chip">Males that bred<span id="fathersVal_ne">—</span></div>
-      <div class="drift-chip"><var>N</var><sub>e</sub> from the run<button class="help-btn" data-help="neFromRun"></button><span id="neHat2Val_ne">—</span></div>
+      <div class="drift-stats ne-split-stats">
+        <div class="drift-chip">Census <var>N</var><span id="census2Val_ne">—</span></div>
+        <div class="drift-chip"><var>N</var><sub>e</sub><span id="ne2Val_ne">—</span></div>
+        <div class="drift-chip"><var>N</var><sub>e</sub>/<var>N</var><span id="ratio2Val_ne">—</span></div>
+        <div class="drift-chip">Males that bred<span id="fathersVal_ne">—</span></div>
+        <div class="drift-chip"><var>N</var><sub>e</sub> from the run<button class="help-btn" data-help="neFromRun"></button><span id="neHat2Val_ne">—</span></div>
+      </div>
     </div>
 
     <div class="reading">
@@ -3486,43 +3491,45 @@
       </div>
     </div>
 
-    <div class="stage-area ne-stage" id="stage3_ne" style="--cols: 2;">
-      <div class="lineage-card card-fill">
-        <div class="lineage-head"><span class="name-group"><span class="name">Genomes</span><button class="help-btn" data-help="neGenomes"></button></span><span class="stat mono" id="genomeLabel_ne">—</span></div>
-        <div class="canvas-wrap ne-genomes"><canvas id="genomeCanvas_ne" role="img" aria-label="Genotypes of the first individuals at the first loci: homozygotes pale, heterozygotes split in two colours"></canvas></div>
-        <div class="ne-key mono">
-          <span><span style="color:#2E5C8A;">■</span> <var>A</var>₁<var>A</var>₁ (pale)</span>
-          <span><span style="color:#2E5C8A;">◩</span> heterozygote</span>
-          <span><span style="color:#A8442A;">■</span> <var>A</var>₂<var>A</var>₂ (pale)</span>
+    <div class="ne-split" id="stage3_ne">
+      <div class="stage-area" style="--cols: 2;">
+        <div class="lineage-card card-fill">
+          <div class="lineage-head"><span class="name-group"><span class="name">Genomes</span><button class="help-btn" data-help="neGenomes"></button></span><span class="stat mono" id="genomeLabel_ne">—</span></div>
+          <div class="canvas-wrap ne-genomes"><canvas id="genomeCanvas_ne" role="img" aria-label="Genotypes of the first individuals at the first loci: homozygotes pale, heterozygotes split in two colours"></canvas></div>
+          <div class="ne-key mono">
+            <span><span style="color:#2E5C8A;">■</span> <var>A</var>₁<var>A</var>₁ (pale)</span>
+            <span><span style="color:#2E5C8A;">◩</span> heterozygote</span>
+            <span><span style="color:#A8442A;">■</span> <var>A</var>₂<var>A</var>₂ (pale)</span>
+          </div>
+        </div>
+        <div class="lineage-card card-fill">
+          <div class="lineage-head"><span class="name-group"><span class="name">Inbreeding coefficient <var>F</var></span><button class="help-btn" data-help="neFChart"></button></span></div>
+          <div class="canvas-wrap ne-genomes"><canvas id="fCanvas_ne" role="img" aria-label="Inbreeding coefficient against generation"></canvas></div>
+          <div class="ne-key mono">
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#4B4F94" stroke-width="2.5"/></svg> within the population, <var>F</var><sub>IS</sub></span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#C08A2E" stroke-width="2.5"/></svg> against the founders</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#5A5249" stroke-width="1.5" stroke-dasharray="5 4"/></svg> dashed: expected, same colour</span>
+          </div>
+        </div>
+        <div class="lineage-card card-fill" style="grid-column: 1 / -1;">
+          <div class="lineage-head"><span class="name-group"><span class="name">Heterozygosity — expected and observed, over 100 loci</span><button class="help-btn" data-help="neHet3"></button></span></div>
+          <div class="canvas-wrap ne-chart"><canvas id="het3Canvas_ne" role="img" aria-label="Heterozygosity against generation"></canvas></div>
+          <div class="ne-key mono">
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> gene diversity 2<var>pq</var>, the gene pool</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#C08A2E" stroke-width="2.5"/></svg> observed heterozygotes</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#5A5249" stroke-width="1.5" stroke-dasharray="5 4"/></svg> dashed: their expectations</span>
+            <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> random mating, same <var>N</var></span>
+          </div>
         </div>
       </div>
-      <div class="lineage-card card-fill">
-        <div class="lineage-head"><span class="name-group"><span class="name">Inbreeding coefficient <var>F</var></span><button class="help-btn" data-help="neFChart"></button></span></div>
-        <div class="canvas-wrap ne-genomes"><canvas id="fCanvas_ne" role="img" aria-label="Inbreeding coefficient against generation"></canvas></div>
-        <div class="ne-key mono">
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#4B4F94" stroke-width="2.5"/></svg> within the population, <var>F</var><sub>IS</sub></span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#C08A2E" stroke-width="2.5"/></svg> against the founders</span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#5A5249" stroke-width="1.5" stroke-dasharray="5 4"/></svg> dashed: expected, same colour</span>
-        </div>
-      </div>
-      <div class="lineage-card card-fill" style="grid-column: 1 / -1;">
-        <div class="lineage-head"><span class="name-group"><span class="name">Heterozygosity — expected and observed, over 100 loci</span><button class="help-btn" data-help="neHet3"></button></span></div>
-        <div class="canvas-wrap ne-chart"><canvas id="het3Canvas_ne" role="img" aria-label="Heterozygosity against generation"></canvas></div>
-        <div class="ne-key mono">
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#7A5C99" stroke-width="2.5"/></svg> gene diversity 2<var>pq</var>, the gene pool</span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#C08A2E" stroke-width="2.5"/></svg> observed heterozygotes</span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#5A5249" stroke-width="1.5" stroke-dasharray="5 4"/></svg> dashed: their expectations</span>
-          <span><svg class="ne-sw" viewBox="0 0 24 6" aria-hidden="true"><line x1="0" y1="3" x2="24" y2="3" stroke="#A8442A" stroke-width="1.5" stroke-dasharray="2 3"/></svg> random mating, same <var>N</var></span>
-        </div>
-      </div>
-    </div>
 
-    <div class="drift-stats">
-      <div class="drift-chip"><var>F</var><sub>IS</sub> now<span id="fisVal_ne">—</span></div>
-      <div class="drift-chip">Observed <var>H</var><span id="hObsVal_ne">—</span></div>
-      <div class="drift-chip">Expected 2<var>pq</var><span id="hExpVal_ne">—</span></div>
-      <div class="drift-chip"><var>N</var><sub>e</sub> = <var>N</var>/(1 + <var>F</var>)<span id="ne3Val_ne">—</span></div>
-      <div class="drift-chip"><var>N</var><sub>e</sub> from the run<button class="help-btn" data-help="neFromRun"></button><span id="neHat3Val_ne">—</span></div>
+      <div class="drift-stats ne-split-stats">
+        <div class="drift-chip"><var>F</var><sub>IS</sub> now<span id="fisVal_ne">—</span></div>
+        <div class="drift-chip">Observed <var>H</var><span id="hObsVal_ne">—</span></div>
+        <div class="drift-chip">Expected 2<var>pq</var><span id="hExpVal_ne">—</span></div>
+        <div class="drift-chip"><var>N</var><sub>e</sub> = <var>N</var>/(1 + <var>F</var>)<span id="ne3Val_ne">—</span></div>
+        <div class="drift-chip"><var>N</var><sub>e</sub> from the run<button class="help-btn" data-help="neFromRun"></button><span id="neHat3Val_ne">—</span></div>
+      </div>
     </div>
 
     <div class="reading">
