@@ -42,6 +42,15 @@
     male: '#2F7A8C', female: '#C08A2E'
   };
 
+  // The Drift Room's ten run colours (wright-fisher-core.js), so a locus line
+  // here reads the way a run line does there. Part 1 draws twenty loci, so each
+  // colour is used twice; what has to be followed is the crowd's lurch at the
+  // bottleneck, not one line through it.
+  const LOCUS_COLORS = [
+    '#3D6E6E', '#A8442A', '#7A5C99', '#C08A2E', '#3C6E3F',
+    '#8B3E62', '#3A5A8C', '#B5651D', '#4F7CAC', '#9B4F4F'
+  ];
+
   const G = 100;         // generations in every part
   const BLOCK = 5;       // Part 1: generations per bar of the size schedule
   const BLOCKS = G / BLOCK;
@@ -491,7 +500,7 @@
       ymax: 1, yticks: [0, 0.25, 0.5, 0.75, 1], ydp: 2,
       ylabel: T('ne.axisP', 'Frequency <var>p</var>'),
       xTitle: false,
-      series: run ? run.traj.map(t => ({ data: t.slice(0, upto + 1), color: COLORS.room, width: 1.25, alpha: 0.6 })) : [],
+      series: run ? run.traj.map((t, i) => ({ data: t.slice(0, upto + 1), color: LOCUS_COLORS[i % LOCUS_COLORS.length], width: 1.25, alpha: 0.85 })) : [],
       cursor: run ? cursor : null
     });
     lineChart(DOM.het1Canvas, {
