@@ -43,9 +43,9 @@
   };
 
   // The Drift Room's ten run colours (wright-fisher-core.js), so a locus line
-  // here reads the way a run line does there. Part 1 draws twenty loci, so each
-  // colour is used twice; what has to be followed is the crowd's lurch at the
-  // bottleneck, not one line through it.
+  // here reads the way a run line does there. Part 1 draws ten loci for that
+  // reason: one colour each, so any one line can be followed through the
+  // bottleneck. The diversity chart still averages all 200.
   const LOCUS_COLORS = [
     '#3D6E6E', '#A8442A', '#7A5C99', '#C08A2E', '#3C6E3F',
     '#8B3E62', '#3A5A8C', '#B5651D', '#4F7CAC', '#9B4F4F'
@@ -56,7 +56,7 @@
   const BLOCKS = G / BLOCK;
   const N_MIN = 5, N_MAX = 1000;
   const LOCI_FREQ = 200; // Parts 1 and 2: unlinked loci followed by frequency
-  const LOCI_SHOWN = 20; // Part 1: how many of them get a trajectory drawn
+  const LOCI_SHOWN = 10; // Part 1: how many of them get a trajectory drawn
   const LOCI_IND = 100;  // Part 3: loci carried by every individual
   const GRID_ROWS = 30, GRID_COLS = 40; // Part 3: the part of the genomes drawn
   const H0 = 0.5;        // every locus starts at p = 0.5
