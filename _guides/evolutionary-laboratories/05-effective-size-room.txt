@@ -31,7 +31,7 @@ The Drift Room's population is ideal: the same size every generation, every indi
 set: Part 1 on its default, the *Bottleneck* preset: 500 individuals for 95 generations and 10 for five generations, from generation 41 to 45.
 predict: The arithmetic mean size is 476. Will the population lose diversity like a population of about 476, of about 10, or of something in between — and if in between, nearer which end?
 run: Press **Run Simulation** in Part 1 and watch both charts as the run passes generation 40.
-look: the *Twenty of the loci* chart during the crash, the purple diversity line against the three expectations, and the chips *Harmonic mean N* and *Ne from the run*.
+look: the *Ten of the 200 loci* chart during the crash, the purple diversity line against the three expectations, and the chips *Harmonic mean N* and *Ne from the run*.
 explain: Why does the purple line follow the black dashed line, and end where the harmonic mean predicted? What happened to the loci that hit 0 or 1 during the crash, once the population was back to 500?
 
 # step core 8 | Bigger on average, poorer in diversity

@@ -1564,10 +1564,11 @@
     },
 
     neTraj: {
-      title: 'Twenty of the loci',
+      title: 'Ten of the loci',
       body: `
-        <p>Twenty of the 200 loci, each drawn as its own line, all starting at <var>p</var> = 0.5. They are the
-        Drift Room's ten-run view, but in a population whose size is changing under them.</p>
+        <p>Ten of the 200 loci, each drawn as its own line in its own colour, all starting at <var>p</var> = 0.5. They
+        are the Drift Room's ten-run view, in the same colours, but in a population whose size is changing under
+        them. The diversity chart below averages all 200.</p>
         <p>Look at what happens during a crash: the lines that were wandering gently suddenly lurch, and several
         hit 0 or 1 within a few generations. When the population grows again they calm down — but the ones that hit
         an edge stay there. Lost alleles do not come back when the population recovers.</p>`
