@@ -3,8 +3,13 @@
 
     // The reading order, and the single source of truth for it — the tab bar,
     // the Previous/Next links and the ?#hash all follow this array. The first
-    // nine are the argument; the last three are the machinery rooms, which the
+    // ten are the argument; the last three are the machinery rooms, which the
     // argument refers to but never depends on at its default settings.
+    //
+    // The Effective Size Room closes Part II rather than opening Part III: it
+    // is the Drift Room's own promise kept — that room calls its N an effective
+    // size, and this is where the phrase is earned — and everything after it
+    // can then use N in that sense without apology.
     //
     // Migration sits directly after Mutation rather than beside the two fish
     // rooms it feeds: with it there, Part III opens by naming all four forces
@@ -12,7 +17,7 @@
     // from Part II) and migration — before Adaptation and Speciation put them
     // to work together.
     const ROOM_ORDER = [
-      'readme', 'copying', 'branching', 'fate', 'drifting',
+      'readme', 'copying', 'branching', 'fate', 'drifting', 'effective',
       'selection', 'mutation', 'migration', 'adaptation', 'speciation',
       'reproduction', 'hardyweinberg', 'linkage'
     ];
@@ -22,6 +27,7 @@
       branching: 'The Branching Room',
       fate: 'The Fate Room',
       drifting: 'The Drift Room',
+      effective: 'The Effective Size Room',
       selection: 'The Selection Room',
       mutation: 'The Mutation Room',
       migration: 'The Migration Room',
@@ -181,7 +187,7 @@
        Focus moves; the room does not change with it. That is the manual
        activation half of the pattern, and it is the right half here because
        switchTab pushes a history entry: arrowing from one end of the bar to the
-       other under automatic activation would stack eleven of them and leave the
+       other under automatic activation would stack twelve of them and leave the
        Back button walking rooms the reader only passed through. Enter and Space
        activate, which they already do as native buttons.
 
@@ -189,7 +195,7 @@
        reader who navigates that way loses nothing. It is a deliberate departure
        from the APG, which would make only the selected tab tabbable.
 
-       Home and End are included because with thirteen rooms the bar is long
+       Home and End are included because with fourteen tabs the bar is long
        enough for them to be worth having. */
     document.addEventListener('keydown', (e) => {
       const tab = e.target.closest && e.target.closest('.tab-btn');
