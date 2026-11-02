@@ -1539,6 +1539,30 @@
         and how much it moves the second.</p>`
     },
 
+    neLoci: {
+      title: 'Where the 200 loci come from',
+      body: `
+        <p>Parts 1 and 2 follow 200 <span class="gloss" data-help="glosLocus">loci</span> — positions in the genome —
+        in one population. They stand for the genetic markers a real study would genotype: single-nucleotide
+        polymorphisms or microsatellites, spread across the chromosomes. They are imagined far enough apart to be
+        inherited independently, so each drifts on its own, as the Drift Room's ten runs did.</p>
+        <p>Three choices make them easy to read, and none changes the conclusion:</p>
+        <ul>
+          <li><strong>Neutral.</strong> No allele at any of them affects fitness, so what happens to them is drift and
+          nothing else — which is what an effective size measures.</li>
+          <li><strong>Two alleles, starting at <var>p</var> = 0.5.</strong> Every locus begins with
+          <var>H</var> = 2<var>pq</var> = 0.5, the most two alleles can give. Start them anywhere else and the curves
+          start lower, but they fall by the same proportion each generation, so the <var>N</var><sub>e</sub> they
+          give is the same.</li>
+          <li><strong>Two hundred of them.</strong> One locus tells you almost nothing about a rate: it may fix in ten
+          generations or wander for five hundred. The average over many is predictable. With 200, the mean
+          <var>H</var> at the end of a default run lands within about 5% of its expectation, and the
+          <var>N</var><sub>e</sub> worked out from it within about 10%.</li>
+        </ul>
+        <p>Part 3 follows 100 loci in each individual instead, because there every individual's genotype at every
+        locus has to be kept.</p>`
+    },
+
     neTraj: {
       title: 'Twenty of the loci',
       body: `

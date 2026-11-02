@@ -235,9 +235,10 @@
 
   // ---- running and revealing ---------------------------------------------------
 
-  // Thirty generations a second: a hundred-generation run takes three seconds,
-  // long enough to watch the bottleneck bite and short enough not to wait for.
-  const STEP_MS = 33;
+  // Fifteen generations a second: a hundred-generation run takes about seven
+  // seconds. Thirty was tried first and was too quick to follow the loci
+  // lurching through a bottleneck while also watching the diversity fall.
+  const STEP_MS = 66;
   const reducedMotion = () => !!(window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
