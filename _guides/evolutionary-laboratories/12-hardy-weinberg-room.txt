@@ -1,11 +1,11 @@
 id: hardyweinberg
-num: 11
+num: 12
 title: The Hardy–Weinberg Room
 kicker: From alleles to genotypes
 part: Part IV — The machinery underneath
 focus: Under random mating one allele frequency fixes all three genotype frequencies in a single generation; drawing real gametes adds drift.
 colour: #8B3E62
-before: The Reproduction Room (10) made the gametes this room pairs up.
+before: The Reproduction Room (11) made the gametes this room pairs up.
 
 # intro
 A single locus with two alleles, A₁ at frequency $p$ and A₂ at $q$ = 1 − $p$. You build a parent population, pair its gametes at random, and compare the offspring with the p² : 2pq : q² that Hardy–Weinberg predicts. This guide asks what the theorem promises, and what it cannot.

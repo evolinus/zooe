@@ -10,8 +10,8 @@
 // Nothing here touches a room's own code. A room signals that it is busy in one
 // of three ways, and all three are visible on the button that started it:
 //
-//   Drift, Selection, Adaptation, Speciation, Fate, Mutation, Hardy-Weinberg
-//     disable the button (and the controls) for the length of the run;
+//   Drift, Effective Size, Selection, Adaptation, Speciation, Fate, Mutation,
+//   Hardy-Weinberg disable the button (and the controls) for the length of the run;
 //   Reproduction and Linkage run on a timer and flip the button to "Pause";
 //   Copying and Branching do the same through a `playing` flag.
 //

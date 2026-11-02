@@ -1,11 +1,11 @@
 id: migration
-num: 07
+num: 08
 title: The Migration Room
 kicker: Gene flow against drift
 part: Part III — Neutral or selected
 focus: Drift pulls two populations apart, gene flow pulls them together; what decides it is the number of migrants Nm, not the fraction m.
 colour: #2F7A8C
-before: The Drift Room (04). The Selection Room (05) helps for step 6.
+before: The Drift Room (04). The Selection Room (06) helps for step 6.
 
 # intro
 Two populations, A and B, each of $N$, drift on their own each generation and then exchange $M$ individuals in each direction. This guide asks how much exchange it takes to stop two populations becoming different, and what *different* should mean.

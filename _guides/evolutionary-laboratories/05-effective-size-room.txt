@@ -1,0 +1,95 @@
+id: effective
+num: 05
+title: The Effective Size Room
+kicker: Effective population size
+part: Part II — What becomes of one mutation
+focus: Real populations drift like smaller ideal ones: the harmonic mean of a changing size, the rarer sex and inbreeding all set $N_e$ below the census.
+colour: #4B4F94
+before: The Drift Room (04): this room measures every population in that room's currency, the rate heterozygosity falls.
+
+# intro
+The Drift Room's population is ideal: the same size every generation, every individual equally likely to be a parent, mating at random. This room breaks those promises one at a time — a size that changes, unequal numbers of the two sexes, mating with relatives — and measures what each costs in lost diversity. The $N$ of the ideal population that would lose diversity at the same rate is the effective population size, $N_e$.
+
+# objectives core
+- Define the effective population size as the size of an ideal population that loses genetic diversity at the same rate.
+- Explain why a population that changes size has an $N_e$ close to the harmonic mean of its sizes, and why a short bottleneck therefore matters so much.
+- Explain why the rarer sex limits $N_e$ when the numbers of breeding males and females differ.
+- Distinguish inbreeding as non-random mating (a heterozygote deficit within the population) from inbreeding as relatedness in a small population (drift seen from the individual).
+
+# objectives ext
+- Calculate the harmonic mean of a size schedule and use $H_t$ = $H$<sub>0</sub>(1 − 1/2$N_e$)<sup>$t$</sup> to predict a run.
+- Use $N_e$ = 4$N_m$$N_f$/($N_m$ + $N_f$) to show that $N_e$ can never exceed four times the number of the rarer sex.
+- Derive $F$ = $σ$/(2 − $σ$) under partial selfing and explain why selfing also lowers $N_e$ to $N$/(1 + $F$).
+
+# routes
+- **45-minute practical (BSc):** steps 1–4, then questions 1–3 as a group discussion.
+- **Self-study:** the core path, then the *Checking your reasoning* page. Allow 40 minutes.
+- **MSc seminar:** the core path as preparation; class time on steps 5–7 and questions 4–6.
+- **15-minute demonstration:** step 1 projected, with the class voting on the prediction before the run.
+
+# step core 8 | A crash in the middle
+set: Part 1 on its default, the *Bottleneck* preset: 500 individuals for 95 generations and 10 for five generations, from generation 41 to 45.
+predict: The arithmetic mean size is 476. Will the population lose diversity like a population of about 476, of about 10, or of something in between — and if in between, nearer which end?
+run: Press **Run Simulation** in Part 1 and watch both charts as the run passes generation 40.
+look: the *Twenty of the loci* chart during the crash, the purple diversity line against the three expectations, and the chips *Harmonic mean N* and *Ne from the run*.
+explain: Why does the purple line follow the black dashed line, and end where the harmonic mean predicted? What happened to the loci that hit 0 or 1 during the crash, once the population was back to 500?
+
+# step core 8 | Bigger on average, poorer in diversity
+set: Part 1. First the *Constant* preset (200 throughout), then *Bottleneck* again.
+predict: The constant population is never larger than 200; the bottlenecked one averages 476. Which will have more diversity left after 100 generations?
+run: Run each preset once, and note *H now* at the end of each.
+look: the chips *Arithmetic mean N*, *Harmonic mean N* and *H now* for the two runs.
+explain: Which number — the average head count or the harmonic mean — put the two populations in the right order? Why does one bad stretch of five generations outweigh ninety-five good ones?
+
+# step core 10 | A few males
+set: Part 2. First 25 males and 25 females; then 2 males and 48 females; then 2 males and 98 females.
+predict: All three have a census of 50 or more. Rank them by how much diversity they will keep, and estimate $N_e$ for each.
+run: Press **Run Simulation** in Part 2 at each setting.
+look: the *One generation of breeding* panel, the chips *Ne* and *Ne from the run*, and the purple line against the two expectations.
+explain: Why do the lines to fathers converge on so few squares, and why does that matter for the whole gene pool? Why did doubling the females from 48 to 98 change almost nothing?
+
+# step core 9 | Two kinds of inbreeding
+set: Part 3, $N$ = 50. First selfing $σ$ = 0, then $σ$ = 1.
+predict: For each setting, what will the indigo line ($F$ within the population) do? What will the gold line ($F$ against the founders) do? How will the *Genomes* panel look after 100 generations?
+run: Press **Run Simulation** in Part 3 at each setting.
+look: the *Genomes* panel and the gold bars beside it, and the two lines on the *Inbreeding coefficient F* chart.
+explain: At $σ$ = 0 nobody mates with a relative on purpose, yet the gold line rises. Why? At $σ$ = 1, what has happened to the heterozygotes, and has any allele frequency had to change for it to happen?
+
+# step ext 12 | Calculating the harmonic mean
+set: Part 1, the *Boom & bust* preset: ten generations at 1,000, then ten at 20, repeated five times.
+predict: Calculate the arithmetic and harmonic means of the hundred sizes by hand. Then predict *H now* at generation 100 from $H_t$ = 0.5(1 − 1/2$N_e$)<sup>100</sup>, using each mean in turn as $N_e$.
+run: Run it twice. Then pick *Expansion* and *Decline*, and for each calculate the harmonic mean from the bars before running.
+look: your calculation against the *Harmonic mean N* chip, and *H now* against your two predictions.
+explain: Real populations of voles and lemmings cycle like this. What does your calculation say about using a census taken in a peak year? In *Expansion*, when was most of the diversity lost?
+plines: 3
+
+# step ext 8 | The ceiling set by the rarer sex
+set: Part 2 with 5 males. Females 5, then 20, then 95.
+predict: Calculate $N_e$ = 4$N_m$$N_f$/($N_m$ + $N_f$) for each. What is the largest $N_e$ any number of females could give with 5 males?
+run: Run each setting.
+look: the *Ne* chip, *Ne from the run*, and the point on the *Ne as a share of the census* curve.
+explain: Show algebraically why $N_e$ < 4$N_m$ however large $N_f$ becomes. Name a species, wild or domestic, where this ceiling is the main limit on $N_e$.
+
+# step ext 10 | What selfing does to the gene pool
+set: Part 3, $N$ = 50. Selfing $σ$ = 0.5, then 1.
+predict: Calculate $F$ = $σ$/(2 − $σ$) and $N_e$ = $N$/(1 + $F$) for each. Will the purple gene-diversity line fall faster than the red dotted line of a randomly mating population of 50?
+run: Run each setting twice.
+look: the purple line against the red dotted line, and *Ne from the run* against the *Ne = N/(1 + F)* chip.
+explain: Selfing on its own changes no allele frequency. Why, then, does the gene pool drift faster? Why does *Ne from the run* vary more from run to run here than in Parts 1 and 2?
+
+# questions
+- [core] A population was 10,000 for a century, except for one hard winter that left 20 survivors. Which number matters more for its genetic diversity today, and why?
+- [core] Why does adding more females to a herd with two breeding males barely raise its effective size?
+- [core] A selfing plant population and an outcrossing one have the same allele frequencies. How do their genotype frequencies differ, and which will lose diversity faster?
+- [ext] A conservation plan counts 2,000 adults in a population whose numbers swing tenfold between good and bad years, with one male in five breeding. Explain, without exact numbers, why its $N_e$ may be in the low hundreds or below.
+- [ext] Every room after this one uses $N$. Should it be read as the census or as $N_e$? Give an example where the difference changes whether selection or drift is in charge.
+- [ext] Inbreeding in a small population and drift are sometimes called two descriptions of one process. Explain what that means, using the gold line of Part 3 at $σ$ = 0.
+
+# check
+- **Step 1.** About 145, the harmonic mean — nearer 10 than 476 in its effect. The schedule predicts $H$<sub>100</sub> = 0.352 against 0.450 from the arithmetic mean; runs land around 0.35 with *Ne from the run* usually between 130 and 160. Loci fixed or lost in the crash stay there: the recovery brings back individuals, not alleles.
+- **Step 2.** The constant population of 200 keeps more: $H$<sub>100</sub> = 0.5 × (1 − 1/400)<sup>100</sup> ≈ 0.389, against about 0.352 for the bottleneck. The harmonic means (200 against 145) put them in the right order; the arithmetic means (200 against 476) put them the wrong way round. Five generations at 10 contribute 5/10 = 0.5 to Σ1/$N$, the other 95 only 95/500 = 0.19.
+- **Step 3.** $N_e$ = 50, 7.7 and 7.8. At 25:25 about 0.18 of the diversity is left after 100 generations; with 2 males almost none (expected 0.0007). Every offspring has one of the two males as its father, so half the gene pool passes through two individuals each generation, however many females there are.
+- **Step 4.** At $σ$ = 0 the indigo line hovers near 0 and the genome panel shows heterozygotes scattered evenly, yet the gold line rises to about 0.63 (1 − 0.99<sup>100</sup>): in a population of 50 everyone becomes related, which is drift. At $σ$ = 1 the indigo line goes to 1 within about five generations (0.5, 0.75, 0.88, 0.94, 0.97) and the genomes turn pale everywhere: no heterozygotes, with no change in allele frequency needed.
+- **Step 5.** Boom & bust: arithmetic mean 510, harmonic mean 100/(50/1,000 + 50/20) = 39.2. Predicted $H$<sub>100</sub> 0.139 from the harmonic mean, 0.453 from the arithmetic. Expansion: harmonic mean 99.5 against an arithmetic 744, most of the loss in the first thirty generations. Decline: harmonic 76 against arithmetic 259, the loss accelerating at the end. A census in a peak year overstates $N_e$ more than tenfold.
+- **Step 6.** $N_e$ = 10, 16 and 19; the limit is 4 × 5 = 20. $N_e$ = 4$N_m$ · $N_f$/($N_m$ + $N_f$), and the fraction is always below 1. Elephant seals, red deer, lekking birds, and livestock bred from a few sires are the classic cases.
+- **Step 7.** $σ$ = 0.5: $F$ = 1/3, $N_e$ = 37.5; $σ$ = 1: $F$ = 1, $N_e$ = 25. The purple line falls below the red dotted one in both, to about 0.13 and 0.07 at generation 100, against 0.18. Two genes in different offspring share a parent with probability 1/$N$ and are then identical with probability (1 + $F$)/2, so selfing raises the per-generation loss. Under heavy selfing the 100 loci share their carriers' histories and are not independent, so a single run is noisier.

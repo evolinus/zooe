@@ -1,5 +1,5 @@
 id: selection
-num: 05
+num: 06
 title: The Selection Room
 kicker: Wright–Fisher + selection
 part: Part III — Neutral or selected

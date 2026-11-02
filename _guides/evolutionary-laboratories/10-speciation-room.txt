@@ -1,11 +1,11 @@
 id: speciation
-num: 09
+num: 10
 title: The Speciation Room
 kicker: Divergence in isolation
 part: Part III — Neutral or selected
 focus: Two isolated populations accumulate fixed differences, mostly by drift at loci nobody selects; selection sorts its loci faster but they are few.
 colour: #1F6E5E
-before: The Drift (04), Selection (05) and Migration (07) rooms. The Adaptation Room (08) supplies the traits.
+before: The Drift (04), Selection (06) and Migration (08) rooms. The Adaptation Room (09) supplies the traits.
 
 # intro
 An ancestral lake population carrying 1,013 loci of standing variation splits in two. Population A stays; population B moves to another lake or to a stream, and nothing passes between them again. After $G$ generations the room counts fixed differences and the divergence of a mating signal, and gives a verdict. This guide asks what accumulates, where in the genome, and how much a verdict of this kind really says.

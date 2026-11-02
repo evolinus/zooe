@@ -165,7 +165,8 @@
         of a thousand rarely drifts like an idealised thousand — unequal families, skewed sex ratios and past crashes
         all make it behave like a smaller one. That smaller equivalent is its <strong>effective population size</strong>,
         written <var>N</var><sub>e</sub>, and it is the number that actually governs drift. Wherever these rooms say
-        <var>N</var>, read <var>N</var><sub>e</sub>.</p>`
+        <var>N</var>, read <var>N</var><sub>e</sub>. The Effective Size Room shows each of those three at work, and
+        how far below the census they can take it.</p>`
     },
 
     glosGeneration: {
@@ -1487,6 +1488,234 @@
         <p>That is the whole point. Mutation proposes — blindly, with fixed odds — and selection
         disposes, acting only on the variants that already exist. Selection shapes a mutation's
         <em>fate</em>, never its <em>origin</em>.</p>`
+    },
+
+    // ---------- The Effective Size Room ----------
+
+    neFluctuating: {
+      title: 'A population that changes size',
+      body: `
+        <p>Real populations do not hold still. They are founded by a few, grow, crash in a hard winter, recover,
+        and cycle with their food supply. The Drift Room's <var>N</var> does none of that, so which <var>N</var>
+        should stand in for a population whose size keeps changing?</p>
+        <p>Each generation of size <var>N</var> removes a fraction 1/2<var>N</var> of the diversity still present.
+        Over many generations those losses multiply, which means the 1/<var>N</var>'s add up — and the constant
+        <var>N</var> that adds up to the same total is the <strong>harmonic mean</strong> of the sizes,
+        <var>t</var> / Σ(1/<var>N</var><sub><var>g</var></sub>).</p>
+        <p>A harmonic mean is dominated by its smallest values. One generation at 10 contributes 1/10 to the sum;
+        a generation at 1,000 contributes 1/1,000. So a short crash weighs as much as a long stretch at a large
+        size, and the effective size of a population with a history is usually far closer to its worst moments
+        than to its average.</p>`
+    },
+
+    nePresets: {
+      title: 'Starting shapes',
+      body: `
+        <p>Five schedules to start from. Every one can be reshaped afterwards by dragging the bars.</p>
+        <ul>
+          <li><strong>Constant</strong> — 200 throughout. The Drift Room's population: both averages agree, and the
+          run should lose diversity like a population of 200.</li>
+          <li><strong>Bottleneck</strong> — 500, except five generations at 10. The arithmetic mean barely notices.</li>
+          <li><strong>Expansion</strong> — a founding group of 10 that grows to 1,000 within thirty generations and
+          stays there, as after a colonisation. Most of the loss happens at the start.</li>
+          <li><strong>Decline</strong> — from 1,000 down to 20, steadily. The loss accelerates as it goes.</li>
+          <li><strong>Boom &amp; bust</strong> — ten generations at 1,000, ten at 20, repeated: lemming years. The
+          arithmetic mean is 510; the effective size is under 40.</li>
+        </ul>`
+    },
+
+    neSchedule: {
+      title: 'Drawing the census size',
+      body: `
+        <p>Each bar is a block of five generations, and its height is the number of individuals in each of those
+        generations. The scale is logarithmic, from 5 to 1,000, so a crash from 500 to 10 is as tall a step as it is
+        a severe one.</p>
+        <p><strong>To change it,</strong> press on a bar and drag up or down; drag sideways to paint several at once.
+        Sizes snap to round numbers. With a keyboard, focus the panel, choose a block with ← and →, and change it
+        with ↑ and ↓.</p>
+        <p>The two horizontal lines are the two averages of what you drew. The red dotted one is the ordinary,
+        <strong>arithmetic</strong> mean — the average head count. The black dashed one is the <strong>harmonic</strong>
+        mean, which is the one that predicts the loss of diversity. Watch how little a short crash moves the first,
+        and how much it moves the second.</p>`
+    },
+
+    neTraj: {
+      title: 'Twenty of the loci',
+      body: `
+        <p>Twenty of the 200 loci, each drawn as its own line, all starting at <var>p</var> = 0.5. They are the
+        Drift Room's ten-run view, but in a population whose size is changing under them.</p>
+        <p>Look at what happens during a crash: the lines that were wandering gently suddenly lurch, and several
+        hit 0 or 1 within a few generations. When the population grows again they calm down — but the ones that hit
+        an edge stay there. Lost alleles do not come back when the population recovers.</p>`
+    },
+
+    neHet1: {
+      title: 'Diversity through a changing size',
+      body: `
+        <p>The purple line is the measured <strong>genetic diversity</strong>: heterozygosity, 2<var>pq</var>,
+        averaged over all 200 loci. Three expectations are drawn before the run, so you can see where it ought to go:</p>
+        <ul>
+          <li><strong>Black dashed</strong> — the exact expectation for the schedule you drew: each generation
+          multiplies <var>H</var> by (1 − 1/2<var>N</var>) for its own <var>N</var>. It falls steeply wherever the
+          bars are short.</li>
+          <li><strong>Indigo dash-dot</strong> — a constant population at the <strong>harmonic</strong> mean. A smooth
+          curve, but it ends at almost exactly the same place as the black one.</li>
+          <li><strong>Red dotted</strong> — a constant population at the <strong>arithmetic</strong> mean. Far too
+          optimistic whenever the size varies.</li>
+        </ul>
+        <p>The measured line follows the black one, and so finishes where the harmonic mean said it would.</p>`
+    },
+
+    neFromRun: {
+      title: '<var>N</var><sub>e</sub> from the run',
+      body: `
+        <p>The room's own measurement of the effective size, made only from the diversity the run actually lost.</p>
+        <p>An ideal population of <var>N</var> keeps a fraction (1 − 1/2<var>N</var>)<sup><var>t</var></sup> of its
+        diversity after <var>t</var> generations. Turn that round: given how much the run kept, solve for the
+        <var>N</var> that would have kept the same. That is <var>N</var><sub>e</sub>, with nothing assumed about
+        why the population lost what it did.</p>
+        <p>This is, in spirit, how effective size is estimated in the field — from the genetic change seen over
+        time, not from counting heads. Being a measurement, it carries noise: compare it with the formula's value,
+        and run again to see how much it moves.</p>`
+    },
+
+    neSexRatio: {
+      title: 'Unequal numbers of the two sexes',
+      body: `
+        <p>Every offspring of a sexual species has exactly one father and one mother. So however many of each sex
+        there are, <strong>half of each generation's genes come from the males and half from the females</strong>.
+        If there are few males, their half of the gene pool is drawn from a small sample, and that half drifts as if
+        the population were small.</p>
+        <p>Wright worked out the result:</p>
+        <p style="text-align:center;"><var>N</var><sub>e</sub> = 4<var>N</var><sub>m</sub><var>N</var><sub>f</sub> / (<var>N</var><sub>m</sub> + <var>N</var><sub>f</sub>)</p>
+        <p>With equal numbers this is just <var>N</var>. With 5 males and 45 females it is 18. And because it is
+        always less than 4<var>N</var><sub>m</sub>, adding females to a population with few males hardly helps:
+        the rarer sex sets the ceiling.</p>
+        <p>The classic examples are species where a few males monopolise breeding — elephant seals, red deer, lekking
+        birds — and captive or farmed populations bred from a handful of sires.</p>`
+    },
+
+    neBreeders: {
+      title: 'Breeding males and females',
+      body: `
+        <p>The number of each sex that <em>breeds</em> each generation, not the number alive. A population may hold
+        hundreds of adult males of which only a few win mates; for drift, only those few count.</p>
+        <p>The numbers are held fixed from generation to generation: every generation has exactly
+        <var>N</var><sub>m</sub> breeding males and <var>N</var><sub>f</sub> breeding females, and the census
+        <var>N</var> is their sum.</p>`
+    },
+
+    neBreeding: {
+      title: 'One generation of breeding',
+      body: `
+        <p>Parents on the top row — males as squares, females as circles — and the next generation below. Each
+        offspring is joined to its father and its mother, chosen at random among the breeders of each sex.</p>
+        <p>With few males, every offspring's line to a father converges on the same few squares, while the lines
+        to mothers spread out. That convergence is the whole story of this part: the same few males are behind
+        every individual in the next generation. A hollow mark is a parent that, this time, left no offspring at all
+        — and with many of one sex, quite a few do.</p>
+        <p>During a run the panel is redrawn every five generations, with a fresh draw of parents.</p>`
+    },
+
+    neSexCurve: {
+      title: '<var>N</var><sub>e</sub> as a share of the census',
+      body: `
+        <p>Write <var>x</var> for the share of the breeders that are male. Then Wright's formula becomes
+        <var>N</var><sub>e</sub>/<var>N</var> = 4<var>x</var>(1 − <var>x</var>): a hill, at its top — 1 — when
+        the sexes are equal, and falling to zero at either extreme.</p>
+        <p>The hill is flat near the top and steep at the sides. A 40:60 split costs only 4% of the census;
+        a 10:90 split costs 64%. The gold dot is where your settings sit.</p>`
+    },
+
+    neHet2: {
+      title: 'Diversity with unequal sexes',
+      body: `
+        <p>The measured genetic diversity — heterozygosity averaged over 200 loci — against two expectations:</p>
+        <ul>
+          <li><strong>Red dotted</strong> — what the census predicts, as if every one of the <var>N</var> breeders
+          were an ideal individual.</li>
+          <li><strong>Black dashed</strong> — what <var>N</var><sub>e</sub> = 4<var>N</var><sub>m</sub><var>N</var><sub>f</sub>/(<var>N</var><sub>m</sub> + <var>N</var><sub>f</sub>) predicts.</li>
+        </ul>
+        <p>The purple line follows the black one. When the sexes are equal the two expectations coincide; the
+        further apart the numbers, the further apart the lines.</p>`
+    },
+
+    neInbreeding: {
+      title: 'Inbreeding — two meanings',
+      body: `
+        <p><strong>Inbreeding</strong> is mating between relatives, and its signature is homozygosity: an
+        offspring of relatives can inherit two copies of the same ancestral gene, one through each parent.
+        The <strong>inbreeding coefficient</strong> <var>F</var> is the probability that an individual's two copies
+        at a locus are identical in that way.</p>
+        <p>The word is used for two things, and this part shows both:</p>
+        <ul>
+          <li><strong>Non-random mating</strong> — individuals mating with relatives more often than chance would
+          have them do, here by selfing. It makes heterozygotes rarer than Hardy–Weinberg predicts from the current
+          allele frequencies, measured by <var>F</var><sub>IS</sub>.</li>
+          <li><strong>Inbreeding in a small population</strong> — in a closed population of <var>N</var>, everyone
+          eventually descends from the same few ancestors, so even random mates are relatives. Measured against the
+          founders, <var>F</var> rises by about 1/2<var>N</var><sub>e</sub> a generation: it is drift, described from
+          the individual's point of view.</li>
+        </ul>`
+    },
+
+    neSelfing: {
+      title: 'Selfing rate (<var>σ</var>)',
+      body: `
+        <p>The probability that an offspring's mother is also its father. At <var>σ</var> = 0 the father is drawn at
+        random from the whole population, which is random mating; at <var>σ</var> = 1 every offspring is selfed.
+        Many plants, some snails and a few fish mix the two.</p>
+        <p>Selfing halves the heterozygosity of a lineage every generation it continues, but outcrossing restores it,
+        so the population settles at a balance: <var>F</var> = <var>σ</var>/(2 − <var>σ</var>). At <var>σ</var> = 0.5
+        that is one third — a third fewer heterozygotes than random mating would give.</p>
+        <p>Selfing is the extreme of mating with relatives. Full-sib or cousin mating does the same thing more slowly,
+        and has the same two consequences.</p>`
+    },
+
+    neGenomes: {
+      title: 'Genomes',
+      body: `
+        <p>Each row is one individual, each column one of its loci — the first 40 of 100, for the first 30
+        individuals. A pale square is a homozygote, blue for <var>A</var>₁<var>A</var>₁ and red for
+        <var>A</var>₂<var>A</var>₂; a square split in two colours is a heterozygote. The gold bar at the end of each
+        row is that individual's own heterozygosity over all 100 loci.</p>
+        <p>Under random mating the split squares are scattered evenly, and the bars are all about the same length.
+        Under selfing they are not: some individuals are the products of several generations of selfing in a row
+        and are homozygous almost everywhere, while a recent outcross is heterozygous at many loci at once. Inbreeding
+        acts on whole genomes, not on one locus at a time.</p>`
+    },
+
+    neFChart: {
+      title: 'The inbreeding coefficient',
+      body: `
+        <p>Two measures of <var>F</var>, the two meanings of inbreeding side by side.</p>
+        <ul>
+          <li><strong>Indigo — within the population,</strong> <var>F</var><sub>IS</sub> = 1 − <var>H</var><sub>obs</sub>/2<var>pq</var>:
+          the shortfall of heterozygotes against what the population's own allele frequencies predict. It is set by
+          the mating system, reaches its balance at <var>σ</var>/(2 − <var>σ</var>) in a few generations, and then
+          stays there. At <var>σ</var> = 0 it hovers around zero.</li>
+          <li><strong>Gold — against the founders,</strong> 1 − <var>H</var><sub>obs</sub>/<var>H</var><sub>0</sub>:
+          the heterozygosity lost since generation 0, for any reason. It includes the first, and keeps rising after the
+          first has levelled off, because the gene pool itself is drifting towards fixation.</li>
+        </ul>
+        <p>Dashed lines are the expectations for each.</p>`
+    },
+
+    neHet3: {
+      title: 'Expected and observed heterozygosity',
+      body: `
+        <p>Two kinds of heterozygosity, and the difference between them is the point.</p>
+        <ul>
+          <li><strong>Purple — gene diversity, 2<var>pq</var>:</strong> how often two gene copies drawn at random from
+          the whole population would differ. A property of the gene pool, set by the allele frequencies alone.</li>
+          <li><strong>Gold — observed heterozygosity:</strong> the share of individuals that actually are
+          heterozygous.</li>
+        </ul>
+        <p>Under random mating the two coincide. Selfing pulls the gold line below the purple one by the factor
+        1 − <var>F</var> — that is the heterozygote deficit. But look at the purple line too: it falls faster than the
+        red dotted line of a randomly mating population of the same <var>N</var>. Selfing does not change allele
+        frequencies by itself, yet the gene pool still drifts faster, as if it had only <var>N</var>/(1 + <var>F</var>)
+        individuals.</p>`
     },
 
     // ---------- The Fate Room ----------
