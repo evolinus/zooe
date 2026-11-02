@@ -160,7 +160,10 @@
     cb(ctx, W, H);
   }
 
-  function genAxis(ctx, W, H, pad) {
+  // The axis title is left off the upper panels of a stack whose bottom panel
+  // already carries it: Part 1's three share one generation axis, and the
+  // height saved is what lets all three fit on screen together.
+  function genAxis(ctx, W, H, pad, title = true) {
     const graphW = W - pad.l - pad.r, axisY = H - pad.b;
     ctx.setLineDash([]);
     ctx.strokeStyle = COLORS.ink; ctx.lineWidth = 1;
@@ -171,8 +174,10 @@
       ctx.beginPath(); ctx.moveTo(x, axisY); ctx.lineTo(x, axisY + 5); ctx.stroke();
       ctx.fillText(String(g), x, axisY + 16);
     }
-    ctx.font = '10px ui-monospace, monospace';
-    ctx.fillText(T('ne.axisGen', 'Generation'), pad.l + graphW / 2, axisY + 30);
+    if (title) {
+      ctx.font = '10px ui-monospace, monospace';
+      ctx.fillText(T('ne.axisGen', 'Generation'), pad.l + graphW / 2, axisY + 30);
+    }
     ctx.textAlign = 'left';
   }
 
@@ -191,7 +196,8 @@
   // in full from the start, so the reader sees where it ought to go first.
   function lineChart(canvas, opts) {
     withCanvas(canvas, (ctx, W, H) => {
-      const pad = { l: 46, r: 16, t: 14, b: 40 };
+      const xTitle = opts.xTitle !== false;
+      const pad = { l: 46, r: 16, t: 10, b: xTitle ? 40 : 22 };
       const graphW = W - pad.l - pad.r, graphH = H - pad.t - pad.b;
       const X = (g) => pad.l + (g / G) * graphW;
       const Y = (v) => pad.t + graphH * (1 - v / opts.ymax);
@@ -203,7 +209,7 @@
         ctx.fillText(v.toFixed(opts.ydp ?? 1), pad.l - 6, Y(v) + 4);
       });
       ctx.setLineDash([]); ctx.textAlign = 'left';
-      genAxis(ctx, W, H, pad);
+      genAxis(ctx, W, H, pad, xTitle);
       yTitle(ctx, opts.ylabel, 12, pad, graphH);
 
       (opts.series || []).forEach(s => {
@@ -297,7 +303,8 @@
   }
 
   // -- the schedule editor --
-  const SCHED_PAD = { l: 46, r: 16, t: 16, b: 34 };
+  // l and r must match lineChart's, or the three Part 1 panels stop lining up.
+  const SCHED_PAD = { l: 46, r: 16, t: 10, b: 22 };
   const logN = (n) => Math.log(n / N_MIN) / Math.log(N_MAX / N_MIN);
 
   function drawSchedule(cursorG) {
@@ -375,8 +382,6 @@
         ctx.beginPath(); ctx.moveTo(x, axisY); ctx.lineTo(x, axisY + 4); ctx.stroke();
         ctx.fillText(String(g), x, axisY + 14);
       }
-      ctx.font = '10px ui-monospace, monospace';
-      ctx.fillText(T('ne.axisGen', 'Generation'), pad.l + graphW / 2, axisY + 27);
 
       if (cursorG != null && cursorG < G) {
         const x = pad.l + (cursorG / G) * graphW;
@@ -484,6 +489,7 @@
     lineChart(DOM.trajCanvas, {
       ymax: 1, yticks: [0, 0.25, 0.5, 0.75, 1], ydp: 2,
       ylabel: T('ne.axisP', 'Frequency <var>p</var>'),
+      xTitle: false,
       series: run ? run.traj.map(t => ({ data: t.slice(0, upto + 1), color: COLORS.room, width: 1.25, alpha: 0.6 })) : [],
       cursor: run ? cursor : null
     });
@@ -866,7 +872,7 @@
       ymax: 1, yticks: [0, 0.25, 0.5, 0.75, 1], ydp: 2,
       ylabel: T('ne.axisF', 'Inbreeding <var>F</var>'),
       series: [
-        { data: th.fis, color: COLORS.ink, width: 1.5, dash: [5, 4] },
+        { data: th.fis, color: COLORS.room, width: 1.5, dash: [5, 4] },
         { data: th.hObs.map(h => 1 - h / H0), color: COLORS.observed, width: 1.5, dash: [5, 4] },
         { data: part(run ? run.hObs.map((h, g) => run.hExp[g] > 0 ? 1 - h / run.hExp[g] : 1) : []), color: COLORS.room, width: 2.5 },
         { data: part(run ? run.hObs.map(h => 1 - h / H0) : []), color: COLORS.observed, width: 2.5 }
