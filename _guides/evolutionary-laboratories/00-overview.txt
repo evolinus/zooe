@@ -12,9 +12,9 @@ Students write a prediction before they press anything, then explain whether the
 
 # routes A BSc course in six practicals of about two hours
 - **Practical 1 — mutation and divergence:** Copying (01) and Branching (02).
-- **Practical 2 — the fate of a mutation:** Fate (03) and Drift (04), with Effective Size (05) steps 1–2 if time allows.
-- **Practical 3 — selection and its limits:** Selection (06) and Mutation (07).
-- **Practical 4 — populations in contact:** Migration (08) and Hardy–Weinberg (12).
+- **Practical 2 — the fate of a mutation:** Fate (03) and Drift (04).
+- **Practical 3 — real populations:** Effective Size (05) and Migration (06), with Hardy–Weinberg (12) steps 1–2 first, for the genotype frequencies Effective Size leans on.
+- **Practical 4 — selection and its limits:** Selection (07) and Mutation (08).
 - **Practical 5 — adaptation:** Adaptation (09), with Linkage (13) part 1 if time allows.
 - **Practical 6 — speciation:** Speciation (10), with Reproduction (11) as the opening demonstration.
 
@@ -24,8 +24,8 @@ Students write a prediction before they press anything, then explain whether the
 - The MSc questions of Selection, Migration, Speciation and Linkage make a good written assignment on the interplay of drift, selection and gene flow.
 
 # routes Single sessions
-- **Drift and selection in 90 minutes:** Drift (04) and Selection (06) core paths.
-- **Evolution is not progress (one hour, first-year):** Copying (01) steps 1–4 and Mutation (07) steps 1–4.
-- **Population genetics revision (two hours):** Hardy–Weinberg (12), Drift (04) and Migration (08) core paths.
+- **Drift and selection in 90 minutes:** Drift (04) and Selection (07) core paths.
+- **Evolution is not progress (one hour, first-year):** Copying (01) steps 1–4 and Mutation (08) steps 1–4.
+- **Population genetics revision (two hours):** Hardy–Weinberg (12), Drift (04) and Migration (06) core paths.
 - **Why sex? (one hour):** Reproduction (11) and Linkage (13) steps 3 and 7.
-- **Conservation genetics (90 minutes):** Drift (04) step 2, then the Effective Size (05) core path, then Migration (08) core path.
+- **Conservation genetics (90 minutes):** Drift (04) step 2, then the Effective Size (05) core path, then Migration (06) core path.

@@ -1,11 +1,11 @@
 id: migration
-num: 08
+num: 06
 title: The Migration Room
 kicker: Gene flow against drift
-part: Part III — Neutral or selected
+part: Part II — Chance alone
 focus: Drift pulls two populations apart, gene flow pulls them together; what decides it is the number of migrants Nm, not the fraction m.
 colour: #2F7A8C
-before: The Drift Room (04). The Selection Room (06) helps for step 6.
+before: The Drift Room (04), and the Effective Size Room (05) for what $N$ means here. Step 6 needs the Selection Room (07): come back for it.
 
 # intro
 Two populations, A and B, each of $N$, drift on their own each generation and then exchange $M$ individuals in each direction. This guide asks how much exchange it takes to stop two populations becoming different, and what *different* should mean.
@@ -18,13 +18,13 @@ Two populations, A and B, each of $N$, drift on their own each generation and th
 
 # objectives ext
 - Interpret the sweep: the mean $F$<sub>ST</sub> against the share of runs that ever become strongly differentiated.
-- Compare the room's results with $F$<sub>ST</sub> ≈ 1/(1 + 4$Nm$) and the two-population 1/(1 + 16$Nm$), and say why neither fits exactly.
+- Compare the room's results with $F$<sub>ST</sub> ≈ 1/(1 + 4$Nm$) and with the version for two haploid populations, 1/(1 + 8$Nm$), and say why the first does not fit and where the second stops fitting.
 - Explain migration–selection balance: why local adaptation survives when $m$ < $s$ and is swamped when $m$ > $s$.
 
 # routes
 - **40-minute practical (BSc):** steps 1–4 and questions 1–3.
 - **Conservation-themed session:** steps 2–4 with question 3, as an argument about corridors between reserves.
-- **MSc:** steps 5–7 and questions 4–6 (about 35 minutes; the sweep takes a little while to run).
+- **MSc:** steps 5–7 and questions 4–6 (about 35 minutes; the sweep takes a little while to run). Step 6 switches selection on, so leave it until after the Selection Room (07).
 
 # step core 8 | One migrant a generation
 set: The defaults: $N$ = 50, A starts at $p$<sub>A</sub> = 0.90, B at $p$<sub>B</sub> = 0.10, 1 migrant each way, $G$ = 200.
@@ -57,7 +57,7 @@ set: $N$ = 50, $G$ = 200. Nothing else matters: the sweep starts every run at $p
 predict: Sketch two curves against $Nm$ from 0 to 10: the mean $F$<sub>ST</sub>, and the share of runs that ever reach $F$<sub>ST</sub> = 0.5. Where, if anywhere, do you expect a sharp drop?
 run: Press **Run the sweep** and wait for the panel to fill.
 look: the teal mean and the gold share.
-explain: Which curve has the cliff, and where? Calculate 1/(1 + 4$Nm$) and 1/(1 + 16$Nm$) at $Nm$ = 1 and compare with the mean you measured. Why does a model of two populations bind them more tightly than the many-island model behind the textbook formula?
+explain: Which curve has the cliff, and where? Calculate 1/(1 + 4$Nm$) and 1/(1 + 8$Nm$) at $Nm$ = 1 and compare with the mean you measured. Why does a model of two populations bind them more tightly than the many-island model behind the textbook formula, and what changes because the individuals here are haploid?
 
 # step ext 10 | Local adaptation against gene flow
 set: Selection: **Opposite in A and B**, $s$ = 0.10, $N$ = 50, both starting at $p$ = 0.5. Migrants 1 ($m$ = 0.02), then 10 ($m$ = 0.2).
@@ -84,6 +84,6 @@ explain: With only two alleles, why does mutation work *against* differentiation
 - **Step 2.** Without migrants each population drifts on its own; about half the runs end with A and B fixed for different alleles.
 - **Step 3.** Expect around thirteen of twenty strongly differentiated with no migrants, and around five with one.
 - **Step 4.** The counts are similar: $Nm$ = 1 in both, even though $m$ differs tenfold. Larger populations drift more slowly, so they need fewer migrants as a fraction.
-- **Step 5.** The mean $F$<sub>ST</sub> slides smoothly; the share reaching 0.5 falls off a cliff near $Nm$ = 1. At $Nm$ = 1 the room measures a mean near 0.09, against 0.2 for the island formula and 0.06 for the two-population one.
+- **Step 5.** The mean $F$<sub>ST</sub> slides smoothly; the share reaching 0.5 falls off a cliff near $Nm$ = 1. At $Nm$ = 1 the room measures a mean near 0.09, against 0.2 for the island formula and 0.11 for 1/(1 + 8$Nm$): two populations bind four times more tightly than many islands, and a haploid migrant carries one gene copy where a diploid one carries two. Below one migrant the room falls short of 1/(1 + 8$Nm$), because 200 generations from $p$ = 0.5 is not long enough to reach the equilibrium the formula describes.
 - **Step 6.** At $m$ = 0.02 < $s$ each population keeps its own allele; at $m$ = 0.2 > $s$ gene flow swamps local adaptation and both end up with the same allele.
 - **Step 7.** Mutation lowers the mean $F$<sub>ST</sub>: symmetric mutation between two alleles pulls both populations towards 0.5. The textbook formula assumes infinitely many alleles, where mutation never makes two populations alike.

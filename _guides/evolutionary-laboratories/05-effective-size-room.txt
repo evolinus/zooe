@@ -2,10 +2,10 @@ id: effective
 num: 05
 title: The Effective Size Room
 kicker: Effective population size
-part: Part II — What becomes of one mutation
+part: Part II — Chance alone
 focus: Real populations drift like smaller ideal ones: the harmonic mean of a changing size, the rarer sex and inbreeding all set $N_e$ below the census.
 colour: #4B4F94
-before: The Drift Room (04): this room measures every population in that room's currency, the rate heterozygosity falls.
+before: The Drift Room (04): this room measures every population in that room's currency, the rate heterozygosity falls. Step 4 compares genotypes with their Hardy–Weinberg proportions; if those are new, do steps 1–2 of the Hardy–Weinberg Room (12) first.
 
 # intro
 The Drift Room's population is ideal: the same size every generation, every individual equally likely to be a parent, mating at random. This room breaks those promises one at a time — a size that changes, unequal numbers of the two sexes, mating with relatives — and measures what each costs in lost diversity. The $N$ of the ideal population that would lose diversity at the same rate is the effective population size, $N_e$.

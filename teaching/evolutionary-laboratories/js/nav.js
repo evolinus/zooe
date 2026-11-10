@@ -6,19 +6,24 @@
     // ten are the argument; the last three are the machinery rooms, which the
     // argument refers to but never depends on at its default settings.
     //
-    // The Effective Size Room closes Part II rather than opening Part III: it
-    // is the Drift Room's own promise kept — that room calls its N an effective
-    // size, and this is where the phrase is earned — and everything after it
-    // can then use N in that sense without apology.
+    // The Effective Size Room follows the Drift Room directly: it is that
+    // room's own promise kept — it calls its N an effective size, and this is
+    // where the phrase is earned — and everything after it can then use N in
+    // that sense without apology.
     //
-    // Migration sits directly after Mutation rather than beside the two fish
-    // rooms it feeds: with it there, Part III opens by naming all four forces
-    // that move an allele frequency — selection, mutation, drift (already had
-    // from Part II) and migration — before Adaptation and Speciation put them
-    // to work together.
+    // Migration closes Part II rather than sitting among the selection rooms.
+    // At its defaults it is two Drift Rooms and an exchange, with nothing
+    // selected, so Part II is everything chance does on its own — to one
+    // mutation, to one population, to a real population, to two in contact —
+    // and its Nm reads N in the sense the room before has just defined. It
+    // also leaves Part III unbroken: Selection hands on to Mutation, Mutation
+    // to Adaptation and Adaptation to Speciation, which is how each of those
+    // rooms' own "where this goes next" already ran. The price is that the
+    // room's optional selection switch now comes before the Selection Room;
+    // the room says so and asks the reader back.
     const ROOM_ORDER = [
       'readme', 'copying', 'branching', 'fate', 'drifting', 'effective',
-      'selection', 'mutation', 'migration', 'adaptation', 'speciation',
+      'migration', 'selection', 'mutation', 'adaptation', 'speciation',
       'reproduction', 'hardyweinberg', 'linkage'
     ];
     const ROOM_NAMES = {
@@ -28,9 +33,9 @@
       fate: 'The Fate Room',
       drifting: 'The Drift Room',
       effective: 'The Effective Size Room',
+      migration: 'The Migration Room',
       selection: 'The Selection Room',
       mutation: 'The Mutation Room',
-      migration: 'The Migration Room',
       adaptation: 'The Adaptation Room',
       speciation: 'The Speciation Room',
       reproduction: 'The Reproduction Room',

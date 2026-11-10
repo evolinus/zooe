@@ -2,7 +2,7 @@ id: fate
 num: 03
 title: The Fate Room
 kicker: The fate of a single new mutation
-part: Part II — What becomes of one mutation
+part: Part II — Chance alone
 focus: A new neutral mutation starts as one copy in N and is usually lost within a few generations; it survives with probability 1/N.
 colour: #6E7B3F
 before: The Copying Room (01) helps but is not needed.

@@ -1,11 +1,11 @@
 id: selection
-num: 06
+num: 07
 title: The Selection Room
 kicker: Wright–Fisher + selection
 part: Part III — Neutral or selected
 focus: Selection tilts the odds, drift still draws the sample; what matters is N·s, and a rare recessive advantage is nearly invisible.
 colour: #388047
-before: The Drift Room (04): this room is the same sampling with one allele favoured.
+before: The Drift Room (04): this room is the same sampling with one allele favoured. The Effective Size Room (05) says which $N$ belongs in $N$·$s$.
 
 # intro
 Allele A₁ now carries a fitness advantage $s$. Each generation the frequency is reweighted by fitness, and then sampled at random exactly as in the Drift Room. This guide asks when selection wins that contest, and when chance does.

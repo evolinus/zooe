@@ -280,7 +280,12 @@ function createWrightFisherRoom(cfg) {
   // expression covers both ploidies: M = N haploid, M = 2N diploid.
   //
   //   neutral    E[T_fix] ≈ 2M            — 4N under diploidy, 2N under haploidy
-  //   selected   E[T_fix] ≈ (2/s)·ln M    — (2/s)·ln 2N under diploidy
+  //   selected   E[T_fix] ≈ (2/s)·ln M    — exact for the haploid model only
+  //
+  // Under diploidy a copy is worth h·s rather than s, so the true sweep is
+  // longer: (4/s)·ln 2N at h = 0.5. The haploid figure is kept for both all the
+  // same, because this only sizes the default axis, a run starts at p = 0.5 by
+  // default and so has half a sweep to make, and a run that fixes ends itself.
   //
   // The selected figure is the deterministic sweep time, and it runs away as s
   // approaches zero, where the honest answer is that drift decides and fixation

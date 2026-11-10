@@ -2,7 +2,7 @@ id: drifting
 num: 04
 title: The Drift Room
 kicker: The Wright–Fisher model
-part: Part II — What becomes of one mutation
+part: Part II — Chance alone
 focus: Chance alone moves an allele frequency, fastest in small populations; drift is unpredictable at one locus and predictable on average.
 colour: #2E5C8A
 before: The Fate Room (03) is the natural lead-in: it followed one new mutation, this room starts from any frequency.

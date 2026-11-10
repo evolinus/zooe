@@ -1,11 +1,11 @@
 id: mutation
-num: 07
+num: 08
 title: The Mutation Room
 kicker: Mutation is random with respect to fitness
 part: Part III — Neutral or selected
 focus: Selection decides a mutation's fate but never its origin: no value of s resizes a slice of the mutation wheel.
 colour: #C08A2E
-before: The Selection Room (06), for what $s$ means. The Fate Room (03) helps with step 1.
+before: The Selection Room (07), for what $s$ means. The Fate Room (03) helps with step 1.
 
 # intro
 Four wheels, one per character of a fish, decide which derived state a mutation produces. Some slices are larger than others: some mutations are simply easier to make. The new alleles then enter a population of $N$ as single copies. This guide separates the two questions the room keeps apart: which mutations appear, and what becomes of them.

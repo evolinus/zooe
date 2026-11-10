@@ -5,7 +5,7 @@ kicker: Two loci at once
 part: Part IV — The machinery underneath
 focus: An association between linked loci decays only as fast as recombination breaks it; while it lasts, two good mutations interfere.
 colour: #8B5E3C
-before: The Hardy–Weinberg Room (12). The Selection Room (06) helps for Part 2.
+before: The Hardy–Weinberg Room (12). The Selection Room (07) helps for Part 2.
 
 # intro
 Two loci on the same chromosome, a distance $r$ apart. Part 1 builds an association between A₁ and B₁ and lets recombination pull it apart. Part 2 drops two beneficial mutations into different individuals and counts how often the population manages to keep both. This guide asks how long associations last and what they cost.

@@ -5,7 +5,7 @@ kicker: Multi-trait selection vs. drift
 part: Part III — Neutral or selected
 focus: Selection adds directed change on top of drift; unrelated lineages in one habitat converge, and population size decides how well mutations are sorted.
 colour: #7A5C99
-before: The Drift (04), Selection (06) and Mutation (07) rooms. The Branching Room (02) explains the tanglegram.
+before: The Drift (04), Selection (07) and Mutation (08) rooms. The Branching Room (02) explains the tanglegram.
 
 # intro
 Three related founder fish each split into a Neutral lineage, where nothing is selected, and a Habitat lineage living in a Stream, Pond or River. Five traits mutate and are sorted by drift and selection over thousands of generations. Because every Habitat lineage has a Neutral twin from the same ancestor, you can see exactly what selection adds.

@@ -1074,9 +1074,27 @@
     margin: 0 0 8px;
   }
   .room-brief .try-label{ font-weight: 700; }
+  /* Try this is a numbered list, one action to a line, because it is the path
+     through the room: a student has to be able to say "I am on step 3" and a
+     teacher "stop after step 2", and neither can be said of a paragraph. Each
+     step says what to do and where to look, and leaves out what will be seen
+     wherever Predict first is about to ask for it; the outcomes are in What to
+     notice, below the simulation, where they are read after the run instead
+     of before it. The numerals take the room's own colour, like the step
+     discs of the setup deck. */
+  .room-brief .try-head{ margin-bottom: 4px; }
+  .room-brief ol.try-steps{
+    margin: 0 0 10px;
+    padding-left: 1.6em;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .room-brief ol.try-steps li{ margin-bottom: 5px; padding-left: 2px; break-inside: avoid; }
+  .room-brief ol.try-steps li::marker{ font-weight: 700; color: var(--room-deep, var(--ink)); }
   /* The last two lines of the brief. Predict first asks for a prediction in
-     writing before the first run, and it comes after Try this rather than
-     before it because it is about the runs Try this has just described. Then
+     writing, and it comes after Try this rather than before it because it is
+     about the runs Try this has just listed: it names the step it belongs
+     before. Then
      the room's printed guide — the same experiments as a timed predict, run,
      explain worksheet, a BSc path and an MSc extension. The guide sits under a
      dashed rule, set smaller, because it is a way out of the room rather than
@@ -1521,8 +1539,13 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> A <span class="gloss" data-help="glosPopulation">population</span> in which nothing interferes: every individual has the same chance of giving birth and the same chance of dying, however crowded the world becomes. Births and deaths are drawn at random for each individual, so you see both the smooth exponential prediction and the noisy reality around it.</p>
-      <p><span class="try-label">Try this.</span> Run the defaults and switch the vertical axis from linear to logarithmic — the curve becomes a straight line, which is the signature of exponential growth. Then set the birth rate just barely above the death rate and run 20 replicate populations starting from 5 individuals. Finally, switch <em>Compare two populations</em> on and give population 2 a slightly higher death rate: two runs, identical in every other respect, on the same chart.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before you run twenty replicates with the birth rate just above the death rate, decide how many of the twenty will go extinct.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Run the defaults and switch the vertical axis from linear to logarithmic — the curve becomes a straight line, which is the signature of exponential growth.</li>
+        <li>Set the birth rate just barely above the death rate and run 20 replicate populations starting from 5 individuals.</li>
+        <li>Switch <em>Compare two populations</em> on and give population 2 a slightly higher death rate: two runs, identical in every other respect, on the same chart.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 2, decide how many of the twenty will go extinct.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/01-growth-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="01-growth-room">core path 31 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -1720,8 +1743,14 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The same population, but now individuals get in each other's way — <span class="gloss" data-help="glosCompetitionKinds">intraspecific competition</span>. The birth rate falls and the death rate rises as the population grows; where the two lines cross, births exactly balance deaths and the population stops changing. That crossing point is the <span class="gloss" data-help="carryingK">carrying capacity</span>, <em>K</em>.</p>
-      <p><span class="try-label">Try this.</span> Run the defaults and watch the S-shaped curve level off at K. Then start the population <em>above</em> K and run again. Finally, open <em>More parameters</em>, switch on the Allee effect, and start with a very small population. To see one parameter's effect on its own, switch <em>Compare two populations</em> on and change nothing but K between them.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before you run the defaults, decide where the curve will level off, and at what population size it will be growing fastest.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Run the defaults. Watch where the curve levels off, and where along the way it climbs fastest.</li>
+        <li>Start the population <em>above</em> K and run again.</li>
+        <li>Open <em>More parameters</em>, switch on the Allee effect, and start with a very small population.</li>
+        <li>To see one parameter's effect on its own, switch <em>Compare two populations</em> on and change nothing but K between them.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 1, decide where the curve will level off, and at what population size it will be growing fastest.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/02-crowding-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="02-crowding-room">core path 32 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -1971,8 +2000,14 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> room treated K as a given. Here it is not: the environment supplies a resource at a fixed rate, consumers eat it, and their births depend on how much they ate. Both the resource and the consumer are tracked over time, and the population's ceiling emerges from the arithmetic rather than being imposed.</p>
-      <p><span class="try-label">Try this.</span> Run the defaults and watch the resource crash as the consumers build up, then settle. Read off <em>R*</em> — the resource level the consumers grind the environment down to. Now double the supply rate and run again. Finally, switch on <em>Environment shift</em> to cut the supply halfway through a run.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before you double the supply, decide what will happen to <var>R</var>* and to the number of consumers.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Run the defaults and watch the resource crash as the consumers build up, then settle.</li>
+        <li>Read off <em>R*</em> — the resource level the consumers grind the environment down to.</li>
+        <li>Double the supply rate and run again.</li>
+        <li>Switch on <em>Environment shift</em> to cut the supply halfway through a run.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 3, decide what will happen to <var>R</var>* and to the number of consumers.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/03-resource-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="03-resource-room">core path 33 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -2183,8 +2218,14 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Many organisms breed once a year: this year's crowding sets next year's numbers, and nothing can respond in between. That one-generation lag is enough to break the tidy approach to K. Three classic discrete-time models are offered — scramble competition (Ricker), contest competition (Beverton–Holt) and the discrete logistic — along with a cobweb diagram and a live bifurcation diagram.</p>
-      <p><span class="try-label">Try this.</span> Start with Ricker at a low growth rate and watch it glide into K. Raise the rate slowly and watch the approach start to wobble, then split into a two-year cycle, then four, then dissolve. Switch to Beverton–Holt at the same high rate. Then turn on <em>Sensitivity test</em>, which runs a second population differing by one thousandth of an individual.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before each increase in the growth rate, decide whether the population will settle, cycle, or never repeat itself.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Start with Ricker at a low growth rate and run.</li>
+        <li>Raise the rate a little at a time, running after each change, and watch what the approach to K turns into.</li>
+        <li>Switch to Beverton–Holt at the same high rate.</li>
+        <li>Turn on <em>Sensitivity test</em>, which runs a second population differing by one thousandth of an individual.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before each increase in step 2, decide whether the population will settle, cycle, or never repeat itself.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/04-overshoot-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="04-overshoot-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -2347,8 +2388,12 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Two species, each self-limiting exactly as in the <button type="button" class="room-link" onclick="switchTab('crowding');">Crowding</button> room, now also feel each other — <span class="gloss" data-help="glosCompetitionKinds">interspecific competition</span>. One coefficient per species says how much a competitor counts in the currency of one's own crowding: <em>α</em> = 2 means one individual of the other species is as suppressive as two of your own.</p>
-      <p><span class="try-label">Try this.</span> Step through the four presets — <em>A wins</em>, <em>B wins</em>, <em>Coexistence</em>, <em>Founder control</em> — and after each one look at the <span class="gloss" data-help="glosPhasePlane">phase plane</span> rather than the time series. Then, in the founder-control preset, click at different points in the phase plane to start the run from a different pair of abundances and see the outcome flip.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before each preset, look at the two isoclines on the phase plane and decide who will win. Then run it.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Step through the four presets — <em>A wins</em>, <em>B wins</em>, <em>Coexistence</em>, <em>Founder control</em> — and after each one look at the <span class="gloss" data-help="glosPhasePlane">phase plane</span> rather than the time series.</li>
+        <li>In the founder-control preset, click at different points in the phase plane to start the run from a different pair of abundances and see the outcome flip.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before you run each preset in step 1, look at the two isoclines on the phase plane and decide who will win. Then run it.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/05-neighbours-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="05-neighbours-room">core path 34 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -2551,8 +2596,14 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room's competition coefficients are descriptive: they say <em>that</em> a species suppresses another, not <em>how</em>. Here both species eat explicit, tracked resources, so competition happens for a reason. In <em>one resource</em> mode there is a single food supply; in <em>two resources</em> mode there are two, and each species can specialise.</p>
-      <p><span class="try-label">Try this.</span> In one-resource mode, run two species with different mortality rates and read the R* table — then start the eventual loser at ten times the winner's abundance and run again. Switch to two resources and give each species the higher attack rate on a different one. Then make both species prefer the <em>same</em> resource and watch coexistence collapse.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before the first run, work out <var>R</var>* for each species and decide who will win. Then decide whether starting the loser at ten times the winner’s abundance will save it.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>In one-resource mode, run two species with different mortality rates and read the R* table.</li>
+        <li>Start the eventual loser at ten times the winner's abundance and run again.</li>
+        <li>Switch to two resources and give each species the higher attack rate on a different one.</li>
+        <li>Make both species prefer the <em>same</em> resource and watch coexistence collapse.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 1, work out <var>R</var>* for each species and decide who will win. Before step 2, decide whether starting the loser at ten times the winner’s abundance will save it.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/06-coexistence-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="06-coexistence-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -2778,8 +2829,14 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Two species, one of which eats the other. Three versions of the same pair of equations are offered, and each repairs an assumption in the one before it: the classic Lotka–Volterra model, then a version in which the prey have a <span class="gloss" data-help="carryingK">carrying capacity</span> of their own, then one in which the predator takes time to handle each prey it catches and so cannot eat without limit.</p>
-      <p><span class="try-label">Try this.</span> Step through the four presets. Under <em>Neutral cycles</em>, click at several different points on the <span class="gloss" data-help="glosPhasePlane">phase plane</span> and watch the cycle change size while the parameters stay put. Then switch to <em>Prey with a ceiling</em> and click the same points — every one of them now ends at the same place. Finally load <em>Paradox of enrichment</em> and drag the prey's carrying capacity K downwards until the cycling stops.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before you click a new starting point under <em>Neutral cycles</em>, decide whether the cycle you get will be the same size as before. Then decide again for <em>Prey with a ceiling</em>.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Step through the four presets.</li>
+        <li>Under <em>Neutral cycles</em>, click at several different points on the <span class="gloss" data-help="glosPhasePlane">phase plane</span>, leaving the parameters alone, and compare the cycles you get.</li>
+        <li>Switch to <em>Prey with a ceiling</em> and click the same points.</li>
+        <li>Load <em>Paradox of enrichment</em> and drag the prey's carrying capacity K downwards until the cycling stops.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before each click in step 2, decide whether the cycle you get will be the same size as the one before. Then decide again for step 3.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/07-predator-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="07-predator-room">core path 36 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -3007,7 +3064,7 @@
 
     <details class="room-methods">
       <summary>Exactly what this room simulates</summary>
-      <p>Lotka–Volterra predation, integrated with fourth-order Runge–Kutta at sixteen sub-steps per frame, which holds the classic model's conserved quantity to about one part in 10¹⁰ over a run: the closed orbits on screen are closed in the mathematics, not by accident of the integrator. A population is declared extinct and pinned to zero below 0.5 individuals — the equations themselves permit a prey population of a hundredth of an individual to recover, and that floor is the room's one concession to reality. Prey released by their predator's extinction grow without limit: the time series stays scaled to the cycles and lets them leave through the top of the panel as a dotted line. The equilibrium is N* = m/(a(e − m·h)), P* = N·g(N*)/f(N*); its stability is decided by the sign of g(N*) + N*·g′(N*) − f′(N*)·P*, which is negative (stable) whenever the prey nullcline is falling where the predator nullcline crosses it.</p>
+      <p>Lotka–Volterra predation, integrated with fourth-order Runge–Kutta at sixteen sub-steps per frame, which holds the classic model's conserved quantity to about one part in 10¹⁰ over a run: the closed orbits on screen are closed in the mathematics, not by accident of the integrator. A population is declared extinct and pinned to zero below 0.5 individuals — the equations themselves permit a prey population of a hundredth of an individual to recover, and that floor is the room's one concession to reality. Prey released by their predator's extinction grow without limit: the time series stays scaled to the cycles and lets them leave through the top of the panel as a dotted line. The equilibrium is N* = m/(a(e − m·h)), P* = N*·g(N*)/f(N*); its stability is decided by the sign of g(N*) + N*·g′(N*) − f′(N*)·P*, which is negative (stable) whenever the prey nullcline is falling where the predator nullcline crosses it.</p>
     </details>
   </div>
 
@@ -3031,8 +3088,14 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('neighbours');">Neighbours</button> room's two competitors and the <button type="button" class="room-link" onclick="switchTab('predator');">Predator</button> room's predator in a single community — a predator that eats both rivals. The only genuinely new parameters are the two attack rates, which say how hard the predator presses on each competitor, and nearly everything this room demonstrates follows from which of the two is larger. Every run is simulated twice, once as you set it up and once with the predator deleted, so a removal experiment is always on screen.</p>
-      <p><span class="try-label">Try this.</span> Run <em>Keystone predation</em>, then <em>Remove the keystone</em> — identical parameters, predator switched off — and watch a species that was coexisting disappear. Then load <em>Apparent competition</em>, check that both competition coefficients really are zero, and watch one species eliminate the other anyway. Finally take the keystone settings and drag the two attack rates towards each other until the effect collapses.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Remove the keystone</em>, decide what will happen to the species that was coexisting.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Run <em>Keystone predation</em>.</li>
+        <li>Press <em>Remove the keystone</em> — identical parameters, predator switched off — and run again.</li>
+        <li>Load <em>Apparent competition</em>, check that both competition coefficients really are zero, and watch one species eliminate the other anyway.</li>
+        <li>Take the keystone settings and drag the two attack rates towards each other until the effect collapses.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 2, decide what will happen to each of the two competitors once the predator is gone.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/08-keystone-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="08-keystone-room">core path 35 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -3296,8 +3359,15 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Every room so far has had one, two or three species. A real community has dozens, and ecologists sum it up in a single number &mdash; most often Shannon's or Simpson's index. This room is about what those numbers measure, and what they cannot tell you. It comes in three steps: <strong>build</strong> a community by dragging its bars, <strong>sample</strong> it the way a field ecologist has to, and then let it <strong>drift</strong>, with no species any better than another. The first step is deterministic arithmetic; the second and third draw individuals at random, so no two runs agree.</p>
-      <p><span class="try-label">Try this.</span> Start from <em>Even</em> and look at the three effective numbers: all equal to the number of species. Now choose <em>One dominant</em> &mdash; the species are all still there, but both indices fall a long way. Press <em>Add a rare species</em> and see which number notices. Then take a sample of 20 individuals, then 100 such samples, and compare each estimate with the truth. Finally, run the drift with no immigration, and again with a little.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before you press <em>Add a rare species</em>, decide which of the three effective numbers will change most, and which least.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Start from <em>Even</em> and look at the three effective numbers: all equal to the number of species.</li>
+        <li>Choose <em>One dominant</em> &mdash; the species are all still there, but both indices fall a long way.</li>
+        <li>Press <em>Add a rare species</em> and see which number notices.</li>
+        <li>Take a sample of 20 individuals, then 100 such samples, and compare each estimate with the truth.</li>
+        <li>Run the drift with no immigration, and again with a little.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 3, decide which of the three effective numbers will change most, and which least.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/09-diversity-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="09-diversity-room">core path 36 min · MSc extension +30 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -3536,8 +3606,13 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> The <button type="button" class="room-link" onclick="switchTab('diversity');">Diversity</button> room measured one community. This one measures several at once &mdash; a set of sites, each with its own species &mdash; and asks how the diversity of the whole is made up from the diversity of its parts. <strong>&gamma;</strong> is the diversity of all the sites pooled, <strong>&alpha;</strong> is the diversity of a typical site, and <strong>&beta;</strong> is how different the sites are from each other: how many distinct sites they amount to. In Step 1 you build the landscape; in Step 2 the sites drift, each on its own, while one large site holding as many individuals as all of them together drifts alongside.</p>
-      <p><span class="try-label">Try this.</span> Step through the four presets and watch &alpha; and &gamma; separately: under <em>Identical</em>, &gamma; is no bigger than &alpha; &mdash; the whole landscape holds no more than one site &mdash; while under <em>Complete turnover</em> it is exactly <em>N</em> times bigger. Then run the drift with the defaults: every site starts the same, and watch &beta; climb as they lose different species. Finally, compare the two lines in the middle panel &mdash; the several small sites against the single large one &mdash; and see which holds more species, and for how long.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before the drift, decide what will happen to <var>α</var> and to <var>β</var> as sites that start identical lose species by chance.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Step through the four presets and watch &alpha; and &gamma; separately: under <em>Identical</em>, &gamma; is no bigger than &alpha; &mdash; the whole landscape holds no more than one site &mdash; while under <em>Complete turnover</em> it is exactly <em>N</em> times bigger.</li>
+        <li>Run the drift with the defaults, in which every site starts the same. Watch &alpha; and &beta;.</li>
+        <li>Compare the two lines in the middle panel &mdash; the several small sites against the single large one &mdash; and see which holds more species, and for how long.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 2, decide what will happen to <var>α</var> and to <var>β</var> as sites that start identical lose species by chance.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/10-turnover-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="10-turnover-room">core path 35 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 
@@ -3744,8 +3819,13 @@
     <div class="room-brief">
       <h2>Start here</h2>
       <p><strong>What it shows.</strong> Every other room counts individuals. This one counts <em>populations</em>. The landscape is a set of patches; each patch holds a local population or stands empty; occupied patches go extinct and empty ones get colonised from the occupied ones. Nothing here asks how many individuals a patch holds &mdash; a patch is occupied or it is not. What survives is the <span class="gloss" data-help="glosMetapopulation">metapopulation</span>, and it survives something that kills every one of its parts.</p>
-      <p><span class="try-label">Try this.</span> Run the defaults and watch occupancy climb and then level off &mdash; then keep watching the grid, which never stops changing. Set <em>e</em> above <em>c</em> and run again: nothing is wrong with any individual patch, and the whole thing still empties. Finally open <em>More parameters</em> and destroy some habitat, a little at a time, watching what <em>p*</em> does compared with how much you took.</p>
-      <p class="room-predict"><span class="try-label">Predict first.</span> Before the first run, work out <var>p</var>* = 1 − <var>e</var>/<var>c</var> and decide whether the landscape will settle there — and whether the grid will stop changing once it does.</p>
+      <p class="try-head"><span class="try-label">Try this.</span></p>
+      <ol class="try-steps">
+        <li>Run the defaults and watch occupancy. Once the curve has flattened, keep watching the grid.</li>
+        <li>Set <em>e</em> above <em>c</em> and run again. Nothing is wrong with any individual patch: what becomes of the whole?</li>
+        <li>Open <em>More parameters</em> and destroy some habitat, a little at a time, watching what <em>p*</em> does compared with how much you took.</li>
+      </ol>
+      <p class="room-predict"><span class="try-label">Predict first.</span> Before step 1, work out <var>p</var>* = 1 − <var>e</var>/<var>c</var> and decide whether the landscape will settle there — and whether the grid will stop changing once it does.</p>
       <p class="room-guide"><a class="room-guide-link" href="guides/11-metapopulation-room.pdf" target="_blank" rel="noopener">Room guide (PDF)</a> <span class="room-guide-time" data-guide="11-metapopulation-room">core path 34 min · MSc extension +28 min</span> <span class="room-guide-what">— step-by-step predict, run, explain, with worksheet questions</span></p>
     </div>
 

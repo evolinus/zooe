@@ -1878,9 +1878,12 @@
         <p><strong>Why no theoretical curve is drawn over the points.</strong> The formula usually quoted,
         <var>F</var><sub>ST</sub> ≈ 1/(1 + 4<var>Nm</var>), is derived for <em>many</em> populations exchanging with a
         common pool; with only two, each one's immigrants all come from the only other place there is, and the same
-        <var>Nm</var> binds them about four times more tightly. It is also an equilibrium between migration and
+        <var>Nm</var> binds them about four times more tightly. It also counts diploid migrants, who carry two gene
+        copies each, where a migrant in this haploid room carries one, which halves it again: the version for this room is
+        1/(1 + 8<var>Nm</var>). And it is an equilibrium between migration and
         <strong>mutation</strong> — mutation being what keeps replacing the variation drift removes — whereas this
-        room, at its default μ = 0, has none. The measured means land near the two-population version anyway; the room's methods panel gives
+        room, at its default μ = 0, has none. The measured means land close to that version from about one migrant upwards, and
+        below it where migration is too weak for a run to reach the equilibrium; the room's methods panel gives
         both sets of numbers side by side, which is worth more than a line drawn across the panel as though it were
         the answer.</p>`
     },
