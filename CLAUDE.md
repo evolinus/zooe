@@ -263,13 +263,15 @@ then open `localhost:4000`. It hot-reloads, and it re-runs `_cite/cite.py` on
 start — so a local preview reaches out to ORCID and PubMed and can modify
 `_data/citations.yaml`. Check `git status` before committing after a preview.
 
-Plain `bundle exec jekyll serve` still does **not** work on this Mac, though no
-longer for the old reason — Homebrew Ruby 3.3 and 4.0 are both installed now,
-so the 2.6 problem is gone. What fails is `bundle install`: `posix-spawn`
-0.3.15, a transitive dependency of `jekyll-last-modified-at`, will not compile
-its native extension against this macOS. CI is unaffected — it builds on Ubuntu
-with Ruby 3.1 — so this is a local-toolchain problem, not a site one, and it is
-not worth changing `Gemfile.lock` over.
+Plain `bundle exec jekyll serve` has **not** been shown to work on this Mac.
+What used to stop it was `bundle install`: `posix-spawn` 0.3.15, a transitive
+dependency of `jekyll-last-modified-at` 1.3.0, would not compile its native
+extension against this macOS. In November 2026 it stopped compiling in CI as
+well, when `ubuntu-latest` became Ubuntu 26.04 and every site build began to
+fail, so `Gemfile.lock` now holds `jekyll-last-modified-at` 1.3.2, which no
+longer depends on it. That removes the known obstacle here too, but nobody has
+retried a local `bundle install` since — try it before assuming either way.
+CI still builds with Ruby 3.1.
 
 To check a **laboratory app** you don't need Jekyll at all: they are plain
 static folders, so serve the repo root (`python3 -m http.server`) and open
